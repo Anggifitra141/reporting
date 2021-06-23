@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-  <title>General Dashboard &mdash; HR - Attendance</title>
+  <title>Management Report</title>
 
   <!-- General CSS Files -->
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/modules/bootstrap/css/bootstrap.min.css">
@@ -252,42 +252,63 @@
       <div class="main-sidebar sidebar-style-2">
         <aside id="sidebar-wrapper">
           <div class="sidebar-brand">
-            <a href="<?php echo base_url(); ?>">Report Management</a>
+            <a href="<?php echo base_url(); ?>">Management Report</a>
           </div>
           <div class="sidebar-brand sidebar-brand-sm">
             <a href="<?php echo base_url(); ?>index.html">St</a>
           </div>
           <ul class="sidebar-menu">
-            <li class="menu-header">Main Menu</li>
+            <li class="menu-header">Regulator Management</li>
             <li>
               <a href="<?php echo site_url('app'); ?>" class="nav-link"><i class="fas fa-home"></i><span>Dashboard</span></a>
             </li>
             <li class="dropdown">
-              <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-database"></i> <span>Source</span></a>
+              <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-layer-group"></i> <span>Data Source</span></a>
               <ul class="dropdown-menu">
-                <li><a class="nav-link" href="<?php echo site_url('employee'); ?>"><i class="fas fa-users"></i> Data Employees</a></li>
-                <li><a class="nav-link" href="layout-transparent.html"><i class="fas fa-clipboard"></i> Attendance</a></li>
-                <li><a class="nav-link" href="layout-top-navigation.html"><i class="fas fa-clipboard"></i> Leaves</a></li>
-                <li><a class="nav-link" href="layout-top-navigation.html"><i class="fas fa-clock"></i> Overtime</a></li>
-                <li><a class="nav-link" href="layout-top-navigation.html"><i class="fas fa-sign-out-alt"></i> Resignation</a></li>
-                <li><a class="nav-link" href="layout-top-navigation.html"><i class="fas fa-times-circle"></i> Termination</a></li>
+                <li><a class="nav-link" href="<?php echo site_url('employee'); ?>"><i class="fas fa-upload"></i> Upload Source</a></li>
+                <li><a class="nav-link" href="layout-transparent.html"><i class="fas fa-database"></i> Raw Data</a></li>
+                <li><a class="nav-link" href="layout-top-navigation.html"><i class="fas fa-database"></i> Data Clean</a></li>
               </ul>
             </li>
             </li>
-            <li class="menu-header">Main Config</li>
             <li>
-              <a href="<?php echo site_url('departement'); ?>" class="nav-link"><i class="fas fa-layer-group"></i><span>Master Data</span></a>
-            </li>
-            </li>
-            <li class="menu-header">Main Setup</li>
-            <li>
-              <a href="<?php echo site_url(); ?>" class="nav-link"><i class="fas fa-chart-area"></i><span>Reporting</span></a>
+              <a href="<?php echo site_url('app'); ?>" class="nav-link"><i class="fas fa-check"></i><span>Verification</span></a>
             </li>
             <li>
-              <a href="<?php echo site_url(); ?>" class="nav-link"><i class="fas fa-users"></i><span>Users</span></a>
+              <a href="<?php echo site_url('app'); ?>" class="nav-link"><i class="fas fa-file-alt"></i><span>Report</span></a>
             </li>
             <li>
-              <a href="<?php echo site_url(); ?>" class="nav-link"><i class="fas fa-user"></i><span>Account</span></a>
+              <a href="<?php echo site_url('app'); ?>" class="nav-link"><i class="fas fa-archive"></i><span>Archive</span></a>
+            </li>
+            <li>
+              <a href="<?php echo site_url('app'); ?>" class="nav-link"><i class="fas fa-history"></i><span>User Activity</span></a>
+            </li>
+            <li class="menu-header">Document Management</li>
+            <li>
+              <a href="<?php echo site_url('app'); ?>" class="nav-link"><i class="fas fa-home"></i><span>Dashboard</span></a>
+            </li>
+            <li>
+              <a href="<?php echo site_url('departement'); ?>" class="nav-link"><i class="fas fa-layer-group"></i><span>Document</span></a>
+            </li>
+            </li>
+            <li>
+              <a href="<?php echo site_url('app'); ?>" class="nav-link"><i class="fas fa-file-alt"></i><span>Report</span></a>
+            </li>
+            <li>
+              <a href="<?php echo site_url('app'); ?>" class="nav-link"><i class="fas fa-scroll"></i><span>Version</span></a>
+            </li>
+            <li>
+              <a href="<?php echo site_url('app'); ?>" class="nav-link"><i class="fas fa-history"></i><span>User Activity</span></a>
+            </li>
+            <li class="menu-header">System Setting</li>
+            <li>
+              <a href="<?php echo site_url(); ?>" class="nav-link"><i class="fas fa-user"></i><span>User</span></a>
+            </li>
+            <li>
+              <a href="<?php echo site_url(); ?>" class="nav-link"><i class="fas fa-users"></i><span>User group</span></a>
+            </li>
+            <li>
+              <a href="<?php echo site_url(); ?>" class="nav-link"><i class="fas fa-sliders-h"></i><span>Master data</span></a>
             </li>
             <li>
               <a href="<?php echo site_url('login/signout'); ?>" class="nav-link"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>

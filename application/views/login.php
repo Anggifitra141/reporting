@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-  <title>Login &mdash; PT. Strawland IT Inventory System</title>
+  <title>Login &mdash; Management Report</title>
 
   <!-- General CSS Files -->
   <link rel="stylesheet" href="<?php echo base_url();?>assets/modules/bootstrap/css/bootstrap.min.css">
@@ -26,10 +26,10 @@
         <div class="row">
           <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4">
             <div class="login-brand">
-              HR - Attendance
+              Management Report
             </div>
 
-            <div class="card card-primary">
+            <div class="card card-danger">
               <div class="card-header"><h4>Login to your account</h4></div>
               <div class="col-md-12">
               <?php
@@ -74,7 +74,7 @@
                   </div>
 
                   <div class="form-group">
-                    <button type="submit" class="btn btn-primary btn-lg btn-block" tabindex="4">
+                    <button type="submit" class="btn btn-danger btn-lg btn-block" tabindex="4">
                       Login
                     </button>
                   </div>
@@ -85,7 +85,7 @@
               Don't have an account? <a href="<?php echo base_url();?>auth-register.html">Create One</a>
             </div> -->
             <div class="simple-footer">
-              Copyright &copy; IT INVENTORY 2019
+              Copyright &copy; Management Report 2021
             </div>
           </div>
         </div>
