@@ -305,7 +305,7 @@
               <a href="<?php echo site_url(); ?>" class="nav-link"><i class="fas fa-user"></i><span>User</span></a>
             </li>
             <li>
-              <a href="<?php echo site_url(); ?>" class="nav-link"><i class="fas fa-users"></i><span>User group</span></a>
+              <a href="<?php echo site_url('user_group'); ?>" class="nav-link"><i class="fas fa-users"></i><span>User group</span></a>
             </li>
             <li>
               <a href="<?php echo site_url(); ?>" class="nav-link"><i class="fas fa-sliders-h"></i><span>Master data</span></a>

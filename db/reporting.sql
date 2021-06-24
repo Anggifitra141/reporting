@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.5
+-- version 5.0.4
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Jun 23, 2021 at 10:08 AM
--- Server version: 10.1.38-MariaDB
--- PHP Version: 5.6.40
+-- Host: 127.0.0.1
+-- Waktu pembuatan: 24 Jun 2021 pada 06.49
+-- Versi server: 10.4.16-MariaDB
+-- Versi PHP: 7.4.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -25,7 +24,7 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user`
+-- Struktur dari tabel `user`
 --
 
 CREATE TABLE `user` (
@@ -33,23 +32,23 @@ CREATE TABLE `user` (
   `username` varchar(50) NOT NULL,
   `password` varchar(250) NOT NULL,
   `fullname` varchar(100) NOT NULL,
-  `user_groups` varchar(200) NOT NULL,
+  `user_group` varchar(200) NOT NULL,
   `avatar` varchar(250) NOT NULL,
   `activation_date` date NOT NULL,
   `status` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `user`
+-- Dumping data untuk tabel `user`
 --
 
-INSERT INTO `user` (`user_id`, `username`, `password`, `fullname`, `user_groups`, `avatar`, `activation_date`, `status`) VALUES
+INSERT INTO `user` (`user_id`, `username`, `password`, `fullname`, `user_group`, `avatar`, `activation_date`, `status`) VALUES
 (1, 'admin', '$2y$10$LlgjxVsOPktq.rns0B8AuuUhSdwZsNWDUJgZx/Ado0GpchI4FFs3e', 'Admin', 'admin', '', '2021-06-23', 'active');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user_group`
+-- Struktur dari tabel `user_group`
 --
 
 CREATE TABLE `user_group` (
@@ -60,32 +59,40 @@ CREATE TABLE `user_group` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
+-- Dumping data untuk tabel `user_group`
+--
+
+INSERT INTO `user_group` (`user_group_id`, `group_name`, `access`, `action`) VALUES
+(1, 'admin', 'dashboard_regulator#verification#report_legulator#archive#user_activity_regulator#upload_source#raw_data#data_clean#dashboard_document#document#report_document#version#user_activity_document#user#user_group#master_data', 'add#update#view#download'),
+(2, 'tes', 'dashboard_regulator#verification', 'add#update');
+
+--
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `user`
+-- Indeks untuk tabel `user`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`user_id`),
-  ADD KEY `user_groups` (`user_groups`);
+  ADD KEY `user_groups` (`user_group`);
 
 --
--- Indexes for table `user_group`
+-- Indeks untuk tabel `user_group`
 --
 ALTER TABLE `user_group`
   ADD PRIMARY KEY (`user_group_id`),
   ADD KEY `group_name` (`group_name`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT untuk tabel yang dibuang
 --
 
 --
--- AUTO_INCREMENT for table `user_group`
+-- AUTO_INCREMENT untuk tabel `user_group`
 --
 ALTER TABLE `user_group`
-  MODIFY `user_group_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `user_group_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

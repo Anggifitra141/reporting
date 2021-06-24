@@ -17,12 +17,13 @@ class M_login extends CI_Model {
 		{
 			$result = $query->row_array();
 			if(password_verify($this->input->post('password', TRUE), $result['password'])){
+				$user_group = $this->db->get_where('user_group', ['group_name' => $result['user_group']])->row();
 				$data = array(
 						'user_id' => $result['user_id'],
 						'username' => $result['username'],
 						'fullname' => $result['fullname'],
-						'role' => $result['role'],
 						'status' => $result['status'],
+						'action' => $user_group->action,
 						'logged_in' => TRUE
 						);
 				$this->session->set_userdata($data);

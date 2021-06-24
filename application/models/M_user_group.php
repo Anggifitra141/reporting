@@ -1,6 +1,6 @@
 <?php
 
-class M_leave extends CI_model {
+class M_user_group extends CI_model {
 
   /**
    *  =======   Application By    : PT. Seiber Mitra Solusi    ========
@@ -15,10 +15,10 @@ class M_leave extends CI_model {
 		parent::__construct();
 	}
 
-	var $table = 'leave';
-  var $column_order = array('no','leave_id','leave_type','description','number_of_days');
-  var $column_search = array('leave_id','leave_type','description','number_of_days');
-  var $order = array('leave_id' => 'desc');
+	var $table = 'user_group';
+  var $column_order = array('group_name','access','action');
+  var $column_search = array('group_name','access','action');
+  var $order = array('user_group_id' => 'desc');
 
   private function _get_datatables_query()
   {
@@ -79,29 +79,29 @@ class M_leave extends CI_model {
     return $this->db->count_all_results();
   }
 
-  public function get_leave($leave_id)
+  public function get_user_group($user_group_id)
   {
     $this->db->from($this->table);
-    $this->db->where('leave_id', $leave_id);
+    $this->db->where('user_group_id', $user_group_id);
     $query = $this->db->get();
     return $query->row();
   }
 
-  public function add_leave($data)
+  public function add_user_group($data)
   {
     $this->db->insert($this->table, $data);
     return $this->db->insert_id();
   }
 
-  public function update_leave($where, $data)
+  public function update_user_group($where, $data)
   {
     $this->db->update($this->table, $data, $where);
     return $this->db->affected_rows();
   }
 
-  public function delete_leave($leave_id)
+  public function delete_user_group($user_group_id)
   {
-    $this->db->where('leave_id', $leave_id);
+    $this->db->where('user_group_id', $user_group_id);
     $this->db->delete($this->table);
   }
 
