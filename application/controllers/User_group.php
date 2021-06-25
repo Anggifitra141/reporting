@@ -6,7 +6,6 @@ class User_group extends CI_Controller {
   /**
    *  =======   Application By    : PT. Seiber Mitra Solusi    ========
    *  =======   Version           : V.1.0                      ========
-   *  =======   Contact Develope  : anggifitra141@gmail.com    ========
    *  ===========           Copyright 2021          ===================
   */
 

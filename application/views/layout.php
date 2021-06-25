@@ -14,11 +14,14 @@
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/modules/bootstrap-daterangepicker/daterangepicker.css">
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/modules/izitoast/css/iziToast.min.css">
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/modules/datatables/datatables.min.css">
+  <link rel="stylesheet" href="<?php echo base_url(); ?>assets/modules/dropify/css/dropify.min.css">
   <!-- Template CSS -->
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/style.css">
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/components.css">
 <!-- Start GA -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-94034622-3"></script>
+
+<script src="<?php echo base_url(); ?>assets/modules/jquery.min.js"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
@@ -265,9 +268,9 @@
             <li class="dropdown">
               <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-layer-group"></i> <span>Data Source</span></a>
               <ul class="dropdown-menu">
-                <li><a class="nav-link" href="<?php echo site_url('employee'); ?>"><i class="fas fa-upload"></i> Upload Source</a></li>
-                <li><a class="nav-link" href="layout-transparent.html"><i class="fas fa-database"></i> Raw Data</a></li>
-                <li><a class="nav-link" href="layout-top-navigation.html"><i class="fas fa-database"></i> Data Clean</a></li>
+                <li id="regulatory_upload_source"><a class="nav-link" href="<?php echo site_url('regulatory/upload_source'); ?>"><i class="fas fa-upload"></i> Upload Source</a></li>
+                <li id="regulatory_raw_data"><a class="nav-link" href="<?php echo site_url('regulatory/raw_data'); ?>"><i class="fas fa-database"></i> Raw Data</a></li>
+                <li id="regulatory_data_clean"><a class="nav-link" href="<?php echo site_url('regulatory/data_clean'); ?>"><i class="fas fa-database"></i> Data Clean</a></li>
               </ul>
             </li>
             </li>
@@ -339,7 +342,7 @@
   </div>
 
   <!-- General JS Scripts -->
-  <script src="<?php echo base_url(); ?>assets/modules/jquery.min.js"></script>
+  
   <script src="<?php echo base_url(); ?>assets/modules/popper.js"></script>
   <script src="<?php echo base_url(); ?>assets/modules/tooltip.js"></script>
   <script src="<?php echo base_url(); ?>assets/modules/bootstrap/js/bootstrap.min.js"></script>
@@ -353,11 +356,16 @@
   <script src="<?php echo base_url(); ?>assets/modules/bootstrap-daterangepicker/daterangepicker.js"></script>
   <script src="<?php echo base_url(); ?>assets/modules/izitoast/js/iziToast.min.js"></script>
   <script src="<?php echo base_url(); ?>assets/modules/sweetalert/sweetalert.min.js"></script>
+  <script src="<?php echo base_url(); ?>assets/modules/dropify/js/dropify.min.js"></script>
   <!-- Page Specific JS File -->
   <script src="<?php echo base_url(); ?>assets/js/page/index-0.js"></script>
-
-  <!-- Template JS File -->
+  <!-- Template JS File --> 
+  
   <script src="<?php echo base_url(); ?>assets/js/scripts.js"></script>
   <script src="<?php echo base_url(); ?>assets/js/custom.js"></script>
+
+  <script>
+    $('.dropify').dropify();
+  </script>
 </body>
 </html>

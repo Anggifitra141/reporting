@@ -74,8 +74,8 @@
                   </div>
 
                   <div class="form-group">
-                    <button type="submit" class="btn btn-danger btn-lg btn-block" tabindex="4">
-                      Login
+                    <button type="submit" class="btn btn-outline-danger btn-icon btn-lg btn-block" tabindex="4">
+                      <i class="fas fa-sign-in-alt"></i> Login
                     </button>
                   </div>
                 </form>

@@ -4,10 +4,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class App extends CI_Controller {
 
   /**
-   *  =======   Application By    : Anggi Fitrahandika  2019    =======
-   *  =======   Version           : V.1.0                       =======
-   *  =======   Contact           : anggifitra141@gmail.com     =======
-   *  ===========           Copyright 2019          ===================
+   *  =======   Application By    : PT. Seiber Mitra Solusi    ========
+   *  =======   Version           : V.1.0                      ========
+   *  ===========           Copyright 2021          ===================
   */
 
 	public function __construct()
