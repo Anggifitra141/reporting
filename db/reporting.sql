@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 24 Jun 2021 pada 06.49
+-- Waktu pembuatan: 26 Jun 2021 pada 09.58
 -- Versi server: 10.4.16-MariaDB
 -- Versi PHP: 7.4.12
 
@@ -20,6 +20,30 @@ SET time_zone = "+00:00";
 --
 -- Database: `reporting`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `source`
+--
+
+CREATE TABLE `source` (
+  `source_id` int(11) NOT NULL,
+  `trxdate` varchar(50) NOT NULL,
+  `sendercountry` int(11) NOT NULL,
+  `sendercity` int(11) NOT NULL,
+  `receiptcountry` int(11) NOT NULL,
+  `receiptcity` int(11) NOT NULL,
+  `sendername` varchar(50) NOT NULL,
+  `receiptname` varchar(50) NOT NULL,
+  `senderphone` varchar(50) NOT NULL,
+  `receiptphone` varchar(50) NOT NULL,
+  `senderwn` int(11) NOT NULL,
+  `receiptwn` int(11) NOT NULL,
+  `description` text NOT NULL,
+  `nominal` int(11) NOT NULL,
+  `date_input` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -71,6 +95,12 @@ INSERT INTO `user_group` (`user_group_id`, `group_name`, `access`, `action`) VAL
 --
 
 --
+-- Indeks untuk tabel `source`
+--
+ALTER TABLE `source`
+  ADD PRIMARY KEY (`source_id`);
+
+--
 -- Indeks untuk tabel `user`
 --
 ALTER TABLE `user`
@@ -87,6 +117,12 @@ ALTER TABLE `user_group`
 --
 -- AUTO_INCREMENT untuk tabel yang dibuang
 --
+
+--
+-- AUTO_INCREMENT untuk tabel `source`
+--
+ALTER TABLE `source`
+  MODIFY `source_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT untuk tabel `user_group`

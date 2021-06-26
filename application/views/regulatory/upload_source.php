@@ -15,18 +15,18 @@
           <div class="card-header">
             <h4>Form Upload</h4>
             <div class="card-header-action">
-            <button class="btn btn-lg btn-outline-info"> <i class="fas fa-download"></i> Sample .xlsx </button>
+            <button class="btn btn-lg btn-outline-info" onclick="download_example()"> <i class="fas fa-download"></i> Sample .xlsx </button>
             </div>
             
           </div>
           <div class="card-body">
-            <form action="#" >
+            <form action="" id="form_import" enctype="multipart/form-data" >
               <div class="col-md-12">
-                <input type="file" class="dropify"  />
+                <input type="file" class="dropify" name="file_import" />
               </div>
               <br>
               <div class="text-center">
-                <button class="btn btn-icon icon-left btn-outline-info"> <i class="fas fa-upload"></i> Upload </button>
+                <button type="submit" class="btn btn-icon icon-left btn-outline-info" id="btnSaveImport" onClick="save_import()"> <i class="fas fa-upload"></i> Upload </button>
               </div>
             </form>
           </div>
@@ -36,3 +36,55 @@
   </div>
 </section>
 
+
+<script>
+
+var base_url = "<?= base_url() ?>";
+
+function save_import()
+{
+  $('#btnSaveImport').html('<i class="fa fa-spinner fa-spin"></i> saving...');
+  $('#btnSaveImport').attr('disabled',true);
+  var formData = new FormData($('#form_import')[0]);
+  $.ajax({
+    url : base_url+`regulatory/import_source`,
+    type: "POST",
+    data: formData,
+    contentType: false,
+    processData: false,
+    dataType: "JSON",
+    success: function(data){
+      if(data.status){
+        // notifikasi('success', data.message);
+        $('.dropify-clear').click();
+      }else{
+        for (var i = 0; i < data.inputerror.length; i++) {
+            $('[name="'+data.inputerror[i]+'"]').parent().addClass('has-error'); 
+            $('[name="'+data.inputerror[i]+'"]').next().text(data.error_string[i]);
+            }
+      }
+      $('#btnSaveImport').html('<i class="fas fa-upload"></i> Upload');
+      $('#btnSaveImport').attr('disabled',false);
+    }
+  });
+}
+
+function download_example()
+{
+  fetch(base_url + 'assets/template-excel/sample.xlsx')
+  .then(resp => resp.blob())
+  .then(blob => {
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.style.display = 'none';
+    a.href = url;
+    // the filename you want
+    a.download = 'example.xlsx';
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    alert('your file has downloaded!'); // or you know, something with better UX...
+  })
+  .catch(() => alert('oh no!'));
+}
+</script>

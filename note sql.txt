@@ -1,0 +1,20 @@
+CREATE TABLE `source` (
+	`source_id` INT(11) NOT NULL AUTO_INCREMENT,
+	`trxdate` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_general_ci',
+	`sendercountry` INT(11) NOT NULL,
+	`sendercity` INT(11) NOT NULL,
+	`receiptcountry` INT(11) NOT NULL,
+	`receiptcity` INT(11) NOT NULL,
+	`sendername` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_general_ci',
+	`receiptname` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_general_ci',
+	`senderphone` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_general_ci',
+	`receiptphone` VARCHAR(50) NOT NULL COLLATE 'utf8mb4_general_ci',
+	`senderwn` INT(11) NOT NULL,
+	`receiptwn` INT(11) NOT NULL,
+	`description` TEXT NOT NULL COLLATE 'utf8mb4_general_ci',
+	`nominal` INT(11) NOT NULL,
+	`date_input` TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+	PRIMARY KEY (`source_id`) USING BTREE
+)
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB;

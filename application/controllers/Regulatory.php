@@ -42,4 +42,52 @@ class Regulatory extends CI_Controller {
     $data['content'] = $this->load->view('regulatory/data_clean', $data, TRUE);
 		$this->load->view('layout', $data);
 	}
+
+
+
+  // START :: UPLOAD SOURCE
+  public function import_source(){
+    // $this->_validate_import();
+    $config['upload_path'] = './assets/';
+    $config['allowed_types'] = 'xls|xlsx';
+    $config['overwrite'] = true;
+    $this->load->library('upload', $config);
+    if($this->upload->do_upload('file_import')){
+      $file = $this->upload->data();
+      include APPPATH.'third_party/PHPExcel/PHPExcel.php';
+      $excelreader = new PHPExcel_Reader_Excel2007();
+      $loadexcel   = $excelreader->load('assets/'.$file['file_name']);
+      $sheet       = $loadexcel->getActiveSheet()->toArray(null, true, true ,true);
+
+      $data = [];
+      $numrow = 1;
+      foreach($sheet as $row){
+        if($numrow > 1){
+          $data[] = [
+              'trxdate'         => $row['A'],
+              'sendercountry'   => $row['B'],
+              'sendercity'      => $row['C'],
+              'receiptcountry'  => $row['D'],
+              'receiptcity'     => $row['E'],
+              'sendername'      => $row['F'],
+              'receiptname'     => $row['G'],
+              'senderphone'     => $row['H'],
+              'receiptphone'    => $row['I'],
+              'senderwn'        => $row['J'],
+              'receiptwn'       => $row['K'],
+              'description'     => $row['L'],
+              'nominal'         => $row['M']
+          ];
+        }
+        $numrow++;
+      }
+      unlink('./assets/'.$file['file_name']);
+      if($data){
+        $this->db->insert_batch('source', $data);
+      }
+     
+    }
+    echo json_encode(['status' => true, 'message' => 'Import data berhasil ']);
+  }
+  // END :: UPLOAD SOURCE
 }
