@@ -58,17 +58,22 @@
   $(document).ready(function() {
 
     var table = $('#table').DataTable({
-        "deferRender": true,
-        "scrollCollapse": true,
-        "scrollX": true,
-        "processing": true,
-        "serverSide": false,
-        "order": [],
-        "columnDefs": [{
-          "orderable": false
-        }],
-      });
+      "deferRender": true,
+      "scrollCollapse": true,
+      "scrollX": true,
+      "processing": true,
+      "serverSide": true,
+      "order": [],
+      "ajax": {
+        url: "<?php echo site_url('regulatory/ajax_list_raw_data')?>", // json datasource
+        type: "POST"
+      },
+      "columnDefs": [{
+        "orderable": false
+      }],
+    });
 
   });
+
 
 </script>

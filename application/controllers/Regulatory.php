@@ -12,7 +12,7 @@ class Regulatory extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-    //$this->load->model('M_app');
+    $this->load->model(['M_raw_data']);
     if(!$this->session->userdata('logged_in'))
     {
       $data=array();
@@ -90,4 +90,38 @@ class Regulatory extends CI_Controller {
     echo json_encode(['status' => true, 'message' => 'Import data berhasil ']);
   }
   // END :: UPLOAD SOURCE
+
+  // START :: AJAX RAW DATA
+  public function ajax_list_raw_data()
+   {
+     $list = $this->M_raw_data->get_datatables();
+     $data = array();
+     $no = $_POST['start'];
+     foreach ($list as $raw_data) {
+       $no++;
+       $row = array();
+       $row[] = $no;
+       $row[] = $raw_data->trxdate;
+       $row[] = $raw_data->sendercountry;
+       $row[] = $raw_data->sendercity;
+       $row[] = $raw_data->receiptcountry;
+       $row[] = $raw_data->receiptcity;
+       $row[] = $raw_data->sendername;
+       $row[] = $raw_data->receiptcity;
+       $row[] = $this->lib->rupiah($raw_data->nominal);
+       $data[] = $row;
+     } 
+     $output = array(
+               "draw" => $_POST['draw'],
+               "recordsTotal" => $this->M_raw_data->count_all(),
+               "recordsFiltered" => $this->M_raw_data->count_filtered(),
+               "data" => $data,
+             );
+     echo json_encode($output);
+   }
+  // END :: AJAX RAW DATA
+
+  
+
+ 
 }
