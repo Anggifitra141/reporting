@@ -5,7 +5,6 @@ class M_raw_data extends CI_model {
   /**
    *  =======   Application By    : PT. Seiber Mitra Solusi    ========
    *  =======   Version           : V.1.0                      ========
-   *  =======   Contact Develope  : anggifitra141@gmail.com    ========
    *  ===========           Copyright 2021          ===================
   */
 
@@ -15,10 +14,10 @@ class M_raw_data extends CI_model {
 		parent::__construct();
 	}
 
-	var $table = 'source';
+	var $table = 'tdatasource1';
   var $column_order = array('trxdate','sendername','receiptname','nominal');
   var $column_search = array('trxdate','sendername','receiptname','nominal');
-  var $order = array('source_id' => 'desc');
+  var $order = array('id' => 'desc');
 
   public function get($where=null)
   {

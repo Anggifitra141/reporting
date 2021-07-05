@@ -13,6 +13,7 @@ class Regulatory extends CI_Controller {
 	{
 		parent::__construct();
     $this->load->model(['M_raw_data']);
+    $this->load->model(['M_clean_data']);
     if(!$this->session->userdata('logged_in'))
     {
       $data=array();
@@ -39,7 +40,7 @@ class Regulatory extends CI_Controller {
   public function data_clean()
 	{
     $data= [];
-    $data['content'] = $this->load->view('regulatory/data_clean', $data, TRUE);
+    $data['content'] = $this->load->view('regulatory/clean_data', $data, TRUE);
 		$this->load->view('layout', $data);
 	}
 
@@ -83,7 +84,7 @@ class Regulatory extends CI_Controller {
       }
       unlink('./assets/'.$file['file_name']);
       if($data){
-        $this->db->insert_batch('source', $data);
+        $this->db->insert_batch('tdatasource1', $data);
       }
      
     }
@@ -120,6 +121,36 @@ class Regulatory extends CI_Controller {
      echo json_encode($output);
    }
   // END :: AJAX RAW DATA
+
+  // START :: AJAX DATA CLEAN
+  public function ajax_list_clean_data()
+   {
+     $list = $this->M_clean_data->get_datatables();
+     $data = array();
+     $no = $_POST['start'];
+     foreach ($list as $raw_data) {
+       $no++;
+       $row = array();
+       $row[] = $no;
+       $row[] = $raw_data->trxdate;
+       $row[] = $raw_data->sendercountry;
+       $row[] = $raw_data->sendercity;
+       $row[] = $raw_data->receiptcountry;
+       $row[] = $raw_data->receiptcity;
+       $row[] = $raw_data->sendername;
+       $row[] = $raw_data->receiptcity;
+       $row[] = $this->lib->rupiah($raw_data->nominal);
+       $data[] = $row;
+     } 
+     $output = array(
+               "draw" => $_POST['draw'],
+               "recordsTotal" => $this->M_clean_data->count_all(),
+               "recordsFiltered" => $this->M_clean_data->count_filtered(),
+               "data" => $data,
+             );
+     echo json_encode($output);
+   }
+  // END :: AJAX DATA CLEAN
 
   
 

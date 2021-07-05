@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/modules/izitoast/css/iziToast.min.css">
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/modules/datatables/datatables.min.css">
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/modules/dropify/css/dropify.min.css">
+  <link rel="stylesheet" href="<?php echo base_url(); ?>assets/modules/fullcalendar/fullcalendar.min.css">
   <!-- Template CSS -->
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/style.css">
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/components.css">
@@ -29,6 +30,13 @@
 
   gtag('config', 'UA-94034622-3');
 </script>
+
+<style>
+  .fc button.fc-state-active {
+    background-color: #fc544b;
+    color: #fff;
+  }
+</style>
 <!-- /END GA --></head>
 
 <body>
@@ -357,6 +365,7 @@
   <script src="<?php echo base_url(); ?>assets/modules/izitoast/js/iziToast.min.js"></script>
   <script src="<?php echo base_url(); ?>assets/modules/sweetalert/sweetalert.min.js"></script>
   <script src="<?php echo base_url(); ?>assets/modules/dropify/js/dropify.min.js"></script>
+  <script src="<?php echo base_url(); ?>assets/modules/fullcalendar/fullcalendar.min.js"></script>
   <!-- Page Specific JS File -->
   <script src="<?php echo base_url(); ?>assets/js/page/index-0.js"></script>
   <!-- Template JS File --> 
