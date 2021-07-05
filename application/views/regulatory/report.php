@@ -55,10 +55,33 @@
             <div class="row">
               <div class="col-md-4"></div>
               <div class="col-md-5">
-                <button class="btn btn-icon btn-outline-warning m-2"><i class="fas fa-eye"></i> View </button>
+                <button class="btn btn-icon btn-outline-warning m-2" id="btn-view"  ><i class="fas fa-eye"></i> View </button>
                 <button class="btn btn-icon btn-outline-success m-2"><i class="fas fa-file-excel"></i> Excel </button>
                 <button class="btn btn-icon btn-outline-success m-2"><i class="fas fa-file-csv"></i> Csv </button> 
               </div>
+            </div>
+
+            <div class="row mt-4" id="result-data" style="display: none;">
+            <div class="col-md-12">
+            <table class="table table-striped" id="table" style="width: 100%;"> 
+              <thead>
+                  <tr>
+                    <th class="text-center" width="1px">
+                      No
+                    </th>
+                    <th>Trxdate</th>
+                    <th>Sender Country</th>
+                    <th>Sender City</th>
+                    <th>Receipt Country</th>
+                    <th>Receipt City</th>
+                    <th>Sender Name</th>
+                    <th>Receipt Name</th>
+                    <th>Nominal</th>
+                  </tr>
+                </thead>
+                
+              </table>
+            
             </div>
           </div>
         </div>
@@ -70,7 +93,7 @@
 
 <script src="<?php echo base_url(); ?>assets/modules/jquery.min.js"></script>
 <script>
-  
+  var base_url = "<?= base_url() ?>";
 
   $("input").change(function(){
       $(this).removeClass('is-invalid');
@@ -81,16 +104,44 @@
     var table = $('#table').DataTable({
       "deferRender": true,
       "scrollCollapse": true,
-      "scrollX": true,
+      "scrollX": false,
       "processing": true,
-      "serverSide": false,
+      "serverSide": true,
       "order": [],
+      "ajax": {
+        url: "<?php echo site_url('regulatory/ajax_list_clean_data')?>", // json datasource
+        type: "POST"
+      },
       "columnDefs": [{
         "orderable": false
       }],
     });
 
   });
+
+  $('#btn-view').click(function(){
+    loading();  
+    setTimeout(function(){
+      $('#result-data').show();
+      
+    }, 1000)
+    
+    
+
+  })
+
+  function loading()
+{
+  swal({
+          title:"Please Wait.", 
+          text:"Loading...",
+          icon: base_url + 'assets/img/loading.gif',
+          buttons: false,      
+          // closeOnClickOutside: false,
+          timer: 1000,
+          //icon: "success"
+      })
+}
 
 
 </script>
