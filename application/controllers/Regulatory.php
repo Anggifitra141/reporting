@@ -150,6 +150,12 @@ class Regulatory extends CI_Controller {
              );
      echo json_encode($output);
    }
+
+   public function cleansing_data()
+   {
+     $data = $this->M_raw_data->get()->result();
+     echo json_encode($data);
+   }
   // END :: AJAX DATA CLEAN
 
   

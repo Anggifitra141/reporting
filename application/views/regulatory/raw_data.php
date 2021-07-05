@@ -11,14 +11,18 @@
 
   <div class="section-body">
     <h2 class="section-title">Manage Raw Data</h2>
-
+    
     <div class="row">
       <div class="col-12">
-        <div class="form-group">
-
-        </div>
         <div class="card">
+          <div class="card-header">
+          <h4></h4>
+          <div class="card-header-form">
+            <button class="btn btn-danger"id="swal-6" style="border-radius: 5px !important;">Cleansing Data</button>
+            </div> 
+          </div>
           <div class="card-body">
+          
             <div class="">
               <table class="table table-striped" id="table" style="width: 100%;">
                 <thead>
@@ -49,6 +53,8 @@
 
 <script src="<?php echo base_url(); ?>assets/modules/jquery.min.js"></script>
 <script>
+
+var base_url = "<?= base_url() ?>";
   
 
   $("input").change(function(){
@@ -74,6 +80,76 @@
     });
 
   });
+  const showLoading = function() {
+  swal({
+    title: 'Now loading',
+    allowEscapeKey: false,
+    allowOutsideClick: false,
+    timer: 2000,
+    onOpen: () => {
+      swal.showLoading();
+    }
+  }).then(
+    () => {},
+    (dismiss) => {
+      if (dismiss === 'timer') {
+        console.log('closed by timer!!!!');
+        swal({ 
+          title: 'Finished!',
+          type: 'success',
+          timer: 2000,
+          showConfirmButton: false
+        })
+      }
+    }
+  )
+};
+
+  $("#swal-6").click(function() {
+  swal({
+      title: 'Are you sure?',
+      text: 'Do you want to cleansing this data ?',
+      icon: 'warning',
+      timerProgressBar: true,
+      buttons: true,
+      dangerMode: true,
+    })
+    .then((willDelete) => {
+      if (willDelete) {
+        loading();
+        $.ajax({
+          url : base_url + 'regulatory/cleansing_data',
+          type : 'GET',
+          dataType : 'JSON',
+          success : function(response){
+            console.log('hi')
+            swal({
+              title: 'Success',
+              text: response.length + ' data cleaned',
+              icon: 'warning',
+              icon: 'success',
+            });
+          }
+        })
+      } else {
+      swal('Cleansing Data Canceled');
+      }
+    });
+});
+
+
+function loading()
+{
+  swal({
+          title:"Please Wait.", 
+          text:"Loading...",
+          icon: base_url + 'assets/img/loading.gif',
+          buttons: false,      
+          // closeOnClickOutside: false,
+          // timer: 3000,
+          //icon: "success"
+      })
+}
 
 
 </script>
