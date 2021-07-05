@@ -44,7 +44,26 @@ class Regulatory extends CI_Controller {
 		$this->load->view('layout', $data);
 	}
 
+  public function report()
+  {
+    $data= [];
+    $data['content'] = $this->load->view('regulatory/report', $data, TRUE);
+    $this->load->view('layout', $data);
+  }
 
+  public function archive()
+  {
+    $data= [];
+    $data['content'] = $this->load->view('regulatory/archive', $data, TRUE);
+    $this->load->view('layout', $data);
+  }
+
+  public function user_activity()
+  {
+    $data= [];
+    $data['content'] = $this->load->view('regulatory/user_activity', $data, TRUE);
+    $this->load->view('layout', $data);
+  }
 
   // START :: UPLOAD SOURCE
   public function import_source(){
@@ -151,8 +170,6 @@ class Regulatory extends CI_Controller {
      echo json_encode($output);
    }
   // END :: AJAX DATA CLEAN
-
   
-
  
 }

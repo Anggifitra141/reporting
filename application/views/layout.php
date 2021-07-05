@@ -283,16 +283,13 @@
             </li>
             </li>
             <li>
-              <a href="<?php echo site_url('app'); ?>" class="nav-link"><i class="fas fa-check"></i><span>Verification</span></a>
+              <a href="<?php echo site_url('regulatory/report'); ?>" class="nav-link"><i class="fas fa-file-alt"></i><span>Report</span></a>
             </li>
             <li>
-              <a href="<?php echo site_url('app'); ?>" class="nav-link"><i class="fas fa-file-alt"></i><span>Report</span></a>
+              <a href="<?php echo site_url('regulatory/archive'); ?>" class="nav-link"><i class="fas fa-archive"></i><span>Archive</span></a>
             </li>
             <li>
-              <a href="<?php echo site_url('app'); ?>" class="nav-link"><i class="fas fa-archive"></i><span>Archive</span></a>
-            </li>
-            <li>
-              <a href="<?php echo site_url('app'); ?>" class="nav-link"><i class="fas fa-history"></i><span>User Activity</span></a>
+              <a href="<?php echo site_url('regulatory/user_activity'); ?>" class="nav-link"><i class="fas fa-history"></i><span>User Activity</span></a>
             </li>
             <li class="menu-header">Document Management</li>
             <li>
