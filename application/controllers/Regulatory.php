@@ -13,7 +13,7 @@ class Regulatory extends CI_Controller {
 	{
 		parent::__construct();
     $this->load->model(['M_raw_data']);
-    $this->load->model(['M_clean_data']);
+    $this->load->model(['M_clean_data', 'M_campaign']);
     if(!$this->session->userdata('logged_in'))
     {
       $data=array();
@@ -26,6 +26,7 @@ class Regulatory extends CI_Controller {
 	public function upload_source()
 	{
     $data= [];
+    $data['campaign'] = $this->M_campaign->get(['is_active' => 'Y'])->result();
     $data['content'] = $this->load->view('regulatory/upload_source', $data, TRUE);
 		$this->load->view('layout', $data);
 	}
@@ -67,9 +68,9 @@ class Regulatory extends CI_Controller {
 
   // START :: UPLOAD SOURCE
   public function import_source(){
-    // $this->_validate_import();
+    $this->_validate_import_source();
     $config['upload_path'] = './assets/';
-    $config['allowed_types'] = 'xls|xlsx';
+    $config['allowed_types'] = 'xls|xlsx|csv';
     $config['overwrite'] = true;
     $this->load->library('upload', $config);
     if($this->upload->do_upload('file_import')){
@@ -84,6 +85,7 @@ class Regulatory extends CI_Controller {
       foreach($sheet as $row){
         if($numrow > 1){
           $data[] = [
+              'campaign'        => $this->input->post('campaign'),
               'trxdate'         => $row['A'],
               'sendercountry'   => $row['B'],
               'sendercity'      => $row['C'],
@@ -96,7 +98,10 @@ class Regulatory extends CI_Controller {
               'senderwn'        => $row['J'],
               'receiptwn'       => $row['K'],
               'description'     => $row['L'],
-              'nominal'         => $row['M']
+              'nominal'         => $row['M'],
+              'datestamp'=> date("Ymd"),
+							'status'=> "new"
+
           ];
         }
         $numrow++;
@@ -107,7 +112,33 @@ class Regulatory extends CI_Controller {
       }
      
     }
-    echo json_encode(['status' => true, 'message' => 'Import data berhasil ']);
+    echo json_encode(['status' => true, 'message' => count($data) .' Data Has Been Uploaded']);
+  }
+
+  private function _validate_import_source()
+  {
+    $data = array();
+    $data['error_string'] = array();
+    $data['inputerror'] = array();
+    $data['status'] = TRUE;
+
+    if($_FILES['file_import']['name'] == '')
+    {
+      $data['inputerror'][] = 'file_import';
+      $data['error_string'][] = 'File Is Required';
+      $data['status'] = FALSE;
+    }
+    if($_POST['campaign'] == '')
+    {
+      $data['inputerror'][] = 'campaign';
+      $data['error_string'][] = 'Camapaign Is Required';
+      $data['status'] = FALSE;
+    }
+    if($data['status'] === FALSE)
+    {
+      echo json_encode($data);
+      exit();
+    }
   }
   // END :: UPLOAD SOURCE
 

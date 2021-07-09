@@ -273,12 +273,23 @@
             <li>
               <a href="<?php echo site_url('app'); ?>" class="nav-link"><i class="fas fa-home"></i><span>Dashboard</span></a>
             </li>
+            <li>
+              <a href="<?php echo site_url('campaign'); ?>" class="nav-link"><i class="fas fa-list"></i><span>Campaign</span></a>
+            </li>
             <li class="dropdown">
               <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-layer-group"></i> <span>Data Source</span></a>
               <ul class="dropdown-menu">
                 <li id="regulatory_upload_source"><a class="nav-link" href="<?php echo site_url('regulatory/upload_source'); ?>"><i class="fas fa-upload"></i> Upload Source</a></li>
                 <li id="regulatory_raw_data"><a class="nav-link" href="<?php echo site_url('regulatory/raw_data'); ?>"><i class="fas fa-database"></i> Raw Data</a></li>
                 <li id="regulatory_data_clean"><a class="nav-link" href="<?php echo site_url('regulatory/data_clean'); ?>"><i class="fas fa-database"></i> Data Clean</a></li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-wrench"></i> <span>Utilities Source</span></a>
+              <ul class="dropdown-menu">
+                <li id="regulatory_upload_source"><a class="nav-link" href="<?php echo site_url('utilities/roles_clean'); ?>"><i class="fas fa-align-center"></i> Roles Clean</a></li>
+                <li id="regulatory_raw_data"><a class="nav-link" href="<?php echo site_url('utilities/auto_clean'); ?>"><i class="fas fa-align-center"></i> Auto Data</a></li>
+                <li id="regulatory_data_clean"><a class="nav-link" href="<?php echo site_url('utilities/manual_clean'); ?>"><i class="fas fa-database"></i> Manual Clean</a></li>
               </ul>
             </li>
             </li>
