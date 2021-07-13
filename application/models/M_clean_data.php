@@ -34,7 +34,7 @@ class M_clean_data extends CI_model {
   {
     $this->db->select('*');
     $this->db->from($this->table);
-    $this->db->where('status', 'verified');
+    // $this->db->where('status', 'verified');
     
     $i = 0;
     foreach ($this->column_search as $item)

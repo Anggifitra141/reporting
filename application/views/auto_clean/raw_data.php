@@ -19,7 +19,7 @@
               <div class="col-md-10">
                 <div class="form-group">
                   <!-- <label for="">Campaign</label> -->
-                  <select class="form-control">
+                  <select class="form-control" name="campaign_id">
                     <option value="">--- Select ---</option>
                     <?php foreach($campaign as $key): ?>
                     <option value="<?= $key->campaign ?>"><?= $key->campaign ?></option>
@@ -28,15 +28,21 @@
                 </div>
               </div>
               <div class="col-md-2">
-              <button class="btn btn-danger"><i class="fas fa-check"></i> Cleansing Data </button>
+              <button class="btn btn-danger" id="auto-clean"><i class="fas fa-check"></i> Cleansing Data </button>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    
-    <div class="row">
+    <div class="row" style="display: none;" id="alert-available">
+      <div class="col-md-12">
+        <div class="alert alert-warning">
+          <i class="fa fa-info"></i>  Data Not Available
+        </div>
+      </div>
+    </div>
+    <div class="row" style="display: none;" id="raw_data">
       <div class="col-12">
         <div class="card">
           <div class="card-body" >
@@ -44,9 +50,6 @@
               <table class="table table-striped" id="table" style="width: 100%;">
                 <thead>
                   <tr>
-                    <th class="text-center" width="1px">
-                      No
-                    </th>
                     <th>Trxdate</th>
                     <th>Sender Country</th>
                     <th>Sender City</th>
@@ -57,6 +60,7 @@
                     <th>Nominal</th>
                   </tr>
                 </thead>
+                <tbody id="result-source"></tbody>
 
               </table>
             </div>
@@ -78,51 +82,49 @@ var base_url = "<?= base_url() ?>";
       $(this).removeClass('is-invalid');
       $(this).next().empty();
   });
-  $(document).ready(function() {
 
-    var table = $('#table').DataTable({
-      "deferRender": true,
-      "scrollCollapse": true,
-      "scrollX": true,
-      "processing": true,
-      "serverSide": true,
-      "order": [],
-      "ajax": {
-        url: "<?php echo site_url('regulatory/ajax_list_raw_data')?>", // json datasource
-        type: "POST"
+
+  $('[name="campaign_id"]').change(function(){
+    loading();
+    $('#alert-available').slideUp();
+    $('#raw_data').slideUp();
+    var campaign_id = $(this).val();
+    $.ajax({
+      url : base_url + 'utilities/ajax_raw_data',
+      type : 'POST',
+      data : {
+        campaign_id : campaign_id
       },
-      "columnDefs": [{
-        "orderable": false
-      }],
-    });
-
-  });
-  const showLoading = function() {
-  swal({
-    title: 'Now loading',
-    allowEscapeKey: false,
-    allowOutsideClick: false,
-    timer: 2000,
-    onOpen: () => {
-      swal.showLoading();
-    }
-  }).then(
-    () => {},
-    (dismiss) => {
-      if (dismiss === 'timer') {
-        console.log('closed by timer!!!!');
-        swal({ 
-          title: 'Finished!',
-          type: 'success',
-          timer: 2000,
-          showConfirmButton: false
-        })
+      dataType : 'JSON',
+      success : function(response)
+      {
+        if(response.length > 0){
+          $('#table').dataTable( {
+            data : response,
+            //data : response,
+            columns: [
+                      {"data" : "trxdate"},
+                      {"data" : "sendercountry"},
+                      {"data" : "sendercity"},
+                      {"data" : "receiptcountry"},
+                      {"data" : "receiptcity"},
+                      {"data" : "sendername"},
+                      {"data" : "receiptname"},
+                      {"data" : "nominal"},
+                      ],
+            searching : true
+        });
+          $('#raw_data').slideDown();
+        }else{
+          $('#alert-available').slideDown();
+        } 
+        swal.close();
       }
-    }
-  )
-};
+    })
+  })
+  
 
-  $("#swal-6").click(function() {
+  $("#auto-clean").click(function() {
   swal({
       title: 'Are you sure?',
       text: 'Do you want to cleansing this data ?',
@@ -135,17 +137,22 @@ var base_url = "<?= base_url() ?>";
       if (willDelete) {
         loading();
         $.ajax({
-          url : base_url + 'regulatory/cleansing_data',
-          type : 'GET',
+          url : base_url + 'utilities/proc_auto_clean',
+          type : 'POST',
           dataType : 'JSON',
+          data : {
+            campaign : $('[name="campaign_id"]').val()
+          },
           success : function(response){
-            console.log('hi')
             swal({
               title: 'Success',
-              text: response.length + ' data cleaned',
+              text: response.success + ' Data Cleaned, ' + response.false + ' Failed' ,
               icon: 'warning',
               icon: 'success',
             });
+            $('#alert-available').slideUp();
+            $('#raw_data').slideUp();
+            $('[name="campaign_id"]').val('');
           }
         })
       } else {

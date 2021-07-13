@@ -29,6 +29,17 @@
   gtag('js', new Date());
 
   gtag('config', 'UA-94034622-3');
+  function convertToRupiah(angka) {
+    var rupiah = '';
+    var angkarev = angka.toString().split('').reverse().join('');
+    for (var i = 0; i < angkarev.length; i++)
+      if (i % 3 == 0) rupiah += angkarev.substr(i, 3) + '.';
+    return 'Rp. ' + rupiah.split('', rupiah.length - 1).reverse().join('');
+  }
+
+  function convertToAngka(rupiah) {
+    return parseInt(rupiah.replace(/,.*|[^0-9]/g, ''), 10);
+  }
 </script>
 
 <style>
@@ -289,7 +300,7 @@
               <ul class="dropdown-menu">
                 <li id="regulatory_upload_source"><a class="nav-link" href="<?php echo site_url('utilities/roles_clean'); ?>"><i class="fas fa-align-center"></i> Roles Clean</a></li>
                 <li id="regulatory_raw_data"><a class="nav-link" href="<?php echo site_url('utilities/auto_clean'); ?>"><i class="fas fa-align-center"></i> Auto Data</a></li>
-                <li id="regulatory_data_clean"><a class="nav-link" href="<?php echo site_url('utilities/manual_clean'); ?>"><i class="fas fa-database"></i> Manual Clean</a></li>
+                <li id="regulatory_data_clean"><a class="nav-link" href="<?php echo site_url('utilities/manual'); ?>"><i class="fas fa-database"></i> Manual Clean</a></li>
               </ul>
             </li>
             </li>
