@@ -25,7 +25,7 @@ class Campaign extends CI_Controller {
 	public function index()
 	{
     $data= [];
-    $data['content'] = $this->load->view('campaign/index', $data, TRUE);
+    $data['content'] = $this->load->view('campaign/campaign', $data, TRUE);
 		$this->load->view('layout', $data);
 	}
 
