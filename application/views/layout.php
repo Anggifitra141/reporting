@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/modules/datatables/datatables.min.css">
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/modules/dropify/css/dropify.min.css">
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/modules/fullcalendar/fullcalendar.min.css">
+  <link rel="stylesheet" href="<?php echo base_url(); ?>assets/modules/select2/dist/css/select2.min.css">
   <!-- Template CSS -->
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/style.css">
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/components.css">
@@ -46,6 +47,11 @@
   .fc button.fc-state-active {
     background-color: #fc544b;
     color: #fff;
+  }
+
+  .select2-container--default .select2-selection--multiple .select2-selection__choice, .select2-container--default .select2-results__option[aria-selected=true], .select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: #FC545C;
+    color: white;
   }
 </style>
 <!-- /END GA --></head>
@@ -290,29 +296,30 @@
             <li class="dropdown">
               <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-layer-group"></i> <span>Data Source</span></a>
               <ul class="dropdown-menu">
-                <li id="regulatory_upload_source"><a class="nav-link" href="<?php echo site_url('regulatory/upload_source'); ?>"><i class="fas fa-upload"></i> Upload Source</a></li>
-                <li id="regulatory_raw_data"><a class="nav-link" href="<?php echo site_url('regulatory/raw_data'); ?>"><i class="fas fa-database"></i> Raw Data</a></li>
-                <li id="regulatory_data_clean"><a class="nav-link" href="<?php echo site_url('regulatory/data_clean'); ?>"><i class="fas fa-database"></i> Data Clean</a></li>
+                <li id="source_upload_source"><a class="nav-link" href="<?php echo site_url('source/upload_source'); ?>"><i class="fas fa-upload"></i> Upload Source</a></li>
+                <li id="source_raw_data"><a class="nav-link" href="<?php echo site_url('source/raw_data'); ?>"><i class="fas fa-database"></i> Raw Data</a></li>
+                <li id="source_data_clean"><a class="nav-link" href="<?php echo site_url('source/data_clean'); ?>"><i class="fas fa-database"></i> Data Clean</a></li>
               </ul>
             </li>
             <li class="dropdown">
               <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-wrench"></i> <span>Utilities Source</span></a>
               <ul class="dropdown-menu">
-                <li id="regulatory_upload_source"><a class="nav-link" href="<?php echo site_url('utilities/roles_clean'); ?>"><i class="fas fa-align-center"></i> Roles Clean</a></li>
-                <li id="regulatory_raw_data"><a class="nav-link" href="<?php echo site_url('utilities/auto_clean'); ?>"><i class="fas fa-align-center"></i> Auto Data</a></li>
-                <li id="regulatory_data_clean"><a class="nav-link" href="<?php echo site_url('utilities/manual'); ?>"><i class="fas fa-database"></i> Manual Clean</a></li>
+                <li id="source_upload_source"><a class="nav-link" href="<?php echo site_url('utilities/roles_clean'); ?>"><i class="fas fa-align-center"></i> Roles Clean</a></li>
+                <li id="source_raw_data"><a class="nav-link" href="<?php echo site_url('utilities/auto_clean'); ?>"><i class="fas fa-align-center"></i> Auto Data</a></li>
+                <li id="source_data_clean"><a class="nav-link" href="<?php echo site_url('utilities/manual'); ?>"><i class="fas fa-database"></i> Manual Clean</a></li>
               </ul>
             </li>
             </li>
             <li>
-              <a href="<?php echo site_url('regulatory/report'); ?>" class="nav-link"><i class="fas fa-file-alt"></i><span>Report</span></a>
+              <a href="<?php echo site_url('source/report'); ?>" class="nav-link"><i class="fas fa-file-alt"></i><span>Report</span></a>
             </li>
             <li>
-              <a href="<?php echo site_url('regulatory/archive'); ?>" class="nav-link"><i class="fas fa-archive"></i><span>Archive</span></a>
+              <a href="<?php echo site_url('source/archive'); ?>" class="nav-link"><i class="fas fa-archive"></i><span>Archive</span></a>
             </li>
             <li>
-              <a href="<?php echo site_url('regulatory/user_activity'); ?>" class="nav-link"><i class="fas fa-history"></i><span>User Activity</span></a>
+              <a href="<?php echo site_url('source/user_activity'); ?>" class="nav-link"><i class="fas fa-history"></i><span>User Activity</span></a>
             </li>
+            <!--
             <li class="menu-header">Document Management</li>
             <li>
               <a href="<?php echo site_url('app'); ?>" class="nav-link"><i class="fas fa-home"></i><span>Dashboard</span></a>
@@ -330,15 +337,20 @@
             <li>
               <a href="<?php echo site_url('app'); ?>" class="nav-link"><i class="fas fa-history"></i><span>User Activity</span></a>
             </li>
+            -->
             <li class="menu-header">System Setting</li>
+            <li class="dropdown">
+              <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-sliders-h"></i> <span>Master data</span></a>
+              <ul class="dropdown-menu">
+                <li id="source_upload_source"><a class="nav-link" href="<?php echo site_url('master/region'); ?>"><i class="fas fa-align-center"></i> Region</a></li>
+                <li id="source_upload_source"><a class="nav-link" href="<?php echo site_url('master/country'); ?>"><i class="fas fa-align-center"></i> Country</a></li>
+              </ul>
+            </li>
             <li>
               <a href="<?php echo site_url(); ?>" class="nav-link"><i class="fas fa-user"></i><span>User</span></a>
             </li>
             <li>
               <a href="<?php echo site_url('user_group'); ?>" class="nav-link"><i class="fas fa-users"></i><span>User group</span></a>
-            </li>
-            <li>
-              <a href="<?php echo site_url(); ?>" class="nav-link"><i class="fas fa-sliders-h"></i><span>Master data</span></a>
             </li>
             <li>
               <a href="<?php echo site_url('login/signout'); ?>" class="nav-link"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
@@ -385,6 +397,7 @@
   <script src="<?php echo base_url(); ?>assets/modules/sweetalert/sweetalert.min.js"></script>
   <script src="<?php echo base_url(); ?>assets/modules/dropify/js/dropify.min.js"></script>
   <script src="<?php echo base_url(); ?>assets/modules/fullcalendar/fullcalendar.min.js"></script>
+  <script src="<?php echo base_url(); ?>assets/modules/select2/dist/js/select2.full.min.js"></script>
   <!-- Page Specific JS File -->
   <script src="<?php echo base_url(); ?>assets/js/page/index-0.js"></script>
   <!-- Template JS File --> 
@@ -394,6 +407,7 @@
 
   <script>
     $('.dropify').dropify();
+    $('.select2').select2();
   </script>
 </body>
 </html>

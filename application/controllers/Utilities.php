@@ -144,7 +144,7 @@ class Utilities extends CI_Controller {
   {
     $data= [];
     $data['campaign'] = $this->M_campaign->get()->result();
-    $data['content'] = $this->load->view('auto_clean/raw_data', $data, TRUE);
+    $data['content'] = $this->load->view('utilities/auto_clean', $data, TRUE);
 		$this->load->view('layout', $data);
   }
 	public function ajax_raw_data()
