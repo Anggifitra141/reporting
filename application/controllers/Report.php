@@ -121,5 +121,15 @@ class Report extends CI_Controller {
     echo json_encode($output);
   }
   // END :: SETTING REPORT
+  function in($value='')
+    {
+		$data['page'] 	 = 'sourceAll';
+		$data['sourceAll'] = $this->db->query("SELECT a.tcal_date as date ,a.tcal_message as name , 
+		b.regulator as regulator, c.periodname as period, a.status as status, b.status as status_rep , b.link
+		FROM tcalendar a INNER JOIN treportsettings b ON a.trepid = b.id INNER JOIN treportperiod c ON b.period = c.periodcode 
+		WHERE a.tcal_date = '$value'")->result_array();
+		// $this->load->view('dataSmall',$data, FALSE);
+    echo json_encode($data);
+    }
 
 }
