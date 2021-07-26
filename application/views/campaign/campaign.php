@@ -6,18 +6,16 @@
 
 <section class="section">
   <div class="section-header">
-    <h1>Camapaign</h1>
+    <h1>Campaign</h1>
   </div>
 
   <div class="section-body">
-    <h2 class="section-title">Manage Camapaign</h2>
+    <h2 class="section-title">Manage Campaign</h2>
 
     <div class="row">
       <div class="col-12">
         <div class="form-group">
           <a href="#" onclick="add_campaign()" class="btn btn-icon icon-left btn-outline-primary"><i class="far fa-plus-square"></i> Add</a>
-          <a href="#" class="btn btn-icon icon-left btn-outline-warning"><i class="fa fa-filter"></i> Filter</a>
-          <a href="#" class="btn btn-icon icon-left btn-outline-success"><i class="fas fa-download"></i> Download </a>
         </div>
         <div class="card">
           <div class="card-body">
@@ -55,7 +53,6 @@
       <div class="modal-body">
         <form class="form-horizontal" method="POST" id="form_campaign">
           <div class="form-body">
-            <input type="hidden" class="form-control" name="campaign_id">
             <div class="form-group">
               <label>Campaign</label>
               <input type="text" class="form-control" name="campaign">

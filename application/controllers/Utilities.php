@@ -29,12 +29,12 @@ class Utilities extends CI_Controller {
 		// $this->load->view('layout', $data);
 	}
 
-  public function roles_clean()
+  public function role_clean()
   {
     $data['sendercountry'] = $this->db->query("SELECT DISTINCT tcleandatasource1.sendercountry FROM tcleandatasource1 WHERE status='unverified'")->result_array();
 		$data['receiptcountry'] = $this->db->query("SELECT DISTINCT tcleandatasource1.receiptcountry FROM tcleandatasource1 WHERE status='unverified'")->result_array();
     $data['country'] = $this->db->query("SELECT name FROM tcountrycode")->result();
-    $data['content'] = $this->load->view('roles/index', $data, TRUE);
+    $data['content'] = $this->load->view('utilities/role_clean', $data, TRUE);
 		$this->load->view('layout', $data);
   }
 

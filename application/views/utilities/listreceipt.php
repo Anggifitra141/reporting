@@ -52,7 +52,7 @@
       <form class="form-horizontal" method="POST" id="form" action="<?php echo base_url();?>utilities/urcity" method="POST" >
       <div class="modal-body">
         <div class="alert alert-info">
-          <i class="fa fa-info"></i> Verify manual data on your system
+          <i class="fas fa-info-circle"></i> Verify manual data on your system
         </div>
         
           <div class="form-body">
@@ -65,7 +65,7 @@
             </div>
             <div class="form-group">
               <label for="">Sender After</label>
-              <select class="form-control" name="name">
+              <select class="form-control select2" name="name">
                 <option value="">Choice City</option>
                 <?php foreach($receipt as $key) :  ?>
                   <option value="<?= $key->alto ?>"><?= $key->alto ?></option>

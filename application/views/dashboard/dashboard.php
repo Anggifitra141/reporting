@@ -195,29 +195,29 @@
     console.log(events)
 
     $('#myEvent').fullCalendar({
-		// themeSystem: 'bootstrap3',
-		  customButtons: {
-			calendarSidebar: {
-				text: 'icon',
-			}
-		},
-    height: 'auto',
-		header: {
-		left: 'calendarSidebar ,today',
-		center: 'prev,title,next',
-		right: 'month,agendaWeek,agendaDay,listMonth'
-		},
-		droppable: false,//true,	
-		editable: false,//true,
-		// height: 'parent',
-		eventLimit: true, // allow "more" link when too many events
-		windowResizeDelay:500,
-		events: events,
-			drop: function() {
-				if($("#remove_event").is(':checked'))
-					$(this).remove();
-			}
-		});
+      // themeSystem: 'bootstrap3',
+      customButtons: {
+        calendarSidebar: {
+          text: 'icon',
+        }
+      },
+      height: 'auto',
+      header: {
+      left: 'calendarSidebar ,today',
+      center: 'prev,title,next',
+      right: 'month,agendaWeek,agendaDay,listMonth'
+      },
+      droppable: false,//true,	
+      editable: false,//true,
+      // height: 'parent',
+      eventLimit: true, // allow "more" link when too many events
+      windowResizeDelay:500,
+      events: events,
+        drop: function() {
+          if($("#remove_event").is(':checked'))
+            $(this).remove();
+        }
+    });
 
   });
 

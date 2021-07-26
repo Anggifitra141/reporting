@@ -305,7 +305,7 @@
             <li class="dropdown">
               <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-wrench"></i> <span>Utilities Source</span></a>
               <ul class="dropdown-menu">
-                <li id="source_upload_source"><a class="nav-link" href="<?php echo site_url('utilities/roles_clean'); ?>"><i class="fas fa-align-center"></i> Roles Clean</a></li>
+                <li id="source_upload_source"><a class="nav-link" href="<?php echo site_url('utilities/role_clean'); ?>"><i class="fas fa-align-center"></i> Role Clean</a></li>
                 <li id="source_raw_data"><a class="nav-link" href="<?php echo site_url('utilities/auto_clean'); ?>"><i class="fas fa-align-center"></i> Auto Clean</a></li>
                 <li id="source_data_clean"><a class="nav-link" href="<?php echo site_url('utilities/manual'); ?>"><i class="fas fa-database"></i> Manual Clean</a></li>
               </ul>
@@ -413,7 +413,9 @@
   <script>
     $(document).ready(function() {  
       $('.dropify').dropify();
-      $('.select2').select2();
+      $('.select2').select2({
+        width: '100%'
+      });
       $('.daterange-picker').daterangepicker({
             startDate: moment().startOf('month'),
             endDate: moment().endOf('month'),

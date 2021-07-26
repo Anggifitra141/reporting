@@ -46,7 +46,7 @@
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header  bg-primary text-white">
-        <h5 class="modal-title">Add User Group</h5>
+        <h5 class="modal-title">Add Report</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -122,7 +122,7 @@
         $('[name="is_active"]').val(data.is_active);
 
         $('#modal_report').modal('show');
-        $('.modal-title').text('Update report');
+        $('.modal-title').text('Update Report');
       },
       error: function(jqXHR, textStatus, errorThrown) {
         alert('Error get data from ajax');

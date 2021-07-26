@@ -1,33 +1,34 @@
 <section class="section">
   <div class="section-header">
-    <h1>Roles Clean</h1>
+    <h1>List Sender Country</h1>
   </div>
 
   <div class="section-body">
-    <h2 class="section-title">Manage Roles Clean</h2>
+    <h2 class="section-title">Manage List Sender Country</h2>
 
     <div class="row">
       <div class="col-12">
         <div class="card">
-          <div class="card-header">
-            <b>Sender Country</b>
-          </div>
           <div class="card-body">
-            <div class="table-responsive">
-              <table class="table table-bordered" id="table" >
+            <div class="">
+              <table class="table table-striped" id="table" style="width:100%">
                 <thead>
                   <tr>
-                    <th>List Sender</th>
-										<th width="125px">Action</th>
+                    <th>No</th>
+                    <th>Action</th>
+                    <th>List Sender</th>										
                   </tr>
                 </thead>
                 <tbody>
-									<?php foreach ($sendercountry as $row) : $city = str_replace(" ", "_",$row['sendercity']); ?>
+									<?php 
+                    $no = 1;
+                    foreach ($sendercountry as $row) : $city = str_replace(" ", "_",$row['sendercity']); ?>
 										<tr>
-                      <td width="100%"><?php echo $row['sendercity'] ?></td>
+                      <td> <?php echo $no++; ?> </td>
 											<td>
-                        <a href="javascript:void(0)" onClick="modal_list('<?= $row['sendercountry']."','".$row['sendercity'] ?>')"  class="btn btn-success btn-xs" data-toggle="tooltip" data-original-title="Edit Data"> <i class="fas fa-pen"></i></a>
+                        <a href="javascript:void(0)" onClick="modal_list('<?= $row['sendercountry']."','".$row['sendercity'] ?>')"  class="btn btn-primary btn-sm" data-toggle="tooltip" data-original-title="Edit Data"> <i class="far fa-edit"></i></a>
                       </td>
+                      <td width="100%"><?php echo $row['sendercity'] ?></td>
                     </tr>
 									<?php endforeach; ?>
 									</tbody>
@@ -40,7 +41,7 @@
   </div>
 </section>
 
-<div class="modal fade" tabindex="-1" role="dialog" id="modal_list">
+<div class="modal fade" role="dialog" id="modal_list">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header  bg-primary text-white">
@@ -52,7 +53,7 @@
       <form class="form-horizontal" method="POST" id="form" action="<?php echo base_url();?>utilities/uscity" method="POST" >
       <div class="modal-body">
         <div class="alert alert-info">
-          <i class="fa fa-info"></i> Verify manual data on your system
+          <i class="fas fa-info-circle"></i> Verify manual data on your system
         </div>
         
           <div class="form-body">
@@ -64,8 +65,8 @@
               <span class="invalid-feedback"></span>
             </div>
             <div class="form-group">
-              <label for="">Sender After</label>
-              <select class="form-control" name="sender">
+              <label>Sender After</label>
+              <select class="form-control select2" name="sender">
                 <option value="">Choice City</option>
                 <?php foreach($city_result as $key) :  ?>
                   <option value="<?= $key->alto ?>"><?= $key->alto ?></option>

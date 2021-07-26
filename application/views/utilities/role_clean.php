@@ -17,20 +17,20 @@
               <table class="table table-bordered" id="table" >
                 <thead>
                   <tr>
-                    <th width="70%">List</th>
                     <th>Action</th>
+                    <th width="70%">List</th>                  
                   </tr>
                 </thead>
                 <tbody>
                   <?php foreach ($sendercountry as $row) { 
-                  $sender = str_replace(" ", "_",$row['sendercountry']);
+                    $sender = str_replace(" ", "_",$row['sendercountry']);
                   ?>
-                  <tr>
-                    <td><?php echo $row['sendercountry'] ?></td>
+                  <tr>                
                     <td >
-                    <a href="<?php echo base_url('utilities/listscountry/'.$sender); ?>" class="btn btn-info btn-xs" data-toggle="tooltip" data-original-title="See Sender"> <i class="fa fa-eye"></i> </a>
-                    <a href="javascript:void(0)" onClick="senderCountry('<?= $row['sendercountry'] ?>')" class="btn btn-success btn-xs" data-toggle="tooltip" data-original-title="Edit Sender"> <i class="fa fa-pen"></i> </a>
+                      <a href="<?php echo base_url('utilities/listscountry/'.$sender); ?>" class="btn btn-success btn-icon btn-sm" data-toggle="tooltip" data-original-title="See Sender"> <i class="fas fa-eye"></i> </a>
+                      <a href="javascript:void(0)" onClick="senderCountry('<?= $row['sendercountry'] ?>')" class="btn btn-primary btn-sm" data-toggle="tooltip" data-original-title="Edit Sender"> <i class="far fa-edit"></i> </a>
                     </td>
+                    <td><?php echo $row['sendercountry'] ?></td>
                   </tr>
                   <?php } ?>
                 </tbody>
@@ -49,20 +49,20 @@
               <table class="table table-bordered" id="table" >
                 <thead>
                   <tr>
-                    <th width="70%">List</th>
                     <th>Action</th>
+                    <th width="70%">List</th>                   
                   </tr>
                 </thead>
                 <tbody>
                 <?php foreach ($receiptcountry as $row) { 
-                $receipt = str_replace(" ", "_",$row['receiptcountry']);
+                  $receipt = str_replace(" ", "_",$row['receiptcountry']);
                 ?>
-                <tr>
-                  <td><?php echo $row['receiptcountry'] ?></td>
+                <tr>                 
                   <td>
-                    <a href="<?php echo base_url('utilities/listreceipt/'.$receipt); ?>" class="btn btn-info btn-xs" data-toggle="tooltip" data-original-title="See Receipt"> <i class="fa fa-eye"></i> </a>
-                    <a href="javascript:void(0)" onClick="receiptCountry('<?= $row['receiptcountry'] ?>')" class="btn btn-success btn-xs" data-toggle="tooltip" data-original-title="Edit Receipt"> <i class="fa fa-pen"></i> </a>
+                    <a href="<?php echo base_url('utilities/listreceipt/'.$receipt); ?>" class="btn btn-success btn-sm" data-toggle="tooltip" data-original-title="See Receipt"> <i class="fas fa-eye"></i> </a>
+                    <a href="javascript:void(0)" onClick="receiptCountry('<?= $row['receiptcountry'] ?>')" class="btn btn-primary btn-sm" data-toggle="tooltip" data-original-title="Edit Receipt"> <i class="far fa-edit"></i> </a>
                   </td>
+                  <td><?php echo $row['receiptcountry'] ?></td>
                 </tr>
                 <?php } ?>
                 </tbody>
@@ -88,7 +88,7 @@
       <form class="form-horizontal" method="POST" id="form" action="<?php echo base_url();?>utilities/uscountry" method="POST" >
       <div class="modal-body">
         <div class="alert alert-info">
-          <i class="fa fa-info"></i> Verify manual data on your system
+          <i class="fas fa-info-circle"></i> Verify manual data on your system
         </div>
         
           <div class="form-body">
@@ -131,7 +131,7 @@
       <form class="form-horizontal" method="POST" id="form" action="<?php echo base_url();?>utilities/urcountry" method="POST" >
       <div class="modal-body">
         <div class="alert alert-info">
-          <i class="fa fa-info"></i> Verify manual data on your system
+          <i class="fas fa-info-circle"></i> Verify manual data on your system
         </div>
         
           <div class="form-body">
