@@ -309,9 +309,12 @@
                 <li id="source_data_clean"><a class="nav-link" href="<?php echo site_url('utilities/manual'); ?>"><i class="fas fa-database"></i> Manual Clean</a></li>
               </ul>
             </li>
-            </li>
-            <li>
-              <a href="<?php echo site_url('source/report'); ?>" class="nav-link"><i class="fas fa-file-alt"></i><span>Report</span></a>
+            <li class="dropdown">
+              <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-file-alt"></i> <span>Report</span></a>
+              <ul class="dropdown-menu">
+                <li id="report"><a class="nav-link" href="<?php echo site_url('report'); ?>"><i class="fas fa-align-center"></i> Report</a></li>
+                <li id="setting_report"><a class="nav-link" href="<?php echo site_url('report/setting_report'); ?>"><i class="fas fa-align-center"></i> Setting Report</a></li>
+              </ul>
             </li>
             <li>
               <a href="<?php echo site_url('source/archive'); ?>" class="nav-link"><i class="fas fa-archive"></i><span>Archive</span></a>

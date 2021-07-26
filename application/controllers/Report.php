@@ -34,7 +34,54 @@ class Report extends CI_Controller {
     $setting_report = $this->input->post('setting_report');
     $start_date = $this->input->post('start_date');
     $end_date = $this->input->post('end_date');
+
+    $result = "";
+    switch ($setting_report) {
+      case 'G0001':
+        $result = $this->report_g1($start_date, $end_date);
+        break;
+      case 'G0002':
+        $result = $this->report_g2($start_date, $end_date);
+        break;
+      case 'G0003':
+        $result = $this->report_g3($start_date, $end_date);
+        break;
+      default:
+        $result = "";
+        break;
+    }
+    echo json_encode($result);
     
+  }
+  private function report_g1($start_date, $end_date){
+    $query = $this->db->query("
+      SELECT A.campaign, A.sendercity, A.receiptcountry, A.receiptname,
+      A.sendername, COUNT(A.nominal) as trxvolume, SUM(A.nominal) as trxnominal FROM tcleandatasource1 A 
+      WHERE A.sendercountry = 'ID-indonesia' AND not A.receiptcountry='ID-Indonesia' AND DATE(datestamp) BETWEEN '".$start_date."' AND '".$end_date."'
+      GROUP BY A.sendercity, A.receiptcountry, A.receiptname, A.sendername
+    ")->result();
+    return $query;
+  }
+  private function report_g2($start_date, $end_date)
+  {
+    $query = $this->db->query("
+      SELECT A.campaign, A.sendercity, A.receiptcountry, A.receiptname, 
+      A.sendername, COUNT(A.nominal) as trxvolume, SUM(A.nominal) as trxnominal FROM tcleandatasource1 A 
+      WHERE not A.sendercountry = 'ID-indonesia' AND A.receiptcountry='ID-Indonesia' AND DATE(datestamp) BETWEEN '".$start_date."' AND '".$end_date."'
+      GROUP BY A.sendercity, A.receiptcountry, A.receiptname, A.sendername
+    ")->result();
+    return $query;
+  }
+  private function report_g3($start_date, $end_date)
+  {
+    $query = $this->db->query("
+      SELECT A.campaign, A.sendercity, A.receiptcountry, A.receiptname,
+      A.sendername, COUNT(A.nominal) as trxvolume, SUM(A.nominal) as trxnominal 
+      FROM tcleandatasource1 A 
+      WHERE A.sendercountry='ID-indonesia' AND A.receiptcountry='ID-Indonesia' AND DATE(datestamp) BETWEEN '".$start_date."' AND '".$end_date."'
+      GROUP BY A.sendercity, A.receiptcountry, A.receiptname, A.sendername
+    ")->result();
+    return $query;
   }
 
   // START :: SETTING REPORT

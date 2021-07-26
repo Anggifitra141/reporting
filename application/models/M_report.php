@@ -114,4 +114,6 @@ class M_report extends CI_model {
     $this->db->delete($this->table);
   }
 
+  
+
 }
