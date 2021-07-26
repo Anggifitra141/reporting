@@ -17,6 +17,7 @@
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/modules/dropify/css/dropify.min.css">
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/modules/fullcalendar/fullcalendar.min.css">
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/modules/select2/dist/css/select2.min.css">
+  <link rel="stylesheet" href="<?php echo base_url(); ?>assets/modules/bootstrap-daterangepicker/daterangepicker.css">
   <!-- Template CSS -->
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/style.css">
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/components.css">
@@ -305,7 +306,7 @@
               <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-wrench"></i> <span>Utilities Source</span></a>
               <ul class="dropdown-menu">
                 <li id="source_upload_source"><a class="nav-link" href="<?php echo site_url('utilities/roles_clean'); ?>"><i class="fas fa-align-center"></i> Roles Clean</a></li>
-                <li id="source_raw_data"><a class="nav-link" href="<?php echo site_url('utilities/auto_clean'); ?>"><i class="fas fa-align-center"></i> Auto Data</a></li>
+                <li id="source_raw_data"><a class="nav-link" href="<?php echo site_url('utilities/auto_clean'); ?>"><i class="fas fa-align-center"></i> Auto Clean</a></li>
                 <li id="source_data_clean"><a class="nav-link" href="<?php echo site_url('utilities/manual'); ?>"><i class="fas fa-database"></i> Manual Clean</a></li>
               </ul>
             </li>
@@ -401,6 +402,7 @@
   <script src="<?php echo base_url(); ?>assets/modules/dropify/js/dropify.min.js"></script>
   <script src="<?php echo base_url(); ?>assets/modules/fullcalendar/fullcalendar.min.js"></script>
   <script src="<?php echo base_url(); ?>assets/modules/select2/dist/js/select2.full.min.js"></script>
+  <script src="<?php echo base_url(); ?>assets/modules/bootstrap-daterangepicker/daterangepicker.js"></script>
   <!-- Page Specific JS File -->
   <script src="<?php echo base_url(); ?>assets/js/page/index-0.js"></script>
   <!-- Template JS File --> 
@@ -409,8 +411,35 @@
   <script src="<?php echo base_url(); ?>assets/js/custom.js"></script>
 
   <script>
-    $('.dropify').dropify();
-    $('.select2').select2();
+    $(document).ready(function() {  
+      $('.dropify').dropify();
+      $('.select2').select2();
+      $('.daterange-picker').daterangepicker({
+            startDate: moment().startOf('month'),
+            endDate: moment().endOf('month'),
+            showDropdowns: true,
+            opens: 'left',
+            ranges: {
+                'Last 30 Days': [moment().subtract('days', 29), moment()],
+                'This Month': [moment().startOf('month'), moment().endOf('month')],
+                'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+            },
+            format: 'DD-MM-YYYY',
+            buttonClasses: ['btn'],
+            applyClass: 'btn-danger',
+            cancelClass: 'default',
+            locale: {
+                format: 'DD-MM-YYYY'
+            }
+        },
+        function (start, end) {
+            $('#daterange-picker input').html(start.format('DD-MM-YYYY') + ' - ' + end.format('DD-MM-YYYY'));
+        }
+    );
+
+    
+
+    });
   </script>
 </body>
 </html>

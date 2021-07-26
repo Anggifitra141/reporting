@@ -14,12 +14,25 @@
         <div class="card">
           <div class="card-body">
             <div class="row">
-              <div class="col-md-4">
+              <div class="col-md-3">
+                <div class="form-group">
+                  <label> Select Campaign </label>
+                  <select class="form-control select2" name="campaign">
+                    <option value="">--- Select ---</option>
+                      <?php foreach($campaign as $key): ?>
+                        <?php if($key['campaign']) : ?>
+                        <option value="<?= $key['campaign'] ?>"><?= $key['campaign'] ?></option>
+                        <?php endif; ?>
+                      <?php endforeach; ?>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-3">
                 <div class="form-group">
                   <label> Select Report </label>
-                  <select class="form-control" name="setting_report">
+                  <select class="form-control select2" name="report_type">
                     <option value="">--- Select ---</option>
-                      <?php foreach($setting as $key): ?>
+                      <?php foreach($report_type as $key): ?>
                         <?php if($key['code']) : ?>
                         <option value="<?= $key['code'] ?>">Laporan <?= $key['code'] ?></option>
                         <?php endif; ?>
@@ -29,37 +42,19 @@
               </div>
               <div class="col-md-4">
                 <div class="form-group">
-                  <label>Start time</label>
+                  <label>Date Range Picker</label>
                   <div class="input-group">
                     <div class="input-group-prepend">
                       <div class="input-group-text">
                         <i class="fas fa-calendar"></i>
                       </div>
                     </div>
-                    <input type="date" class="form-control" name="start_date" value="<?= date('Y-m-d') ?>">
+                    <input type="text" class="form-control daterange-picker" name="daterange">
                   </div>
                 </div>
               </div>
-              <div class="col-md-4">
-                <div class="form-group">
-                  <label>End time</label>
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <div class="input-group-text">
-                        <i class="fas fa-calendar"></i>
-                      </div>
-                    </div>
-                    <input type="date" class="form-control" name="end_date" value="<?= date('Y-m-d') ?>">
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-4"></div>
-              <div class="col-md-5">
-                <button class="btn btn-icon btn-outline-warning m-2" id="btn-view"  ><i class="fas fa-eye"></i> View </button>
-                <button class="btn btn-icon btn-outline-success m-2"><i class="fas fa-file-excel"></i> Excel </button>
-                <button class="btn btn-icon btn-outline-success m-2"><i class="fas fa-file-csv"></i> Csv </button> 
+              <div class="col-md-2">
+                <button class="btn btn-icon btn-outline-primary btn-block" style="margin-top:27px;" id="btn-view"  ><i class="fas fa-sync"></i> Process </button>
               </div>
             </div>
 
@@ -111,16 +106,20 @@
   
   function dataTable()
   {
-    $('#table-data').DataTable( {
+      var table = $('#table-data').DataTable( {
       "pageLength": 20,
           dom: 'Bfrtip',
           buttons: [
-              'copyHtml5',
-              'excelHtml5',
-              'csvHtml5',
-              'pdfHtml5'
-          ]
+            { extend: 'copyHtml5', text: '<i class="fas fa-copy"> </i> Copy', className: 'btn btn-icon btn-outline-primary m-1' },
+            { extend: 'excelHtml5', text: '<i class="fas fa-file-excel"> </i> Excel', className: 'btn btn-icon btn-outline-success m-1' },
+            { extend: 'csvHtml5', text: '<i class="fas fa-file-csv"> </i> CSV', className: 'btn btn-icon btn-outline-success m-1' },
+            { extend: 'pdfHtml5', text: '<i class="fas fa-file-pdf"> </i> PDF', className: 'btn btn-icon btn-outline-danger m-1' },
+        ]
       });
+
+      $('div').removeClass("btn-group");
+      $('button').removeClass("btn-secondary");
+
   }
 
   $("input").change(function(){
@@ -133,19 +132,20 @@
     $('#result-data').hide();
     $('#table-data').DataTable().destroy();
     // $('#data-source').html(``);
-    var setting_report = $('[name="setting_report"]').val();
-    var start_date = $('[name="start_date"]').val();
-    var end_date = $('[name="end_date"]').val();
-    if(setting_report && start_date && end_date){
+    var campaign = $('[name="campaign"]').val();
+    var report_type = $('[name="report_type"]').val();
+    var daterange = $('[name="daterange"]').val();
+
+    if(campaign && report_type && daterange){
       loading();
       $.ajax({
         url : base_url +'report/get_report_range',
         type : 'POST',
         asyc : true,
         data : {
-          setting_report : setting_report,
-          start_date : start_date,
-          end_date : end_date
+          campaign : campaign,
+          report_type : report_type,
+          daterange : daterange
         },
         dataType : 'JSON',
         success : function(response)
