@@ -35,8 +35,8 @@ class Report extends CI_Controller {
   {
     $report_type = $this->input->post('report_type');
     $campaign = $this->input->post('campaign');
-    $start_date = substr($this->input->post('monthly_date'),0,10);
-    $end_date =  substr($this->input->post('monthly_date'),13,23);
+    $start_date = substr($this->input->post('daterange'),0,10);
+    $end_date =  substr($this->input->post('daterange'),13,23);
 
     $result = "";
     switch ($report_type) {
