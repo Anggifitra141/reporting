@@ -24,7 +24,7 @@
                     <th class="text-center" width="1px">
                       No
                     </th>
-                    <th width="5px">Action</th>
+                    <th width="10px" style="width:90px;">Action</th>
                     <th>Code</th>
                     <th>Name</th>
                     <th>Period</th>

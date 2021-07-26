@@ -25,26 +25,29 @@ class Report extends CI_Controller {
 	public function index()
 	{
     $data= [];
-    $data['setting'] = $this->db->query("SELECT * FROM treportsettings")->result_array();
+    $data['report_type'] = $this->db->query("SELECT * FROM treportsettings")->result_array();
+    $data['campaign'] = $this->db->query("SELECT * FROM campaign")->result_array();
     $data['content'] = $this->load->view('report/month', $data, TRUE);
 		$this->load->view('layout', $data);
 	}
+
   public function get_report_range()
   {
-    $setting_report = $this->input->post('setting_report');
-    $start_date = $this->input->post('start_date');
-    $end_date = $this->input->post('end_date');
+    $report_type = $this->input->post('report_type');
+    $campaign = $this->input->post('campaign');
+    $start_date = substr($this->input->post('monthly_date'),0,10);
+    $end_date =  substr($this->input->post('monthly_date'),13,23);
 
     $result = "";
-    switch ($setting_report) {
+    switch ($report_type) {
       case 'G0001':
-        $result = $this->report_g1($start_date, $end_date);
+        $result = $this->report_g1($start_date, $end_date, $campaign);
         break;
       case 'G0002':
-        $result = $this->report_g2($start_date, $end_date);
+        $result = $this->report_g2($start_date, $end_date, $campaign);
         break;
       case 'G0003':
-        $result = $this->report_g3($start_date, $end_date);
+        $result = $this->report_g3($start_date, $end_date, $campaign);
         break;
       default:
         $result = "";
@@ -57,7 +60,7 @@ class Report extends CI_Controller {
     $query = $this->db->query("
       SELECT A.campaign, A.sendercity, A.receiptcountry, A.receiptname,
       A.sendername, COUNT(A.nominal) as trxvolume, SUM(A.nominal) as trxnominal FROM tcleandatasource1 A 
-      WHERE A.sendercountry = 'ID-indonesia' AND not A.receiptcountry='ID-Indonesia' AND DATE(datestamp) BETWEEN '".$start_date."' AND '".$end_date."'
+      WHERE A.sendercountry = 'ID-indonesia' AND not A.receiptcountry='ID-Indonesia' AND DATE(datestamp) BETWEEN '".$start_date."' AND '".$end_date."' AND campaign='$campaign'
       GROUP BY A.sendercity, A.receiptcountry, A.receiptname, A.sendername
     ")->result();
     return $query;
@@ -67,7 +70,7 @@ class Report extends CI_Controller {
     $query = $this->db->query("
       SELECT A.campaign, A.sendercity, A.receiptcountry, A.receiptname, 
       A.sendername, COUNT(A.nominal) as trxvolume, SUM(A.nominal) as trxnominal FROM tcleandatasource1 A 
-      WHERE not A.sendercountry = 'ID-indonesia' AND A.receiptcountry='ID-Indonesia' AND DATE(datestamp) BETWEEN '".$start_date."' AND '".$end_date."'
+      WHERE not A.sendercountry = 'ID-indonesia' AND A.receiptcountry='ID-Indonesia' AND DATE(datestamp) BETWEEN '".$start_date."' AND '".$end_date."' AND campaign='$campaign'
       GROUP BY A.sendercity, A.receiptcountry, A.receiptname, A.sendername
     ")->result();
     return $query;
@@ -78,7 +81,7 @@ class Report extends CI_Controller {
       SELECT A.campaign, A.sendercity, A.receiptcountry, A.receiptname,
       A.sendername, COUNT(A.nominal) as trxvolume, SUM(A.nominal) as trxnominal 
       FROM tcleandatasource1 A 
-      WHERE A.sendercountry='ID-indonesia' AND A.receiptcountry='ID-Indonesia' AND DATE(datestamp) BETWEEN '".$start_date."' AND '".$end_date."'
+      WHERE A.sendercountry='ID-indonesia' AND A.receiptcountry='ID-Indonesia' AND DATE(datestamp) BETWEEN '".$start_date."' AND '".$end_date."' AND campaign='$campaign'
       GROUP BY A.sendercity, A.receiptcountry, A.receiptname, A.sendername
     ")->result();
     return $query;
@@ -91,6 +94,7 @@ class Report extends CI_Controller {
     $data['content'] = $this->load->view('report/setting', $data, TRUE);
 		$this->load->view('layout', $data);
 	}
+
   public function ajax_setting_report()
   {
     $list = $this->M_report->Get_All();

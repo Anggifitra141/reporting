@@ -192,11 +192,11 @@
     cursor: pointer; }
     .ranges li:hover {
       background-color: #08c;
-      border: 1px solid #08c;
+      border: 1px solid #fc544b;
       color: #fff; }
     .ranges li.active {
       background-color: #08c;
-      border: 1px solid #08c;
+      border: 1px solid #fc544b;
       color: #fff; }
 
 /*  Larger Screen Styling */

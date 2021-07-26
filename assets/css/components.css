@@ -446,14 +446,14 @@ div.dataTables_wrapper div.dataTables_processing {
 }
 
 .ranges li {
-  color: #6777ef;
+  color: #fc544b;
 }
 .ranges li:hover, .ranges li.active {
-  background-color: #6777ef;
+  background-color: #fc544b;
 }
 
 .daterangepicker td.active, .daterangepicker td.active:hover {
-  background-color: #6777ef;
+  background-color: #fc544b;
 }
 
 /* 1.10 Dropzone */
