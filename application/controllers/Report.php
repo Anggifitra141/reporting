@@ -35,8 +35,9 @@ class Report extends CI_Controller {
   {
     $report_type = $this->input->post('report_type');
     $campaign = $this->input->post('campaign');
-    $start_date = substr($this->input->post('daterange'),0,10);
-    $end_date =  substr($this->input->post('daterange'),13,23);
+    $start_date = date('Y-m-d', strtotime(substr($this->input->post('daterange'),0,10)));
+    $end_date =  date('Y-m-d', strtotime(substr($this->input->post('daterange'),13,23)));
+    // echo json_encode(['start_date' => $report_type, 'end_date' => $end_date]);
 
     $result = "";
     switch ($report_type) {
@@ -56,7 +57,7 @@ class Report extends CI_Controller {
     echo json_encode($result);
     
   }
-  private function report_g1($start_date, $end_date){
+  private function report_g1($start_date, $end_date, $campaign){
     $query = $this->db->query("
       SELECT A.campaign, A.sendercity, A.receiptcountry, A.receiptname,
       A.sendername, COUNT(A.nominal) as trxvolume, SUM(A.nominal) as trxnominal FROM tcleandatasource1 A 
@@ -65,7 +66,7 @@ class Report extends CI_Controller {
     ")->result();
     return $query;
   }
-  private function report_g2($start_date, $end_date)
+  private function report_g2($start_date, $end_date, $campaign)
   {
     $query = $this->db->query("
       SELECT A.campaign, A.sendercity, A.receiptcountry, A.receiptname, 
@@ -75,7 +76,7 @@ class Report extends CI_Controller {
     ")->result();
     return $query;
   }
-  private function report_g3($start_date, $end_date)
+  private function report_g3($start_date, $end_date, $campaign)
   {
     $query = $this->db->query("
       SELECT A.campaign, A.sendercity, A.receiptcountry, A.receiptname,

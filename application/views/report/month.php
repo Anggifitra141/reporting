@@ -150,6 +150,7 @@
         dataType : 'JSON',
         success : function(response)
         {
+          console.log(response)
           if(response.length > 0 ){
             var str;
             $.each(response, function(index, val){
