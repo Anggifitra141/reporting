@@ -252,14 +252,30 @@ class Utilities extends CI_Controller {
 	}
 	public function ajax_manual_clean()
 	{
+		if($this->input->post('campaign') != ''){
+			$this->db->where('campaign', $this->input->post('campaign'));
+		}
+		if($this->input->post('daterange') != ''){
+			$start_date = date('Y-m-d', strtotime(substr($this->input->post('daterange'),0,10)));
+			$end_date =  date('Y-m-d', strtotime(substr($this->input->post('daterange'),13,23)));
+			$this->db->where('DATE(datestamp) >=', $start_date);
+			$this->db->where('DATE(datestamp) <=', $end_date);
+		}
+	
+
 		$list = $this->M_clean_data->get_datatables();
 		$data = array();
 		$no = $_POST['start'];
 		foreach ($list as $raw_data) {
 			$no++;
 			$row = array();
-			$row[] = $no;
-			$row[] = '<a href="'.base_url('utilities/edit_manual/').md5($raw_data->id).'">'.$raw_data->trxdate.'</a>';
+			$row[] = '<input type="checkbox" class="data-check" value="'.$raw_data->id.'">';
+			$row[] = '
+				<a href="'.base_url('utilities/edit_manual/').md5($raw_data->id).'"  class="btn btn-primary btn-sm"> <i class="far fa-edit"></i></a>
+				<a href="javascript:void(0)"  class="btn btn-danger btn-sm"> <i class="fas fa-trash"></i></a>
+			';
+			$row[] = date('d-m-Y', strtotime($raw_data->trxdate));
+			$row[] = $raw_data->campaign;
 			$row[] = $raw_data->sendercountry;
 			$row[] = $raw_data->sendercity;
 			$row[] = $raw_data->receiptcountry;
@@ -268,11 +284,32 @@ class Utilities extends CI_Controller {
 			$row[] = $raw_data->receiptcity;
 			$row[] = $this->lib->rupiah($raw_data->nominal);
 			$data[] = $row;
-		} 
+		}
+		if($this->input->post('campaign') != ''){
+			$this->db->where('campaign', $this->input->post('campaign'));
+		}
+		if($this->input->post('daterange') != ''){
+			$start_date = date('Y-m-d', strtotime(substr($this->input->post('daterange'),0,10)));
+			$end_date =  date('Y-m-d', strtotime(substr($this->input->post('daterange'),13,23)));
+			$this->db->where('DATE(datestamp) >=', $start_date);
+			$this->db->where('DATE(datestamp) <=', $end_date);
+		}
+		$recordsTotal = $this->M_clean_data->count_all();
+
+		if($this->input->post('campaign') != ''){
+			$this->db->where('campaign', $this->input->post('campaign'));
+		}
+		if($this->input->post('daterange') != ''){
+			$start_date = date('Y-m-d', strtotime(substr($this->input->post('daterange'),0,10)));
+			$end_date =  date('Y-m-d', strtotime(substr($this->input->post('daterange'),13,23)));
+			$this->db->where('DATE(datestamp) >=', $start_date);
+			$this->db->where('DATE(datestamp) <=', $end_date);
+		}
+		$recordsFiltered = $this->M_clean_data->count_filtered();
 		$output = array(
 							"draw" => $_POST['draw'],
-							"recordsTotal" => $this->M_clean_data->count_all(),
-							"recordsFiltered" => $this->M_clean_data->count_filtered(),
+							"recordsTotal" => $recordsTotal,
+							"recordsFiltered" => $recordsFiltered,
 							"data" => $data,
 						);
 		echo json_encode($output);
@@ -325,6 +362,14 @@ class Utilities extends CI_Controller {
 		Berhasil mengubah service!
 		</div><br/>");
 		redirect('utilities/manual');
+	}
+	function ajax_bulk_delete_manual()
+	{
+		$list_id = $this->input->post('id');
+		foreach ($list_id as $id) {
+				$this->M_clean_data->delete_by_id($id);
+		}
+		echo json_encode(array("status" => TRUE));
 	}
 	// END :: MANUAL CLEAN
 }

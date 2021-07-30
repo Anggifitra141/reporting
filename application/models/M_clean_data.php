@@ -15,7 +15,7 @@ class M_clean_data extends CI_model {
 	}
 
 	var $table = 'tcleandatasource1';
-  var $column_order = array('trxdate','sendername','receiptname','nominal');
+  var $column_order = array('','','trxdate','sendername','receiptname','nominal');
   var $column_search = array('trxdate','sendername','receiptname','nominal');
   var $order = array('id' => 'desc');
 
@@ -80,6 +80,12 @@ class M_clean_data extends CI_model {
   {
     $this->db->from($this->table);
     return $this->db->count_all_results();
+  }
+  
+  public function delete_by_id($id)
+  {
+      $this->db->where('id', $id);
+      $this->db->delete($this->table);
   }
 
 

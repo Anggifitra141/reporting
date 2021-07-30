@@ -310,6 +310,9 @@
                 <li id="source_data_clean"><a class="nav-link" href="<?php echo site_url('utilities/manual'); ?>"><i class="fas fa-database"></i> Manual Clean</a></li>
               </ul>
             </li>
+            <li>
+              <a href="<?php echo site_url('verify'); ?>" class="nav-link"><i class="fas fa-check"></i><span>Verify Data</span></a>
+            </li>
             <li class="dropdown">
               <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-file-alt"></i> <span>Report</span></a>
               <ul class="dropdown-menu">
