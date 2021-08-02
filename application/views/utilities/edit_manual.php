@@ -83,6 +83,7 @@
                 <div class="col-md-12 mt-3">
                   <a href="<?= base_url('utilities/manual') ?>" class="btn btn-secondary"><i class="fas fa-arrow-left"></i> Back</a>
                   <button type="submit" class="btn btn-primary float-right"><i class="fas fa-save"></i> Save</button>
+                  <button type="submit" name="rollback" value="Y" class="btn btn-primary mr-2 float-right"><i class="fas fa-redo-alt"></i> Rollback Data</button> &nbsp;
                 </div>
               </div>
             </form>

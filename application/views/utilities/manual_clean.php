@@ -44,7 +44,7 @@
           <div class="card-body">
             <div class="row">
               <div class="col-md-6 mb-3">
-                <a href="" class="btn btn-warning"><i class="far fa-edit"></i> Edit Selected</a>
+                <a href="javascript:void(0)" onclick="rollback_selected()" class="btn btn-warning"><i class="fas fa-redo-alt"></i> Rollback Selected</a>
                 <a href="javascript:void(0)" onclick="delete_selected()" class="btn btn-danger"><i class="fas fa-times"></i> Delete Selected</a>
               </div>
             </div>
@@ -82,6 +82,7 @@
 <script src="<?php echo base_url(); ?>assets/modules/jquery.min.js"></script>
 <script>
   var table;
+  var base_url = "<?= base_url() ?>";
 
   $("input").change(function(){
       $(this).removeClass('is-invalid');
@@ -130,36 +131,128 @@
     });
     if(list_id.length > 0)
     {
-      if(confirm('Are you sure delete this '+list_id.length+' data?'))
-      {
-        $.ajax({
-          type: "POST",
-          data: {id:list_id},
-          url: "<?php echo site_url('utilities/ajax_bulk_delete_manual')?>",
-          dataType: "JSON",
-          success: function(data)
-          {
-            if(data.status)
-            {
+      swal({
+        title: 'Are you sure?',
+        text: 'Are you sure delete '+list_id.length+' data?',
+        icon: 'warning',
+        timerProgressBar: true,
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+          loading();
+          $.ajax({
+            url: "<?php echo site_url('utilities/ajax_bulk_delete_manual')?>",
+            data: {id:list_id},
+            type: 'POST',
+            dataType : 'JSON',
+            success : function(response){
               reload_table();
+              swal({
+                title: 'Success',
+                text: list_id.length + ' Deleted' ,
+                icon: 'warning',
+                icon: 'success',
+              });
             }
-            else
-            {
-              alert('Failed.');
-            }
-                
-          },
-          error: function (jqXHR, textStatus, errorThrown)
-          {
-            alert('Error deleting data');
-          }
-        });
-      }
+          })
+        } else {
+          swal('Delete Data Canceled');
+        }
+      });
     }
     else
     {
-      alert('no data selected');
+      swal('no data selected');
     }
+  }
+  function rollback_selected()
+  {
+    var list_id = [];
+    $(".data-check:checked").each(function() {
+      list_id.push(this.value);
+    });
+    if(list_id.length > 0)
+    {
+      swal({
+        title: 'Are you sure?',
+        text: 'Are you sure rollback this '+list_id.length+' data?',
+        icon: 'warning',
+        timerProgressBar: true,
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+          loading();
+          $.ajax({
+            url: "<?php echo site_url('utilities/ajax_bulk_rollback')?>",
+            data: {id:list_id},
+            type: 'POST',
+            dataType : 'JSON',
+            success : function(response){
+              reload_table();
+              swal({
+                title: 'Success',
+                text: response.rollback + ' data rollback' ,
+                icon: 'warning',
+                icon: 'success',
+              });
+            }
+          })
+        } else {
+          swal('Rollback Data Canceled');
+        }
+      });
+    }else{
+      swal('No data selected');
+    }
+  }
+  function delete_row(id)
+  {
+    swal({
+        title: 'Are you sure?',
+        text: 'Are you sure delete this data?',
+        icon: 'warning',
+        timerProgressBar: true,
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+          loading();
+          $.ajax({
+            url: "<?php echo site_url('utilities/ajax_delete_manual_clean')?>",
+            data: {id:id},
+            type: 'POST',
+            dataType : 'JSON',
+            success : function(response){
+              reload_table();
+              swal({
+                title: 'Success',
+                text:  'Deleted Successfuly' ,
+                icon: 'warning',
+                icon: 'success',
+              });
+            }
+          })
+        } else {
+          swal('Deleted Data Canceled');
+        }
+      });
+  }
+  function loading()
+  {
+    swal({
+      title:"Please Wait.", 
+      text:"Loading...",
+      icon: base_url + 'assets/img/loading.gif',
+      buttons: false,      
+      // closeOnClickOutside: false,
+      // timer: 3000,
+      //icon: "success"
+    })
   }
 
 </script>

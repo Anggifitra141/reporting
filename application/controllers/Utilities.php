@@ -207,6 +207,7 @@ class Utilities extends CI_Controller {
 			}
 			
 			$fetchData = array(
+							'id_data_source'	=> $id,
 							'campaign'				=> $campaign,
 							'trxdate' 				=> $trxdate, 
 							'sendercountry' 	=> $countrySFil, 
@@ -272,7 +273,7 @@ class Utilities extends CI_Controller {
 			$row[] = '<input type="checkbox" class="data-check" value="'.$raw_data->id.'">';
 			$row[] = '
 				<a href="'.base_url('utilities/edit_manual/').md5($raw_data->id).'"  class="btn btn-primary btn-sm"> <i class="far fa-edit"></i></a>
-				<a href="javascript:void(0)"  class="btn btn-danger btn-sm"> <i class="fas fa-trash"></i></a>
+				<a href="javascript:void(0)" onclick="delete_row('.$raw_data->id.')"  class="btn btn-danger btn-sm"> <i class="fas fa-trash"></i></a>
 			';
 			$row[] = date('d-m-Y', strtotime($raw_data->trxdate));
 			$row[] = $raw_data->campaign;
@@ -322,6 +323,7 @@ class Utilities extends CI_Controller {
 		$this->load->view('layout', $data);
 	}
 	public function udata(){
+		$rollback = $this->input->post('rollback');
 		$id 						= $this->input->post('id');
 		$sendercity 		= $this->input->post('sendercity');
 		$sendercountry 	= $this->input->post('sendercountry');
@@ -333,31 +335,37 @@ class Utilities extends CI_Controller {
 		$receiptphone 	= $this->input->post('receiptphone');
 		$description 		= $this->input->post('description');
 		$status 				= $this->input->post('status');
-		/* $update = "status";
-		$data2 = array(
-			'status' => $update;
-			);	
-		$where = array('id' => $id);
-		$this->corelib->update($where,$data2,'tdatasource1'); */
-		$dataInsert = array(
-			'sendercity' 			=> $sendercity,
-			'sendercountry' 	=> $sendercountry,
-			'receiptcity' 		=> $receiptcity,
-			'receiptcountry' 	=> $receiptcountry,
-			'sendername' 			=> $sendername,
-			'receiptname' 		=> $receiptname,
-			'senderphone' 		=> $senderphone,
-			'receiptphone' 		=> $receiptphone,
-			'description' 		=> $description,
-			'status' 					=> $status
-			);	
-		$where = array('id' => $id);
-		$this->db->update('tcleandatasource1',$dataInsert,$where);
-		//die(print_r($dataInsert));
-		//$insertdata  = $this->corelib->input_data($dataInsert,'tcleandatasource1');
-		/* if($insertdata == TRUE) {
-			$this->db->query("UPDATE tdatasource1 SET status = 'old' WHERE id='".$id."'");
-		} */
+		if($rollback == 'Y'){
+			$this->db->update('tdatasource1', ['status' => 'rollback'], ['id' => $id]);
+			$this->db->where_in('id', $id);
+			$this->db->delete('tcleandatasource1');
+		}else{
+			/* $update = "status";
+			$data2 = array(
+				'status' => $update;
+				);	
+			$where = array('id' => $id);
+			$this->corelib->update($where,$data2,'tdatasource1'); */
+			$dataInsert = array(
+				'sendercity' 			=> $sendercity,
+				'sendercountry' 	=> $sendercountry,
+				'receiptcity' 		=> $receiptcity,
+				'receiptcountry' 	=> $receiptcountry,
+				'sendername' 			=> $sendername,
+				'receiptname' 		=> $receiptname,
+				'senderphone' 		=> $senderphone,
+				'receiptphone' 		=> $receiptphone,
+				'description' 		=> $description,
+				'status' 					=> $status
+				);	
+			$where = array('id' => $id);
+			$this->db->update('tcleandatasource1',$dataInsert,$where);
+			//die(print_r($dataInsert));
+			//$insertdata  = $this->corelib->input_data($dataInsert,'tcleandatasource1');
+			/* if($insertdata == TRUE) {
+				$this->db->query("UPDATE tdatasource1 SET status = 'old' WHERE id='".$id."'");
+			} */
+		}
 		$this->session->set_flashdata("msg", "<div class='alert alert-success' role='alert' style='font-size: 10px; margin:15px 0px -15px 0px;'>
 		Berhasil mengubah service!
 		</div><br/>");
@@ -370,6 +378,31 @@ class Utilities extends CI_Controller {
 				$this->M_clean_data->delete_by_id($id);
 		}
 		echo json_encode(array("status" => TRUE));
+	}
+	public function ajax_bulk_rollback()
+	{
+		$list_id = $this->input->post('id');
+		$update_source_data = [];
+		$delete_clean_data = [];
+		foreach ($list_id as $id) {
+			$result = $this->db->query("SELECT * FROM tcleandatasource1 WHERE id = '".$id."'")->row();
+			$update_source_data[] = array(
+				'id'				=> $result->id_data_source,
+				'status'		=> 'rollback'
+			);
+			$delete_clean_data[] = $id;
+
+		}
+		$this->db->update_batch('tdatasource1', $update_source_data, 'id');
+		$this->db->where_in('id', $delete_clean_data);
+		$this->db->delete('tcleandatasource1');
+		echo json_encode(['status' => true, 'rollback' => count($update_source_data)]);
+	}
+	public function ajax_delete_manual_clean()
+	{
+		$id = $this->input->post('id');
+		$this->db->delete('tcleandatasource1', ['id' => $id]);
+		echo json_encode(['status' => true]);
 	}
 	// END :: MANUAL CLEAN
 }
