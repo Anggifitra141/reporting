@@ -16,9 +16,9 @@
         <div class="card">
           <div class="card-body">
             <div class="row">
-              <div class="col-md-9">
+              <div class="col-md-5">
                 <div class="form-group">
-                  <!-- <label for="">Campaign</label> -->
+                  <label for="">Campaign</label>
                   <select class="form-control select2" name="campaign_id">
                     <option value="">--- Select ---</option>
                     <?php foreach($campaign as $key): ?>
@@ -27,8 +27,18 @@
                   </select>
                 </div>
               </div>
-              <div class="col-md-2 ml-5">
-              <button class="btn btn-danger" id="auto-clean"><i class="fas fa-check"></i> Cleansing Data </button>
+              <div class="col-md-5">
+                <div class="form-group">
+                  <label for="">Status</label>
+                  <select class="form-control select2" name="status">
+                    <option value="all">--- All Status ---</option>
+                    <option value="new">NEW</option>
+                    <option value="rollback">ROLLBACK</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-2 mt-4">
+              <button class="btn btn-danger" id="auto-clean" style="margin-top: 6px;"><i class="fas fa-check"></i> Cleansing Data </button>
               </div>
             </div>
           </div>
@@ -51,6 +61,7 @@
                 <thead>
                   <tr>
                     <th>Trxdate</th>
+                    <th>Status</th>
                     <th>Sender Country</th>
                     <th>Sender City</th>
                     <th>Receipt Country</th>
@@ -76,51 +87,72 @@
 <script>
 
 var base_url = "<?= base_url() ?>";
+
+var table;
+  $(document).ready(function(){
+    table = $('#table').DataTable({
+      "deferRender": true,
+      "scrollCollapse": false,
+      "scrollX": false,
+      "processing": true,
+      "serverSide": true,
+      "order": [],
+      "ajax": {
+        url: "<?php echo site_url('utilities/ajax_raw_data')?>", // json datasource
+        type: "POST",
+        data : function(data){
+          data.campaign = $('[name="campaign_id"]').val()
+          data.status = $('[name="status"]').val()
+        },
+        "dataSrc": function(response) {
+          console.log(response)
+          if (response.status == false) {
+            alert(response.msg);
+            return [];
+          }
+          if(response.data.length > 0 ){
+            $('#raw_data').slideDown();
+            $('#alert-available').slideUp();
+          }else{
+            $('#raw_data').slideUp();
+            $('#alert-available').slideDown();
+            if($('[name="campaign_id"]').val() == ''){
+              $('#alert-available').hide();
+            }
+            return [];
+          }
+          return response.data;
+          
+        },
+        beforeSend: function() {
+          loading();
+        },
+        complete: function() {
+          swal.close();
+        }
+      },
+      "columnDefs": [{
+        "orderable": false
+      }],
+    });
+  })
   
 
   $("input").change(function(){
       $(this).removeClass('is-invalid');
       $(this).next().empty();
   });
+  function reload_table()
+  {
+    table.ajax.reload(null,false);
+  }
 
 
   $('[name="campaign_id"]').change(function(){
-    loading();
-    $('#alert-available').slideUp();
-    $('#raw_data').slideUp();
-    var campaign_id = $(this).val();
-    $.ajax({
-      url : base_url + 'utilities/ajax_raw_data',
-      type : 'POST',
-      data : {
-        campaign_id : campaign_id
-      },
-      dataType : 'JSON',
-      success : function(response)
-      {
-        if(response.length > 0){
-          $('#table').dataTable( {
-            data : response,
-            //data : response,
-            columns: [
-                      {"data" : "trxdate"},
-                      {"data" : "sendercountry"},
-                      {"data" : "sendercity"},
-                      {"data" : "receiptcountry"},
-                      {"data" : "receiptcity"},
-                      {"data" : "sendername"},
-                      {"data" : "receiptname"},
-                      {"data" : "nominal"},
-                      ],
-            searching : true
-        });
-          $('#raw_data').slideDown();
-        }else{
-          $('#alert-available').slideDown();
-        } 
-        swal.close();
-      }
-    })
+    reload_table();
+  })
+  $('[name="status"]').change(function(){
+    reload_table();
   })
   
 
@@ -141,7 +173,8 @@ var base_url = "<?= base_url() ?>";
           type : 'POST',
           dataType : 'JSON',
           data : {
-            campaign : $('[name="campaign_id"]').val()
+            campaign : $('[name="campaign_id"]').val(),
+            status : $('[name="status"]').val(),
           },
           success : function(response){
             swal({
@@ -153,6 +186,7 @@ var base_url = "<?= base_url() ?>";
             $('#alert-available').slideUp();
             $('#raw_data').slideUp();
             $('[name="campaign_id"]').val('');
+            $('[name="status"]').val('all');
           }
         })
       } else {

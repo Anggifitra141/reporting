@@ -149,15 +149,64 @@ class Utilities extends CI_Controller {
   }
 	public function ajax_raw_data()
 	{
-		$campaign_id = $this->input->post('campaign_id');
-		$data = $this->M_raw_data->get(['campaign' => $campaign_id, 'status' => 'new'])->result();
-		echo json_encode($data);
+		$campaign = $this->input->post('campaign');
+		$status = $this->input->post('status');
+		$this->db->where('campaign', $campaign);
+		if($status != 'all'){
+			$this->db->where('status', $status);
+		}else{
+			$this->db->where_in('status', array('new', 'rollback'));
+		}
+    $list = $this->M_raw_data->get_datatables();
+    $data = array();
+    $no = 1;
+    foreach ($list as $item) {
+      $row = array();
+      $row[] = date('d-m-Y', strtotime($item->trxdate));
+      $row[] = strtoupper($item->status);
+      $row[] = $item->sendercountry;
+      $row[] = $item->sendercity;
+			$row[] = $item->receiptcountry;
+      $row[] = $item->receiptcity;
+      $row[] = $item->sendername;
+      $row[] = $item->receiptname;
+      $row[] = $this->lib->rupiah($item->nominal);
+      $data[] = $row;
+    }
+		$this->db->where('campaign', $campaign);
+		if($status != 'all'){
+			$this->db->where('status', $status);
+		}else{
+			$this->db->where_in('status', array('new', 'rollback'));
+		}
+    $recordsTotal = $this->M_raw_data->count_all();
+		$this->db->where('campaign', $campaign);
+		if($status != 'all'){
+			$this->db->where('status', $status);
+		}else{
+			$this->db->where_in('status', array('new', 'rollback'));
+		}
+    $recordsFiltered = $this->M_raw_data->count_filtered();
+    
+
+    $output = array(
+          "draw" => $_POST['draw'],
+          "recordsTotal" => $recordsTotal,
+          "recordsFiltered" => $recordsFiltered,
+          "data" => $data,
+        );
+    echo json_encode($output);
 	}
 	public function proc_auto_clean()
   {
 		$data['page'] 	= 'displayClean';
 		$campaign  			= $this->input->post('campaign');
-		$test = $this->db->query("SELECT * FROM tdatasource1 WHERE status = 'new' AND campaign = '".$campaign."' ")->result_array();
+		$status  			= $this->input->post('status');
+		if($status != 'all'){
+			$test = $this->db->query("SELECT * FROM tdatasource1 WHERE campaign = '".$campaign."' AND status = '".$status."' ")->result_array();
+		}else{
+			$test = $this->db->query("SELECT * FROM tdatasource1 WHERE status IN ('new', 'rollback') AND campaign = '".$campaign."' ")->result_array();
+		}
 		$datestamp = date("Ymd");
 		$success = 0;
 		$false = 0;
@@ -228,14 +277,15 @@ class Utilities extends CI_Controller {
 			
 				$insert_layanan = $this->db->insert('tcleandatasource1',$fetchData);
 			 	if($insert_layanan==TRUE){
-			 		$update_layanan = $this->db->query("UPDATE tdatasource1 SET status = 'old' WHERE id='".$id."' AND status='new'");
+					 if($status = 'all'){
+							$update_layanan = $this->db->query("UPDATE tdatasource1 SET status = 'old' WHERE id='".$id."' AND status IN ('new', 'rollback') ");
+					 }else{
+							$update_layanan = $this->db->query("UPDATE tdatasource1 SET status = 'old' WHERE id='".$id."' AND status='".$status."'");
+					 }
 					 $success++;
 				}else{
 					$false++;
 				}
-			
-			// $data['previewClean'] = $this->db->query("SELECT * FROM tcleandatasource1 WHERE datestamp = '$datestamp'")->result_array();
-			// $this->load->view('dataSmall',$data, FALSE);
 			}
 			echo json_encode(['status' => true, 'success' => $success, 'false' => $false]);
 		}

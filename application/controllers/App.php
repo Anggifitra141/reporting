@@ -69,4 +69,55 @@ class App extends CI_Controller {
     $data['content'] = $this->load->view('dashboard/dashboard', $data, TRUE);
 		$this->load->view('layout', $data);
 	}
+
+
+   // START :: REPORT DASHBOARD
+   public function unprocessed()
+   {
+     $data['sourceAll'] = $this->db->query("SELECT a.`tcal_date` as date ,a.`tcal_message` as name , 
+     b.regulator as regulator, c.periodname as period, a.`status` as status, b.status as status_rep, b.link 
+     FROM tcalendar a INNER JOIN treportsettings b ON a.trepid = b.id INNER JOIN treportperiod c ON b.period = c.periodcode 
+     WHERE a.tcal_date < CURRENT_DATE() and a.status <>'printed';")->result_array();
+     $data['content'] = $this->load->view('dashboard/unprocessed', $data, TRUE);
+     $this->load->view('layout', $data);
+   }
+   function download_today($value)
+    {
+		$this->load->helper('file');
+		//AND a.status = 'verified'
+		//die(print_r($value));
+		if($value=="cetakg1"){
+			$test = $this->db->query("SELECT A.sendercity, A.receiptcountry, A.receiptname, 
+			A.sendername, COUNT(A.nominal) as trxvolume, SUM(A.nominal) as trxnominal FROM tcleandatasource1 A 
+			WHERE A.sendercountry = 'ID-indonesia' AND not A.receiptcountry='ID-Indonesia' 
+			GROUP BY A.sendercity, A.receiptcountry, A.receiptname, A.sendername");
+		}elseif($value == "cetakg2"){
+			$test = $this->db->query("SELECT A.sendercity, A.receiptcountry, A.receiptname, 
+			A.sendername, COUNT(A.nominal) as trxvolume, SUM(A.nominal) as trxnominal FROM tcleandatasource1 A 
+			WHERE not A.sendercountry = 'ID-indonesia' AND A.receiptcountry='ID-Indonesia' 
+			GROUP BY A.sendercity, A.receiptcountry, A.receiptname, A.sendername");
+		}elseif($value == "cetakg3"){
+			$test = $this->db->query("SELECT A.sendercity, A.receiptcountry, A.receiptname,
+			A.sendername, COUNT(A.nominal) as trxvolume, SUM(A.nominal) as trxnominal 
+			FROM tcleandatasource1 A 
+			WHERE A.sendercountry='ID-indonesia' AND A.receiptcountry='ID-Indonesia' 
+			GROUP BY A.sendercity, A.receiptcountry, A.receiptname, A.sendername");	
+		}
+		$datestamp = date("Ymd");
+		$dateFile = "".$datestamp.".txt";
+		$dataContent = array();
+		$indeks=0;
+		$i = 1;
+		foreach($test->result() as $dat){	
+			$dataContent[$i] = "".str_pad($dat->sendercity, 35)." ".str_pad($dat->receiptcountry, 20)." ".str_pad($dat->receiptname, 40)." ".str_pad($dat->sendername, 40)." ".str_pad($dat->trxvolume, 3)." ".str_pad($dat->trxnominal, 10).".\n";
+			$indeks++;
+			$i++;
+		}
+		file_put_contents($dateFile,$dataContent);
+		header('Content-Type: application/text');
+		header('Content-Disposition: attachment; filename="'.$dateFile);
+		echo file_get_contents($dateFile);
+	}
+   // END :: REPORT DASHBOARD
+ 
 }

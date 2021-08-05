@@ -26,7 +26,7 @@
 										<tr>
                       <td width="100%"><?php echo $row['receiptcity'] ?></td>
 											<td>
-                        <a href="javascript:void(0)" onClick="modal_list('<?= $row['receiptcity']."','".$row['receiptcountry'] ?>')"  class="btn btn-success btn-xs" data-toggle="tooltip" data-original-title="Edit Data"> <i class="fas fa-pen"></i></a>
+                        <a href="javascript:void(0)" onClick="modal_list('<?= $row['receiptcity']."','".$row['receiptcountry'] ?>')"  class="btn btn-success btn-xs" title="Edit Data"> <i class="fas fa-pen"></i></a>
                       </td>
                     </tr>
 									<?php endforeach; ?>
