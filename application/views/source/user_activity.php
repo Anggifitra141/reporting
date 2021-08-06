@@ -203,3 +203,7 @@
     </div>
   </div>
 </section>
+
+<script>
+  $('#nav-user-activity').addClass('active');
+</script>

@@ -6,11 +6,11 @@
 
 <section class="section">
   <div class="section-header">
-    <h1>Country</h1>
+    <h1 id="section-header">123</h1>
   </div>
 
   <div class="section-body">
-    <h2 class="section-title">Master Country</h2>
+    <h2 class="section-title" id="section-title">Master </h2>
 
     <div class="row">
       <div class="col-12">
@@ -26,8 +26,8 @@
                       No
                     </th>
                     <th>Code</th>
-                    <th>Name</th>
                     <th>Description</th>
+                    <th>Status</th>
                   </tr>
                 </thead>
 
@@ -44,8 +44,12 @@
 
 <script src="<?php echo base_url(); ?>assets/modules/jquery.min.js"></script>
 <script>
+  var table_query = "<?= $this->uri->segment(3) ?>";
+  var table_query_split = table_query.split('_');
   $('#nav-master-data').addClass('dropdown active');
-  $('#nav-country').addClass('active');
+  $('#nav-'+ table_query_split[2]).addClass('active');
+  $('#section-header').text(table_query_split[2].toUpperCase());
+  $('#section-title').text('Master ' +table_query_split[2]);
 
   $("input").change(function(){
       $(this).removeClass('is-invalid');
@@ -61,8 +65,11 @@
         "serverSide": true,
         "order": [],
         "ajax": {
-          url: "<?php echo site_url('master/ajax_list_country')?>", // json datasource
-          type: "POST"
+          url: "<?php echo site_url('master/ajax_master_all')?>", // json datasource
+          type: "POST",
+          data : function(data){
+          data.table = table_query
+        },
         },
         "columnDefs": [{
           "orderable": false

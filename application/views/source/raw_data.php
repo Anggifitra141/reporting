@@ -51,7 +51,8 @@
 <script>
 
 var base_url = "<?= base_url() ?>";
-  
+$('#nav-data-source').addClass('dropdown active');
+$('#nav-raw-data').addClass('active');
 
   $("input").change(function(){
       $(this).removeClass('is-invalid');

@@ -6,11 +6,11 @@
 
 <section class="section">
   <div class="section-header">
-    <h1>Auto Clean</h1>
+    <h1>Verify Data</h1>
   </div>
 
   <div class="section-body">
-    <h2 class="section-title">Manage Auto clean</h2>
+    <h2 class="section-title">Manage Verify Data</h2>
     <div class="row">
       <div class="col-12">
         <div class="card">
@@ -77,6 +77,7 @@
 
 var base_url = "<?= base_url() ?>";
 var table;
+  $('#nav-verify-data').addClass('active');
 $(document).ready(function() {
 
   table = $('#table').DataTable({

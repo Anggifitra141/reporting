@@ -4,7 +4,7 @@
   </div>
 
   <div class="section-body">
-    <h2 class="section-title">Report Unprocess</h2>
+    <h2 class="section-title">Report <?= $title ?></h2>
 
     <div class="row">
       <div class="col-12">
@@ -41,9 +41,9 @@
                           </td>
                         <?php }else if($row['status_rep']=="inactive") { ?>
                           <td>
-                            <a href="#" class="btn btn-xl btn-danger" title="Download"> <i class="fa fa-file"></i></a>
-                            <a href="#" class="btn btn-xl btn-danger" title="List Report"> <i class="fa fa-pen"></i> </a>
-                            <a class="btn btn-xl btn-danger" href="#lap_G3" title="Printed Report"><span class="fa fa-print"></span></a>
+                            <a href="#" class="btn btn-xl btn-danger" enable title="Download"> <i class="fa fa-file"></i></a>
+                            <a href="#" class="btn btn-xl btn-danger" enable title="List Report"> <i class="fa fa-pen"></i> </a>
+                            <a class="btn btn-xl btn-danger" href="" enable title="Printed Report"><span class="fa fa-print"></span></a>
                           </td>
                         <?php } ?>
                       </tr>

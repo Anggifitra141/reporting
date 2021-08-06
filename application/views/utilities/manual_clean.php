@@ -83,6 +83,8 @@
 <script>
   var table;
   var base_url = "<?= base_url() ?>";
+  $('#nav-utilities-source').addClass('dropdown active');
+  $('#nav-manual-clean').addClass('active');
 
   $("input").change(function(){
       $(this).removeClass('is-invalid');

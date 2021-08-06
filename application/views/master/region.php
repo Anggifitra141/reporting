@@ -45,7 +45,8 @@
 <script src="<?php echo base_url(); ?>assets/modules/jquery.min.js"></script>
 <script>
   
-
+  $('#nav-master-data').addClass('dropdown active');
+  $('#nav-region').addClass('active');
   $("input").change(function(){
       $(this).removeClass('is-invalid');
       $(this).next().empty();

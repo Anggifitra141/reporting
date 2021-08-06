@@ -36,21 +36,24 @@
       </a>
     </div>
     <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-      <div class="card card-statistic-1">
-        <div class="card-icon bg-warning">
-          <i class="far fa-file"></i>
-        </div>
-        <div class="card-wrap">
-          <div class="card-header">
-            <h4>Next</h4>
+      <a href="<?= base_url('app/next') ?>">
+        <div class="card card-statistic-1">
+          <div class="card-icon bg-warning">
+            <i class="far fa-file"></i>
           </div>
-          <div class="card-body">
-            <?= $totalnext ?>
+          <div class="card-wrap">
+            <div class="card-header">
+              <h4>Next</h4>
+            </div>
+            <div class="card-body">
+              <?= $totalnext ?>
+            </div>
           </div>
         </div>
-      </div>
+      </a>
     </div>
     <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+    <a href="<?= base_url('app/month') ?>">
       <div class="card card-statistic-1">
         <div class="card-icon bg-success">
           <i class="fas fa-circle"></i>
@@ -64,6 +67,7 @@
           </div>
         </div>
       </div>
+    </a>
     </div>
   </div>
   <div class="row">
@@ -142,6 +146,7 @@
 <script src="<?php echo base_url(); ?>assets/modules/jquery.min.js"></script>
 
 <script>
+  $('li#nav-dashboard').addClass('active');
   $(document).ready(function() {
 
     // $("#myEvent").fullCalendar({
@@ -154,6 +159,7 @@
     //   editable: true
 
     // });
+    
     var drag =  function() {
 			$('.calendar-event').each(function() {
 
@@ -194,7 +200,7 @@
 		var day = date.getDate();
 		var month = date.getMonth();
 		var year = date.getFullYear();
-    console.log(events)
+  
 
     $('#myEvent').fullCalendar({
       // themeSystem: 'bootstrap3',

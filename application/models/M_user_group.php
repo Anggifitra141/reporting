@@ -56,7 +56,14 @@ class M_user_group extends CI_model {
           $this->db->order_by(key($order), $order[key($order)]);
       }
   }
-
+  public function get($where="")
+  {
+    if($where)
+    {
+      $this->db->where($where);
+    }
+    return $this->db->get($this->table);
+  }
 	public function Get_All()
 	{
 		$this->_get_datatables_query();

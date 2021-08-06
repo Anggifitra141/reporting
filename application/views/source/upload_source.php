@@ -53,7 +53,8 @@
 <script>
 
 var base_url = "<?= base_url() ?>";
-
+$('#nav-data-source').addClass('dropdown active');
+$('#nav-upload-source').addClass('active');
 function save_import()
 {
   $('#btnSaveImport').html('<i class="fa fa-spinner fa-spin"></i> saving...');

@@ -87,6 +87,8 @@
 
 <script src="<?php echo base_url(); ?>assets/modules/jquery.min.js"></script>
 <script>
+  $('#nav-utilities-source').addClass('dropdown active');
+  $('#nav-role-clean').addClass('active');
    $(document).ready(function() {
     var table = $('#table').DataTable({
         "deferRender": true,

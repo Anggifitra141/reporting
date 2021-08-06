@@ -84,4 +84,52 @@ class Master extends CI_Controller {
 
 
 
+
+  // START :: ALL MASTER DATA
+  public function page($table_name = "")
+  {
+    $existing_tabel = $this->db->query("SELECT count(TABLE_NAME) tot FROM information_schema.tables WHERE table_schema = 'reporting' AND table_name = '".$table_name."' LIMIT 1")->row()->tot;
+    if($table_name && $existing_tabel > 0 ){
+      $data= [];
+      $data['content'] = $this->load->view('master/master_all', $data, TRUE);
+      $this->load->view('layout', $data);
+    }else{
+      echo show_404();
+    }
+    
+      
+  }
+
+  public function ajax_master_all()
+  {
+    $table = $this->input->post('table');
+    $list = $this->M_master->Get_All_master_all($table);
+    $data = array();
+    $no = 1;
+    foreach ($list as $item) {
+        $row = array();
+        $row[] = $no++;
+				$row[] = $item->code;
+        $row[] = $item->description;
+        if($item->status == 'active'){
+          $status = '<span class="badge badge-primary">Active</span>';
+        }else{
+          $status = '<span class="badge badge-danger">No Active</span>';
+        }
+        $row[] = $status;
+        $data[] = $row;
+    }
+
+    $output = array(
+                    "draw" => $_POST['draw'],
+                    "recordsTotal" => $this->M_master->count_all_master_all($table),
+                    "recordsFiltered" => $this->M_master->count_filtered_master_all($table),
+                    "data" => $data,
+            );
+    echo json_encode($output);
+  }
+  // END :: ALL MASTER DATA
+
+
+
 }

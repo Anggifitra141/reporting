@@ -1,6 +1,6 @@
 <?php
 
-class M_campaign extends CI_model {
+class M_user extends CI_model {
 
   /**
    *  =======   Application By    : PT. Seiber Mitra Solusi    ========
@@ -14,10 +14,10 @@ class M_campaign extends CI_model {
 		parent::__construct();
 	}
 
-	var $table = 'campaign';
-  var $column_order = array('campaign');
-  var $column_search = array('campaign');
-  var $order = array('campaign_id' => 'desc');
+	var $table = 'user';
+  var $column_order = array('username', 'fullname', 'user_group', 'activation_date', 'status');
+  var $column_search = array('username', 'fullname', 'user_group', 'activation_date', 'status');
+  var $order = array('user_id' => 'desc');
 
   private function _get_datatables_query()
   {
@@ -87,29 +87,29 @@ class M_campaign extends CI_model {
     return $this->db->count_all_results();
   }
 
-  public function get_campaign($campaign_id)
+  public function get_user($user_id)
   {
     $this->db->from($this->table);
-    $this->db->where('campaign_id', $campaign_id);
+    $this->db->where('user_id', $user_id);
     $query = $this->db->get();
     return $query->row();
   }
 
-  public function add_campaign($data)
+  public function add_user($data)
   {
     $this->db->insert($this->table, $data);
     return $this->db->insert_id();
   }
 
-  public function update_campaign($where, $data)
+  public function update_user($where, $data)
   {
     $this->db->update($this->table, $data, $where);
     return $this->db->affected_rows();
   }
 
-  public function delete_campaign($campaign_id)
+  public function delete_user($user_id)
   {
-    $this->db->where('campaign_id', $campaign_id);
+    $this->db->where('user_id', $user_id);
     $this->db->delete($this->table);
   }
 

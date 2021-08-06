@@ -87,7 +87,8 @@
 <script>
 
 var base_url = "<?= base_url() ?>";
-
+$('#nav-utilities-source').addClass('dropdown active');
+  $('#nav-auto-clean').addClass('active');
 var table;
   $(document).ready(function(){
     table = $('#table').DataTable({

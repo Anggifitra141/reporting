@@ -103,7 +103,8 @@
 <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js"></script>
 <script>
   var base_url = "<?= base_url() ?>";
-  
+  $('#nav-sub-report').addClass('dropdown active');
+  $('#nav-report').addClass('active');
   function dataTable()
   {
       var table = $('#table-data').DataTable( {

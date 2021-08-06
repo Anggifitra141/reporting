@@ -85,7 +85,7 @@
       $(this).next().empty();
   });
   $(document).ready(function() {
-
+    $('#nav-campaign').addClass('active');
     var table = $('#table').DataTable({
         "deferRender": true,
         "scrollCollapse": false,

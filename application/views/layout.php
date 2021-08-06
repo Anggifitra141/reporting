@@ -288,73 +288,73 @@
           </div>
           <ul class="sidebar-menu">
             <li class="menu-header">Regulator Management</li>
-            <li>
+            <li id="nav-dashboard">
               <a href="<?php echo site_url('app'); ?>" class="nav-link"><i class="fas fa-home"></i><span>Dashboard</span></a>
             </li>
-            <li>
+            <li id="nav-campaign">
               <a href="<?php echo site_url('campaign'); ?>" class="nav-link"><i class="fas fa-list"></i><span>Campaign</span></a>
             </li>
-            <li class="dropdown">
+            <li class="dropdown" id="nav-data-source">
               <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-layer-group"></i> <span>Data Source</span></a>
               <ul class="dropdown-menu">
-                <li id="source_upload_source"><a class="nav-link" href="<?php echo site_url('source/upload_source'); ?>"><i class="fas fa-upload"></i> Upload Source</a></li>
-                <li id="source_raw_data"><a class="nav-link" href="<?php echo site_url('source/raw_data'); ?>"><i class="fas fa-database"></i> Raw Data</a></li>
-                <li id="source_data_clean"><a class="nav-link" href="<?php echo site_url('source/data_clean'); ?>"><i class="fas fa-database"></i> Data Clean</a></li>
+                <li id="nav-upload-source"><a class="nav-link" href="<?php echo site_url('source/upload_source'); ?>"><i class="fas fa-upload"></i> Upload Source</a></li>
+                <li id="nav-raw-data"><a class="nav-link" href="<?php echo site_url('source/raw_data'); ?>"><i class="fas fa-database"></i> Raw Data</a></li>
+                <li id="nav-data-clean"><a class="nav-link" href="<?php echo site_url('source/data_clean'); ?>"><i class="fas fa-database"></i> Data Clean</a></li>
               </ul>
             </li>
-            <li class="dropdown">
+            <li class="dropdown" id="nav-utilities-source">
               <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-wrench"></i> <span>Utilities Source</span></a>
               <ul class="dropdown-menu">
-                <li id="source_upload_source"><a class="nav-link" href="<?php echo site_url('utilities/role_clean'); ?>"><i class="fas fa-align-center"></i> Role Clean</a></li>
-                <li id="source_raw_data"><a class="nav-link" href="<?php echo site_url('utilities/auto_clean'); ?>"><i class="fas fa-align-center"></i> Auto Clean</a></li>
-                <li id="source_data_clean"><a class="nav-link" href="<?php echo site_url('utilities/manual'); ?>"><i class="fas fa-database"></i> Manual Clean</a></li>
+                <li id="nav-role-clean"><a class="nav-link" href="<?php echo site_url('utilities/role_clean'); ?>"><i class="fas fa-align-center"></i> Role Clean</a></li>
+                <li id="nav-auto-clean"><a class="nav-link" href="<?php echo site_url('utilities/auto_clean'); ?>"><i class="fas fa-align-center"></i> Auto Clean</a></li>
+                <li id="nav-manual-clean"><a class="nav-link" href="<?php echo site_url('utilities/manual'); ?>"><i class="fas fa-database"></i> Manual Clean</a></li>
               </ul>
             </li>
-            <li>
+            <li id="nav-verify-data">
               <a href="<?php echo site_url('verify'); ?>" class="nav-link"><i class="fas fa-check"></i><span>Verify Data</span></a>
             </li>
-            <li class="dropdown">
+            <li class="dropdown" id="nav-sub-report">
               <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-file-alt"></i> <span>Report</span></a>
               <ul class="dropdown-menu">
-                <li id="report"><a class="nav-link" href="<?php echo site_url('report'); ?>"><i class="fas fa-align-center"></i> Report</a></li>
-                <li id="setting_report"><a class="nav-link" href="<?php echo site_url('report/setting_report'); ?>"><i class="fas fa-align-center"></i> Setting Report</a></li>
+                <li id="nav-report"><a class="nav-link" href="<?php echo site_url('report'); ?>"><i class="fas fa-align-center"></i> Report</a></li>
+                <li id="nav-setting-report"><a class="nav-link" href="<?php echo site_url('report/setting_report'); ?>"><i class="fas fa-align-center"></i> Setting Report</a></li>
               </ul>
             </li>
-            <li>
+            <li id="nav-archive">
               <a href="<?php echo site_url('source/archive'); ?>" class="nav-link"><i class="fas fa-archive"></i><span>Archive</span></a>
             </li>
-            <li>
+            <li id="nav-user-activity">
               <a href="<?php echo site_url('source/user_activity'); ?>" class="nav-link"><i class="fas fa-history"></i><span>User Activity</span></a>
             </li>
-            <!--
-            <li class="menu-header">Document Management</li>
-            <li>
-              <a href="<?php echo site_url('app'); ?>" class="nav-link"><i class="fas fa-home"></i><span>Dashboard</span></a>
-            </li>
-            <li>
-              <a href="<?php echo site_url('departement'); ?>" class="nav-link"><i class="fas fa-layer-group"></i><span>Document</span></a>
-            </li>
-            </li>
-            <li>
-              <a href="<?php echo site_url('app'); ?>" class="nav-link"><i class="fas fa-file-alt"></i><span>Report</span></a>
-            </li>
-            <li>
-              <a href="<?php echo site_url('app'); ?>" class="nav-link"><i class="fas fa-scroll"></i><span>Version</span></a>
-            </li>
-            <li>
-              <a href="<?php echo site_url('app'); ?>" class="nav-link"><i class="fas fa-history"></i><span>User Activity</span></a>
-            </li>
-            -->
             <li class="menu-header">System Setting</li>
-            <li class="dropdown">
+            <li class="dropdown" id="nav-master-data">
               <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-sliders-h"></i> <span>Master data</span></a>
               <ul class="dropdown-menu">
-                <li id="source_upload_source"><a class="nav-link" href="<?php echo site_url('master/region'); ?>"><i class="fas fa-align-center"></i> Region</a></li>
-                <li id="source_upload_source"><a class="nav-link" href="<?php echo site_url('master/country'); ?>"><i class="fas fa-align-center"></i> Country</a></li>
+                <li id="nav-region"><a class="nav-link" href="<?php echo site_url('master/region'); ?>"><i class="fas fa-align-center"></i> Region</a></li>
+                <li id="nav-country"><a class="nav-link" href="<?php echo site_url('master/country'); ?>"><i class="fas fa-align-center"></i> Country</a></li>
+                <li id="nav-subtype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_01_subtype'); ?>"><i class="fas fa-align-center"></i> Subtype</a></li>
+                <li id="nav-fundtype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_02_fundtype'); ?>"><i class="fas fa-align-center"></i> Fundtype</a></li>
+                <li id="nav-acctype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_03_acctype'); ?>"><i class="fas fa-align-center"></i> Acctype</a></li>
+                <li id="nav-accstat"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_04_accstat'); ?>"><i class="fas fa-align-center"></i> Accstat</a></li>
+                <li id="nav-idtype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_05_idtype'); ?>"><i class="fas fa-align-center"></i> Idtype</a></li>
+                <li id="nav-trxmode"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_06_trxmode'); ?>"><i class="fas fa-align-center"></i> Trxmode</a></li>
+                <li id="nav-trxtype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_07_trxtype'); ?>"><i class="fas fa-align-center"></i> Trxtype</a></li>
+                <li id="nav-reporttype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_08_reporttype'); ?>"><i class="fas fa-align-center"></i> Reporttype</a></li>
+                <li id="nav-contactcat"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_09_contactcat'); ?>"><i class="fas fa-align-center"></i> Contactcat</a></li>
+                <li id="nav-commtype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_10_commtype'); ?>"><i class="fas fa-align-center"></i> Commtype</a></li>
+                <li id="nav-companytype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_11_companytype'); ?>"><i class="fas fa-align-center"></i> Companytype</a></li>
+                <li id="nav-stufftype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_12_stufftype'); ?>"><i class="fas fa-align-center"></i> Stufftype</a></li>
+                <li id="nav-currency"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_13_currency'); ?>"><i class="fas fa-align-center"></i> Currency</a></li>
+                <li id="nav-country"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_14_country'); ?>"><i class="fas fa-align-center"></i> Country</a></li>
+                <li id="nav-personacc"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_15_personacc'); ?>"><i class="fas fa-align-center"></i> Personacc</a></li>
+                <li id="nav-personentity"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_16_personentity'); ?>"><i class="fas fa-align-center"></i> Personentity</a></li>
+                <li id="nav-partyrole"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_17_partyrole'); ?>"><i class="fas fa-align-center"></i> Partyrole</a></li>
+                <li id="nav-reportind"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_18_reportind'); ?>"><i class="fas fa-align-center"></i> Reportind</a></li>
+                <li id="nav-gender"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_19_gender'); ?>"><i class="fas fa-align-center"></i> Gender</a></li>
               </ul>
             </li>
             <li>
-              <a href="<?php echo site_url(); ?>" class="nav-link"><i class="fas fa-user"></i><span>User</span></a>
+              <a href="<?php echo site_url('user'); ?>" class="nav-link"><i class="fas fa-user"></i><span>User</span></a>
             </li>
             <li>
               <a href="<?php echo site_url('user_group'); ?>" class="nav-link"><i class="fas fa-users"></i><span>User group</span></a>
@@ -365,10 +365,11 @@
           </ul>
 
           <div class="mt-4 mb-4 p-3 hide-sidebar-mini">
-            <a href="https://getstisla.com/docs" class="btn btn-danger btn-lg btn-block btn-icon-split">
+            <!-- <a href="https://getstisla.com/docs" class="btn btn-danger btn-lg btn-block btn-icon-split">
               <i class="fas fa-rocket"></i> Documentation
-            </a>
-          </div>        </aside>
+            </a> -->
+          </div>
+        </aside>
       </div>
 
       <!-- Main Content -->
@@ -378,7 +379,7 @@
 
       <footer class="main-footer">
         <div class="footer-left">
-          Copyright &copy; 2021 Report Management || By <a href="https://seiberms.com/">PT. Seiber Mitra Solusi </a> <div class="bullet"></div> All Right Reserved
+          Copyright &copy; 2021 Report Management || By <a href="javascript:void(0)"> </a> <div class="bullet"></div> All Right Reserved
         </div>
         <div class="footer-right">
 

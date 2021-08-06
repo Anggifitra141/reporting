@@ -46,6 +46,12 @@ class Lib
 		}
 		return $waktu;
 	}
+	function date_indo($tanggal){
+		if ($tanggal == '0000-00-00') {
+			return "-";
+		}
+		return date('d-m-Y', strtotime($tanggal));
+ }
  
    
 

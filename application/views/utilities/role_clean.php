@@ -165,7 +165,8 @@
 
 
 <script>
-
+  $('#nav-utilities-source').addClass('dropdown active');
+  $('#nav-role-clean').addClass('active');
   function senderCountry(sendercountry)
   {
    $('#modal_sender_country').modal('show');

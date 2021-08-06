@@ -26,7 +26,7 @@
 										<tr>
                       <td> <?php echo $no++; ?> </td>
 											<td>
-                        <a href="javascript:void(0)" onClick="modal_list('<?= $row['sendercountry']."','".$row['sendercity'] ?>')"  class="btn btn-primary btn-sm" data-toggle="tooltip" data-original-title="Edit Data"> <i class="far fa-edit"></i></a>
+                        <a href="javascript:void(0)" onClick="modal_list('<?= $row['sendercountry']."','".$row['sendercity'] ?>')"  class="btn btn-primary btn-sm" title="Edit Data"> <i class="far fa-edit"></i></a>
                       </td>
                       <td width="100%"><?php echo $row['sendercity'] ?></td>
                     </tr>
@@ -88,6 +88,9 @@
 
 <script src="<?php echo base_url(); ?>assets/modules/jquery.min.js"></script>
 <script>
+  $('#nav-utilities-source').addClass('dropdown active');
+  $('#nav-role-clean').addClass('active');
+  
    $(document).ready(function() {
     var table = $('#table').DataTable({
         "deferRender": true,
