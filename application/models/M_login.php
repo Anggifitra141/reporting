@@ -12,12 +12,12 @@ class M_login extends CI_Model {
 		$this->db->where('username', $this->input->post('username', TRUE));
 		// $this->db->where('password', md5($this->input->post('password', TRUE)));
     $this->db->where('status', "ACTIVE", TRUE);
-		$query = $this->db->get('user');
+		$query = $this->db->get('tuser');
 		if($query->num_rows() > 0)
 		{
 			$result = $query->row_array();
 			if(password_verify($this->input->post('password', TRUE), $result['password'])){
-				$user_group = $this->db->get_where('user_group', ['group_name' => $result['user_group']])->row();
+				$user_group = $this->db->get_where('tuser_group', ['group_name' => $result['user_group']])->row();
 				$data = array(
 						'user_id' => $result['user_id'],
 						'username' => $result['username'],

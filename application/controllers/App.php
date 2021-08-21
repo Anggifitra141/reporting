@@ -25,20 +25,19 @@ class App extends CI_Controller {
 	public function index()
 	{
     $data= [];
-    $sqltoday								  = "SELECT COUNT(*) as reportcount FROM tcalendar WHERE tcal_date = CURRENT_DATE();";
+    $sqltoday								  = "SELECT COUNT(*) as reportcount FROM tcalendar WHERE datestamp = CURRENT_DATE();";
     $row_today								= $this->db->query($sqltoday)->row();
 		$data['totaltoday']				= $row_today->reportcount;
 		
-    $data['campaign']				  = $this->db->query("SELECT COUNT(campaign_id) tot FROM campaign ")->row()->tot;
-		$sqlunprocessed						= "SELECT COUNT(*) as reportcount  FROM tcalendar WHERE tcal_date < CURRENT_DATE() and status <>'printed'";
+		$sqlunprocessed						= "SELECT COUNT(*) as reportcount  FROM tcalendar WHERE datestamp < CURRENT_DATE() and status <>'printed'";
     $row_unprocessed					= $this->db->query($sqlunprocessed)->row();
 		$data['totalunprocessed'] = $row_unprocessed->reportcount;
 		
-		$sqlnext								  = "SELECT COUNT(*) as reportcount FROM tcalendar WHERE tcal_date > CURRENT_DATE() AND MONTH(tcal_date) = MONTH(CURRENT_DATE()) AND status <>'printed'";
+		$sqlnext								  = "SELECT COUNT(*) as reportcount FROM tcalendar WHERE datestamp > CURRENT_DATE() AND MONTH(datestamp) = MONTH(CURRENT_DATE()) AND status <>'printed'";
     $row_next							    = $this->db->query($sqlnext)->row();
 		$data['totalnext']				= $row_next->reportcount;
 		
-		$sqlmonth								  = "SELECT COUNT(*) as reportcount FROM tcalendar WHERE MONTH(tcal_date) = MONTH(CURRENT_DATE());";
+		$sqlmonth								  = "SELECT COUNT(*) as reportcount FROM tcalendar WHERE MONTH(datestamp) = MONTH(CURRENT_DATE());";
         $row_month						= $this->db->query($sqlmonth)->row();
 		$data['totalmonth'] 			= $row_month->reportcount;
 		
@@ -46,14 +45,14 @@ class App extends CI_Controller {
 		$bulan = $row_month->reportcount;
 		$data['hasil'] = $bulan - $belum;
 		
-		$data['activity'] = $this->db->query("SELECT username,actcategory, actlog,datestamp FROM tlogact JOIN user ON tlogact.uid = user.user_id WHERE MONTH(datestamp) = MONTH(CURRENT_DATE()) ORDER BY id DESC LIMIT 5")->result_array();
+		// $data['activity'] = $this->db->query("SELECT username,actcategory, actlog,datestamp FROM tlogact JOIN user ON tlogact.uid = user.user_id WHERE MONTH(datestamp) = MONTH(CURRENT_DATE()) ORDER BY id DESC LIMIT 5")->result_array();
 		
 		$data['result'] = $this->db->get("tcalendar")->result();
     foreach ($data['result'] as $key => $value) {
-    $data['calender'][$key]['start'] = $value->tcal_date;
-		$data['calender'][$key]['end'] = $value->tcal_date;
+    $data['calender'][$key]['start'] = $value->datestamp;
+		$data['calender'][$key]['end'] = $value->datestamp;
     $data['calender'][$key]['title'] = $value->tcal_message;
-		$data['calender'][$key]['url'] = "report/in/".$value->tcal_date;
+		$data['calender'][$key]['url'] = "report/in/".$value->datestamp;
 		$status = $value->status;
 		$today = date("Y-m-d"); 
 		if ($status == "unverified"){
@@ -75,30 +74,30 @@ class App extends CI_Controller {
    public function unprocessed()
    {
 		$data['title'] 	 = 'Unprocess';
-     $data['sourceAll'] = $this->db->query("SELECT a.`tcal_date` as date ,a.`tcal_message` as name , 
+     $data['sourceAll'] = $this->db->query("SELECT a.`datestamp` as date ,a.`tcal_message` as name , 
      b.regulator as regulator, c.periodname as period, a.`status` as status, b.status as status_rep, b.link 
      FROM tcalendar a INNER JOIN treportsettings b ON a.trepid = b.id INNER JOIN treportperiod c ON b.period = c.periodcode 
-     WHERE a.tcal_date < CURRENT_DATE() and a.status <>'printed';")->result_array();
+     WHERE a.datestamp < CURRENT_DATE() and a.status <>'printed';")->result_array();
      $data['content'] = $this->load->view('dashboard/reminder', $data, TRUE);
      $this->load->view('layout', $data);
    }
 	public function next()
 	{
 		$data['title'] 	 = 'Next';
-		$data['sourceAll'] = $this->db->query("SELECT a.`tcal_date` as date ,a.`tcal_message` as name , 
+		$data['sourceAll'] = $this->db->query("SELECT a.`datestamp` as date ,a.`tcal_message` as name , 
 		b.regulator as regulator, c.periodname as period, a.`status` as status , b.status as status_rep, b.link
 		FROM tcalendar a INNER JOIN treportsettings b ON a.trepid = b.id INNER JOIN treportperiod c ON b.period = c.periodcode 
-		WHERE tcal_date > CURRENT_DATE() AND MONTH(tcal_date) = MONTH(CURRENT_DATE()) AND a.status <>'printed'")->result_array();
+		WHERE datestamp > CURRENT_DATE() AND MONTH(datestamp) = MONTH(CURRENT_DATE()) AND a.status <>'printed'")->result_array();
 		$data['content'] = $this->load->view('dashboard/reminder', $data, TRUE);
 		$this->load->view('layout', $data);
 	}
 	public function month()
 	{
 		$data['title'] 	 = 'Month';
-		$data['sourceAll'] = $this->db->query("SELECT a.`tcal_date` as date ,a.`tcal_message` as name ,
+		$data['sourceAll'] = $this->db->query("SELECT a.`datestamp` as date ,a.`tcal_message` as name ,
 		b.regulator as regulator, c.periodname as period, a.`status` as status , b.status as status_rep, b.link
 		FROM tcalendar a INNER JOIN treportsettings b ON a.trepid = b.id INNER JOIN treportperiod c ON b.period = c.periodcode 
-		WHERE MONTH(tcal_date) = MONTH(CURRENT_DATE())")->result_array();
+		WHERE MONTH(datestamp) = MONTH(CURRENT_DATE())")->result_array();
 		$data['content'] = $this->load->view('dashboard/reminder', $data, TRUE);
 		$this->load->view('layout', $data);
 	}

@@ -14,7 +14,7 @@ class M_raw_data extends CI_model {
 		parent::__construct();
 	}
 
-	var $table = 'tdatasource1';
+	var $table = 'tltdbb_source';
   var $column_order = array('trxdate','sendername','receiptname','nominal');
   var $column_search = array('trxdate','sendername','receiptname','nominal');
   var $order = array('id' => 'desc');

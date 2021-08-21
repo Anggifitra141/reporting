@@ -13,7 +13,7 @@ class Source extends CI_Controller {
 	{
 		parent::__construct();
     $this->load->model(['M_raw_data']);
-    $this->load->model(['M_clean_data', 'M_campaign']);
+    $this->load->model(['M_clean_data']);
     if(!$this->session->userdata('logged_in'))
     {
       $data=array();
@@ -26,7 +26,6 @@ class Source extends CI_Controller {
 	public function upload_source()
 	{
     $data= [];
-    $data['campaign'] = $this->M_campaign->get(['is_active' => 'Y'])->result();
     $data['content'] = $this->load->view('source/upload_source', $data, TRUE);
 		$this->load->view('layout', $data);
 	}
