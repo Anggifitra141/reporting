@@ -295,8 +295,9 @@
               <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-layer-group"></i> <span>Data Source</span></a>
               <ul class="dropdown-menu">
                 <!-- <li id="nav-upload-source"><a class="nav-link" href="<?php echo site_url('source/upload_source'); ?>"><i class="fas fa-upload"></i> Upload Source</a></li> -->
-                <li id="nav-raw-data"><a class="nav-link" href="<?php echo site_url('source/raw_data'); ?>"><i class="fas fa-database"></i> Raw Data</a></li>
-                <li id="nav-data-clean"><a class="nav-link" href="<?php echo site_url('source/data_clean'); ?>"><i class="fas fa-database"></i> Data Clean</a></li>
+                <li id="nav-tltdbb-source"><a class="nav-link" href="<?php echo site_url('source/tltdbb_source'); ?>"><i class="fas fa-database"></i> Ltdbb</a></li>
+                <li id="nav-tltdbb-source"><a class="nav-link" href="<?php echo site_url('source/dana_float'); ?>"><i class="fas fa-database"></i> Dana Float</a></li>
+                <li id="nav-data-clean"><a class="nav-link" href="<?php echo site_url('source/si_pesat'); ?>"><i class="fas fa-database"></i> Si Pesat</a></li>
               </ul>
             </li>
             <li class="dropdown" id="nav-utilities-source">
@@ -307,9 +308,9 @@
                 <li id="nav-manual-clean"><a class="nav-link" href="<?php echo site_url('utilities/manual'); ?>"><i class="fas fa-database"></i> Manual Clean</a></li>
               </ul>
             </li>
-            <li id="nav-verify-data">
+            <!-- <li id="nav-verify-data">
               <a href="<?php echo site_url('verify'); ?>" class="nav-link"><i class="fas fa-check"></i><span>Verify Data</span></a>
-            </li>
+            </li> -->
             <li class="dropdown" id="nav-sub-report">
               <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-file-alt"></i> <span>Report</span></a>
               <ul class="dropdown-menu">
@@ -327,8 +328,9 @@
             <li class="dropdown" id="nav-master-data">
               <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-sliders-h"></i> <span>Master data</span></a>
               <ul class="dropdown-menu">
-                <li id="nav-region"><a class="nav-link" href="<?php echo site_url('master/region'); ?>"><i class="fas fa-align-center"></i> Region</a></li>
-                <li id="nav-country"><a class="nav-link" href="<?php echo site_url('master/country'); ?>"><i class="fas fa-align-center"></i> Country</a></li>
+                <li id="nav-region"><a class="nav-link" href="<?php echo site_url('role_model'); ?>"><i class="fas fa-align-center"></i> Role Model</a></li>
+                <!-- <li id="nav-region"><a class="nav-link" href="<?php echo site_url('master/region'); ?>"><i class="fas fa-align-center"></i> Region</a></li> -->
+                <!-- <li id="nav-country"><a class="nav-link" href="<?php echo site_url('master/country'); ?>"><i class="fas fa-align-center"></i> Country</a></li> -->
                 <!-- <li id="nav-subtype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_01_subtype'); ?>"><i class="fas fa-align-center"></i> Subtype</a></li>
                 <li id="nav-fundtype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_02_fundtype'); ?>"><i class="fas fa-align-center"></i> Fundtype</a></li>
                 <li id="nav-acctype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_03_acctype'); ?>"><i class="fas fa-align-center"></i> Acctype</a></li>

@@ -55,7 +55,7 @@
       <div class="modal-body">
         <form class="form-horizontal" method="POST" id="form_user_group">
           <div class="form-body">
-            <input type="hidden" class="form-control" name="user_group_id">
+            <input type="hidden" class="form-control" name="id">
             <div class="form-group">
               <label>Group Name</label>
               <input type="text" class="form-control" name="group_name">
@@ -160,11 +160,11 @@
     $('.modal-title').text('Add User Group'); // Set Title to Bootstrap modal title
   }
 
-  function get_user_group(user_group_id) {
+  function get_user_group(id) {
     save_method = 'update';
     $('#form_user_group')[0].reset();
     $.ajax({
-      url: "<?php echo site_url('user_group/get_user_group')?>/" + user_group_id,
+      url: "<?php echo site_url('user_group/get_user_group')?>/" + id,
       type: "GET",
       dataType: "JSON",
       success: function(data) {
@@ -177,7 +177,7 @@
         
         
 
-        $('[name="user_group_id"]').val(data.user_group_id);
+        $('[name="id"]').val(data.id);
         $('[name="group_name"]').val(data.group_name);
         
         if(actions.match(/add/g)){ $('#add-action').attr('checked', true); }else{ $('#add-action').attr('checked', false); }
@@ -242,7 +242,7 @@
     });
   }
 
-  function delete_user_group(user_group_id) {
+  function delete_user_group(id) {
     var event = "<?php echo $this->session->userdata('action'); ?>";
     console.log(event)
 		if(event.match(/delete/g)){
@@ -256,7 +256,7 @@
       .then((willDelete) => {
         if (willDelete) {
           $.ajax({
-            url: "<?php echo site_url('user_group/delete_user_group')?>/" + user_group_id,
+            url: "<?php echo site_url('user_group/delete_user_group')?>/" + id,
             type: "post",
             complete: function() {
               swal("Your data has been deleted!", {

@@ -22,15 +22,15 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <?php foreach ($sendercountry as $row) { 
-                    $sender = str_replace(" ", "_",$row['sendercountry']);
+                  <?php foreach ($sender_country as $row) { 
+                    $sender = str_replace(" ", "_",$row['sender_country']);
                   ?>
                   <tr>                
                     <td >
                       <a href="<?php echo base_url('utilities/listscountry/'.$sender); ?>" class="btn btn-success btn-icon btn-sm" data-toggle="tooltip" data-original-title="See Sender"> <i class="fas fa-eye"></i> </a>
-                      <a href="javascript:void(0)" onClick="senderCountry('<?= $row['sendercountry'] ?>')" class="btn btn-primary btn-sm" data-toggle="tooltip" data-original-title="Edit Sender"> <i class="far fa-edit"></i> </a>
+                      <a href="javascript:void(0)" onClick="sender_country('<?= $row['sender_country'] ?>')" class="btn btn-primary btn-sm" data-toggle="tooltip" data-original-title="Edit Sender"> <i class="far fa-edit"></i> </a>
                     </td>
-                    <td><?php echo $row['sendercountry'] ?></td>
+                    <td><?php echo $row['sender_country'] ?></td>
                   </tr>
                   <?php } ?>
                 </tbody>
@@ -54,15 +54,15 @@
                   </tr>
                 </thead>
                 <tbody>
-                <?php foreach ($receiptcountry as $row) { 
-                  $receipt = str_replace(" ", "_",$row['receiptcountry']);
+                <?php foreach ($recept_country as $row) { 
+                  $receipt = str_replace(" ", "_",$row['recept_country']);
                 ?>
                 <tr>                 
                   <td>
                     <a href="<?php echo base_url('utilities/listreceipt/'.$receipt); ?>" class="btn btn-success btn-sm" data-toggle="tooltip" data-original-title="See Receipt"> <i class="fas fa-eye"></i> </a>
-                    <a href="javascript:void(0)" onClick="receiptCountry('<?= $row['receiptcountry'] ?>')" class="btn btn-primary btn-sm" data-toggle="tooltip" data-original-title="Edit Receipt"> <i class="far fa-edit"></i> </a>
+                    <a href="javascript:void(0)" onClick="recept_country('<?= $row['recept_country'] ?>')" class="btn btn-primary btn-sm" data-toggle="tooltip" data-original-title="Edit Receipt"> <i class="far fa-edit"></i> </a>
                   </td>
-                  <td><?php echo $row['receiptcountry'] ?></td>
+                  <td><?php echo $row['recept_country'] ?></td>
                 </tr>
                 <?php } ?>
                 </tbody>
@@ -167,16 +167,16 @@
 <script>
   $('#nav-utilities-source').addClass('dropdown active');
   $('#nav-role-clean').addClass('active');
-  function senderCountry(sendercountry)
+  function sender_country(sender_country)
   {
    $('#modal_sender_country').modal('show');
-   $('[name="senderbefore"]').val(sendercountry);
-   $('[name="id"]').val(sendercountry);
+   $('[name="senderbefore"]').val(sender_country);
+   $('[name="id"]').val(sender_country);
   }
-  function receiptCountry(receiptcountry)
+  function recept_country(recept_country)
   {
     $('#modal_receipt_country').modal('show');
-    $('[name="receiptbefore"]').val(receiptcountry);
-    $('[name="id"]').val(receiptcountry);
+    $('[name="receiptbefore"]').val(recept_country);
+    $('[name="id"]').val(recept_country);
   }
 </script>

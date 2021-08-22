@@ -38,8 +38,8 @@ class User extends CI_Controller {
     foreach ($list as $item) {
         $row = array();
         $row[] = $no++;
-				$row[] = '<a href="#" onclick="get_user('.$item->user_id.')" class="btn btn-icon btn-primary btn-sm"><i class="far fa-edit"></i></a>
-                  <a href="#" onclick="delete_user('.$item->user_id.')" class="btn btn-icon btn-danger btn-sm"><i class="fas fa-trash"></i></a>';
+				$row[] = '<a href="#" onclick="get_user('.$item->id.')" class="btn btn-icon btn-primary btn-sm"><i class="far fa-edit"></i></a>
+                  <a href="#" onclick="delete_user('.$item->id.')" class="btn btn-icon btn-danger btn-sm"><i class="fas fa-trash"></i></a>';
 				$row[] = $item->username;
         $row[] = $item->fullname;
         $row[] = $item->user_group;
@@ -62,9 +62,9 @@ class User extends CI_Controller {
     echo json_encode($output);
   }
 
-  public function get_user($user_id)
+  public function get_user($id)
   {
-      $data = $this->M_user->get_user($user_id);
+      $data = $this->M_user->get_user($id);
       echo json_encode($data);
   }
 
@@ -98,13 +98,13 @@ class User extends CI_Controller {
     if($this->input->post('password')){
       $data['password'] = PASSWORD_HASH($this->input->post('password'), PASSWORD_DEFAULT);
     }
-     $this->M_user->update_user(array('user_id' => $this->input->post('user_id')), $data);
+     $this->M_user->update_user(array('id' => $this->input->post('id')), $data);
      echo json_encode(array("status" => TRUE ));
   }
 
-  public function delete_user($user_id)
+  public function delete_user($id)
   {
-    $this->M_user->delete_user($user_id);
+    $this->M_user->delete_user($id);
     echo json_encode(array("status" => TRUE));
   }
 
@@ -147,8 +147,8 @@ class User extends CI_Controller {
         $data['error_string'][] = 'status is required';
         $data['status'] = FALSE;
     }
-    if ($this->input->post('user_id')) {
-      $user = $this->M_user->get_user($this->input->post('user_id'));
+    if ($this->input->post('id')) {
+      $user = $this->M_user->get_user($this->input->post('id'));
       if($this->input->post('username') != '')
       {
           if($user->username != $this->input->post('username')){

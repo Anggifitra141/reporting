@@ -22,13 +22,13 @@
                 <tbody>
 									<?php 
                     $no = 1;
-                    foreach ($sendercountry as $row) : $city = str_replace(" ", "_",$row['sendercity']); ?>
+                    foreach ($sender_country as $row) : $city = str_replace(" ", "_",$row['sender_city']); ?>
 										<tr>
                       <td> <?php echo $no++; ?> </td>
 											<td>
-                        <a href="javascript:void(0)" onClick="modal_list('<?= $row['sendercountry']."','".$row['sendercity'] ?>')"  class="btn btn-primary btn-sm" title="Edit Data"> <i class="far fa-edit"></i></a>
+                        <a href="javascript:void(0)" onClick="modal_list('<?= $row['sender_country']."','".$row['sender_city'] ?>')"  class="btn btn-primary btn-sm" title="Edit Data"> <i class="far fa-edit"></i></a>
                       </td>
-                      <td width="100%"><?php echo $row['sendercity'] ?></td>
+                      <td width="100%"><?php echo $row['sender_city'] ?></td>
                     </tr>
 									<?php endforeach; ?>
 									</tbody>
@@ -101,12 +101,12 @@
       });
    })
 
-   function modal_list(sendercountry, sendercity) {
+   function modal_list(sender_country, sender_city) {
       save_method = 'update';
       $('#form')[0].reset();
       $('#modal_list').modal('show');
-      $('[name="id"]').val(sendercity);
-      $('[name="senderbefore"]').val(sendercity);
-      $('[name="contry"]').val(sendercountry);
+      $('[name="id"]').val(sender_city);
+      $('[name="senderbefore"]').val(sender_city);
+      $('[name="contry"]').val(sender_country);
     }
 </script>

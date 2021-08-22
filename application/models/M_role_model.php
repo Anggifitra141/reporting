@@ -1,11 +1,10 @@
 <?php
 
-class M_user_group extends CI_model {
+class M_role_model extends CI_model {
 
   /**
    *  =======   Application By    : PT. Seiber Mitra Solusi    ========
    *  =======   Version           : V.1.0                      ========
-   *  =======   Contact Develope  : anggifitra141@gmail.com    ========
    *  ===========           Copyright 2021          ===================
   */
 
@@ -15,9 +14,9 @@ class M_user_group extends CI_model {
 		parent::__construct();
 	}
 
-	var $table = 'tuser_group';
-  var $column_order = array('group_name','access','action');
-  var $column_search = array('group_name','access','action');
+	var $table = 'trole_model';
+  var $column_order = array('report_code', 'table', 'field', 'from', 'to');
+  var $column_search = array('report_code', 'table', 'field', 'from', 'to');
   var $order = array('id' => 'desc');
 
   private function _get_datatables_query()
@@ -56,6 +55,7 @@ class M_user_group extends CI_model {
           $this->db->order_by(key($order), $order[key($order)]);
       }
   }
+
   public function get($where="")
   {
     if($where)
@@ -64,6 +64,7 @@ class M_user_group extends CI_model {
     }
     return $this->db->get($this->table);
   }
+
 	public function Get_All()
 	{
 		$this->_get_datatables_query();
@@ -86,7 +87,7 @@ class M_user_group extends CI_model {
     return $this->db->count_all_results();
   }
 
-  public function get_user_group($id)
+  public function get_role_model($id)
   {
     $this->db->from($this->table);
     $this->db->where('id', $id);
@@ -94,19 +95,19 @@ class M_user_group extends CI_model {
     return $query->row();
   }
 
-  public function add_user_group($data)
+  public function add_role_model($data)
   {
     $this->db->insert($this->table, $data);
     return $this->db->insert_id();
   }
 
-  public function update_user_group($where, $data)
+  public function update_role_model($where, $data)
   {
     $this->db->update($this->table, $data, $where);
     return $this->db->affected_rows();
   }
 
-  public function delete_user_group($id)
+  public function delete_role_model($id)
   {
     $this->db->where('id', $id);
     $this->db->delete($this->table);

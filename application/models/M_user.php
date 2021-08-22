@@ -14,10 +14,10 @@ class M_user extends CI_model {
 		parent::__construct();
 	}
 
-	var $table = 'user';
+	var $table = 'tuser';
   var $column_order = array('username', 'fullname', 'user_group', 'activation_date', 'status');
   var $column_search = array('username', 'fullname', 'user_group', 'activation_date', 'status');
-  var $order = array('user_id' => 'desc');
+  var $order = array('id' => 'desc');
 
   private function _get_datatables_query()
   {
@@ -87,10 +87,10 @@ class M_user extends CI_model {
     return $this->db->count_all_results();
   }
 
-  public function get_user($user_id)
+  public function get_user($id)
   {
     $this->db->from($this->table);
-    $this->db->where('user_id', $user_id);
+    $this->db->where('id', $id);
     $query = $this->db->get();
     return $query->row();
   }
@@ -107,9 +107,9 @@ class M_user extends CI_model {
     return $this->db->affected_rows();
   }
 
-  public function delete_user($user_id)
+  public function delete_user($id)
   {
-    $this->db->where('user_id', $user_id);
+    $this->db->where('id', $id);
     $this->db->delete($this->table);
   }
 

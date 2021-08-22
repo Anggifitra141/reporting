@@ -19,7 +19,7 @@ class M_login extends CI_Model {
 			if(password_verify($this->input->post('password', TRUE), $result['password'])){
 				$user_group = $this->db->get_where('tuser_group', ['group_name' => $result['user_group']])->row();
 				$data = array(
-						'user_id' => $result['user_id'],
+						'id' => $result['id'],
 						'username' => $result['username'],
 						'fullname' => $result['fullname'],
 						'status' => $result['status'],

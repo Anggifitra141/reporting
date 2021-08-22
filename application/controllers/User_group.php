@@ -37,8 +37,8 @@ class User_group extends CI_Controller {
     foreach ($list as $item) {
         $row = array();
         $row[] = $no++;
-				$row[] = '<a href="#" onclick="get_user_group('.$item->user_group_id.')" class="btn btn-icon btn-primary btn-sm"><i class="far fa-edit"></i></a>
-                  <a href="#" onclick="delete_user_group('.$item->user_group_id.')" class="btn btn-icon btn-danger btn-sm"><i class="fas fa-trash"></i></a>';
+				$row[] = '<a href="#" onclick="get_user_group('.$item->id.')" class="btn btn-icon btn-primary btn-sm"><i class="far fa-edit"></i></a>
+                  <a href="#" onclick="delete_user_group('.$item->id.')" class="btn btn-icon btn-danger btn-sm"><i class="fas fa-trash"></i></a>';
 				$row[] = $item->group_name;
         $row[] = $item->access;
         $row[] = $item->action;
@@ -54,9 +54,9 @@ class User_group extends CI_Controller {
     echo json_encode($output);
   }
 
-  public function get_user_group($user_group_id)
+  public function get_user_group($id)
   {
-      $data = $this->M_user_group->get_user_group($user_group_id);
+      $data = $this->M_user_group->get_user_group($id);
       echo json_encode($data);
   }
 
@@ -82,13 +82,13 @@ class User_group extends CI_Controller {
       'action'            => implode('#', $this->input->post('action')),
       'access'            => implode('#', $this->input->post('access')),
     );
-     $this->M_user_group->update_user_group(array('user_group_id' => $this->input->post('user_group_id')), $data);
+     $this->M_user_group->update_user_group(array('id' => $this->input->post('id')), $data);
      echo json_encode(array("status" => TRUE ));
   }
 
-  public function delete_user_group($user_group_id)
+  public function delete_user_group($id)
   {
-    $this->M_user_group->delete_user($user_group_id);
+    $this->M_user_group->delete_user($id);
     echo json_encode(array("status" => TRUE));
   }
 

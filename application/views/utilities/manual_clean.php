@@ -20,18 +20,7 @@
         </div>
         <div class="card">
           <div class="card-header">
-            <div class="col-md-5">
-              <div class="form-group">
-                <label for="">Campaign</label>
-                <select class="form-control select2" name="campaign_id">
-                  <option value="">--- All Campaign ---</option>
-                  <?php foreach($campaign as $key): ?>
-                  <option value="<?= $key->campaign ?>"><?= $key->campaign ?></option>
-                  <?php endforeach; ?>
-                </select>
-              </div>
-            </div>
-            <div class="col-md-5">
+            <div class="col-md-10">
               <div class="form-group">
                 <label>Date Upload</label>
                 <input type="text" class="form-control daterange-picker" name="daterange" style="height: 38px;font-size: 13px;border-radius: 4px">

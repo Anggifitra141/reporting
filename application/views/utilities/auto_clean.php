@@ -11,41 +11,8 @@
 
   <div class="section-body">
     <h2 class="section-title">Manage Auto clean</h2>
-    <div class="row">
-      <div class="col-12">
-        <div class="card">
-          <div class="card-body">
-            <div class="row">
-              <div class="col-md-5">
-                <div class="form-group">
-                  <label for="">Campaign</label>
-                  <select class="form-control select2" name="campaign_id">
-                    <option value="">--- Select ---</option>
-                    <?php foreach($campaign as $key): ?>
-                    <option value="<?= $key->campaign ?>"><?= $key->campaign ?></option>
-                    <?php endforeach; ?>
-                  </select>
-                </div>
-              </div>
-              <div class="col-md-5">
-                <div class="form-group">
-                  <label for="">Status</label>
-                  <select class="form-control select2" name="status">
-                    <option value="all">--- All Status ---</option>
-                    <option value="new">NEW</option>
-                    <option value="rollback">ROLLBACK</option>
-                  </select>
-                </div>
-              </div>
-              <div class="col-md-2 mt-4">
-              <button class="btn btn-danger" id="auto-clean" style="margin-top: 6px;"><i class="fas fa-check"></i> Cleansing Data </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
     <div class="row" style="display: none;" id="alert-available">
+    
       <div class="col-md-12">
         <div class="alert alert-warning">
           <i class="fa fa-info"></i>  Data Not Available
@@ -54,7 +21,11 @@
     </div>
     <div class="row" style="display: none;" id="raw_data">
       <div class="col-12">
+        
         <div class="card">
+          <div class="card-header">
+          <button class="btn btn-danger pull-right" id="auto-clean" style="margin-top: 6px; border-radius: 2px !important;"><i class="fas fa-check"></i> Cleansing Data </button>
+          </div>
           <div class="card-body" >
             <div class="">
               <table class="table table-striped" id="table" style="width: 100%;">
@@ -101,12 +72,7 @@ var table;
       "ajax": {
         url: "<?php echo site_url('utilities/ajax_raw_data')?>", // json datasource
         type: "POST",
-        data : function(data){
-          data.campaign = $('[name="campaign_id"]').val()
-          data.status = $('[name="status"]').val()
-        },
         "dataSrc": function(response) {
-          console.log(response)
           if (response.status == false) {
             alert(response.msg);
             return [];
@@ -117,9 +83,6 @@ var table;
           }else{
             $('#raw_data').slideUp();
             $('#alert-available').slideDown();
-            if($('[name="campaign_id"]').val() == ''){
-              $('#alert-available').hide();
-            }
             return [];
           }
           return response.data;
@@ -147,14 +110,6 @@ var table;
   {
     table.ajax.reload(null,false);
   }
-
-
-  $('[name="campaign_id"]').change(function(){
-    reload_table();
-  })
-  $('[name="status"]').change(function(){
-    reload_table();
-  })
   
 
   $("#auto-clean").click(function() {
@@ -173,10 +128,6 @@ var table;
           url : base_url + 'utilities/proc_auto_clean',
           type : 'POST',
           dataType : 'JSON',
-          data : {
-            campaign : $('[name="campaign_id"]').val(),
-            status : $('[name="status"]').val(),
-          },
           success : function(response){
             swal({
               title: 'Success',
@@ -186,8 +137,6 @@ var table;
             });
             $('#alert-available').slideUp();
             $('#raw_data').slideUp();
-            $('[name="campaign_id"]').val('');
-            $('[name="status"]').val('all');
           }
         })
       } else {

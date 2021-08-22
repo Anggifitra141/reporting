@@ -1,6 +1,6 @@
 <?php
 
-class M_clean_data extends CI_model {
+class M_dana_float extends CI_model {
 
   /**
    *  =======   Application By    : PT. Seiber Mitra Solusi    ========
@@ -14,9 +14,9 @@ class M_clean_data extends CI_model {
 		parent::__construct();
 	}
 
-	var $table = 'tltdbb_clean';
-  var $column_order = array('','','trxdate','sendername','receiptname','nominal');
-  var $column_search = array('trxdate','sendername','receiptname','nominal');
+	var $table = 'tdanafloat_clean';
+  var $column_order = array('wallet_code','trx_code','trx_id','trx_type', 'trx_value', 'description', 'status');
+  var $column_search = array('wallet_code','trx_code','trx_id','trx_type', 'trx_value', 'description', 'status');
   var $order = array('id' => 'desc');
 
   public function get($where=null)
@@ -34,7 +34,6 @@ class M_clean_data extends CI_model {
   {
     $this->db->select('*');
     $this->db->from($this->table);
-    // $this->db->where('status', 'verified');
     
     $i = 0;
     foreach ($this->column_search as $item)
@@ -80,12 +79,6 @@ class M_clean_data extends CI_model {
   {
     $this->db->from($this->table);
     return $this->db->count_all_results();
-  }
-  
-  public function delete_by_id($id)
-  {
-      $this->db->where('id', $id);
-      $this->db->delete($this->table);
   }
 
 
