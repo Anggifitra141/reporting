@@ -12,7 +12,7 @@ class Utilities extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-    $this->load->model(['M_raw_data', 'M_clean_data', 'M_tltdbb_source']);
+    $this->load->model(['M_raw_data', 'M_tltdbb_source', 'M_tltdbb_clean']);
 		if(!$this->session->userdata('logged_in'))
     {
       $data=array();
@@ -52,9 +52,9 @@ class Utilities extends CI_Controller {
 		$id = $this->input->post('id');
 		$name = $this->input->post('sender');
 		$contry = $this->input->post('contry');
-		$data['sendercity'] = $name;
+		$data['sender_city'] = $name;
 		$this->db->trans_start();
-		$this->db->where('sendercity', $id);
+		$this->db->where('sender_city', $id);
 		$this->db->update('tltdbb_clean', $data);
 		$this->db->trans_complete();
 		$this->session->set_flashdata("msg", "<div class='alert alert-success' role='alert' style='font-size: 10px; margin:15px 0px -15px 0px;'>
@@ -96,7 +96,7 @@ class Utilities extends CI_Controller {
     $receipt				= str_replace("_", " ",$value);
 		$data['header']			= $receipt ;
 		$data['page']  			= 'listrcountry';
-		$data['recept_country']	= $this->db->query("SELECT DISTINCT receiptcity, recept_country From tltdbb_clean WHERE recept_country='$receipt'")->result_array();
+		$data['recept_country']	= $this->db->query("SELECT DISTINCT recept_city, recept_country From tltdbb_clean WHERE recept_country='$receipt'")->result_array();
     $data['receipt'] = $this->db->query("SELECT alto FROM tregioncode")->result();
 		$data['content'] = $this->load->view('utilities/listreceipt', $data, TRUE);
 		$this->load->view('layout', $data);
@@ -106,9 +106,9 @@ class Utilities extends CI_Controller {
 		$id = $this->input->post('id');
 		$name = $this->input->post('name');
 		$contry = $this->input->post('contry');
-		$data['receiptcity'] = $name;
+		$data['recept_city'] = $name;
 		$this->db->trans_start();
-		$this->db->where('receiptcity', $id);
+		$this->db->where('recept_city', $id);
 		$this->db->update('tltdbb_clean', $data);
 		$this->db->trans_complete();
 		$this->session->set_flashdata("msg", "<div class='alert alert-success' role='alert' style='font-size: 10px; margin:15px 0px -15px 0px;'>
@@ -197,13 +197,13 @@ class Utilities extends CI_Controller {
 			$recept_name 		= strtoupper($SheetDataKey['recept_name']);
 			$recept_phone		= $SheetDataKey['recept_phone'];
 			$description		= $SheetDataKey['description'];
-			$amount		= $SheetDataKey['amount'];
+			$trx_amount		= $SheetDataKey['trx_amount'];
 			$trx_date		= $SheetDataKey['trx_date'];
 			$trx_type		= $SheetDataKey['trx_type'];
 
 
 			//Cleanser sender_country
-			$cek_sender_country = $this->db->query("SELECT `country` as `country` FROM tltdbb_bi_country WHERE `from` = '".$sender_country."'  ")->row();
+			$cek_sender_country = $this->db->query("SELECT `to` as `to` FROM trole_model WHERE `from` = '".$sender_country."' AND `table` = 'tltdbb' AND field = 'sender_country'  ")->row();
 			if($cek_sender_country){
 				$sender_country = $cek_sender_country->to;
 			}
@@ -222,27 +222,26 @@ class Utilities extends CI_Controller {
 			if($cek_recept_city){
 				$recept_city = $cek_recept_city->to;
 			}
-			$result = $this->db->insert('tltdbb_clean', [
-				'source_id'					=> $id,
-				'sender_country'		=> $sender_country,
-				'sender_city'				=> $sender_city,
-				'recept_country'		=> $recept_country,
-				'recept_city'				=> $recept_city,
-				'sender_name'				=> $sender_name,
-				'recept_name'				=> $recept_name,
-				'recept_phone'				=> $recept_phone,
-				'description'				=> $description,
-				'amount'				=> $amount,
-				'trx_type'				=> $trx_type,
-				'trx_date'				=> date('Ymd'),
-				'status'						=> 'cleansing'
-			]);
-
-			if($result){
+			if($cek_sender_country && $cek_sender_city && $cek_recept_country && $cek_recept_city ){
+				$result = $this->db->insert('tltdbb_clean', [
+					'source_id'					=> $id,
+					'sender_country'		=> $sender_country,
+					'sender_city'				=> $sender_city,
+					'recept_country'		=> $recept_country,
+					'recept_city'				=> $recept_city,
+					'sender_name'				=> $sender_name,
+					'recept_name'				=> $recept_name,
+					'recept_phone'			=> $recept_phone,
+					'description'				=> $description,
+					'amount'						=> $trx_amount,
+					'trx_type'					=> $trx_type,
+					'trx_date'					=> date('Ymd'),
+					'status'						=> 'cleansing'
+				]);
 				$this->db->update('tltdbb_source', ['status' => 'old'], ['id' => $id]);
 				$success++;
 			}else{
-				$this->db->update('tltdbb_source', ['status' => 'failed'], ['id' => $id]);
+				// $this->db->update('tltdbb_source', ['status' => 'failed'], ['id' => $id]);
 				$false++;
 			}
 		}
@@ -273,7 +272,7 @@ class Utilities extends CI_Controller {
 		}
 	
 
-		$list = $this->M_clean_data->get_datatables();
+		$list = $this->M_tltdbb_clean->get_datatables();
 		$data = array();
 		$no = $_POST['start'];
 		foreach ($list as $raw_data) {
@@ -284,38 +283,31 @@ class Utilities extends CI_Controller {
 				<a href="'.base_url('utilities/edit_manual/').md5($raw_data->id).'"  class="btn btn-primary btn-sm"> <i class="far fa-edit"></i></a>
 				<a href="javascript:void(0)" onclick="delete_row('.$raw_data->id.')"  class="btn btn-danger btn-sm"> <i class="fas fa-trash"></i></a>
 			';
-			$row[] = date('d-m-Y', strtotime($raw_data->trxdate));
-			$row[] = $raw_data->campaign;
+			$row[] = date('d-m-Y', strtotime($raw_data->trx_date));
 			$row[] = $raw_data->sender_country;
-			$row[] = $raw_data->sendercity;
+			$row[] = $raw_data->sender_city;
 			$row[] = $raw_data->recept_country;
-			$row[] = $raw_data->receiptcity;
-			$row[] = $raw_data->sendername;
-			$row[] = $raw_data->receiptcity;
-			$row[] = $this->lib->rupiah($raw_data->nominal);
+			$row[] = $raw_data->recept_city;
+			$row[] = $raw_data->sender_name;
+			$row[] = $raw_data->recept_city;
+			$row[] = $this->lib->rupiah($raw_data->amount);
 			$data[] = $row;
 		}
-		if($this->input->post('campaign') != ''){
-			$this->db->where('campaign', $this->input->post('campaign'));
-		}
 		if($this->input->post('daterange') != ''){
 			$start_date = date('Y-m-d', strtotime(substr($this->input->post('daterange'),0,10)));
 			$end_date =  date('Y-m-d', strtotime(substr($this->input->post('daterange'),13,23)));
 			$this->db->where('DATE(datestamp) >=', $start_date);
 			$this->db->where('DATE(datestamp) <=', $end_date);
 		}
-		$recordsTotal = $this->M_clean_data->count_all();
+		$recordsTotal = $this->M_tltdbb_clean->count_all();
 
-		if($this->input->post('campaign') != ''){
-			$this->db->where('campaign', $this->input->post('campaign'));
-		}
 		if($this->input->post('daterange') != ''){
 			$start_date = date('Y-m-d', strtotime(substr($this->input->post('daterange'),0,10)));
 			$end_date =  date('Y-m-d', strtotime(substr($this->input->post('daterange'),13,23)));
 			$this->db->where('DATE(datestamp) >=', $start_date);
 			$this->db->where('DATE(datestamp) <=', $end_date);
 		}
-		$recordsFiltered = $this->M_clean_data->count_filtered();
+		$recordsFiltered = $this->M_tltdbb_clean->count_filtered();
 		$output = array(
 							"draw" => $_POST['draw'],
 							"recordsTotal" => $recordsTotal,
@@ -327,27 +319,26 @@ class Utilities extends CI_Controller {
 	public function edit_manual($id)
 	{
 		$data= [];
-    $data['source'] =	$this->M_clean_data->get(['md5(id)' => $id])->row();
+    $data['source'] =	$this->M_tltdbb_clean->get(['md5(id)' => $id])->row();
     $data['content'] = $this->load->view('utilities/edit_manual', $data, TRUE);
 		$this->load->view('layout', $data);
 	}
 	public function udata(){
 		$rollback = $this->input->post('rollback');
 		$id 						= $this->input->post('id');
-		$sendercity 		= $this->input->post('sendercity');
+		$sender_city 		= $this->input->post('sender_city');
 		$sender_country 	= $this->input->post('sender_country');
-		$receiptcity 		= $this->input->post('receiptcity');
+		$recept_city 		= $this->input->post('recept_city');
 		$recept_country = $this->input->post('recept_country');
-		$sendername			= $this->input->post('sendername');
-		$receiptname 		= $this->input->post('receiptname');
-		$senderphone 		= $this->input->post('senderphone');
-		$receiptphone 	= $this->input->post('receiptphone');
+		$sender_name			= $this->input->post('sender_name');
+		$recept_name 		= $this->input->post('recept_name');
+		$sender_phone 		= $this->input->post('sender_phone');
+		$recept_phone 	= $this->input->post('recept_phone');
 		$description 		= $this->input->post('description');
 		$status 				= $this->input->post('status');
 		if($rollback == 'Y'){
-			$this->db->update('tdatasource1', ['status' => 'rollback'], ['id' => $id]);
+			$this->db->update('tltdbb_clean', ['status' => 'rollback'], ['id' => $id]);
 			$this->db->where_in('id', $id);
-			$this->db->delete('tltdbb_clean');
 		}else{
 			/* $update = "status";
 			$data2 = array(
@@ -356,14 +347,14 @@ class Utilities extends CI_Controller {
 			$where = array('id' => $id);
 			$this->corelib->update($where,$data2,'tdatasource1'); */
 			$dataInsert = array(
-				'sendercity' 			=> $sendercity,
+				'sender_city' 			=> $sender_city,
 				'sender_country' 	=> $sender_country,
-				'receiptcity' 		=> $receiptcity,
+				'recept_city' 		=> $recept_city,
 				'recept_country' 	=> $recept_country,
-				'sendername' 			=> $sendername,
-				'receiptname' 		=> $receiptname,
-				'senderphone' 		=> $senderphone,
-				'receiptphone' 		=> $receiptphone,
+				'sender_name' 			=> $sender_name,
+				'recept_name' 		=> $recept_name,
+				'sender_phone' 		=> $sender_phone,
+				'recept_phone' 		=> $recept_phone,
 				'description' 		=> $description,
 				'status' 					=> $status
 				);	
@@ -384,7 +375,7 @@ class Utilities extends CI_Controller {
 	{
 		$list_id = $this->input->post('id');
 		foreach ($list_id as $id) {
-				$this->M_clean_data->delete_by_id($id);
+				$this->M_tltdbb_clean->delete_by_id($id);
 		}
 		echo json_encode(array("status" => TRUE));
 	}

@@ -136,7 +136,7 @@ var table;
               icon: 'success',
             });
             $('#alert-available').slideUp();
-            $('#raw_data').slideUp();
+            // $('#raw_data').slideUp();
           }
         })
       } else {

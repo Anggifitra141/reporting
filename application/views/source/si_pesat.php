@@ -26,14 +26,13 @@
                     <th class="text-center" width="1px">
                       No
                     </th>
-                    <th>Trx Date</th>
-                    <th>Customer Code</th>
-                    <th>Customer Cif</th>
-                    <th>Customer Name</th>
-                    <th>Place And Date Birth</th>
-                    <th>Address</th>
-                    <th>Phone Number</th>
-                    <th>Status</th>
+                    <th>Nama Nasabah</th>
+                    <th>Tempat Lahir</th>
+                    <th>Tanggal Lahir</th>
+                    <th>Alamat</th>
+                    <th>No KTP</th>
+                    <th>No Identitas Lain</th>
+                    <th>No Cif</th>
                   </tr>
                 </thead>
 

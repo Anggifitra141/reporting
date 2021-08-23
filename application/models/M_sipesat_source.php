@@ -1,6 +1,6 @@
 <?php
 
-class M_tltdbb_source extends CI_model {
+class M_sipesat_source extends CI_model {
 
   /**
    *  =======   Application By    : PT. Seiber Mitra Solusi    ========
@@ -14,9 +14,9 @@ class M_tltdbb_source extends CI_model {
 		parent::__construct();
 	}
 
-	var $table = 'tltdbb_source';
-  var $column_order = array('trx_date','sender_name','recept_name','trx_amount');
-  var $column_search = array('trx_date','sender_name','recept_name','trx_amount');
+	var $table = 'tsipesat_source';
+  var $column_order = array('trx_date','customer_code','customer_cif','customer_name', 'birth_place', 'birth_date', 'address', 'phone_number', 'status');
+  var $column_search = array('trx_date','customer_code','customer_cif','customer_name', 'birth_place', 'birth_date', 'address', 'phone_number', 'status');
   var $order = array('id' => 'desc');
 
   public function get($where=null)

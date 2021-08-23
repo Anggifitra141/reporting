@@ -21,49 +21,49 @@
               <div class="row">
                 <div class="col-6">
                   <div class="form-group">
-                    <label for="lastName">Sender Country</label>
-                    <input class="form-control" name="sendercountry" placeholder="" value="<?= $source->sendercountry ?>" type="text">
+                    <label for="lastName">Negara Asal Pengiriman</label>
+                    <input class="form-control" name="sender_country" placeholder="" value="<?= $source->sender_country ?>" type="text">
                     <span class="text-danger"></span>
                   </div>
                   <div class="form-group">
-                    <label for="">Sender City</label>
-                    <input type="text" name="sendercity" class="form-control" value="<?= $source->sendercity ?>" >
+                    <label for="">Kota/Kabupaten Asal Pengiriman</label>
+                    <input type="text" name="sender_city" class="form-control" value="<?= $source->sender_city ?>" >
                     <span class="text-danger"></span>
                   </div>
                   <div class="form-group">
-                    <label for="firstName">Sendername</label>
-                    <input class="form-control" name="sendername" placeholder="" value="<?php echo $source->sendername ?>" type="text">
+                    <label for="firstName">Nama Pengirim</label>
+                    <input class="form-control" name="sender_name" placeholder="" value="<?php echo $source->sender_name ?>" type="text">
                   </div>
                   <div class="form-group">
-                    <label for="firstName">Sender Phone</label>
-                    <input class="form-control" name="senderphone" placeholder="" value="<?php echo $source->senderphone ?>" type="text">
+                    <label for="firstName">Telepon Pengirim</label>
+                    <input class="form-control" name="sender_phone" placeholder="" value="<?php echo $source->sender_phone ?>" type="text">
                     <span class="text-danger"></span>
                   </div>
                   <div class="form-group">
                     <label for="firstName">Nominal</label>
-                    <input class="form-control" name="nominal" placeholder="" value="<?php echo $this->lib->rupiah($source->nominal) ?>" type="text" readonly>
+                    <input class="form-control" name="amount" placeholder="" value="<?php echo $this->lib->rupiah($source->amount) ?>" type="text" readonly>
                     <span class="text-danger"></span>
                   </div>
 											          
                 </div>
                 <div class="col-6">
                   <div class="form-group">
-                    <label for="lastName">Receipt Country</label>
-                    <input class="form-control" name="receiptcountry" placeholder="" value="<?php echo $source->receiptcountry ?>" type="text">
+                    <label for="lastName">Negara Penerima</label>
+                    <input class="form-control" name="recept_country" placeholder="" value="<?php echo $source->recept_country ?>" type="text">
                     <span class="text-danger"></span>
                   </div>
                   <div class="form-group">
-                    <label for="firstName">Receipt City</label>
-                    <input class="form-control" name="receiptcity" placeholder="" value="<?php echo $source->receiptcity ?>" type="text">
+                    <label for="firstName">Kota/Kabupaten Asal Pengiriman</label>
+                    <input class="form-control" name="recept_city" placeholder="" value="<?php echo $source->recept_city ?>" type="text">
                     <span class="text-danger"></span>
                   </div>
                   <div class="form-group">
-                    <label for="lastName">Receiptname</label>
-                    <input class="form-control" name="receiptname" placeholder="" value="<?php echo $source->receiptname ?>" type="text">
+                    <label for="lastName">Nama Penerima</label>
+                    <input class="form-control" name="recept_name" placeholder="" value="<?php echo $source->recept_name ?>" type="text">
                   </div>
                   <div class="form-group">
-                    <label for="lastName">Receipt Phone</label>
-                    <input class="form-control" name="receiptphone" placeholder="" value="<?php echo $source->receiptphone ?>" type="text">
+                    <label for="lastName">Telepon Penerima</label>
+                    <input class="form-control" name="recept_phone" placeholder="" value="<?php echo $source->recept_phone ?>" type="text">
                     <span class="text-danger"></span>
                   </div>
                   <div class="form-group">

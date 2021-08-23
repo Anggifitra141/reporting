@@ -47,7 +47,6 @@
                     </th>
                     <th width="8%">Action</th>
                     <th>Trxdate</th>
-                    <th>Campaign</th>
                     <th>Sender Country</th>
                     <th>Sender City</th>
                     <th>Receipt Country</th>

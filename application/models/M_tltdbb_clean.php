@@ -1,6 +1,6 @@
 <?php
 
-class M_si_pesat extends CI_model {
+class M_tltdbb_clean extends CI_model {
 
   /**
    *  =======   Application By    : PT. Seiber Mitra Solusi    ========
@@ -14,9 +14,9 @@ class M_si_pesat extends CI_model {
 		parent::__construct();
 	}
 
-	var $table = 'tsipesat_clean';
-  var $column_order = array('trx_date','customer_code','customer_cif','customer_name', 'birth_place', 'birth_date', 'address', 'phone_number', 'status');
-  var $column_search = array('trx_date','customer_code','customer_cif','customer_name', 'birth_place', 'birth_date', 'address', 'phone_number', 'status');
+	var $table = 'tltdbb_clean';
+  var $column_order = array('trx_date','sender_name','recept_name','trx_amount');
+  var $column_search = array('trx_date','sender_name','recept_name','trx_amount');
   var $order = array('id' => 'desc');
 
   public function get($where=null)
