@@ -4,7 +4,7 @@
   </div>
 
   <div class="section-body">
-    <h2 class="section-title">Manage Report LTDBB : G001</h2>
+    <h2 class="section-title"><?= $header['title'] ?></h2>
 
     <div class="row">
       <div class="col-12">
@@ -31,10 +31,10 @@
                 <button class="btn btn-icon btn-outline-warning btn-block" style="margin-top:27px;" id="btn-view"><i class="fas fa-eye"></i> View </button>
               </div>
               <div class="col-md-2">
-                <button class="btn btn-icon btn-outline-success btn-block" style="margin-top:27px;" id="btn-view"><i class="fas fa-file-excel"></i> Download Excel </button>
+                <button class="btn btn-icon btn-outline-success btn-block" style="margin-top:27px;" id="btn-download-excel"><i class="fas fa-file-excel"></i> Download Excel </button>
               </div>
               <div class="col-md-2">
-                <button class="btn btn-icon btn-outline-primary btn-block" style="margin-top:27px;" id="btn-view"><i class="fas fa-file-alt"></i> Download Txt </button>
+                <button class="btn btn-icon btn-outline-primary btn-block" style="margin-top:27px;" id="btn-download-txt"><i class="fas fa-file-alt"></i> Download Txt </button>
               </div>
             </div>
 
@@ -43,14 +43,12 @@
                 <table class="table table-striped" id="table-data" style="width: 100%;">
                   <thead>
                     <tr>
-                      <th>No</th>
-                      <th>Kota/Kabupaten Asal Pengiriman</th>
-                      <th>Negara Tujuan Pengiriman</th>
-                      <th>Nama Penerima</th>
-                      <th>Nama Pengirim</th>
-                      <th>Volume / Frekuensi Transaksi</th>
-                      <th>Nominal Transaksi</th>
-                      <th>Tujuan Transaksi</th>
+                      <th class="text-center" width="1px">
+                        No
+                      </th>
+                      <?php foreach ($header['header'] as $key) : ?>
+                        <th><?= $key; ?></th>
+                      <?php endforeach; ?>
                     </tr>
                   </thead>
                   <tbody id="data-source"></tbody>
@@ -87,37 +85,6 @@
   $('#nav-sub-report').addClass('dropdown active');
   $('#nav-report').addClass('active');
 
-  function dataTable() {
-    var table = $('#table-data').DataTable({
-      "pageLength": 20,
-      dom: 'Bfrtip',
-      buttons: [{
-          extend: 'copyHtml5',
-          text: '<i class="fas fa-copy"> </i> Copy',
-          className: 'btn btn-icon btn-outline-primary m-1'
-        },
-        {
-          extend: 'excelHtml5',
-          text: '<i class="fas fa-file-excel"> </i> Excel',
-          className: 'btn btn-icon btn-outline-success m-1'
-        },
-        {
-          extend: 'csvHtml5',
-          text: '<i class="fas fa-file-csv"> </i> CSV',
-          className: 'btn btn-icon btn-outline-success m-1'
-        },
-        {
-          extend: 'pdfHtml5',
-          text: '<i class="fas fa-file-pdf"> </i> PDF',
-          className: 'btn btn-icon btn-outline-danger m-1'
-        },
-      ]
-    });
-
-    $('div').removeClass("btn-group");
-    $('button').removeClass("btn-secondary");
-
-  }
 
   $("input").change(function() {
     $(this).removeClass('is-invalid');
@@ -129,45 +96,61 @@
     $('#result-data').hide();
     $('#table-data').DataTable().destroy();
 
-    var report_type = 'G001'
+    var type_report = "<?= $this->uri->segment(3); ?>";
     var daterange = $('[name="daterange"]').val();
 
-    if (report_type && daterange) {
+    if (type_report && daterange) {
       loading();
-      $.ajax({
-        url: base_url + 'report/get_report',
-        type: 'POST',
-        asyc: true,
-        data: {
-          report_type: report_type,
-          daterange: daterange
-        },
-        dataType: 'JSON',
-        success: function(response) {
-          console.log(response)
-          if (response.length > 0) {
-            var str;
-            $.each(response, function(index, val) {
-              str += `
-                <tr>
-                  <td>${val.sendercity}</td>
-                  <td>${val.receiptcountry}</td>
-                  <td>${val.receiptname}</td>
-                  <td>${val.sendername}</td>
-                  <td>${val.trxvolume}</td>
-                  <td>${val.trxnominal}</td>
-                </tr>
-              `;
-            })
-            $('#data-source').html(str);
-            dataTable();
-            $('#result-data').slideDown('slow');
-          } else {
-            $('#notif-available').slideDown('slow');
+      //
+      var table = $('#table-data').DataTable({
+        "deferRender": true,
+        "scrollCollapse": true,
+        "scrollX": true,
+        "processing": true,
+        "serverSide": true,
+        "order": [],
+        "ajax": {
+          url: "<?php echo site_url('report/ajax_list_ltdbb') ?>", // json dataclean
+          type: "POST",
+          data: function(data) {
+            data.type_report = type_report,
+            data.daterange = daterange
           }
-          swal.close();
-        }
-      })
+        },
+        "columnDefs": [{
+          "orderable": false
+        }],
+        "pageLength": 20,
+        dom: 'Bfrtip',
+        buttons: [{
+            extend: 'copyHtml5',
+            text: '<i class="fas fa-copy"> </i> Copy',
+            className: 'btn btn-icon btn-outline-primary m-1'
+          },
+          {
+            extend: 'excelHtml5',
+            text: '<i class="fas fa-file-excel"> </i> Excel',
+            className: 'btn btn-icon btn-outline-success m-1'
+          },
+          {
+            extend: 'csvHtml5',
+            text: '<i class="fas fa-file-csv"> </i> CSV',
+            className: 'btn btn-icon btn-outline-success m-1'
+          },
+          {
+            extend: 'pdfHtml5',
+            text: '<i class="fas fa-file-pdf"> </i> PDF',
+            className: 'btn btn-icon btn-outline-danger m-1'
+          },
+        ]
+
+      });
+      $('div').removeClass("btn-group");
+      $('button').removeClass("btn-secondary");
+
+      $('#result-data').slideDown('slow');
+      swal.close();
+
     } else {
       alert('Fields Is Required');
     }

@@ -1,6 +1,6 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
@@ -21,41 +21,48 @@
   <!-- Template CSS -->
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/style.css">
   <link rel="stylesheet" href="<?php echo base_url(); ?>assets/css/components.css">
-<!-- Start GA -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-94034622-3"></script>
+  <!-- Start GA -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-94034622-3"></script>
 
-<script src="<?php echo base_url(); ?>assets/modules/jquery.min.js"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+  <script src="<?php echo base_url(); ?>assets/modules/jquery.min.js"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
 
-  gtag('config', 'UA-94034622-3');
-  function convertToRupiah(angka) {
-    var rupiah = '';
-    var angkarev = angka.toString().split('').reverse().join('');
-    for (var i = 0; i < angkarev.length; i++)
-      if (i % 3 == 0) rupiah += angkarev.substr(i, 3) + '.';
-    return 'Rp. ' + rupiah.split('', rupiah.length - 1).reverse().join('');
-  }
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
 
-  function convertToAngka(rupiah) {
-    return parseInt(rupiah.replace(/,.*|[^0-9]/g, ''), 10);
-  }
-</script>
+    gtag('config', 'UA-94034622-3');
 
-<style>
-  .fc button.fc-state-active {
-    background-color: #fc544b;
-    color: #fff;
-  }
+    function convertToRupiah(angka) {
+      var rupiah = '';
+      var angkarev = angka.toString().split('').reverse().join('');
+      for (var i = 0; i < angkarev.length; i++)
+        if (i % 3 == 0) rupiah += angkarev.substr(i, 3) + '.';
+      return 'Rp. ' + rupiah.split('', rupiah.length - 1).reverse().join('');
+    }
 
-  .select2-container--default .select2-selection--multiple .select2-selection__choice, .select2-container--default .select2-results__option[aria-selected=true], .select2-container--default .select2-results__option--highlighted[aria-selected] {
-    background-color: #FC545C;
-    color: white;
-  }
-</style>
-<!-- /END GA --></head>
+    function convertToAngka(rupiah) {
+      return parseInt(rupiah.replace(/,.*|[^0-9]/g, ''), 10);
+    }
+  </script>
+
+  <style>
+    .fc button.fc-state-active {
+      background-color: #fc544b;
+      color: #fff;
+    }
+
+    .select2-container--default .select2-selection--multiple .select2-selection__choice,
+    .select2-container--default .select2-results__option[aria-selected=true],
+    .select2-container--default .select2-results__option--highlighted[aria-selected] {
+      background-color: #FC545C;
+      color: white;
+    }
+  </style>
+  <!-- /END GA -->
+</head>
 
 <body>
   <div id="app">
@@ -116,7 +123,7 @@
                   <div class="search-icon bg-danger text-white mr-3">
                     <i class="fas fa-code"></i>
                   </div>-->
-                  Report Management
+                Report Management
                 </a>
               </div>
               <div class="search-item">
@@ -257,8 +264,9 @@
             </div>
           </li>
           <li class="dropdown"><a href="<?php echo base_url(); ?>#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
-            <img alt="image" src="<?php echo base_url(); ?>assets/img/avatar/avatar-1.png" class="rounded-circle mr-1">
-            <div class="d-sm-none d-lg-inline-block"><?php echo $this->session->userdata('fullname'); ?></div></a>
+              <img alt="image" src="<?php echo base_url(); ?>assets/img/avatar/avatar-1.png" class="rounded-circle mr-1">
+              <div class="d-sm-none d-lg-inline-block"><?php echo $this->session->userdata('fullname'); ?></div>
+            </a>
             <div class="dropdown-menu dropdown-menu-right">
               <div class="dropdown-title">Logged in 5 min ago</div>
               <a href="<?php echo base_url(); ?>features-profile.html" class="dropdown-item has-icon">
@@ -294,21 +302,47 @@
             <li class="dropdown" id="nav-data-source">
               <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-layer-group"></i> <span>Data Source</span></a>
               <ul class="dropdown-menu">
-                <li id="nav-tltdbb-source"><a class="nav-link" href="<?php echo site_url('source/tltdbb_source/G001'); ?>"><i class="fas fa-database"></i> Ltdbb G001</a></li>
-                <li id="nav-tltdbb-source"><a class="nav-link" href="<?php echo site_url('source/tltdbb_source/G002'); ?>"><i class="fas fa-database"></i> Ltdbb G002</a></li>
-                <li id="nav-tltdbb-source"><a class="nav-link" href="<?php echo site_url('source/tltdbb_source/G003'); ?>"><i class="fas fa-database"></i> Ltdbb G003</a></li>
-                <li id="nav-tltdbb-source"><a class="nav-link" href="<?php echo site_url('source/dana_float'); ?>"><i class="fas fa-database"></i> Dana Float</a></li>
-                <li id="nav-data-clean"><a class="nav-link" href="<?php echo site_url('source/si_pesat'); ?>"><i class="fas fa-database"></i> Si Pesat</a></li>
+                <li class="dropdown" id="nav-ltdbb-source">
+                  <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-database"></i>LTDBB</a>
+                  <ul class="dropdown-menu">
+                    <li id="nav-ltdbb-source-g001"><a class="nav-link" href="<?php echo site_url('source/tltdbb_source/G001'); ?>"><i class="fas fa-circle"></i> G001</a></li>
+                    <li id="nav-ltdbb-source-g002"><a class="nav-link" href="<?php echo site_url('source/tltdbb_source/G002'); ?>"><i class="fas fa-circle"></i> G002</a></li>
+                    <li id="nav-ltdbb-source-g003"><a class="nav-link" href="<?php echo site_url('source/tltdbb_source/G003'); ?>"><i class="fas fa-circle"></i> G003</a></li>
+                  </ul>
+                </li>
+                <li id="nav-dana-float-source"><a class="nav-link" href="<?php echo site_url('source/ltkl'); ?>"><i class="fas fa-database"></i> LTKL</a></li>
+                <li id="nav-dana-float-source"><a class="nav-link" href="<?php echo site_url('source/qris'); ?>"><i class="fas fa-database"></i> QRIS</a></li>
+                <li id="nav-dana-float-source"><a class="nav-link" href="<?php echo site_url('source/dana_float'); ?>"><i class="fas fa-database"></i> Dana Float</a></li>
+                <li id="nav-dana-float-source"><a class="nav-link" href="<?php echo site_url('source/qris'); ?>"><i class="fas fa-database"></i> Payment Gateway</a></li>
+                <li id="nav-sipesat-source"><a class="nav-link" href="<?php echo site_url('source/si_pesat'); ?>"><i class="fas fa-database"></i> Si Pesat</a></li>
+                <li class="dropdown" id="nav-ltdbb-source">
+                  <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-database"></i>LKPBU</a>
+                  <ul class="dropdown-menu">
+                    <li id="nav-ltdbb-source-g001"><a class="nav-link" href="<?php echo site_url('source/tltdbb_source/G001'); ?>"><i class="fas fa-circle"></i> Form 302</a></li>
+                    <li id="nav-ltdbb-source-g002"><a class="nav-link" href="<?php echo site_url('source/tltdbb_source/G002'); ?>"><i class="fas fa-circle"></i> Form 303</a></li>
+                    <li id="nav-ltdbb-source-g003"><a class="nav-link" href="<?php echo site_url('source/tltdbb_source/G003'); ?>"><i class="fas fa-circle"></i> Form 304</a></li>
+                    <li id="nav-ltdbb-source-g003"><a class="nav-link" href="<?php echo site_url('source/tltdbb_source/G003'); ?>"><i class="fas fa-circle"></i> Form 306</a></li>
+                    <li id="nav-ltdbb-source-g003"><a class="nav-link" href="<?php echo site_url('source/tltdbb_source/G003'); ?>"><i class="fas fa-circle"></i> Form 309</a></li>
+                    <li id="nav-ltdbb-source-g003"><a class="nav-link" href="<?php echo site_url('source/tltdbb_source/G003'); ?>"><i class="fas fa-circle"></i> Form 310</a></li>
+                    <li id="nav-ltdbb-source-g003"><a class="nav-link" href="<?php echo site_url('source/tltdbb_source/G003'); ?>"><i class="fas fa-circle"></i> Form 311</a></li>
+                    <li id="nav-ltdbb-source-g003"><a class="nav-link" href="<?php echo site_url('source/tltdbb_source/G003'); ?>"><i class="fas fa-circle"></i> Form 312</a></li>
+                    <li id="nav-ltdbb-source-g003"><a class="nav-link" href="<?php echo site_url('source/tltdbb_source/G003'); ?>"><i class="fas fa-circle"></i> Form 313</a></li>
+                  </ul>
+                </li>
+                <li id="nav-sipesat-source"><a class="nav-link" href="<?php echo site_url('source/si_pesat'); ?>"><i class="fas fa-database"></i> Gangguan Sistem</a></li>
               </ul>
             </li>
             <li class="dropdown" id="nav-data-clean">
               <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-layer-group"></i> <span>Data Clean</span></a>
               <ul class="dropdown-menu">
-                <li id="nav-tltdbb-clean"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G001'); ?>"><i class="fas fa-database"></i> Ltdbb G001</a></li>
-                <li id="nav-tltdbb-clean"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G002'); ?>"><i class="fas fa-database"></i> Ltdbb G002</a></li>
-                <li id="nav-tltdbb-clean"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G003'); ?>"><i class="fas fa-database"></i> Ltdbb G003</a></li>
-                <li id="nav-tltdbb-clean"><a class="nav-link" href="<?php echo site_url('clean/dana_float'); ?>"><i class="fas fa-database"></i> Dana Float</a></li>
-                <li id="nav-data-clean"><a class="nav-link" href="<?php echo site_url('clean/si_pesat'); ?>"><i class="fas fa-database"></i> Si Pesat</a></li>
+                <li class="dropdown" id="nav-ltdbb-clean">
+                  <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-database"></i>LTDBB</a>
+                  <ul class="dropdown-menu">
+                    <li id="nav-ltdbb-clean-g001"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G001'); ?>"><i class="fas fa-circle"></i> G001</a></li>
+                    <li id="nav-ltdbb-clean-g002"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G002'); ?>"><i class="fas fa-circle"></i> G002</a></li>
+                    <li id="nav-ltdbb-clean-g003"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G003'); ?>"><i class="fas fa-circle"></i> G003</a></li>
+                  </ul>
+                </li>
               </ul>
             </li>
             <li class="dropdown" id="nav-utilities-source">
@@ -322,10 +356,38 @@
             <!-- <li id="nav-verify-data">
               <a href="<?php echo site_url('verify'); ?>" class="nav-link"><i class="fas fa-check"></i><span>Verify Data</span></a>
             </li> -->
-            <li class="dropdown" id="nav-sub-report">
+            <li class="dropdown" id="nav-report">
               <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-file-alt"></i> <span>Report</span></a>
               <ul class="dropdown-menu">
-                <li id="nav-report"><a class="nav-link" href="<?php echo site_url('report'); ?>"><i class="fas fa-align-center"></i> Report</a></li>
+
+
+                <li class="dropdown" id="nav-ltdbb-source">
+                  <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-list"></i>LTDBB</a>
+                  <ul class="dropdown-menu">
+                    <li id="nav-ltdbb-source-g001"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G001'); ?>"><i class="fas fa-circle"></i> G001</a></li>
+                    <li id="nav-ltdbb-source-g002"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G002'); ?>"><i class="fas fa-circle"></i> G002</a></li>
+                    <li id="nav-ltdbb-source-g003"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G003'); ?>"><i class="fas fa-circle"></i> G003</a></li>
+                  </ul>
+                </li>
+                <li id="nav-dana-float-source"><a class="nav-link" href="<?php echo site_url('source/ltkl'); ?>"><i class="fas fa-list"></i> LTKL</a></li>
+                <li id="nav-dana-float-source"><a class="nav-link" href="<?php echo site_url('source/qris'); ?>"><i class="fas fa-list"></i> QRIS</a></li>
+                <li id="nav-dana-float-source"><a class="nav-link" href="<?php echo site_url('source/dana_float'); ?>"><i class="fas fa-list"></i> Dana Float</a></li>
+                <li id="nav-dana-float-source"><a class="nav-link" href="<?php echo site_url('source/qris'); ?>"><i class="fas fa-list"></i> Payment Gateway</a></li>
+                <li id="nav-sipesat-source"><a class="nav-link" href="<?php echo site_url('source/si_pesat'); ?>"><i class="fas fa-list"></i> Si Pesat</a></li>
+                <li class="dropdown" id="nav-ltdbb-source">
+                  <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-list"></i>LKPBU</a>
+                  <ul class="dropdown-menu">
+                    <li id="nav-ltdbb-source-g001"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G001'); ?>"><i class="fas fa-circle"></i> Form 302</a></li>
+                    <li id="nav-ltdbb-source-g002"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G002'); ?>"><i class="fas fa-circle"></i> Form 303</a></li>
+                    <li id="nav-ltdbb-source-g003"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G003'); ?>"><i class="fas fa-circle"></i> Form 304</a></li>
+                    <li id="nav-ltdbb-source-g003"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G003'); ?>"><i class="fas fa-circle"></i> Form 306</a></li>
+                    <li id="nav-ltdbb-source-g003"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G003'); ?>"><i class="fas fa-circle"></i> Form 309</a></li>
+                    <li id="nav-ltdbb-source-g003"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G003'); ?>"><i class="fas fa-circle"></i> Form 310</a></li>
+                    <li id="nav-ltdbb-source-g003"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G003'); ?>"><i class="fas fa-circle"></i> Form 311</a></li>
+                    <li id="nav-ltdbb-source-g003"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G003'); ?>"><i class="fas fa-circle"></i> Form 312</a></li>
+                    <li id="nav-ltdbb-source-g003"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G003'); ?>"><i class="fas fa-circle"></i> Form 313</a></li>
+                  </ul>
+                </li>
                 <li id="nav-setting-report"><a class="nav-link" href="<?php echo site_url('report/setting_report'); ?>"><i class="fas fa-align-center"></i> Setting Report</a></li>
               </ul>
             </li>
@@ -389,7 +451,8 @@
 
       <footer class="main-footer">
         <div class="footer-left">
-          Copyright &copy; 2021 Report Management || By <a href="javascript:void(0)"> </a> <div class="bullet"></div> All Right Reserved
+          Copyright &copy; 2021 Report Management || By <a href="javascript:void(0)"> </a>
+          <div class="bullet"></div> All Right Reserved
         </div>
         <div class="footer-right">
 
@@ -399,7 +462,7 @@
   </div>
 
   <!-- General JS Scripts -->
-  
+
   <script src="<?php echo base_url(); ?>assets/modules/popper.js"></script>
   <script src="<?php echo base_url(); ?>assets/modules/tooltip.js"></script>
   <script src="<?php echo base_url(); ?>assets/modules/bootstrap/js/bootstrap.min.js"></script>
@@ -419,43 +482,44 @@
   <script src="<?php echo base_url(); ?>assets/modules/bootstrap-daterangepicker/daterangepicker.js"></script>
   <!-- Page Specific JS File -->
   <script src="<?php echo base_url(); ?>assets/js/page/index-0.js"></script>
-  <!-- Template JS File --> 
-  
+  <!-- Template JS File -->
+
   <script src="<?php echo base_url(); ?>assets/js/scripts.js"></script>
   <script src="<?php echo base_url(); ?>assets/js/custom.js"></script>
 
   <script>
-    $(document).ready(function() {  
+    $(document).ready(function() {
       $('.dropify').dropify();
       $('.select2').select2({
         width: '100%'
       });
       $('.daterange-picker').daterangepicker({
-            startDate: moment().startOf('month'),
-            endDate: moment().endOf('month'),
-            showDropdowns: true,
-            opens: 'left',
-            ranges: {
-                'Last 30 Days': [moment().subtract('days', 29), moment()],
-                'This Month': [moment().startOf('month'), moment().endOf('month')],
-                'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
-            },
-            format: 'DD-MM-YYYY',
-            buttonClasses: ['btn'],
-            applyClass: 'btn-danger',
-            cancelClass: 'default',
-            locale: {
-                format: 'DD-MM-YYYY'
-            }
+          startDate: moment().startOf('month'),
+          endDate: moment().endOf('month'),
+          showDropdowns: true,
+          opens: 'left',
+          ranges: {
+            'Last 30 Days': [moment().subtract('days', 29), moment()],
+            'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'Last Month': [moment().subtract('month', 1).startOf('month'), moment().subtract('month', 1).endOf('month')]
+          },
+          format: 'DD-MM-YYYY',
+          buttonClasses: ['btn'],
+          applyClass: 'btn-danger',
+          cancelClass: 'default',
+          locale: {
+            format: 'DD-MM-YYYY'
+          }
         },
-        function (start, end) {
-            $('#daterange-picker input').html(start.format('DD-MM-YYYY') + ' - ' + end.format('DD-MM-YYYY'));
+        function(start, end) {
+          $('#daterange-picker input').html(start.format('DD-MM-YYYY') + ' - ' + end.format('DD-MM-YYYY'));
         }
-    );
+      );
 
-    
+
 
     });
   </script>
 </body>
+
 </html>

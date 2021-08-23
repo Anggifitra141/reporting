@@ -15,6 +15,84 @@ class M_report extends CI_model {
 		parent::__construct();
 	}
 
+  // LTDBB
+
+  var $tltdbb_clean = 'tltdbb_clean';
+  var $column_order_tltdbb = array('trx_date', 'sender_name', 'recept_name', 'trx_amount');
+  var $column_search_tltdbb = array('trx_date', 'sender_name', 'recept_name', 'trx_amount');
+  var $order_tltdbb = array('id' => 'desc');
+
+  private function _get_datatables_query_ltdbb()
+  {
+    $start_date = date('Y-m-d', strtotime(substr($this->input->post('daterange'), 0, 10)));
+    $end_date =  date('Y-m-d', strtotime(substr($this->input->post('daterange'), 13, 23)));
+    $type_report = $this->input->post('type_report');
+
+    $this->db->where('status', "cleansing");
+    $this->db->where('datestamp >=', $start_date);
+    $this->db->where('datestamp <=', $end_date);
+
+    if ($type_report == 'G001') {
+      $this->db->where_in('sender_country', array('INDONESIA', '86'));
+      $this->db->where_not_in('recept_country', array('INDONESIA', '86'));
+    } else if ($type_report == 'G002') {
+      $this->db->where_not_in('sender_country', array('INDONESIA', '86'));
+      $this->db->where_in('recept_country', array('INDONESIA', '86'));
+    } else if ($type_report == 'G003') {
+      $this->db->where_in('sender_country', array('INDONESIA', '86'));
+      $this->db->where_in('recept_country', array('INDONESIA', '86'));
+    }
+
+    $this->db->select('*');
+    $this->db->from($this->tltdbb_clean);
+
+    $i = 0;
+    foreach ($this->column_search_tltdbb as $item) {
+      if ($_POST['search']['value']) {
+        if ($i === 0) {
+          $this->db->group_start();
+          $this->db->like($item, $_POST['search']['value']);
+        } else {
+          $this->db->or_like($item, $_POST['search']['value']);
+        }
+
+        if (count($this->column_search_tltdbb) - 1 == $i)
+          $this->db->group_end();
+      }
+      $i++;
+    }
+
+    if (isset($_POST['order'])) {
+      $this->db->order_by($this->column_order_tltdbb[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+    } else if (isset($this->order_tltdbb)) {
+      $order_tltdbb = $this->order_tltdbb;
+      $this->db->order_by(key($order_tltdbb), $order_tltdbb[key($order_tltdbb)]);
+    }
+  }
+
+  public function get_datatables_ltdbb()
+  {
+    $this->_get_datatables_query_ltdbb();
+    if ($_POST['length'] != -1)
+    $this->db->limit($_POST['length'], $_POST['start']);
+    $query = $this->db->get();
+    return $query->result();
+  }
+
+  public function count_filtered_ltdbb()
+  {
+    $this->_get_datatables_query_ltdbb();
+    $query = $this->db->get();
+    return $query->num_rows();
+  }
+
+  public function count_all_ltdbb()
+  {
+    $this->db->from($this->tltdbb_clean);
+    return $this->db->count_all_results();
+  }
+
+  // REPORT SETTINGS
 	var $table = 'treportsettings';
   var $column_order = array('code', 'name');
   var $column_search = array('code', 'name');
@@ -57,7 +135,7 @@ class M_report extends CI_model {
       }
   }
 
-  public function get($where="")
+  public function get_ltdbb($where="")
   {
     if($where)
     {

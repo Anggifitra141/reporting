@@ -23,22 +23,88 @@ class Report extends CI_Controller {
 	}
 
 
- 
-	public function ltdbb($report_type)
-	{  
-    $data= [];
 
-    if($report_type == 'G001'){
-      $data['content'] = $this->load->view('report/ltdbb/g001', $data, TRUE);
-    }else if($report_type == 'G002') {
-      $data['content'] = $this->load->view('report/ltdbb/g002', $data, TRUE);
-    }else{
-      $data['content'] = $this->load->view('report/ltdbb/g003', $data, TRUE);
+  public function ltdbb($type = "")
+  {
+    if ($type == "") {
+      $data['msg'] = "Access Forbidden !";
+      $content = $this->load->view('errors/html/error_sessi', $data, TRUE);
+      exit($content);
     }
+    $cek_type_report = $this->_get_header($type);
+    $data = [];
+    $data['header'] = $cek_type_report;
+    $data['content'] = $this->load->view('report/ltdbb', $data, TRUE);
     $this->load->view('layout', $data);
-	}
+  }
 
-  public function get_report_range()
+  private function _get_header($type)
+  {
+    $data = [];
+    if ($type == "G001") {
+      $data['title']  = 'Manage Report LTDBB G001';
+      $data['header'] = ['Kota/Kabupaten Asal Pengiriman', 'Negara Tujuan Pengiriman', 'Nama Penerima', 'Nama Pengirim', 'Volume/frekuensi transaksi', 'Nominal Transaksi', 'Tujuan Transaksi'];
+    } else if ($type == "G002") {
+      $data['title']  = 'Manage Report LTDBB G002';
+      $data['header'] = ['Negara Asal Pengiriman', 'Kota/Kabupaten Tujuan Pengiriman', 'Nama Penerima', 'Nama Pengirim', 'Volume/frekuensi transaksi', 'Nominal Transaksi'];
+    } else {
+      $data['title']  = 'Manage Report LTDBB G003';
+      $data['header'] = ['Kota/Kabupaten Asal Pengiriman', 'Kota/Kabupaten Tujuan Pengiriman', 'Nama Penerima', 'Nama Pengirim', 'Volume/frekuensi transaksi', 'Nominal Transaksi', 'Tujuan Transaksi'];
+    }
+    return $data;
+  }
+
+  public function ajax_list_ltdbb()
+  {
+    $type_report = $this->input->post('type_report');
+
+    $list = $this->M_report->get_datatables_ltdbb();
+    $data = array();
+    $no = $_POST['start'];
+    foreach ($list as $raw_data) {
+      $no++;
+      $row = array();
+      $row[] = $no;
+      if ($type_report == 'G001') {
+        $row[] = $raw_data->recept_city;
+        $row[] = $raw_data->recept_country;
+        $row[] = $raw_data->recept_name;
+        $row[] = $raw_data->sender_name;
+        $row[] = '1';
+        $row[] = $this->lib->rupiah($raw_data->amount);
+        $row[] = '3-Non Usaha – Lainnya';
+      } else if ($type_report == 'G002') {
+        $row[] = $raw_data->sender_country;
+        $row[] = $raw_data->recept_city;
+        $row[] = $raw_data->recept_name;
+        $row[] = $raw_data->sender_name;
+        $row[] = '1';
+        $row[] = $this->lib->rupiah($raw_data->amount);
+      } else if ($type_report == 'G003') {
+        $row[] = $raw_data->sender_city;
+        $row[] = $raw_data->recept_city;
+        $row[] = $raw_data->recept_name;
+        $row[] = $raw_data->sender_name;
+        $row[] = '1';
+        $row[] = $this->lib->rupiah($raw_data->amount);
+        $row[] = '3-Non Usaha – Lainnya';
+      }
+
+      $data[] = $row;
+    }
+ 
+    $recordsTotal = $this->M_report->count_all_ltdbb();
+    $recordsFiltered = $this->M_report->count_filtered_ltdbb();
+    $output = array(
+      "draw" => $_POST['draw'],
+      "recordsTotal" => $recordsTotal,
+      "recordsFiltered" => $recordsFiltered,
+      "data" => $data,
+    );
+    echo json_encode($output);
+  }
+
+  public function get_report()
   {
     $report_type = $this->input->post('report_type');
     $start_date = date('Y-m-d', strtotime(substr($this->input->post('daterange'),0,10)));

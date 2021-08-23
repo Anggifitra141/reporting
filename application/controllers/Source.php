@@ -35,6 +35,7 @@ class Source extends CI_Controller {
     $data['content'] = $this->load->view('source/tltdbb_source', $data, TRUE);
 		$this->load->view('layout', $data);
 	}
+
   private function _get_header($type)
   {
     $data = [];
@@ -128,7 +129,7 @@ class Source extends CI_Controller {
       $this->db->where_in('sender_country', array('Indonesia', '86'));
       $this->db->where_in('recept_country', array('Indonesia', '86'));
     }
-    $recordsTotal = $this->M_raw_data->count_all();
+    $recordsTotal = $this->M_tltdbb_source-->count_all();
 
     if($type_report == 'G001'){
       $this->db->where_in('sender_country', array('Indonesia', '86'));
@@ -140,7 +141,7 @@ class Source extends CI_Controller {
       $this->db->where_in('sender_country', array('Indonesia', '86'));
       $this->db->where_in('recept_country', array('Indonesia', '86'));
     }
-    $recordsFiltered = $this->M_raw_data->count_filtered();
+    $recordsFiltered = $this->M_tltdbb_source-->count_filtered();
      $output = array(
                "draw" => $_POST['draw'],
                "recordsTotal" => $recordsTotal,
@@ -150,7 +151,6 @@ class Source extends CI_Controller {
      echo json_encode($output);
    }
 
-   
   // END :: AJAX LTDBB
 
   // START :: AJAX DANA FLOAT
