@@ -1,6 +1,6 @@
 <?php
 
-class M_dana_float extends CI_model {
+class M_danafloat_clean extends CI_model {
 
   /**
    *  =======   Application By    : PT. Seiber Mitra Solusi    ========
@@ -49,6 +49,7 @@ class M_dana_float extends CI_model {
       if(count($this->column_search) - 1 == $i)
         $this->db->group_end();
       }
+      
       $i++;
     }
        

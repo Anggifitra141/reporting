@@ -46,7 +46,7 @@
 <script>
 
 var base_url = "<?= base_url() ?>";
-$('#nav-data-source').addClass('dropdown active');
+$('#nav-data-clean').addClass('dropdown active');
 $('#nav-raw-data').addClass('active');
 var type_report = "<?= $this->uri->segment(3);?>";
 console.log(type_report)
@@ -66,7 +66,7 @@ console.log(type_report)
       "serverSide": true,
       "order": [],
       "ajax": {
-        url: "<?php echo site_url('source/ajax_list_tltdbb_source')?>", // json datasource
+        url: "<?php echo site_url('clean/ajax_list_tltdbb_clean')?>", // json dataclean
         type: "POST",
         data : function(data){
           data.type_report = type_report
@@ -116,7 +116,7 @@ console.log(type_report)
       if (willDelete) {
         loading();
         $.ajax({
-          url : base_url + 'source/cleansing_data',
+          url : base_url + 'clean/cleansing_data',
           type : 'GET',
           dataType : 'JSON',
           success : function(response){

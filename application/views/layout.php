@@ -294,10 +294,21 @@
             <li class="dropdown" id="nav-data-source">
               <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-layer-group"></i> <span>Data Source</span></a>
               <ul class="dropdown-menu">
-                <!-- <li id="nav-upload-source"><a class="nav-link" href="<?php echo site_url('source/upload_source'); ?>"><i class="fas fa-upload"></i> Upload Source</a></li> -->
-                <li id="nav-tltdbb-source"><a class="nav-link" href="<?php echo site_url('source/tltdbb_source'); ?>"><i class="fas fa-database"></i> Ltdbb</a></li>
+                <li id="nav-tltdbb-source"><a class="nav-link" href="<?php echo site_url('source/tltdbb_source/G001'); ?>"><i class="fas fa-database"></i> Ltdbb G001</a></li>
+                <li id="nav-tltdbb-source"><a class="nav-link" href="<?php echo site_url('source/tltdbb_source/G002'); ?>"><i class="fas fa-database"></i> Ltdbb G002</a></li>
+                <li id="nav-tltdbb-source"><a class="nav-link" href="<?php echo site_url('source/tltdbb_source/G003'); ?>"><i class="fas fa-database"></i> Ltdbb G003</a></li>
                 <li id="nav-tltdbb-source"><a class="nav-link" href="<?php echo site_url('source/dana_float'); ?>"><i class="fas fa-database"></i> Dana Float</a></li>
                 <li id="nav-data-clean"><a class="nav-link" href="<?php echo site_url('source/si_pesat'); ?>"><i class="fas fa-database"></i> Si Pesat</a></li>
+              </ul>
+            </li>
+            <li class="dropdown" id="nav-data-clean">
+              <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-layer-group"></i> <span>Data Clean</span></a>
+              <ul class="dropdown-menu">
+                <li id="nav-tltdbb-clean"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G001'); ?>"><i class="fas fa-database"></i> Ltdbb G001</a></li>
+                <li id="nav-tltdbb-clean"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G002'); ?>"><i class="fas fa-database"></i> Ltdbb G002</a></li>
+                <li id="nav-tltdbb-clean"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G003'); ?>"><i class="fas fa-database"></i> Ltdbb G003</a></li>
+                <li id="nav-tltdbb-clean"><a class="nav-link" href="<?php echo site_url('clean/dana_float'); ?>"><i class="fas fa-database"></i> Dana Float</a></li>
+                <li id="nav-data-clean"><a class="nav-link" href="<?php echo site_url('clean/si_pesat'); ?>"><i class="fas fa-database"></i> Si Pesat</a></li>
               </ul>
             </li>
             <li class="dropdown" id="nav-utilities-source">
