@@ -56,11 +56,11 @@ class App extends CI_Controller {
 		$status = $value->status;
 		$today = date("Y-m-d"); 
 		if ($status == "unverified"){
-        $data['calender'][$key]['backgroundColor'] = "#ff847f";
+        $data['calender'][$key]['backgroundColor'] = "#fc544b";
       }elseif($status == "verified"){
-        $data['calender'][$key]['backgroundColor'] = "#7fff84";
+        $data['calender'][$key]['backgroundColor'] = "#63ed7a";
       }elseif($status == "printed"){
-        $data['calender'][$key]['backgroundColor'] = "#faff7f";	
+        $data['calender'][$key]['backgroundColor'] = "#ffa426";	
       }else{
         $data['calender'][$key]['backgroundColor'] = "#7fffc4";	
       }
@@ -101,6 +101,7 @@ class App extends CI_Controller {
 		$data['content'] = $this->load->view('dashboard/reminder', $data, TRUE);
 		$this->load->view('layout', $data);
 	}
+
   function download_today($value)
   {
 		$this->load->helper('file');
@@ -139,5 +140,60 @@ class App extends CI_Controller {
 		echo file_get_contents($dateFile);
 	}
    // END :: REPORT DASHBOARD
+
+	public function generate_report()
+	{
+		$query_get_report_setting = $this->db->get('treport_settings')->result();
+
+		foreach ($query_get_report_setting as $row){
+			if($row->period  == '1D'){
+				$last_generate = $row->last_generate;		
+				$generate = date('Y-m-d', strtotime($last_generate . ' +1 day'));
+
+				$data = array (
+					'id_user'     	=> '1',
+					'trepid'      	=> $row->id,
+					'datestamp'    	=> $generate,
+					'tcal_message'	=> $row->code,
+					'status'       	=> 'unverified'
+				);
+
+				$this->db->insert('tcalendar', $data);
+				echo json_encode(array("status" => TRUE));
+
+			}else if($row->period == '1W'){
+				$last_generate = $row->last_generate;
+				$generate = date('Y-m-d', strtotime($last_generate . ' +7 day'));
+
+				$data = array(
+					'id_user'     	=> '1',
+					'trepid'      	=> $row->id,
+					'datestamp'    	=> $generate,
+					'tcal_message'	=> $row->code,
+					'status'       	=> 'unverified'
+				);
+				$this->db->insert('tcalendar', $data);
+				echo json_encode(array("status" => TRUE));
+
+			}else if($row->period == '1M'){
+
+				$last_generate = $row->last_generate;
+				$generate = date('Y-m-d', strtotime($last_generate . ' +30 day'));
+
+				$data = array(
+					'id_user'     	=> '1',
+					'trepid'      	=> $row->id,
+					'datestamp'    	=> $generate,
+					'tcal_message'	=> $row->code,
+					'status'       	=> 'unverified'
+				);
+				$this->db->insert('tcalendar', $data);
+				echo json_encode(array("status" => TRUE));
+
+			}else{
+
+			}
+		}
+	} 
  
 }

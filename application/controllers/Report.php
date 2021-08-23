@@ -24,19 +24,23 @@ class Report extends CI_Controller {
 
 
  
-	public function index()
-	{
+	public function ltdbb($report_type)
+	{  
     $data= [];
-    $data['report_type'] = $this->db->query("SELECT * FROM treportsettings")->result_array();
-    $data['campaign'] = $this->db->query("SELECT * FROM campaign")->result_array();
-    $data['content'] = $this->load->view('report/month', $data, TRUE);
-		$this->load->view('layout', $data);
+
+    if($report_type == 'G001'){
+      $data['content'] = $this->load->view('report/ltdbb/g001', $data, TRUE);
+    }else if($report_type == 'G002') {
+      $data['content'] = $this->load->view('report/ltdbb/g002', $data, TRUE);
+    }else{
+      $data['content'] = $this->load->view('report/ltdbb/g003', $data, TRUE);
+    }
+    $this->load->view('layout', $data);
 	}
 
   public function get_report_range()
   {
     $report_type = $this->input->post('report_type');
-    $campaign = $this->input->post('campaign');
     $start_date = date('Y-m-d', strtotime(substr($this->input->post('daterange'),0,10)));
     $end_date =  date('Y-m-d', strtotime(substr($this->input->post('daterange'),13,23)));
     // echo json_encode(['start_date' => $report_type, 'end_date' => $end_date]);
@@ -44,13 +48,13 @@ class Report extends CI_Controller {
     $result = "";
     switch ($report_type) {
       case 'G0001':
-        $result = $this->report_g1($start_date, $end_date, $campaign);
+        $result = $this->report_g1($start_date, $end_date);
         break;
       case 'G0002':
-        $result = $this->report_g2($start_date, $end_date, $campaign);
+        $result = $this->report_g2($start_date, $end_date);
         break;
       case 'G0003':
-        $result = $this->report_g3($start_date, $end_date, $campaign);
+        $result = $this->report_g3($start_date, $end_date);
         break;
       default:
         $result = "";
@@ -59,7 +63,7 @@ class Report extends CI_Controller {
     echo json_encode($result);
     
   }
-  private function report_g1($start_date, $end_date, $campaign){
+  private function report_g1($start_date, $end_date){
     $query = $this->db->query("
       SELECT A.campaign, A.sendercity, A.receiptcountry, A.receiptname,
       A.sendername, COUNT(A.nominal) as trxvolume, SUM(A.nominal) as trxnominal FROM tcleandatasource1 A 
@@ -68,7 +72,7 @@ class Report extends CI_Controller {
     ")->result();
     return $query;
   }
-  private function report_g2($start_date, $end_date, $campaign)
+  private function report_g2($start_date, $end_date)
   {
     $query = $this->db->query("
       SELECT A.campaign, A.sendercity, A.receiptcountry, A.receiptname, 
@@ -78,7 +82,7 @@ class Report extends CI_Controller {
     ")->result();
     return $query;
   }
-  private function report_g3($start_date, $end_date, $campaign)
+  private function report_g3($start_date, $end_date)
   {
     $query = $this->db->query("
       SELECT A.campaign, A.sendercity, A.receiptcountry, A.receiptname,
@@ -129,7 +133,7 @@ class Report extends CI_Controller {
 		$data['page'] 	 = 'sourceAll';
 		$data['sourceAll'] = $this->db->query("SELECT a.tcal_date as date ,a.tcal_message as name , 
 		b.regulator as regulator, c.periodname as period, a.status as status, b.status as status_rep , b.link
-		FROM tcalendar a INNER JOIN treportsettings b ON a.trepid = b.id INNER JOIN treportperiod c ON b.period = c.periodcode 
+		FROM tcalendar a INNER JOIN treport_settings b ON a.trepid = b.id INNER JOIN treportperiod c ON b.period = c.periodcode 
 		WHERE a.tcal_date = '$value'")->result_array();
 		// $this->load->view('dataSmall',$data, FALSE);
     echo json_encode($data);
