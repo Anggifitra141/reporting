@@ -71,7 +71,7 @@ class Report extends CI_Controller {
         $row[] = $raw_data->recept_name;
         $row[] = $raw_data->sender_name;
         $row[] = '1';
-        $row[] = $this->lib->rupiah($raw_data->amount);
+        $row[] = $this->lib->rupiah($raw_data->trx_amount);
         $row[] = '3-Non Usaha – Lainnya';
       } else if ($type_report == 'G002') {
         $row[] = $raw_data->sender_country;
@@ -79,14 +79,14 @@ class Report extends CI_Controller {
         $row[] = $raw_data->recept_name;
         $row[] = $raw_data->sender_name;
         $row[] = '1';
-        $row[] = $this->lib->rupiah($raw_data->amount);
+        $row[] = $this->lib->rupiah($raw_data->trx_amount);
       } else if ($type_report == 'G003') {
         $row[] = $raw_data->sender_city;
         $row[] = $raw_data->recept_city;
         $row[] = $raw_data->recept_name;
         $row[] = $raw_data->sender_name;
         $row[] = '1';
-        $row[] = $this->lib->rupiah($raw_data->amount);
+        $row[] = $this->lib->rupiah($raw_data->trx_amount);
         $row[] = '3-Non Usaha – Lainnya';
       }
 
@@ -103,62 +103,80 @@ class Report extends CI_Controller {
     );
     echo json_encode($output);
   }
-
-  public function get_report()
+  
+  public function download_excel_ltdbb()
   {
-    $report_type = $this->input->post('report_type');
-    $start_date = date('Y-m-d', strtotime(substr($this->input->post('daterange'),0,10)));
-    $end_date =  date('Y-m-d', strtotime(substr($this->input->post('daterange'),13,23)));
-    // echo json_encode(['start_date' => $report_type, 'end_date' => $end_date]);
+    $type_report = $this->input->post('type_report');
 
-    $result = "";
-    switch ($report_type) {
-      case 'G0001':
-        $result = $this->report_g1($start_date, $end_date);
-        break;
-      case 'G0002':
-        $result = $this->report_g2($start_date, $end_date);
-        break;
-      case 'G0003':
-        $result = $this->report_g3($start_date, $end_date);
-        break;
-      default:
-        $result = "";
-        break;
+    $list = $this->M_report->get_datatables_ltdbb();
+    $report_setting = $this->M_report->get_report_setting($type_report);
+
+    $data = array();
+    $no = 1;
+    $baris = 6;
+    //$objPHPExcel    = new PHPExcel();
+
+    if ($type_report == 'G001') {
+      $objPHPExcel = PHPExcel_IOFactory::load("./assets/template-excel/template-ltdbb-g001.xlsx");
+    }else if ($type_report == 'G002'){
+      $objPHPExcel = PHPExcel_IOFactory::load("./assets/template-excel/template-ltdbb-g003.xlsx");
+    }else{
+      $objPHPExcel = PHPExcel_IOFactory::load("./assets/template-excel/template-ltdbb-g003.xlsx");
+    } 
+
+    foreach ($list as $row) {
+      foreach($report_setting as $row2){
+        if ($type_report == 'G001') {
+          $objPHPExcel->setActiveSheetIndex(0)
+          ->setCellValue('A' . $baris, $no)
+          ->setCellValue('B' . $baris, $row->recept_city)
+          ->setCellValue('C' . $baris, $row->recept_country)
+          ->setCellValue('D' . $baris, $row->recept_name)
+          ->setCellValue('E' . $baris, $row->sender_name)
+          ->setCellValue('F' . $baris, "1")
+          ->setCellValue('G' . $baris, $row->trx_amount)
+          ->setCellValue('H' . $baris, "3-Non Usaha – Lainnya");
+          $baris++;
+          $no++;
+        } else if ($type_report == 'G002') {
+          $objPHPExcel->setActiveSheetIndex(0)
+          ->setCellValue('A' . $baris, $no)
+          ->setCellValue('B' . $baris, $row->sender_country)
+          ->setCellValue('C' . $baris, $row->recept_city)
+          ->setCellValue('D' . $baris, $row->recept_name)
+          ->setCellValue('E' . $baris, $row->sender_name)
+          ->setCellValue('F' . $baris, "1")
+          ->setCellValue('G' . $baris, $row->trx_amount)
+
+          ->setCellValue('C'. 2, $row2->header2)
+          ->setCellValue('C'. 4, date('Y'))
+          ->setCellValue('D'. 4, date('M'));
+
+          $baris++;
+          $no++;
+
+          $baris++;
+          $no++;
+        } else {
+          $objPHPExcel->setActiveSheetIndex(0)
+          ->setCellValue('A' . $baris, $no)
+          ->setCellValue('B' . $baris, $row->sender_country)
+          ->setCellValue('C' . $baris, $row->recept_city)
+          ->setCellValue('D' . $baris, $row->recept_name)
+          ->setCellValue('E' . $baris, $row->sender_name)
+          ->setCellValue('F' . $baris, "1")
+          ->setCellValue('G' . $baris, $row->trx_amount)
+          ->setCellValue('H' . $baris, "3-Non Usaha – Lainnya");
+          $baris++;
+          $no++;
+        }
+      }
+      
     }
-    echo json_encode($result);
-    
+ 
+
   }
-  private function report_g1($start_date, $end_date){
-    $query = $this->db->query("
-      SELECT A.campaign, A.sendercity, A.receiptcountry, A.receiptname,
-      A.sendername, COUNT(A.nominal) as trxvolume, SUM(A.nominal) as trxnominal FROM tcleandatasource1 A 
-      WHERE A.sendercountry = 'ID-indonesia' AND not A.receiptcountry='ID-Indonesia' AND DATE(datestamp) BETWEEN '".$start_date."' AND '".$end_date."' AND campaign='$campaign'
-      GROUP BY A.sendercity, A.receiptcountry, A.receiptname, A.sendername
-    ")->result();
-    return $query;
-  }
-  private function report_g2($start_date, $end_date)
-  {
-    $query = $this->db->query("
-      SELECT A.campaign, A.sendercity, A.receiptcountry, A.receiptname, 
-      A.sendername, COUNT(A.nominal) as trxvolume, SUM(A.nominal) as trxnominal FROM tcleandatasource1 A 
-      WHERE not A.sendercountry = 'ID-indonesia' AND A.receiptcountry='ID-Indonesia' AND DATE(datestamp) BETWEEN '".$start_date."' AND '".$end_date."' AND campaign='$campaign'
-      GROUP BY A.sendercity, A.receiptcountry, A.receiptname, A.sendername
-    ")->result();
-    return $query;
-  }
-  private function report_g3($start_date, $end_date)
-  {
-    $query = $this->db->query("
-      SELECT A.campaign, A.sendercity, A.receiptcountry, A.receiptname,
-      A.sendername, COUNT(A.nominal) as trxvolume, SUM(A.nominal) as trxnominal 
-      FROM tcleandatasource1 A 
-      WHERE A.sendercountry='ID-indonesia' AND A.receiptcountry='ID-Indonesia' AND DATE(datestamp) BETWEEN '".$start_date."' AND '".$end_date."' AND campaign='$campaign'
-      GROUP BY A.sendercity, A.receiptcountry, A.receiptname, A.sendername
-    ")->result();
-    return $query;
-  }
+
 
   // START :: SETTING REPORT
   public function setting_report()

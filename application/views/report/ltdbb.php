@@ -51,7 +51,6 @@
                       <?php endforeach; ?>
                     </tr>
                   </thead>
-                  <tbody id="data-source"></tbody>
 
                 </table>
 
@@ -100,7 +99,7 @@
     var daterange = $('[name="daterange"]').val();
 
     if (type_report && daterange) {
-      loading();
+      
       //
       var table = $('#table-data').DataTable({
         "deferRender": true,
@@ -120,36 +119,12 @@
         "columnDefs": [{
           "orderable": false
         }],
-        "pageLength": 20,
-        dom: 'Bfrtip',
-        buttons: [{
-            extend: 'copyHtml5',
-            text: '<i class="fas fa-copy"> </i> Copy',
-            className: 'btn btn-icon btn-outline-primary m-1'
-          },
-          {
-            extend: 'excelHtml5',
-            text: '<i class="fas fa-file-excel"> </i> Excel',
-            className: 'btn btn-icon btn-outline-success m-1'
-          },
-          {
-            extend: 'csvHtml5',
-            text: '<i class="fas fa-file-csv"> </i> CSV',
-            className: 'btn btn-icon btn-outline-success m-1'
-          },
-          {
-            extend: 'pdfHtml5',
-            text: '<i class="fas fa-file-pdf"> </i> PDF',
-            className: 'btn btn-icon btn-outline-danger m-1'
-          },
-        ]
+        
 
       });
-      $('div').removeClass("btn-group");
-      $('button').removeClass("btn-secondary");
 
       $('#result-data').slideDown('slow');
-      swal.close();
+      
 
     } else {
       alert('Fields Is Required');

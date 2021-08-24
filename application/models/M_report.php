@@ -16,10 +16,9 @@ class M_report extends CI_model {
 	}
 
   // LTDBB
-
   var $tltdbb_clean = 'tltdbb_clean';
-  var $column_order_tltdbb = array('trx_date', 'sender_name', 'recept_name', 'trx_amount');
-  var $column_search_tltdbb = array('trx_date', 'sender_name', 'recept_name', 'trx_amount');
+  var $column_order_tltdbb = array('trx_date', 'sender_name', 'recept_name', 'trx_amount', '','','','');
+  var $column_search_tltdbb = array('trx_date', 'sender_country', 'sender_city', 'recept_country', 'recept_city', 'sender_name', 'recept_name', 'trx_amount');
   var $order_tltdbb = array('id' => 'desc');
 
   private function _get_datatables_query_ltdbb()
@@ -42,7 +41,6 @@ class M_report extends CI_model {
       $this->db->where_in('sender_country', array('INDONESIA', '86'));
       $this->db->where_in('recept_country', array('INDONESIA', '86'));
     }
-
     $this->db->select('*');
     $this->db->from($this->tltdbb_clean);
 
@@ -70,7 +68,7 @@ class M_report extends CI_model {
     }
   }
 
-  public function get_datatables_ltdbb()
+  function get_datatables_ltdbb()
   {
     $this->_get_datatables_query_ltdbb();
     if ($_POST['length'] != -1)
@@ -79,7 +77,7 @@ class M_report extends CI_model {
     return $query->result();
   }
 
-  public function count_filtered_ltdbb()
+  function count_filtered_ltdbb()
   {
     $this->_get_datatables_query_ltdbb();
     $query = $this->db->get();
@@ -143,7 +141,7 @@ class M_report extends CI_model {
     }
     return $this->db->get($this->table);
   }
-
+  
 	public function Get_All()
 	{
 		$this->_get_datatables_query();
@@ -192,6 +190,13 @@ class M_report extends CI_model {
     $this->db->delete($this->table);
   }
 
+  public function get_report_setting($type_report)
+  {
+    $this->db->from('treport_settings');
+    $this->db->where('code', $type_report);
+    $query = $this->db->get();
+    return $query->row();
+  }
   
 
 }
