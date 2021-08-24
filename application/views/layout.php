@@ -373,6 +373,35 @@
                 <li id="nav-manual-clean"><a class="nav-link" href="<?php echo site_url('utilities/manual'); ?>"><i class="fas fa-database"></i> Manual Clean</a></li>
               </ul>
             </li>
+            <li class="dropdown" id="nav-master-data">
+              <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-sliders-h"></i> <span>Master data</span></a>
+              <ul class="dropdown-menu">
+                <li id="nav-role-model"><a class="nav-link" href="<?php echo site_url('role_model'); ?>"><i class="fas fa-align-center"></i> Role Model</a></li>
+                <li id="nav-ltdbb-bi-country"><a class="nav-link" href="<?php echo site_url('master/ltdbb_bi_country'); ?>"><i class="fas fa-align-center"></i> Ltdbb BI Country</a></li>
+                <li id="nav-ltdbb-bi-city"><a class="nav-link" href="<?php echo site_url('master/ltdbb_bi_city'); ?>"><i class="fas fa-align-center"></i> Ltdbb BI City</a></li>
+                <!-- <li id="nav-region"><a class="nav-link" href="<?php echo site_url('master/region'); ?>"><i class="fas fa-align-center"></i> Region</a></li> -->
+                <!-- <li id="nav-country"><a class="nav-link" href="<?php echo site_url('master/country'); ?>"><i class="fas fa-align-center"></i> Country</a></li> -->
+                <!-- <li id="nav-subtype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_01_subtype'); ?>"><i class="fas fa-align-center"></i> Subtype</a></li>
+                <li id="nav-fundtype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_02_fundtype'); ?>"><i class="fas fa-align-center"></i> Fundtype</a></li>
+                <li id="nav-acctype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_03_acctype'); ?>"><i class="fas fa-align-center"></i> Acctype</a></li>
+                <li id="nav-accstat"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_04_accstat'); ?>"><i class="fas fa-align-center"></i> Accstat</a></li>
+                <li id="nav-idtype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_05_idtype'); ?>"><i class="fas fa-align-center"></i> Idtype</a></li>
+                <li id="nav-trxmode"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_06_trxmode'); ?>"><i class="fas fa-align-center"></i> Trxmode</a></li>
+                <li id="nav-trxtype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_07_trxtype'); ?>"><i class="fas fa-align-center"></i> Trxtype</a></li>
+                <li id="nav-reporttype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_08_reporttype'); ?>"><i class="fas fa-align-center"></i> Reporttype</a></li>
+                <li id="nav-contactcat"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_09_contactcat'); ?>"><i class="fas fa-align-center"></i> Contactcat</a></li>
+                <li id="nav-commtype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_10_commtype'); ?>"><i class="fas fa-align-center"></i> Commtype</a></li>
+                <li id="nav-companytype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_11_companytype'); ?>"><i class="fas fa-align-center"></i> Companytype</a></li>
+                <li id="nav-stufftype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_12_stufftype'); ?>"><i class="fas fa-align-center"></i> Stufftype</a></li>
+                <li id="nav-currency"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_13_currency'); ?>"><i class="fas fa-align-center"></i> Currency</a></li>
+                <li id="nav-country"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_14_country'); ?>"><i class="fas fa-align-center"></i> Country</a></li>
+                <li id="nav-personacc"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_15_personacc'); ?>"><i class="fas fa-align-center"></i> Personacc</a></li>
+                <li id="nav-personentity"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_16_personentity'); ?>"><i class="fas fa-align-center"></i> Personentity</a></li>
+                <li id="nav-partyrole"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_17_partyrole'); ?>"><i class="fas fa-align-center"></i> Partyrole</a></li>
+                <li id="nav-reportind"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_18_reportind'); ?>"><i class="fas fa-align-center"></i> Reportind</a></li>
+                <li id="nav-gender"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_19_gender'); ?>"><i class="fas fa-align-center"></i> Gender</a></li> -->
+              </ul>
+            </li>
             <!-- <li id="nav-verify-data">
               <a href="<?php echo site_url('verify'); ?>" class="nav-link"><i class="fas fa-check"></i><span>Verify Data</span></a>
             </li> -->
@@ -411,47 +440,19 @@
                 <li id="nav-setting-report"><a class="nav-link" href="<?php echo site_url('report/setting_report'); ?>"><i class="fas fa-align-center"></i> Setting Report</a></li>
               </ul>
             </li>
-            <li id="nav-archive">
-              <a href="<?php echo site_url('source/archive'); ?>" class="nav-link"><i class="fas fa-archive"></i><span>Archive</span></a>
-            </li>
-            <li id="nav-user-activity">
-              <a href="<?php echo site_url('source/user_activity'); ?>" class="nav-link"><i class="fas fa-history"></i><span>User Activity</span></a>
-            </li>
+
             <li class="menu-header">System Setting</li>
-            <li class="dropdown" id="nav-master-data">
-              <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-sliders-h"></i> <span>Master data</span></a>
-              <ul class="dropdown-menu">
-                <li id="nav-role-model"><a class="nav-link" href="<?php echo site_url('role_model'); ?>"><i class="fas fa-align-center"></i> Role Model</a></li>
-                <li id="nav-ltdbb-bi-country"><a class="nav-link" href="<?php echo site_url('master/ltdbb_bi_country'); ?>"><i class="fas fa-align-center"></i> Ltdbb BI Country</a></li>
-                <li id="nav-ltdbb-bi-city"><a class="nav-link" href="<?php echo site_url('master/ltdbb_bi_city'); ?>"><i class="fas fa-align-center"></i> Ltdbb BI City</a></li>
-                <!-- <li id="nav-region"><a class="nav-link" href="<?php echo site_url('master/region'); ?>"><i class="fas fa-align-center"></i> Region</a></li> -->
-                <!-- <li id="nav-country"><a class="nav-link" href="<?php echo site_url('master/country'); ?>"><i class="fas fa-align-center"></i> Country</a></li> -->
-                <!-- <li id="nav-subtype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_01_subtype'); ?>"><i class="fas fa-align-center"></i> Subtype</a></li>
-                <li id="nav-fundtype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_02_fundtype'); ?>"><i class="fas fa-align-center"></i> Fundtype</a></li>
-                <li id="nav-acctype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_03_acctype'); ?>"><i class="fas fa-align-center"></i> Acctype</a></li>
-                <li id="nav-accstat"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_04_accstat'); ?>"><i class="fas fa-align-center"></i> Accstat</a></li>
-                <li id="nav-idtype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_05_idtype'); ?>"><i class="fas fa-align-center"></i> Idtype</a></li>
-                <li id="nav-trxmode"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_06_trxmode'); ?>"><i class="fas fa-align-center"></i> Trxmode</a></li>
-                <li id="nav-trxtype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_07_trxtype'); ?>"><i class="fas fa-align-center"></i> Trxtype</a></li>
-                <li id="nav-reporttype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_08_reporttype'); ?>"><i class="fas fa-align-center"></i> Reporttype</a></li>
-                <li id="nav-contactcat"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_09_contactcat'); ?>"><i class="fas fa-align-center"></i> Contactcat</a></li>
-                <li id="nav-commtype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_10_commtype'); ?>"><i class="fas fa-align-center"></i> Commtype</a></li>
-                <li id="nav-companytype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_11_companytype'); ?>"><i class="fas fa-align-center"></i> Companytype</a></li>
-                <li id="nav-stufftype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_12_stufftype'); ?>"><i class="fas fa-align-center"></i> Stufftype</a></li>
-                <li id="nav-currency"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_13_currency'); ?>"><i class="fas fa-align-center"></i> Currency</a></li>
-                <li id="nav-country"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_14_country'); ?>"><i class="fas fa-align-center"></i> Country</a></li>
-                <li id="nav-personacc"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_15_personacc'); ?>"><i class="fas fa-align-center"></i> Personacc</a></li>
-                <li id="nav-personentity"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_16_personentity'); ?>"><i class="fas fa-align-center"></i> Personentity</a></li>
-                <li id="nav-partyrole"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_17_partyrole'); ?>"><i class="fas fa-align-center"></i> Partyrole</a></li>
-                <li id="nav-reportind"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_18_reportind'); ?>"><i class="fas fa-align-center"></i> Reportind</a></li>
-                <li id="nav-gender"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_19_gender'); ?>"><i class="fas fa-align-center"></i> Gender</a></li> -->
-              </ul>
+            <li>
+              <a href="<?php echo site_url('user_group'); ?>" class="nav-link"><i class="fas fa-users"></i><span>User group</span></a>
             </li>
             <li>
               <a href="<?php echo site_url('user'); ?>" class="nav-link"><i class="fas fa-user"></i><span>User</span></a>
             </li>
-            <li>
-              <a href="<?php echo site_url('user_group'); ?>" class="nav-link"><i class="fas fa-users"></i><span>User group</span></a>
+            <li id="nav-user-activity">
+              <a href="<?php echo site_url('source/user_activity'); ?>" class="nav-link"><i class="fas fa-history"></i><span>User Activity</span></a>
+            </li>
+            <li id="nav-archive">
+              <a href="<?php echo site_url('source/archive'); ?>" class="nav-link"><i class="fas fa-archive"></i><span>Archive</span></a>
             </li>
             <li>
               <a href="<?php echo site_url('login/signout'); ?>" class="nav-link"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
