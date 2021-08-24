@@ -21,9 +21,8 @@ class M_role_model extends CI_model {
 
   private function _get_datatables_query()
   {
-	$this->db->from($this->table);
+	    $this->db->from($this->table);
       $i = 0;
-
       foreach ($this->column_search as $row)
       {
           if($_POST['search']['value'])

@@ -17,48 +17,42 @@ class M_master extends CI_model {
 
 	var $table_ltdbb_bi_country = 'tltdbb_bi_country';
   var $column_order_ltdbb_bi_country = array('id');
-  var $column_search_ltdbb_bi_country = array('ltdb','name');
+  var $column_search_ltdbb_bi_country = array('bi_code','country', 'bi_country');
   var $order_ltdbb_bi_country = array('id' => 'DESC');
-
-  
 
   private function _get_datatables_query_ltdbb_bi_country()
   {
-	$this->db->from($this->table_ltdbb_bi_country);
-      $i = 0;
-
-      foreach ($this->column_search_ltdbb_bi_country as $row)
+    $this->db->from($this->table_ltdbb_bi_country);
+    $i = 0;
+    foreach ($this->column_search_ltdbb_bi_country as $row)
+    {
+      if($_POST['search']['value'])
       {
-          if($_POST['search']['value'])
-          {
+        if($i===0)
+        {
+          $this->db->group_start();
+          $this->db->like($row, $_POST['search']['value']);
+        }
+        else
+        {
+          $this->db->or_like($row, $_POST['search']['value']);
+        }
 
-              if($i===0)
-              {
-                  $this->db->group_start();
-                  $this->db->like($row, $_POST['search']['value']);
-              }
-              else
-              {
-                  $this->db->or_like($row, $_POST['search']['value']);
-              }
-
-              if(count($this->column_search_ltdbb_bi_country) - 1 == $i)
-                  $this->db->group_end();
-          }
-          $i++;
+        if(count($this->column_search_ltdbb_bi_country) - 1 == $i)
+          $this->db->group_end();
       }
-
-      if(isset($_POST['order']))
-      {
-          $this->db->order_by($this->column_order_ltdbb_bi_country[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
-      }
-      else if(isset($this->order))
-      {
-          $order_ltdbb_bi_country = $this->order;
-          $this->db->order_by(key($order_ltdbb_bi_country), $order_ltdbb_bi_country[key($order)]);
-      }
+      $i++;
+    }
+    if(isset($_POST['order']))
+    {
+      $this->db->order_by($this->column_order_ltdbb_bi_country[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+    }
+    else if(isset($this->order_ltdbb_bi_country))
+    {
+      $order = $this->order_ltdbb_bi_country;
+      $this->db->order_by(key($order), $order[key($order)]);
+    }
   }
-
   public function get_ltdbb_bi_country($id)
   {
     $this->db->from($this->table_ltdbb_bi_country);
@@ -66,7 +60,6 @@ class M_master extends CI_model {
     $query = $this->db->get();
     return $query->row();
   }
-
 	public function Get_All_ltdbb_bi_country()
 	{
 		$this->_get_datatables_query_ltdbb_bi_country();
@@ -75,37 +68,116 @@ class M_master extends CI_model {
     $query = $this->db->get();
     return $query->result();
 	}
-
   public function count_filtered_ltdbb_bi_country()
   {
     $this->_get_datatables_query_ltdbb_bi_country();
     $query = $this->db->get();
     return $query->num_rows();
   }
-
   public function count_all_ltdbb_bi_country()
   {
     $this->db->from($this->table_ltdbb_bi_country);
     return $this->db->count_all_results();
   }
-
   public function add_ltdbb_bi_country($data)
   {
     $this->db->insert($this->table_ltdbb_bi_country, $data);
     return $this->db->insert_id();
   }
-
   public function update_ltdbb_bi_country($where, $data)
   {
     $this->db->update($this->table_ltdbb_bi_country, $data, $where);
     return $this->db->affected_rows();
   }
-
   public function delete_ltdbb_bi_country($id)
   {
     $this->db->where('id', $id);
     $this->db->delete($this->table_ltdbb_bi_country);
   }
+
+
+  // START :: MASTER LTDBB_BI_CITY
+  var $table_ltdbb_bi_city = 'tltdbb_bi_city';
+  var $column_order_ltdbb_bi_city = array('id');
+  var $column_search_ltdbb_bi_city = array('bi_code','city', 'bi_city');
+  var $order_ltdbb_bi_city = array('id' => 'DESC');
+
+  private function _get_datatables_query_ltdbb_bi_city()
+  {
+    $this->db->from($this->table_ltdbb_bi_city);
+    $i = 0;
+    foreach ($this->column_search_ltdbb_bi_city as $row)
+    {
+      if($_POST['search']['value'])
+      {
+        if($i===0)
+        {
+          $this->db->group_start();
+          $this->db->like($row, $_POST['search']['value']);
+        }
+        else
+        {
+          $this->db->or_like($row, $_POST['search']['value']);
+        }
+
+        if(count($this->column_search_ltdbb_bi_city) - 1 == $i)
+          $this->db->group_end();
+      }
+      $i++;
+    }
+    if(isset($_POST['order']))
+    {
+      $this->db->order_by($this->column_order_ltdbb_bi_city[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+    }
+    else if(isset($this->order_ltdbb_bi_city))
+    {
+      $order = $this->order_ltdbb_bi_city;
+      $this->db->order_by(key($order), $order[key($order)]);
+    }
+  }
+  public function get_ltdbb_bi_city($id)
+  {
+    $this->db->from($this->table_ltdbb_bi_city);
+    $this->db->where('id', $id);
+    $query = $this->db->get();
+    return $query->row();
+  }
+	public function Get_All_ltdbb_bi_city()
+	{
+		$this->_get_datatables_query_ltdbb_bi_city();
+    if($_POST['length'] != -1)
+    $this->db->limit($_POST['length'], $_POST['start']);
+    $query = $this->db->get();
+    return $query->result();
+	}
+  public function count_filtered_ltdbb_bi_city()
+  {
+    $this->_get_datatables_query_ltdbb_bi_city();
+    $query = $this->db->get();
+    return $query->num_rows();
+  }
+  public function count_all_ltdbb_bi_city()
+  {
+    $this->db->from($this->table_ltdbb_bi_city);
+    return $this->db->count_all_results();
+  }
+  public function add_ltdbb_bi_city($data)
+  {
+    $this->db->insert($this->table_ltdbb_bi_city, $data);
+    return $this->db->insert_id();
+  }
+  public function update_ltdbb_bi_city($where, $data)
+  {
+    $this->db->update($this->table_ltdbb_bi_city, $data, $where);
+    return $this->db->affected_rows();
+  }
+  public function delete_ltdbb_bi_city($id)
+  {
+    $this->db->where('id', $id);
+    $this->db->delete($this->table_ltdbb_bi_city);
+  }
+
+  // END :: MASTER LTDBB_BI_CITY
 
   /// MASTER COUNTRY /// 
 
@@ -144,9 +216,9 @@ class M_master extends CI_model {
       {
           $this->db->order_by($this->column_order_country[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
       }
-      else if(isset($this->order))
+      else if(isset($this->order_country))
       {
-          $order_country = $this->order;
+          $order_country = $this->order_country;
           $this->db->order_by(key($order_country), $order_country[key($order)]);
       }
   }
@@ -182,31 +254,6 @@ class M_master extends CI_model {
     return $this->db->count_all_results();
   }
 
-  public function get_campaign($campaign_id)
-  {
-    $this->db->from($this->table);
-    $this->db->where('campaign_id', $campaign_id);
-    $query = $this->db->get();
-    return $query->row();
-  }
-
-  public function add_campaign($data)
-  {
-    $this->db->insert($this->table, $data);
-    return $this->db->insert_id();
-  }
-
-  public function update_campaign($where, $data)
-  {
-    $this->db->update($this->table, $data, $where);
-    return $this->db->affected_rows();
-  }
-
-  public function delete_campaign($campaign_id)
-  {
-    $this->db->where('campaign_id', $campaign_id);
-    $this->db->delete($this->table);
-  }
 
   // MASTER ALL
   var $table_master_all = '';
@@ -244,10 +291,10 @@ class M_master extends CI_model {
       {
           $this->db->order_by($this->column_order_master_all[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
       }
-      else if(isset($this->order))
+      else if(isset($this->order_master_all))
       {
-          $order_master_all = $this->order;
-          $this->db->order_by(key($order_master_all), $order_master_all[key($order)]);
+          $order = $this->order_master_all;
+          $this->db->order_by(key($order), $order[key($order)]);
       }
   }
 
@@ -271,6 +318,28 @@ class M_master extends CI_model {
   {
     $this->db->from($table);
     return $this->db->count_all_results();
+  }
+  public function get_master_all($table, $id)
+  {
+    $this->db->from($table);
+    $this->db->where('id', $id);
+    $query = $this->db->get();
+    return $query->row();
+  }
+  public function add_master_all($table, $data)
+  {
+    $this->db->insert($table, $data);
+    return $this->db->insert_id();
+  }
+  public function update_master_all($table, $where, $data)
+  {
+    $this->db->update($table, $data, $where);
+    return $this->db->affected_rows();
+  }
+  public function delete_master_all($table, $id)
+  {
+    $this->db->where('id', $id);
+    $this->db->delete($table);
   }
 
 }

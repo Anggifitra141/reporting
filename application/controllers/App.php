@@ -71,12 +71,22 @@ class App extends CI_Controller {
 
 
    // START :: REPORT DASHBOARD
+	 public function today()
+	 {
+			$data['title'] 	 = 'sourceAll';
+			$data['sourceAll'] = $this->db->query("SELECT a.datestamp as date ,a.tcal_message as name ,
+			b.regulator as regulator, c.period_name as period, a.status as status, b.status as status_rep , b.link
+			FROM tcalendar a INNER JOIN treport_settings b ON a.trepid = b.id INNER JOIN treport_period c ON b.period = c.period_code 
+			WHERE a.datestamp = CURRENT_DATE()")->result_array();
+			$data['content'] = $this->load->view('dashboard/reminder', $data, TRUE);
+			$this->load->view('layout', $data);
+	 }
    public function unprocessed()
    {
 		$data['title'] 	 = 'Unprocess';
      $data['sourceAll'] = $this->db->query("SELECT a.`datestamp` as date ,a.`tcal_message` as name , 
-     b.regulator as regulator, c.periodname as period, a.`status` as status, b.status as status_rep, b.link 
-     FROM tcalendar a INNER JOIN treportsettings b ON a.trepid = b.id INNER JOIN treportperiod c ON b.period = c.periodcode 
+     b.regulator as regulator, c.period_name as period, a.`status` as status, b.status as status_rep, b.link 
+     FROM tcalendar a INNER JOIN treport_settings b ON a.trepid = b.id INNER JOIN treport_period c ON b.period = c.period_code 
      WHERE a.datestamp < CURRENT_DATE() and a.status <>'printed';")->result_array();
      $data['content'] = $this->load->view('dashboard/reminder', $data, TRUE);
      $this->load->view('layout', $data);
@@ -85,9 +95,9 @@ class App extends CI_Controller {
 	{
 		$data['title'] 	 = 'Next';
 		$data['sourceAll'] = $this->db->query("SELECT a.`datestamp` as date ,a.`tcal_message` as name , 
-		b.regulator as regulator, c.periodname as period, a.`status` as status , b.status as status_rep, b.link
-		FROM tcalendar a INNER JOIN treportsettings b ON a.trepid = b.id INNER JOIN treportperiod c ON b.period = c.periodcode 
-		WHERE datestamp > CURRENT_DATE() AND MONTH(datestamp) = MONTH(CURRENT_DATE()) AND a.status <>'printed'")->result_array();
+		b.regulator as regulator, c.period_name as period, a.`status` as status , b.status as status_rep, b.link
+		FROM tcalendar a INNER JOIN treport_settings b ON a.trepid = b.id INNER JOIN treport_period c ON b.period = c.period_code 
+		WHERE a.datestamp > CURRENT_DATE() AND MONTH(a.datestamp) = MONTH(CURRENT_DATE()) AND a.status <>'printed'")->result_array();
 		$data['content'] = $this->load->view('dashboard/reminder', $data, TRUE);
 		$this->load->view('layout', $data);
 	}
@@ -95,9 +105,9 @@ class App extends CI_Controller {
 	{
 		$data['title'] 	 = 'Month';
 		$data['sourceAll'] = $this->db->query("SELECT a.`datestamp` as date ,a.`tcal_message` as name ,
-		b.regulator as regulator, c.periodname as period, a.`status` as status , b.status as status_rep, b.link
-		FROM tcalendar a INNER JOIN treportsettings b ON a.trepid = b.id INNER JOIN treportperiod c ON b.period = c.periodcode 
-		WHERE MONTH(datestamp) = MONTH(CURRENT_DATE())")->result_array();
+		b.regulator as regulator, c.period_name as period, a.`status` as status , b.status as status_rep, b.link
+		FROM tcalendar a INNER JOIN treport_settings b ON a.trepid = b.id INNER JOIN treport_period c ON b.period = c.period_code
+		WHERE MONTH(a.datestamp) = MONTH(CURRENT_DATE())")->result_array();
 		$data['content'] = $this->load->view('dashboard/reminder', $data, TRUE);
 		$this->load->view('layout', $data);
 	}
@@ -108,29 +118,30 @@ class App extends CI_Controller {
 		//AND a.status = 'verified'
 		//die(print_r($value));
 		if($value=="cetakg1"){
-			$test = $this->db->query("SELECT A.sendercity, A.receiptcountry, A.receiptname, 
-			A.sendername, COUNT(A.nominal) as trxvolume, SUM(A.nominal) as trxnominal FROM tcleandatasource1 A 
-			WHERE A.sendercountry = 'ID-indonesia' AND not A.receiptcountry='ID-Indonesia' 
-			GROUP BY A.sendercity, A.receiptcountry, A.receiptname, A.sendername");
+			$test = $this->db->query("SELECT A.sender_city, A.recept_country, A.recept_name, 
+			A.sender_name, COUNT(A.amount) as trxvolume, SUM(A.amount) as trxnominal FROM tltdbb_clean A 
+			WHERE A.sender_country = 'INDONESIA' AND not A.recept_country='INDONESIA' 
+			GROUP BY A.sender_city, A.recept_country, A.recept_name, A.sender_name");
 		}elseif($value == "cetakg2"){
-			$test = $this->db->query("SELECT A.sendercity, A.receiptcountry, A.receiptname, 
-			A.sendername, COUNT(A.nominal) as trxvolume, SUM(A.nominal) as trxnominal FROM tcleandatasource1 A 
-			WHERE not A.sendercountry = 'ID-indonesia' AND A.receiptcountry='ID-Indonesia' 
-			GROUP BY A.sendercity, A.receiptcountry, A.receiptname, A.sendername");
+			$test = $this->db->query("SELECT A.sender_city, A.recept_country, A.recept_name, 
+			A.sender_name, COUNT(A.amount) as trxvolume, SUM(A.amount) as trxnominal FROM tltdbb_clean A 
+			WHERE not A.sender_country = 'INDONESIA' AND A.recept_country='INDONESIA' 
+			GROUP BY A.sender_city, A.recept_country, A.recept_name, A.sender_name");
 		}elseif($value == "cetakg3"){
-			$test = $this->db->query("SELECT A.sendercity, A.receiptcountry, A.receiptname,
-			A.sendername, COUNT(A.nominal) as trxvolume, SUM(A.nominal) as trxnominal 
-			FROM tcleandatasource1 A 
-			WHERE A.sendercountry='ID-indonesia' AND A.receiptcountry='ID-Indonesia' 
-			GROUP BY A.sendercity, A.receiptcountry, A.receiptname, A.sendername");	
+			$test = $this->db->query("SELECT A.sender_city, A.recept_country, A.recept_name,
+			A.sender_name, COUNT(A.amount) as trxvolume, SUM(A.amount) as trxnominal 
+			FROM tltdbb_clean A 
+			WHERE A.sender_country='INDONESIA' AND A.recept_country='INDONESIA' 
+			GROUP BY A.sender_city, A.recept_country, A.recept_name, A.sender_name");	
 		}
 		$datestamp = date("Ymd");
 		$dateFile = "".$datestamp.".txt";
 		$dataContent = array();
 		$indeks=0;
 		$i = 1;
+		
 		foreach($test->result() as $dat){	
-			$dataContent[$i] = "".str_pad($dat->sendercity, 35)." ".str_pad($dat->receiptcountry, 20)." ".str_pad($dat->receiptname, 40)." ".str_pad($dat->sendername, 40)." ".str_pad($dat->trxvolume, 3)." ".str_pad($dat->trxnominal, 10).".\n";
+			$dataContent[$i] = "".str_pad($dat->sender_city, 35)." ".str_pad($dat->recept_country, 20)." ".str_pad($dat->recept_name, 40)." ".str_pad($dat->sender_name, 40)." ".str_pad($dat->trxvolume, 3)." ".str_pad($dat->trxnominal, 10).".\n";
 			$indeks++;
 			$i++;
 		}

@@ -6,16 +6,16 @@
 
 <section class="section">
   <div class="section-header">
-    <h1 id="section-header">123</h1>
+    <h1>Master Data</h1>
   </div>
 
   <div class="section-body">
-    <h2 class="section-title" id="section-title">Master </h2>
+    <h2 class="section-title">Ltdbb BI City</h2>
 
     <div class="row">
       <div class="col-12">
-      <div class="form-group">
-          <a href="#" onclick="add_master_all()" class="btn btn-icon icon-left btn-outline-primary"><i class="far fa-plus-square"></i> Add</a>
+        <div class="form-group">
+          <a href="#" onclick="add_ltdbb_bi_city()" class="btn btn-icon icon-left btn-outline-primary"><i class="far fa-plus-square"></i> Add</a>
         </div>
         <div class="card">
           <div class="card-body">
@@ -26,10 +26,10 @@
                     <th class="text-center" width="1px">
                       No
                     </th>
-                    <th>Action</th>
-                    <th>Code</th>
-                    <th>Description</th>
-                    <th>Status</th>
+                    <th style="width: 80px;">Action</th>
+                    <th>BI Code</th>
+                    <th>City</th>
+                    <th>BI City</th>
                   </tr>
                 </thead>
 
@@ -41,36 +41,34 @@
     </div>
   </div>
 </section>
+
 <!-- Modal -->
-<div class="modal fade" tabindex="-1" role="dialog" id="modal_master_all">
+<div class="modal fade" tabindex="-1" role="dialog" id="modal_ltdbb_bi_city">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header  bg-primary text-white">
-        <h5 class="modal-title">Add Role Model</h5>
+        <h5 class="modal-title"></h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <form class="form-horizontal" method="POST" id="form_master_all">
+        <form class="form-horizontal" method="POST" id="form_ltdbb_bi_city">
           <input type="hidden" name="id">
           <div class="form-body">
             <div class="form-group">
-              <label>Code</label>
-              <input type="text" class="form-control" name="code">
+              <label>BI Code</label>
+              <input type="text" class="form-control" name="bi_code">
               <span class="invalid-feedback"></span>
             </div>
             <div class="form-group">
-              <label>Description</label>
-              <textarea name="description" class="form-control"></textarea>
+              <label>city</label>
+              <input type="text" class="form-control" name="city">
               <span class="invalid-feedback"></span>
             </div>
             <div class="form-group">
-              <label>Status</label>
-              <select class="form-control" name="status">
-                <option value="active" id="status-active">Active</option>
-                <option value="no active" id="status-no-active" selected>No Active</option>
-              </select>
+              <label>BI city</label>
+              <input type="text" class="form-control" name="bi_city">
               <span class="invalid-feedback"></span>
             </div>
           </div>
@@ -84,16 +82,9 @@
   </div>
 </div>
 
-
-
 <script src="<?php echo base_url(); ?>assets/modules/jquery.min.js"></script>
 <script>
-  var table_query = "<?= $this->uri->segment(3) ?>";
-  var table_query_split = table_query.split('_');
-  $('#nav-master-data').addClass('dropdown active');
-  $('#nav-'+ table_query_split[2]).addClass('active');
-  $('#section-header').text(table_query_split[2].toUpperCase());
-  $('#section-title').text('Master ' +table_query_split[2]);
+  
 
   $("input").change(function(){
       $(this).removeClass('is-invalid');
@@ -109,11 +100,8 @@
         "serverSide": true,
         "order": [],
         "ajax": {
-          url: "<?php echo site_url('master/ajax_master_all')?>", // json datasource
-          type: "POST",
-          data : function(data){
-          data.table = table_query
-        },
+          url: "<?php echo site_url('master/ajax_list_ltdbb_bi_city')?>", // json datasource
+          type: "POST"
         },
         "columnDefs": [{
           "orderable": false
@@ -122,34 +110,30 @@
 
   });
 
-   /* -- Action -- */
-   function add_master_all() {
+  /* -- Action -- */
+  function add_ltdbb_bi_city() {
     save_method = 'add';
     $('.form-control').removeClass('is-invalid'); // clear error class
-    $('#form_master_all')[0].reset();
-    $('#modal_master_all').modal('show'); // show bootstrap modal
-    $('.modal-title').text('Add ' + table_query_split[2].toUpperCase()); // Set Title to Bootstrap modal title
+    $('#form_ltdbb_bi_city')[0].reset();
+    $('#modal_ltdbb_bi_city').modal('show'); // show bootstrap modal
+    $('.modal-title').text('Add ltdbb bi city'); // Set Title to Bootstrap modal title
   }
 
-  function get_master_all(id) {
+  function get_ltdbb_bi_city(id) {
     save_method = 'update';
-    $('#form_master_all')[0].reset();
+    $('#form_ltdbb_bi_city')[0].reset();
     $.ajax({
-      url: "<?php echo site_url('master/get_master_all')?>/" + id + '/' + table_query,
+      url: "<?php echo site_url('master/get_ltdbb_bi_city')?>/" + id,
       type: "GET",
       dataType: "JSON",
       success: function(data) {
         $('[name="id"]').val(data.id);
-        $('[name="code"]').val(data.code);
-        $('[name="description"]').val(data.description);
-        if(data.status == 'active'){
-          $('#status-active').attr('selected', true);
-        }else{
-          $('#status-no-active').attr('selected', true);
-        }
+        $('[name="bi_code"]').val(data.bi_code);
+        $('[name="city"]').val(data.city);
+        $('[name="bi_city"]').val(data.bi_city);
 
-        $('#modal_master_all').modal('show');
-        $('.modal-title').text('Update ' . table_query_split[2].toUpperCase());
+        $('#modal_ltdbb_bi_city').modal('show');
+        $('.modal-title').text('Update ltdbb bi city');
       },
       error: function(jqXHR, textStatus, errorThrown) {
         alert('Error get data from ajax');
@@ -160,15 +144,15 @@
   function save() {
     var url;
     if (save_method == 'add') {
-      url = "<?php echo site_url('master/add_master_all/')?>" + table_query;
+      url = "<?php echo site_url('master/add_ltdbb_bi_city')?>";
     } else {
-      url = "<?php echo site_url('master/update_master_all/')?>" + table_query;
+      url = "<?php echo site_url('master/update_ltdbb_bi_city')?>";
     }
     // ajax adding data to database
     $.ajax({
       url: url,
       type: "POST",
-      data: $('#form_master_all').serialize(),
+      data: $('#form_ltdbb_bi_city').serialize(),
       dataType: "JSON",
       success: function(data, response) {
         if(data.status) //if success close modal and reload ajax table
@@ -176,7 +160,7 @@
           $('#btnSave').text('save'); //change button text
           $('#btnSave').attr('disabled',false); //set button enable 
           //if success close modal and reload ajax table
-          $('#modal_master_all').modal('hide');
+          $('#modal_ltdbb_bi_city').modal('hide');
           iziToast.success({
             title: 'Success !',
             message: 'Data saved successfully ',
@@ -204,7 +188,7 @@
     });
   }
 
-  function delete_master_all(id) {
+  function delete_ltdbb_bi_city(id) {
     var event = "<?php echo $this->session->userdata('action'); ?>";
     console.log(event)
 		if(event.match(/delete/g)){
@@ -218,7 +202,7 @@
       .then((willDelete) => {
         if (willDelete) {
           $.ajax({
-            url: "<?php echo site_url('master/delete_master_all')?>/" + table_query + '/' + id,
+            url: "<?php echo site_url('master/delete_ltdbb_bi_city')?>/" + id,
             type: "post",
             complete: function() {
               swal("Your data has been deleted!", {

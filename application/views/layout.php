@@ -381,7 +381,7 @@
                 <li id="nav-ltdbb-bi-city"><a class="nav-link" href="<?php echo site_url('master/ltdbb_bi_city'); ?>"><i class="fas fa-align-center"></i> Ltdbb BI City</a></li>
                 <!-- <li id="nav-region"><a class="nav-link" href="<?php echo site_url('master/region'); ?>"><i class="fas fa-align-center"></i> Region</a></li> -->
                 <!-- <li id="nav-country"><a class="nav-link" href="<?php echo site_url('master/country'); ?>"><i class="fas fa-align-center"></i> Country</a></li> -->
-                <!-- <li id="nav-subtype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_01_subtype'); ?>"><i class="fas fa-align-center"></i> Subtype</a></li>
+                <li id="nav-subtype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_01_subtype'); ?>"><i class="fas fa-align-center"></i> Subtype</a></li>
                 <li id="nav-fundtype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_02_fundtype'); ?>"><i class="fas fa-align-center"></i> Fundtype</a></li>
                 <li id="nav-acctype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_03_acctype'); ?>"><i class="fas fa-align-center"></i> Acctype</a></li>
                 <li id="nav-accstat"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_04_accstat'); ?>"><i class="fas fa-align-center"></i> Accstat</a></li>
@@ -399,7 +399,7 @@
                 <li id="nav-personentity"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_16_personentity'); ?>"><i class="fas fa-align-center"></i> Personentity</a></li>
                 <li id="nav-partyrole"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_17_partyrole'); ?>"><i class="fas fa-align-center"></i> Partyrole</a></li>
                 <li id="nav-reportind"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_18_reportind'); ?>"><i class="fas fa-align-center"></i> Reportind</a></li>
-                <li id="nav-gender"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_19_gender'); ?>"><i class="fas fa-align-center"></i> Gender</a></li> -->
+                <li id="nav-gender"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_19_gender'); ?>"><i class="fas fa-align-center"></i> Gender</a></li>
               </ul>
             </li>
             <!-- <li id="nav-verify-data">
