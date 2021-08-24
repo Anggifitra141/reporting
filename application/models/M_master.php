@@ -15,19 +15,19 @@ class M_master extends CI_model {
 		parent::__construct();
 	}
 
-	var $table_region = 'tregioncode';
-  var $column_order_region = array('id');
-  var $column_search_region = array('ltdb','name');
-  var $order_region = array('id' => 'ASC');
+	var $table_ltdbb_bi_country = 'tltdbb_bi_country';
+  var $column_order_ltdbb_bi_country = array('id');
+  var $column_search_ltdbb_bi_country = array('ltdb','name');
+  var $order_ltdbb_bi_country = array('id' => 'DESC');
 
   
 
-  private function _get_datatables_query_region()
+  private function _get_datatables_query_ltdbb_bi_country()
   {
-	$this->db->from($this->table_region);
+	$this->db->from($this->table_ltdbb_bi_country);
       $i = 0;
 
-      foreach ($this->column_search_region as $row)
+      foreach ($this->column_search_ltdbb_bi_country as $row)
       {
           if($_POST['search']['value'])
           {
@@ -42,7 +42,7 @@ class M_master extends CI_model {
                   $this->db->or_like($row, $_POST['search']['value']);
               }
 
-              if(count($this->column_search_region) - 1 == $i)
+              if(count($this->column_search_ltdbb_bi_country) - 1 == $i)
                   $this->db->group_end();
           }
           $i++;
@@ -50,44 +50,61 @@ class M_master extends CI_model {
 
       if(isset($_POST['order']))
       {
-          $this->db->order_by($this->column_order_region[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+          $this->db->order_by($this->column_order_ltdbb_bi_country[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
       }
       else if(isset($this->order))
       {
-          $order_region = $this->order;
-          $this->db->order_by(key($order_region), $order_region[key($order)]);
+          $order_ltdbb_bi_country = $this->order;
+          $this->db->order_by(key($order_ltdbb_bi_country), $order_ltdbb_bi_country[key($order)]);
       }
   }
 
-  public function get_region($where="")
+  public function get_ltdbb_bi_country($id)
   {
-    if($where)
-    {
-      $this->db->where($where);
-    }
-    return $this->db->get($this->table_region);
+    $this->db->from($this->table_ltdbb_bi_country);
+    $this->db->where('id', $id);
+    $query = $this->db->get();
+    return $query->row();
   }
 
-	public function Get_All_region()
+	public function Get_All_ltdbb_bi_country()
 	{
-		$this->_get_datatables_query_region();
+		$this->_get_datatables_query_ltdbb_bi_country();
     if($_POST['length'] != -1)
     $this->db->limit($_POST['length'], $_POST['start']);
     $query = $this->db->get();
     return $query->result();
 	}
 
-  public function count_filtered_region()
+  public function count_filtered_ltdbb_bi_country()
   {
-    $this->_get_datatables_query_region();
+    $this->_get_datatables_query_ltdbb_bi_country();
     $query = $this->db->get();
     return $query->num_rows();
   }
 
-  public function count_all_region()
+  public function count_all_ltdbb_bi_country()
   {
-    $this->db->from($this->table_region);
+    $this->db->from($this->table_ltdbb_bi_country);
     return $this->db->count_all_results();
+  }
+
+  public function add_ltdbb_bi_country($data)
+  {
+    $this->db->insert($this->table_ltdbb_bi_country, $data);
+    return $this->db->insert_id();
+  }
+
+  public function update_ltdbb_bi_country($where, $data)
+  {
+    $this->db->update($this->table_ltdbb_bi_country, $data, $where);
+    return $this->db->affected_rows();
+  }
+
+  public function delete_ltdbb_bi_country($id)
+  {
+    $this->db->where('id', $id);
+    $this->db->delete($this->table_ltdbb_bi_country);
   }
 
   /// MASTER COUNTRY /// 

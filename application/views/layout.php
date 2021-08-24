@@ -343,6 +343,26 @@
                     <li id="nav-ltdbb-clean-g003"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G003'); ?>"><i class="fas fa-circle"></i> G003</a></li>
                   </ul>
                 </li>
+                <li id="nav-dana-float-clean"><a class="nav-link" href="<?php echo site_url('clean/ltkl'); ?>"><i class="fas fa-database"></i> LTKL</a></li>
+                <li id="nav-dana-float-clean"><a class="nav-link" href="<?php echo site_url('clean/qris'); ?>"><i class="fas fa-database"></i> QRIS</a></li>
+                <li id="nav-dana-float-clean"><a class="nav-link" href="<?php echo site_url('clean/dana_float'); ?>"><i class="fas fa-database"></i> Dana Float</a></li>
+                <li id="nav-dana-float-clean"><a class="nav-link" href="<?php echo site_url('clean/qris'); ?>"><i class="fas fa-database"></i> Payment Gateway</a></li>
+                <li id="nav-sipesat-clean"><a class="nav-link" href="<?php echo site_url('clean/si_pesat'); ?>"><i class="fas fa-database"></i> Si Pesat</a></li>
+                <li class="dropdown" id="nav-ltdbb-clean">
+                  <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-database"></i>LKPBU</a>
+                  <ul class="dropdown-menu">
+                    <li id="nav-ltdbb-clean-g001"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G001'); ?>"><i class="fas fa-circle"></i> Form 302</a></li>
+                    <li id="nav-ltdbb-clean-g002"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G002'); ?>"><i class="fas fa-circle"></i> Form 303</a></li>
+                    <li id="nav-ltdbb-clean-g003"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G003'); ?>"><i class="fas fa-circle"></i> Form 304</a></li>
+                    <li id="nav-ltdbb-clean-g003"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G003'); ?>"><i class="fas fa-circle"></i> Form 306</a></li>
+                    <li id="nav-ltdbb-clean-g003"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G003'); ?>"><i class="fas fa-circle"></i> Form 309</a></li>
+                    <li id="nav-ltdbb-clean-g003"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G003'); ?>"><i class="fas fa-circle"></i> Form 310</a></li>
+                    <li id="nav-ltdbb-clean-g003"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G003'); ?>"><i class="fas fa-circle"></i> Form 311</a></li>
+                    <li id="nav-ltdbb-clean-g003"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G003'); ?>"><i class="fas fa-circle"></i> Form 312</a></li>
+                    <li id="nav-ltdbb-clean-g003"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G003'); ?>"><i class="fas fa-circle"></i> Form 313</a></li>
+                  </ul>
+                </li>
+                <li id="nav-sipesat-clean"><a class="nav-link" href="<?php echo site_url('clean/si_pesat'); ?>"><i class="fas fa-database"></i> Gangguan Sistem</a></li>
               </ul>
             </li>
             <li class="dropdown" id="nav-utilities-source">
@@ -401,7 +421,9 @@
             <li class="dropdown" id="nav-master-data">
               <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-sliders-h"></i> <span>Master data</span></a>
               <ul class="dropdown-menu">
-                <li id="nav-region"><a class="nav-link" href="<?php echo site_url('role_model'); ?>"><i class="fas fa-align-center"></i> Role Model</a></li>
+                <li id="nav-role-model"><a class="nav-link" href="<?php echo site_url('role_model'); ?>"><i class="fas fa-align-center"></i> Role Model</a></li>
+                <li id="nav-ltdbb-bi-country"><a class="nav-link" href="<?php echo site_url('master/ltdbb_bi_country'); ?>"><i class="fas fa-align-center"></i> Ltdbb BI Country</a></li>
+                <li id="nav-ltdbb-bi-city"><a class="nav-link" href="<?php echo site_url('master/ltdbb_bi_city'); ?>"><i class="fas fa-align-center"></i> Ltdbb BI City</a></li>
                 <!-- <li id="nav-region"><a class="nav-link" href="<?php echo site_url('master/region'); ?>"><i class="fas fa-align-center"></i> Region</a></li> -->
                 <!-- <li id="nav-country"><a class="nav-link" href="<?php echo site_url('master/country'); ?>"><i class="fas fa-align-center"></i> Country</a></li> -->
                 <!-- <li id="nav-subtype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_01_subtype'); ?>"><i class="fas fa-align-center"></i> Subtype</a></li>

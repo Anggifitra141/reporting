@@ -6,11 +6,11 @@
 
 <section class="section">
   <div class="section-header">
-    <h1>Data Si Pesat</h1>
+    <h1>Data Clean</h1>
   </div>
 
   <div class="section-body">
-    <h2 class="section-title">Manage Data Si Pesat</h2>
+    <h2 class="section-title">Manage Data Dana Float</h2>
     
     <div class="row">
       <div class="col-12">
@@ -26,13 +26,13 @@
                     <th class="text-center" width="1px">
                       No
                     </th>
-                    <th>Nama Nasabah</th>
-                    <th>Tempat Lahir</th>
-                    <th>Tanggal Lahir</th>
-                    <th>Alamat</th>
-                    <th>No KTP</th>
-                    <th>No Identitas Lain</th>
-                    <th>No Cif</th>
+                    <th>Wallet Code</th>
+                    <th>Trx Code</th>
+                    <th>Trx ID</th>
+                    <th>Trx Type</th>
+                    <th>Trx Value</th>
+                    <th>Description</th>
+                    <th>Status</th>
                   </tr>
                 </thead>
 
@@ -50,7 +50,7 @@
 <script>
 
 var base_url = "<?= base_url() ?>";
-$('#nav-data-source').addClass('dropdown active');
+$('#nav-data-clean').addClass('dropdown active');
 $('#nav-raw-data').addClass('active');
 
   $("input").change(function(){
@@ -67,7 +67,7 @@ $('#nav-raw-data').addClass('active');
       "serverSide": true,
       "order": [],
       "ajax": {
-        url: "<?php echo site_url('source/ajax_list_si_pesat')?>", // json datasource
+        url: "<?php echo site_url('clean/ajax_list_dana_float')?>", // json dataclean
         type: "POST"
       },
       "columnDefs": [{
@@ -101,37 +101,7 @@ $('#nav-raw-data').addClass('active');
   )
 };
 
-  $("#swal-6").click(function() {
-  swal({
-      title: 'Are you sure?',
-      text: 'Do you want to cleansing this data ?',
-      icon: 'warning',
-      timerProgressBar: true,
-      buttons: true,
-      dangerMode: true,
-    })
-    .then((willDelete) => {
-      if (willDelete) {
-        loading();
-        $.ajax({
-          url : base_url + 'source/ajax_list_si_pesat',
-          type : 'GET',
-          dataType : 'JSON',
-          success : function(response){
-            console.log('hi')
-            swal({
-              title: 'Success',
-              text: response.length + ' data cleaned',
-              icon: 'warning',
-              icon: 'success',
-            });
-          }
-        })
-      } else {
-      swal('Cleansing Data Canceled');
-      }
-    });
-});
+ 
 
 
 function loading()

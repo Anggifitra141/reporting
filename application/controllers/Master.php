@@ -22,65 +22,117 @@ class Master extends CI_Controller {
     }
 	}
 
-	public function region()
+	public function ltdbb_bi_country()
 	{
     $data= [];
-    $data['content'] = $this->load->view('master/region', $data, TRUE);
+    $data['content'] = $this->load->view('master/ltdbb_bi_country', $data, TRUE);
 		$this->load->view('layout', $data);
 	}
 
-	public function ajax_list_region()
+	public function ajax_list_ltdbb_bi_country()
   {
-    $list = $this->M_master->Get_All_region();
+    $list = $this->M_master->Get_All_ltdbb_bi_country();
     $data = array();
     $no = 1;
     foreach ($list as $item) {
         $row = array();
         $row[] = $no++;
-				$row[] = $item->ltdb;
-        $row[] = $item->name;
-        $row[] = $item->alto;
+        $row[] = '<a href="#" onclick="get_ltdbb_bi_country('.$item->id.')" class="btn btn-icon btn-primary btn-sm"><i class="far fa-edit"></i></a>
+                  <a href="#" onclick="delete_ltdbb_bi_country('.$item->id.')" class="btn btn-icon btn-danger btn-sm"><i class="fas fa-trash"></i></a>';
+				$row[] = $item->bi_code;
+        $row[] = $item->country;
+        $row[] = $item->bi_country;
         $data[] = $row;
     }
 
     $output = array(
                     "draw" => $_POST['draw'],
-                    "recordsTotal" => $this->M_master->count_all_region(),
-                    "recordsFiltered" => $this->M_master->count_filtered_region(),
+                    "recordsTotal" => $this->M_master->count_all_ltdbb_bi_country(),
+                    "recordsFiltered" => $this->M_master->count_filtered_ltdbb_bi_country(),
                     "data" => $data,
             );
     echo json_encode($output);
   }
-
-  public function country()
-	{
-    $data= [];
-    $data['content'] = $this->load->view('master/country', $data, TRUE);
-		$this->load->view('layout', $data);
-	}
-
-	public function ajax_list_country()
+  public function get_ltdbb_bi_country($id)
   {
-    $list = $this->M_master->Get_All_country();
-    $data = array();
-    $no = 1;
-    foreach ($list as $item) {
-        $row = array();
-        $row[] = $no++;
-				$row[] = $item->code;
-        $row[] = $item->name;
-        $row[] = $item->description;
-        $data[] = $row;
-    }
-
-    $output = array(
-                    "draw" => $_POST['draw'],
-                    "recordsTotal" => $this->M_master->count_all_country(),
-                    "recordsFiltered" => $this->M_master->count_filtered_country(),
-                    "data" => $data,
-            );
-    echo json_encode($output);
+      $data = $this->M_master->get_ltdbb_bi_country($id);
+      echo json_encode($data);
   }
+
+  public function add_ltdbb_bi_country()
+  {
+    $ACT = 'add';
+    $this->_validate($ACT);
+    $data = array(
+      'bi_code'            => $this->input->post('bi_code'),
+      'country'            => $this->input->post('country'),
+      'bi_country'         => $this->input->post('bi_country')
+    );
+    $this->M_master->add_ltdbb_bi_country($data);
+    echo json_encode(array("status" => TRUE ));
+  }
+
+  public function update_ltdbb_bi_country()
+  {
+    $ACT = 'update';
+    $this->_validate($ACT);
+    $data = array(
+      'bi_code'            => $this->input->post('bi_code'),
+      'country'            => $this->input->post('country'),
+      'bi_country'         => $this->input->post('bi_country')
+    );
+     $this->M_master->update_ltdbb_bi_country(array('id' => $this->input->post('id')), $data);
+     echo json_encode(array("status" => TRUE ));
+  }
+
+  public function delete_ltdbb_bi_country($id)
+  {
+    $this->M_master->delete_ltdbb_bi_country($id);
+    echo json_encode(array("status" => TRUE));
+  }
+
+  private function _validate($event)
+  {
+    $data = array();
+    $data['error_string'] = array();
+    $data['inputerror'] = array();
+    $data['status'] = TRUE;
+    $actions = explode('#', $this->session->userdata('action'));
+    $data['action'] = $actions;
+
+    if(!in_array($event, $actions))
+    {
+        $data['inputerror'][] = 'sess_act';
+        $data['error_string'][] = 'Error! You have no right to this action.';
+        $data['status'] = FALSE;
+    }
+    if($this->input->post('bi_code') == '')
+    {
+        $data['inputerror'][] = 'bi_code';
+        $data['error_string'][] = 'BI code is required';
+        $data['status'] = FALSE;
+    }
+    if($this->input->post('country') == '')
+    {
+        $data['inputerror'][] = 'country';
+        $data['error_string'][] = 'country is required';
+        $data['status'] = FALSE;
+    }
+    if($this->input->post('bi_country') == '')
+    {
+        $data['inputerror'][] = 'bi_country';
+        $data['error_string'][] = 'bi_country is required';
+        $data['status'] = FALSE;
+    }
+   
+    if($data['status'] === FALSE)
+    {
+        echo json_encode($data);
+        exit();
+    }
+  }
+
+
 
 
 

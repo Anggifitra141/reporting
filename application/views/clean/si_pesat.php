@@ -6,7 +6,7 @@
 
 <section class="section">
   <div class="section-header">
-    <h1>Data Si Pesat</h1>
+    <h1>Data Clean</h1>
   </div>
 
   <div class="section-body">
@@ -50,7 +50,7 @@
 <script>
 
 var base_url = "<?= base_url() ?>";
-$('#nav-data-source').addClass('dropdown active');
+$('#nav-data-clean').addClass('dropdown active');
 $('#nav-raw-data').addClass('active');
 
   $("input").change(function(){
@@ -67,7 +67,7 @@ $('#nav-raw-data').addClass('active');
       "serverSide": true,
       "order": [],
       "ajax": {
-        url: "<?php echo site_url('source/ajax_list_si_pesat')?>", // json datasource
+        url: "<?php echo site_url('clean/ajax_list_si_pesat')?>", // json dataclean
         type: "POST"
       },
       "columnDefs": [{
@@ -114,7 +114,7 @@ $('#nav-raw-data').addClass('active');
       if (willDelete) {
         loading();
         $.ajax({
-          url : base_url + 'source/ajax_list_si_pesat',
+          url : base_url + 'clean/ajax_list_si_pesat',
           type : 'GET',
           dataType : 'JSON',
           success : function(response){
