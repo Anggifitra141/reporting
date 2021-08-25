@@ -163,7 +163,7 @@ class Report extends CI_Controller {
           $no++;
         } else if ($type_report == 'G002') {
           $tgl_code = date('Ymd').substr($report_setting->code, 1);
-          $format_code = $report_setting->header2.'M'.date('Ymd').$report_setting->code.str_pad('123', 9, "0", STR_PAD_LEFT);
+          $format_code = $report_setting->header2.'M'.date('Ymd').$report_setting->code.str_pad(count($list), 9, "0", STR_PAD_LEFT);
           $objPHPExcel->setActiveSheetIndex(0)
 
           ->setCellValue('C'. 2, $report_setting->header2)
@@ -217,30 +217,16 @@ class Report extends CI_Controller {
       
     }
 
-    // Download (Excel2007)
-    //$writer = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-    // $writer = new Xlsx($spreadsheet);
-    //header('Content-Type: application/vnd.ms-excel');
-    //header('Content-Disposition: attachment;filename="Laporan LTDBB GOO3' . date('d-m-Y') . '.xlsx"');
-    //header('Cache-Control: max-age=0');
-    //$writer->save('php://output');
-    // Download (Excel2007)
-    ob_end_clean();
-    header('Last-Modified:' . gmdate("D, d M Y H:i:s") . 'GMT');
-    header('Chace-Control: no-store, no-cache, must-revalation');
-    header('Chace-Control: post-check=0, pre-check=0', FALSE);
-    header('Pragma: no-cache');
+    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
     header('Content-Type: application/vnd.ms-excel');
-    header('Content-Disposition: attachment;filename="Data_BNI_' . date('d_m_Y') . '.xls"');
-    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+    header('Content-Disposition: attachment;filename="Laporan LTDBB ' . $report_setting->code . ' - ' . date('Y-m-d') . '.xlsx"');
+    header('Cache-Control: max-age=0');
     $objWriter->save('php://output');
+
     set_time_limit(0);
     ini_set('memory_limit', '1G');
     ob_end_clean();
     exit;
-
-
-    echo json_encode($data);
 
   }
 
