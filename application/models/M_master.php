@@ -219,7 +219,7 @@ class M_master extends CI_model {
       else if(isset($this->order_country))
       {
           $order_country = $this->order_country;
-          $this->db->order_by(key($order_country), $order_country[key($order)]);
+          $this->db->order_by(key($order_country), $order_country[key($order_country)]);
       }
   }
 
@@ -329,17 +329,22 @@ class M_master extends CI_model {
   public function add_master_all($table, $data)
   {
     $this->db->insert($table, $data);
+    trx_log($this->session->userdata('id'), $table, "Add", "", "Add code ".$data['code']." to table ".$table."");
     return $this->db->insert_id();
+    
   }
   public function update_master_all($table, $where, $data)
   {
     $this->db->update($table, $data, $where);
+
+    trx_log($this->session->userdata('id'), $table, "Update ", $where, "Update ".$data['code']." table ".$table."");
     return $this->db->affected_rows();
   }
   public function delete_master_all($table, $id)
   {
     $this->db->where('id', $id);
     $this->db->delete($table);
+    trx_log($this->session->userdata('id'), $table, "Delete", $id, "Delete from record id=".$id." table ".$table."");
   }
 
 }

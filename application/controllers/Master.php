@@ -308,7 +308,8 @@ class Master extends CI_Controller {
       'status'         => $this->input->post('status')
     );
     $this->M_master->add_master_all($table, $data);
-    echo json_encode(array("status" => TRUE ));
+    //trx_log($this->session->userdata('id'), $table, "ADD", "", "ADD");
+    echo json_encode(array("status" => TRUE));
   }
 
   public function update_master_all($table)
