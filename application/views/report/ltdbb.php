@@ -31,7 +31,7 @@
                 <button class="btn btn-icon btn-outline-warning btn-block" style="margin-top:27px;" id="btn-view"><i class="fas fa-eye"></i> View </button>
               </div>
               <div class="col-md-2">
-                <button class="btn btn-icon btn-outline-success btn-block" style="margin-top:27px;" id="btn-download-excel"><i class="fas fa-file-excel"></i> Download Excel </button>
+                <a href="" target="_blank" class="btn btn-icon btn-outline-success btn-block" style="margin-top:27px;" id="btn-download-excel"><i class="fas fa-file-excel"></i> Download Excel </a>
               </div>
               <div class="col-md-2">
                 <button class="btn btn-icon btn-outline-primary btn-block" style="margin-top:27px;" id="btn-download-txt"><i class="fas fa-file-alt"></i> Download Txt </button>
@@ -99,7 +99,7 @@
     var daterange = $('[name="daterange"]').val();
 
     if (type_report && daterange) {
-      
+
       //
       var table = $('#table-data').DataTable({
         "deferRender": true,
@@ -113,18 +113,18 @@
           type: "POST",
           data: function(data) {
             data.type_report = type_report,
-            data.daterange = daterange
+              data.daterange = daterange
           }
         },
         "columnDefs": [{
           "orderable": false
         }],
-        
+
 
       });
 
       $('#result-data').slideDown('slow');
-      
+      $('#btn-download-excel').attr('href', base_url + 'report/download_excel_ltdbb?report_type=' + type_report + '&daterange=' + daterange);
 
     } else {
       alert('Fields Is Required');
@@ -135,9 +135,31 @@
 
     // }, 1000)
 
-
-
   })
+
+  $('#btn-download-excel').click(function() {
+    var type_report = "<?= $this->uri->segment(3); ?>";
+    var daterange = $('[name="daterange"]').val();
+
+    if (type_report && daterange) {
+      $.ajax({
+        url: base_url + 'report/download_excel_ltdbb',
+        type: 'POST',
+        dataType: 'JSON',
+        data: {
+          type_report: type_report,
+          daterange: daterange
+        },
+        success: function(response) {
+          console.log(response);
+        }
+      })
+    } else {
+      alert('Fields Is Required');
+    }
+  });
+
+
 
   function loading() {
     swal({

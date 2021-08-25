@@ -16,7 +16,7 @@ class M_report extends CI_model {
 	}
 
   // LTDBB
-  var $tltdbb_clean = 'tltdbb_clean';
+  var $tltdbb_clean = 'tltdbb_source';
   var $column_order_tltdbb = array('trx_date', 'sender_name', 'recept_name', 'trx_amount', '','','','');
   var $column_search_tltdbb = array('trx_date', 'sender_country', 'sender_city', 'recept_country', 'recept_city', 'sender_name', 'recept_name', 'trx_amount');
   var $order_tltdbb = array('id' => 'desc');
@@ -27,7 +27,7 @@ class M_report extends CI_model {
     $end_date =  date('Y-m-d', strtotime(substr($this->input->post('daterange'), 13, 23)));
     $type_report = $this->input->post('type_report');
 
-    $this->db->where('status', "cleansing");
+    $this->db->where('status', "new");
     $this->db->where('datestamp >=', $start_date);
     $this->db->where('datestamp <=', $end_date);
 

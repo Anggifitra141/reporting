@@ -106,10 +106,34 @@ class Report extends CI_Controller {
   
   public function download_excel_ltdbb()
   {
-    $type_report = $this->input->post('type_report');
+    
 
-    $list = $this->M_report->get_datatables_ltdbb();
+    include APPPATH . 'third_party/PHPExcel/PHPExcel.php';
+    // $type_report = $this->input->post('type_report');
+
+    $start_date = date('Y-m-d', strtotime(substr($_GET['daterange'], 0, 10)));
+    $end_date =  date('Y-m-d', strtotime(substr($_GET['daterange'], 13, 23)));
+    $type_report = $_GET['report_type'];
+
+    $this->db->where('status', "new");
+    $this->db->where('datestamp >=', $start_date);
+    $this->db->where('datestamp <=', $end_date);
+
+    if ($type_report == 'G001') {
+      $this->db->where_in('sender_country', array('INDONESIA', '86'));
+      $this->db->where_not_in('recept_country', array('INDONESIA', '86'));
+    } else if ($type_report == 'G002') {
+      $this->db->where_not_in('sender_country', array('INDONESIA', '86'));
+      $this->db->where_in('recept_country', array('INDONESIA', '86'));
+    } else if ($type_report == 'G003') {
+      $this->db->where_in('sender_country', array('INDONESIA', '86'));
+      $this->db->where_in('recept_country', array('INDONESIA', '86'));
+    }
+    $list = $this->db->get('tltdbb_source')->result();
+
+
     $report_setting = $this->M_report->get_report_setting($type_report);
+    //$recordsFiltered = $this->M_report->count_filtered_ltdbb();
 
     $data = array();
     $no = 1;
@@ -119,13 +143,12 @@ class Report extends CI_Controller {
     if ($type_report == 'G001') {
       $objPHPExcel = PHPExcel_IOFactory::load("./assets/template-excel/template-ltdbb-g001.xlsx");
     }else if ($type_report == 'G002'){
-      $objPHPExcel = PHPExcel_IOFactory::load("./assets/template-excel/template-ltdbb-g003.xlsx");
+      $objPHPExcel = PHPExcel_IOFactory::load("./assets/template-excel/template-ltdbb-g002.xlsx");
     }else{
       $objPHPExcel = PHPExcel_IOFactory::load("./assets/template-excel/template-ltdbb-g003.xlsx");
     } 
 
     foreach ($list as $row) {
-      foreach($report_setting as $row2){
         if ($type_report == 'G001') {
           $objPHPExcel->setActiveSheetIndex(0)
           ->setCellValue('A' . $baris, $no)
@@ -139,41 +162,85 @@ class Report extends CI_Controller {
           $baris++;
           $no++;
         } else if ($type_report == 'G002') {
+          $tgl_code = date('Ymd').substr($report_setting->code, 1);
+          $format_code = $report_setting->header2.'M'.date('Ymd').$report_setting->code.str_pad('123', 9, "0", STR_PAD_LEFT);
           $objPHPExcel->setActiveSheetIndex(0)
-          ->setCellValue('A' . $baris, $no)
-          ->setCellValue('B' . $baris, $row->sender_country)
-          ->setCellValue('C' . $baris, $row->recept_city)
-          ->setCellValue('D' . $baris, $row->recept_name)
-          ->setCellValue('E' . $baris, $row->sender_name)
-          ->setCellValue('F' . $baris, "1")
-          ->setCellValue('G' . $baris, $row->trx_amount)
 
-          ->setCellValue('C'. 2, $row2->header2)
+          ->setCellValue('C'. 2, $report_setting->header2)
           ->setCellValue('C'. 4, date('Y'))
-          ->setCellValue('D'. 4, date('M'));
+          ->setCellValue('D'. 4, date('M'))
+          ->setCellValue('J'. 3, $report_setting->code)
+          ->setCellValue('J'. 4, '')
+          ->setCellValue('L'. 3, $tgl_code)
+          ->setCellValue('L'. 4, $format_code)
 
+          ->setCellValue('A'.$baris, $no)
+          ->setCellValue('B'.$baris, $row->sender_country)
+          ->setCellValue('C'.$baris, $row->recept_city)
+          ->setCellValue('D'.$baris, $row->recept_name)
+          ->setCellValue('E'.$baris, $row->sender_name)
+          ->setCellValue('F'.$baris, "1")
+          ->setCellValue('G'.$baris, $row->trx_amount);
+
+         
           $baris++;
           $no++;
 
           $baris++;
           $no++;
         } else {
+        $tgl_code = date('Ym') . substr($report_setting->code, 1);
+        $report_code = $report_setting->header2.'M'.date('Ymd').$report_setting->code.str_pad(count($list), 9, "0", STR_PAD_LEFT);
           $objPHPExcel->setActiveSheetIndex(0)
-          ->setCellValue('A' . $baris, $no)
-          ->setCellValue('B' . $baris, $row->sender_country)
-          ->setCellValue('C' . $baris, $row->recept_city)
-          ->setCellValue('D' . $baris, $row->recept_name)
-          ->setCellValue('E' . $baris, $row->sender_name)
-          ->setCellValue('F' . $baris, "1")
-          ->setCellValue('G' . $baris, $row->trx_amount)
-          ->setCellValue('H' . $baris, "3-Non Usaha – Lainnya");
+          
+          ->setCellValue('C' . 2, $report_setting->header2)
+          ->setCellValue('C' . 4, date('Y'))
+          ->setCellValue('D' . 4, date('m'))
+          ->setCellValue('K' . 2, $report_setting->code)
+          ->setCellValue('K' . 3, count($list)) //jumlah record
+          ->setCellValue('M' . 2,  $tgl_code) // tglcode
+          ->setCellValue('M' . 3, $report_code) // reportcode
+
+          ->setCellValue('A'.$baris, $no)
+          ->setCellValue('B'.$baris, $row->sender_country)
+          ->setCellValue('C'.$baris, $row->recept_city)
+          ->setCellValue('D'.$baris, $row->recept_name)
+          ->setCellValue('E'.$baris, $row->sender_name)
+          ->setCellValue('F'.$baris, "1")
+          ->setCellValue('G'.$baris, $row->trx_amount)
+          ->setCellValue('H'.$baris, "3-Non Usaha – Lainnya");
           $baris++;
           $no++;
         }
-      }
+        $data[] = $row;
+    
       
     }
- 
+
+    // Download (Excel2007)
+    //$writer = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+    // $writer = new Xlsx($spreadsheet);
+    //header('Content-Type: application/vnd.ms-excel');
+    //header('Content-Disposition: attachment;filename="Laporan LTDBB GOO3' . date('d-m-Y') . '.xlsx"');
+    //header('Cache-Control: max-age=0');
+    //$writer->save('php://output');
+    // Download (Excel2007)
+    ob_end_clean();
+    header('Last-Modified:' . gmdate("D, d M Y H:i:s") . 'GMT');
+    header('Chace-Control: no-store, no-cache, must-revalation');
+    header('Chace-Control: post-check=0, pre-check=0', FALSE);
+    header('Pragma: no-cache');
+    header('Content-Type: application/vnd.ms-excel');
+    header('Content-Disposition: attachment;filename="Data_BNI_' . date('d_m_Y') . '.xls"');
+    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+    $objWriter->save('php://output');
+    set_time_limit(0);
+    ini_set('memory_limit', '1G');
+    ob_end_clean();
+    exit;
+
+
+    echo json_encode($data);
 
   }
 
