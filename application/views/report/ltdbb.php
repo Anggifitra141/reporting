@@ -40,12 +40,19 @@
 
             <div class="row mt-4" id="result-data" style="display: none;">
               <div class="col-md-12">
+              <div class="row">
+              <div class="col-md-6 mb-3">
+                <a href="javascript:void(0)" onclick="rollback_selected()" class="btn btn-warning"><i class="fas fa-redo-alt"></i> Rollback Selected</a>
+                <a href="javascript:void(0)" onclick="delete_selected()" class="btn btn-danger"><i class="fas fa-times"></i> Delete Selected</a>
+              </div>
+            </div>
                 <table class="table table-striped" id="table-data" style="width: 100%;">
                   <thead>
                     <tr>
-                      <th class="text-center" width="1px">
-                        No
+                      <th>
+                        <input type="checkbox" id="check-all" name="check_all">
                       </th>
+                      <th>Action</th>
                       <?php foreach ($header['header'] as $key) : ?>
                         <th><?= $key; ?></th>
                       <?php endforeach; ?>
@@ -70,7 +77,120 @@
       </div>
     </div>
 </section>
+<div class="modal fade" tabindex="-1" role="dialog" id="modal_modify_ltdbb">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header  bg-primary text-white">
+        <b class="modal-title">Sender Country </b>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form class="form-horizontal"  id="form" method="POST" >
+      <div class="modal-body">
+        <div class="alert alert-info">
+          <i class="fas fa-info-circle"></i> Verify manual data on your system
+        </div>
+        
+          <div class="form-body">
 
+            <input type="hidden" name="id" value=""> 
+              <div class="row">
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="lastName">Negara Asal Pengiriman</label>
+                    <select name="sender_country" class="form-control" id="">
+                        <?php foreach($country as $key) : ?>
+                          <option value="<?= $key->country ?>"><?= $key->country ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <span class="text-danger"></span>
+                  </div>
+                  <div class="form-group">
+                    <label for="">Kota/Kabupaten Asal Pengiriman</label>
+                    <select name="sender_city" class="form-control" id="">
+                      <?php foreach($city as $key) : ?>
+                          <option value="<?= $key->bi_code .' - ' . $key->city ?>"><?= $key->bi_code .' - ' . $key->city ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <span class="text-danger"></span>
+                  </div>
+                  <div class="form-group">
+                    <label for="firstName">Nama Pengirim</label>
+                    <input class="form-control" name="sender_name" placeholder="" value="" type="text">
+                  </div>
+                  <div class="form-group">
+                    <label for="firstName">Telepon Pengirim</label>
+                    <input class="form-control" name="sender_phone" placeholder="" value="" type="text">
+                    <span class="text-danger"></span>
+                  </div>
+                  <div class="form-group">
+                    <label for="firstName">Nominal</label>
+                    <input class="form-control" name="amount" placeholder="" value="" type="text" readonly>
+                    <span class="text-danger"></span>
+                  </div>
+											          
+                </div>
+                <div class="col-6">
+                  <div class="form-group">
+                    <label for="lastName">Negara Penerima</label>
+                    <select name="recept_country" class="form-control" id="">
+                    <?php foreach($country as $key) : ?>
+                          <option value="<?= $key->country ?>"><?= $key->country ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <span class="text-danger"></span>
+                  </div>
+                  <div class="form-group">
+                    <label for="firstName">Kota/Kabupaten Asal Pengiriman</label>
+                    <select name="recept_city" class="form-control" id="">
+                    <?php foreach($city as $key) : ?>
+                          <option value="<?= $key->bi_code .' - ' . $key->city ?>"><?= $key->bi_code .' - ' . $key->city ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <span class="text-danger"></span>
+                  </div>
+                  <div class="form-group">
+                    <label for="lastName">Nama Penerima</label>
+                    <input class="form-control" name="recept_name" placeholder="" value="" type="text">
+                  </div>
+                  <div class="form-group">
+                    <label for="lastName">Telepon Penerima</label>
+                    <input class="form-control" name="recept_phone" placeholder="" value="" type="text">
+                    <span class="text-danger"></span>
+                  </div>
+                  <div class="form-group">
+                    <label for="lastName">Status</label>
+                    <select name="status" class="form-control" required>
+                      <option value="verified" >Verified</option>
+                      <option value="unverified" >Unverified</option>
+                    </select>
+                    <span class="text-danger"></span>
+                  </div>
+                </div>
+                <div class="col-md-12 form-group">
+                  <label for="lastName">Description</label>
+                  <textarea class="form-control" name="description" type="text" readonly></textarea>
+                  <span class="text-danger"></span>
+                </div>
+              </div>
+                      
+
+
+
+
+            
+          </div>
+        
+      </div>
+      <div class="modal-footer bg-whitesmoke br">
+        <button type="button" class="btn btn-secondary float-left" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-outline-primary float-right">Save</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
 
 <script src="<?php echo base_url(); ?>assets/modules/jquery.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
@@ -83,7 +203,7 @@
   var base_url = "<?= base_url() ?>";
   $('#nav-sub-report').addClass('dropdown active');
   $('#nav-report').addClass('active');
-
+  var table;
 
   $("input").change(function() {
     $(this).removeClass('is-invalid');
@@ -101,8 +221,9 @@
     if (type_report && daterange) {
 
       //
-      var table = $('#table-data').DataTable({
+       table = $('#table-data').DataTable({
         "deferRender": true,
+        "ordering": false,
         "scrollCollapse": true,
         "scrollX": true,
         "processing": true,
@@ -124,6 +245,9 @@
       });
 
       $('#result-data').slideDown('slow');
+      $("#check-all").click(function () {
+        $(".data-check").prop('checked', $(this).prop('checked'));
+    });
       $('#btn-download-excel').attr('href', base_url + 'report/download_excel_ltdbb?report_type=' + type_report + '&daterange=' + daterange);
 
     } else {
@@ -158,6 +282,161 @@
       alert('Fields Is Required');
     }
   });
+  function reload_table()
+  {
+    table.ajax.reload(null,false);
+  }
+  
+
+  function delete_selected()
+  {
+    var list_id = [];
+    $(".data-check:checked").each(function() {
+      list_id.push(this.value);
+    });
+    if(list_id.length > 0)
+    {
+      swal({
+        title: 'Are you sure?',
+        text: 'Are you sure delete '+list_id.length+' data?',
+        icon: 'warning',
+        timerProgressBar: true,
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+          loading();
+          $.ajax({
+            url: "<?php echo site_url('clean/ajax_bulk_delete_ltdbb')?>",
+            data: {id:list_id},
+            type: 'POST',
+            dataType : 'JSON',
+            success : function(response){
+              reload_table();
+              swal({
+                title: 'Success',
+                text: list_id.length + ' Deleted' ,
+                icon: 'warning',
+                icon: 'success',
+              });
+            }
+          })
+        } else {
+          swal('Delete Data Canceled');
+        }
+      });
+    }
+    else
+    {
+      swal('no data selected');
+    }
+  }
+  function rollback_selected()
+  {
+    var list_id = [];
+    $(".data-check:checked").each(function() {
+      list_id.push(this.value);
+    });
+    if(list_id.length > 0)
+    {
+      swal({
+        title: 'Are you sure?',
+        text: 'Are you sure rollback this '+list_id.length+' data?',
+        icon: 'warning',
+        timerProgressBar: true,
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+          loading();
+          $.ajax({
+            url: "<?php echo site_url('clean/ajax_bulk_rollback_ltdbb')?>",
+            data: {id:list_id},
+            type: 'POST',
+            dataType : 'JSON',
+            success : function(response){
+              reload_table();
+              swal({
+                title: 'Success',
+                text: response.rollback + ' data rollback' ,
+                icon: 'warning',
+                icon: 'success',
+              });
+            }
+          })
+        } else {
+          swal('Rollback Data Canceled');
+        }
+      });
+    }else{
+      swal('No data selected');
+    }
+  }
+  function delete_row(id)
+  {
+    swal({
+        title: 'Are you sure?',
+        text: 'Are you sure delete this data?',
+        icon: 'warning',
+        timerProgressBar: true,
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+          loading();
+          $.ajax({
+            url: "<?php echo site_url('clean/ajax_delete_ltdbb')?>",
+            data: {id:id},
+            type: 'POST',
+            dataType : 'JSON',
+            success : function(response){
+              reload_table();
+              swal({
+                title: 'Success',
+                text:  'Deleted Successfuly' ,
+                icon: 'warning',
+                icon: 'success',
+              });
+            }
+          })
+        } else {
+          swal('Deleted Data Canceled');
+        }
+      });
+  }
+
+  function edit_ltdbb(id)
+  {
+    $('#form')[0].reset();
+    $.ajax({
+      url: "<?php echo site_url('clean/get_ltdbb_by_id')?>/" + id,
+      type: "GET",
+      dataType: "JSON",
+      success: function(data) {
+        $('[name="id"]').val(data.id);
+        $('[name="sender_country"]').val(data.sender_country);
+        $('[name="sender_city"]').val(data.sender_city);
+        $('[name="sender_name"]').val(data.sender_name);
+        $('[name="sender_phone"]').val(data.sender_phone);
+        $('[name="amount"]').val(data.amount);
+        $('[name="recept_country"]').val(data.recept_country);
+        $('[name="recept_city"]').val(data.recept_city);
+        $('[name="recept_name"]').val(data.recept_name);
+        $('[name="recept_phone"]').val(data.recept_phone);
+        $('[name="status"]').val(data.status);
+        $('[name="description"]').val(data.description);
+
+        $('#modal_modify_ltdbb').modal('show');
+        $('.modal-title').text('Update Ltdbb');
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        alert('Error get data from ajax');
+      }
+    });
+  }
 
 
 

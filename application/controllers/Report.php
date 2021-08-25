@@ -33,6 +33,8 @@ class Report extends CI_Controller {
     }
     $cek_type_report = $this->_get_header($type);
     $data = [];
+    $data['country'] = $this->db->get('tltdbb_bi_country')->result();
+     $data['city'] = $this->db->get('tltdbb_bi_city')->result();
     $data['header'] = $cek_type_report;
     $data['content'] = $this->load->view('report/ltdbb', $data, TRUE);
     $this->load->view('layout', $data);
@@ -64,14 +66,18 @@ class Report extends CI_Controller {
     foreach ($list as $raw_data) {
       $no++;
       $row = array();
-      $row[] = $no;
+      $row[] = '<input type="checkbox" class="data-check" value="'.$raw_data->id.'">';
+			$row[] = '
+				<a href="javascript:void(0)" onClick="edit_ltdbb('.$raw_data->id.')"  class="btn btn-primary btn-sm"> <i class="far fa-edit"></i></a>
+				<a href="javascript:void(0)" onclick="delete_row('.$raw_data->id.')"  class="btn btn-danger btn-sm"> <i class="fas fa-trash"></i></a>
+			';
       if ($type_report == 'G001') {
         $row[] = $raw_data->recept_city;
         $row[] = $raw_data->recept_country;
         $row[] = $raw_data->recept_name;
         $row[] = $raw_data->sender_name;
         $row[] = '1';
-        $row[] = $this->lib->rupiah($raw_data->trx_amount);
+        $row[] = $this->lib->rupiah($raw_data->amount);
         $row[] = '3-Non Usaha – Lainnya';
       } else if ($type_report == 'G002') {
         $row[] = $raw_data->sender_country;
@@ -79,14 +85,14 @@ class Report extends CI_Controller {
         $row[] = $raw_data->recept_name;
         $row[] = $raw_data->sender_name;
         $row[] = '1';
-        $row[] = $this->lib->rupiah($raw_data->trx_amount);
+        $row[] = $this->lib->rupiah($raw_data->amount);
       } else if ($type_report == 'G003') {
         $row[] = $raw_data->sender_city;
         $row[] = $raw_data->recept_city;
         $row[] = $raw_data->recept_name;
         $row[] = $raw_data->sender_name;
         $row[] = '1';
-        $row[] = $this->lib->rupiah($raw_data->trx_amount);
+        $row[] = $this->lib->rupiah($raw_data->amount);
         $row[] = '3-Non Usaha – Lainnya';
       }
 

@@ -80,6 +80,11 @@ class M_tltdbb_source extends CI_model {
     $this->db->from($this->table);
     return $this->db->count_all_results();
   }
+  public function delete_by_id($id)
+  {
+    $this->db->where('id', $id);
+    $this->db->delete($this->table);
+  }
 
 
 }

@@ -235,8 +235,9 @@ class Utilities extends CI_Controller {
 					'description'				=> $description,
 					'amount'						=> $trx_amount,
 					'trx_type'					=> $trx_type,
-					'trx_date'					=> date('Ymd'),
-					'status'						=> 'cleansing'
+					'trx_date'					=> $trx_date,
+					'datestamp'					=> date('YmdHis'),
+					'status'						=> 'cleaned'
 				]);
 				$this->db->update('tltdbb_source', ['status' => 'old'], ['id' => $id]);
 				$success++;
