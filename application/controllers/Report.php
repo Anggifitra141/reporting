@@ -242,14 +242,14 @@ class Report extends CI_Controller {
   {
 
     $data = [];
-    $data['content'] = $this->load->view('report/ltdbb', $data, TRUE);
+    $data['content'] = $this->load->view('report/sipesat', $data, TRUE);
     $this->load->view('layout', $data);
   }
 
   public function ajax_list_sipesat()
   {
 
-    $list = $this->M_report->get_datatables_sipesat();
+    $list = $this->M_report->get_datatables_t1clean_sipesat();
     $data = array();
     $no = $_POST['start'];
     foreach ($list as $raw_data) {
@@ -257,27 +257,84 @@ class Report extends CI_Controller {
       $row = array();
       $row[] = '<input type="checkbox" class="data-check" value="'.$raw_data->id.'">';
 			$row[] = '
-				<a href="javascript:void(0)" onClick="edit_ltdbb('.$raw_data->id.')"  class="btn btn-primary btn-sm"> <i class="far fa-edit"></i></a>
+				<a href="javascript:void(0)" onClick="edit_sipesat('.$raw_data->id.')"  class="btn btn-primary btn-sm"> <i class="far fa-edit"></i></a>
 				<a href="javascript:void(0)" onclick="delete_row('.$raw_data->id.')"  class="btn btn-danger btn-sm"> <i class="fas fa-trash"></i></a>
 			';
-        $row[] = $raw_data->customer_code;
-        $row[] = $raw_data->customer_name;
-        $row[] = $raw_data->birth_place;
-        $row[] = $raw_data->birth_date;
-        $row[] = $raw_data->address;
-        $row[] = $raw_data->id_card_number;
-        $row[] = $raw_data->id_card_number_other;
-        $row[] = $raw_data->customer_cif;
-        $row[] = $raw_data->birth_date;
-        $row[] = $raw_data->birth_date;
-        $row[] = $raw_data->birth_date;
-        $row[] = $raw_data->birth_date;
-        $row[] = $raw_data->birth_date;
-
+      $row[] = $raw_data->customer_code;
+      $row[] = $raw_data->customer_name;
+      $row[] = $raw_data->birth_place;
+      $row[] = $raw_data->birth_date;
+      $row[] = $raw_data->address;
+      $row[] = $raw_data->id_card_number;
+      $row[] = $raw_data->id_card_number_other;
+      $row[] = $raw_data->customer_cif;
 
       $data[] = $row;
     }
+    $output = array(
+      "draw" => $_POST['draw'],
+      "recordsTotal" => $this->M_report->count_all_t1clean_sipesat(),
+      "recordsFiltered" => $this->M_report->count_filtered_t1clean_sipesat(),
+      "data" => $data,
+    );
+    echo json_encode($output);
+  }
 
+  public function download_excel_sipesat()
+  {
+
+
+    include APPPATH . 'third_party/PHPExcel/PHPExcel.php';
+    //$type_report = $this->input->post('type_report');
+
+    $start_date = date('Ymd', strtotime(substr($_GET['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_GET['daterange'], 13, 23)));
+
+    $this->db->where('status', "cleaned");
+    $this->db->where('datestamp >=', $start_date);
+    $this->db->where('datestamp <=', $end_date);
+
+
+    $list = $this->db->get('t1clean_sipesat')->result();
+
+    $type_report = "SIPESAT";
+    $report_setting = $this->M_report->get_report_setting($type_report);
+
+    $data = array();
+    $no = 1;
+    $baris = 3;
+    //$objPHPExcel    = new PHPExcel();
+
+
+    $objPHPExcel = PHPExcel_IOFactory::load("./assets/template-excel/template-sipesat.xlsx");
+
+
+    foreach ($list as $row) {
+
+      $objPHPExcel->setActiveSheetIndex(0)
+        ->setCellValue('A' . $baris, $row->customer_code)
+        ->setCellValue('B' . $baris, $row->customer_name)
+        ->setCellValue('C' . $baris, $row->birth_place)
+        ->setCellValue('D' . $baris, $row->birth_date)
+        ->setCellValue('E' . $baris, $row->address)
+        ->setCellValue('F' . $baris, $row->id_card_number)
+        ->setCellValue('G' . $baris, $row->id_card_number_other)
+        ->setCellValue('H' . $baris, $row->customer_cif);
+      $baris++;
+      $no++;
+
+      $data[] = $row;
+    }
+    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+    header('Content-Type: application/vnd.ms-excel');
+    header('Content-Disposition: attachment;filename="SIPESAT_41740_TW ' . ceil(date("n") / 3) . date('Y') . '_' . date('dmY') . '_1.xlsx"');
+    header('Cache-Control: max-age=0');
+    $objWriter->save('php://output');
+
+    set_time_limit(0);
+    ini_set('memory_limit', '1G');
+    ob_end_clean();
+    exit;
   }
 
   // START :: SETTING REPORT
