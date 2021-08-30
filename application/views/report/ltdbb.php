@@ -40,12 +40,12 @@
 
             <div class="row mt-4" id="result-data" style="display: none;">
               <div class="col-md-12">
-              <div class="row">
-              <div class="col-md-6 mb-3">
-                <a href="javascript:void(0)" onclick="rollback_selected()" class="btn btn-warning"><i class="fas fa-redo-alt"></i> Rollback Selected</a>
-                <a href="javascript:void(0)" onclick="delete_selected()" class="btn btn-danger"><i class="fas fa-times"></i> Delete Selected</a>
-              </div>
-            </div>
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <a href="javascript:void(0)" onclick="rollback_selected()" class="btn btn-warning"><i class="fas fa-redo-alt"></i> Rollback Selected</a>
+                    <a href="javascript:void(0)" onclick="delete_selected()" class="btn btn-danger"><i class="fas fa-times"></i> Delete Selected</a>
+                  </div>
+                </div>
                 <table class="table table-striped" id="table-data" style="width: 100%;">
                   <thead>
                     <tr>
@@ -86,80 +86,80 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form class="form-horizontal" action=""  id="form-ltdbb" method="POST" >
-      <div class="modal-body">
-        <div class="alert alert-info">
-          <i class="fas fa-info-circle"></i> Verify manual data on your system
-        </div>
-        
+      <form class="form-horizontal" action="" id="form-ltdbb" method="POST">
+        <div class="modal-body">
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i> Verify manual data on your system
+          </div>
+
           <div class="form-body">
 
-            <input type="hidden" name="id" value=""> 
-              <div class="row">
-                <div class="col-6">
-                  <div class="form-group">
-                    <label for="lastName">Negara Asal Pengiriman</label>
-                    <select name="sender_country" class="form-control" id="">
-                        <?php foreach($country as $key) : ?>
-                          <option value="<?= $key->country ?>"><?= $key->country ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                    <span class="text-danger"></span>
-                  </div>
-                  <div class="form-group">
-                    <label for="">Kota/Kabupaten Asal Pengiriman</label>
-                    <select name="sender_city" class="form-control" id="">
-                      <?php foreach($city as $key) : ?>
-                          <option value="<?= $key->bi_code .' - ' . $key->city ?>"><?= $key->bi_code .' - ' . $key->city ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                    <span class="text-danger"></span>
-                  </div>
-                  <div class="form-group">
-                    <label for="firstName">Nama Pengirim</label>
-                    <input class="form-control" name="sender_name" placeholder="" value="" type="text">
-                  </div>
-                  <div class="form-group">
-                    <label for="firstName">Telepon Pengirim</label>
-                    <input class="form-control" name="sender_phone" placeholder="" value="" type="text">
-                    <span class="text-danger"></span>
-                  </div>
-                  <div class="form-group">
-                    <label for="firstName">Nominal</label>
-                    <input class="form-control" name="trx_amount" placeholder="" value="" type="text" readonly>
-                    <span class="text-danger"></span>
-                  </div>
-											          
+            <input type="hidden" name="id" value="">
+            <div class="row">
+              <div class="col-6">
+                <div class="form-group">
+                  <label for="lastName">Negara Asal Pengiriman</label>
+                  <select name="sender_country" class="form-control" id="">
+                    <?php foreach ($country as $key) : ?>
+                      <option value="<?= $key->country ?>"><?= $key->country ?></option>
+                    <?php endforeach; ?>
+                  </select>
+                  <span class="text-danger"></span>
                 </div>
-                <div class="col-6">
-                  <div class="form-group">
-                    <label for="lastName">Negara Penerima</label>
-                    <select name="recept_country" class="form-control" id="">
-                    <?php foreach($country as $key) : ?>
-                          <option value="<?= $key->country ?>"><?= $key->country ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                    <span class="text-danger"></span>
-                  </div>
-                  <div class="form-group">
-                    <label for="firstName">Kota/Kabupaten Asal Pengiriman</label>
-                    <select name="recept_city" class="form-control" id="">
-                    <?php foreach($city as $key) : ?>
-                          <option value="<?= $key->bi_code .' - ' . $key->city ?>"><?= $key->bi_code .' - ' . $key->city ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                    <span class="text-danger"></span>
-                  </div>
-                  <div class="form-group">
-                    <label for="lastName">Nama Penerima</label>
-                    <input class="form-control" name="recept_name" placeholder="" value="" type="text">
-                  </div>
-                  <div class="form-group">
-                    <label for="lastName">Telepon Penerima</label>
-                    <input class="form-control" name="recept_phone" placeholder="" value="" type="text">
-                    <span class="text-danger"></span>
-                  </div>
-                  <!-- <div class="form-group">
+                <div class="form-group">
+                  <label for="">Kota/Kabupaten Asal Pengiriman</label>
+                  <select name="sender_city" class="form-control" id="">
+                    <?php foreach ($city as $key) : ?>
+                      <option value="<?= $key->bi_code . ' - ' . $key->city ?>"><?= $key->bi_code . ' - ' . $key->city ?></option>
+                    <?php endforeach; ?>
+                  </select>
+                  <span class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                  <label for="firstName">Nama Pengirim</label>
+                  <input class="form-control" name="sender_name" placeholder="" value="" type="text">
+                </div>
+                <div class="form-group">
+                  <label for="firstName">Telepon Pengirim</label>
+                  <input class="form-control" name="sender_phone" placeholder="" value="" type="text">
+                  <span class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                  <label for="firstName">Nominal</label>
+                  <input class="form-control" name="trx_amount" placeholder="" value="" type="text" readonly>
+                  <span class="text-danger"></span>
+                </div>
+
+              </div>
+              <div class="col-6">
+                <div class="form-group">
+                  <label for="lastName">Negara Penerima</label>
+                  <select name="recept_country" class="form-control" id="">
+                    <?php foreach ($country as $key) : ?>
+                      <option value="<?= $key->country ?>"><?= $key->country ?></option>
+                    <?php endforeach; ?>
+                  </select>
+                  <span class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                  <label for="firstName">Kota/Kabupaten Asal Pengiriman</label>
+                  <select name="recept_city" class="form-control" id="">
+                    <?php foreach ($city as $key) : ?>
+                      <option value="<?= $key->bi_code . ' - ' . $key->city ?>"><?= $key->bi_code . ' - ' . $key->city ?></option>
+                    <?php endforeach; ?>
+                  </select>
+                  <span class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                  <label for="lastName">Nama Penerima</label>
+                  <input class="form-control" name="recept_name" placeholder="" value="" type="text">
+                </div>
+                <div class="form-group">
+                  <label for="lastName">Telepon Penerima</label>
+                  <input class="form-control" name="recept_phone" placeholder="" value="" type="text">
+                  <span class="text-danger"></span>
+                </div>
+                <!-- <div class="form-group">
                     <label for="lastName">Status</label>
                     <select name="status" class="form-control" required>
                       <option value="verified" >Verified</option>
@@ -167,26 +167,26 @@
                     </select>
                     <span class="text-danger"></span>
                   </div> -->
-                </div>
-                <div class="col-md-12 form-group">
-                  <label for="lastName">Description</label>
-                  <textarea class="form-control" name="description" type="text" readonly></textarea>
-                  <span class="text-danger"></span>
-                </div>
               </div>
-                      
+              <div class="col-md-12 form-group">
+                <label for="lastName">Description</label>
+                <textarea class="form-control" name="description" type="text" readonly></textarea>
+                <span class="text-danger"></span>
+              </div>
+            </div>
 
 
 
 
-            
+
+
           </div>
-        
-      </div>
-      <div class="modal-footer bg-whitesmoke br">
-        <button type="button" class="btn btn-secondary float-left" data-dismiss="modal">Close</button>
-        <button type="button" onclick="save_modify()" id="btnSave" class="btn btn-outline-primary float-right">Save</button>
-      </div>
+
+        </div>
+        <div class="modal-footer bg-whitesmoke br">
+          <button type="button" class="btn btn-secondary float-left" data-dismiss="modal">Close</button>
+          <button type="button" onclick="save_modify()" id="btnSave" class="btn btn-outline-primary float-right">Save</button>
+        </div>
       </form>
     </div>
   </div>
@@ -209,10 +209,13 @@
     $(this).removeClass('is-invalid');
     $(this).next().empty();
   });
-
+  $('#btn-download-excel').hide();
+  $('#btn-download-txt').hide();
   $('#btn-view').click(function() {
     $('#notif-available').hide();
     $('#result-data').hide();
+    $('#btn-download-excel').show();
+    $('#btn-download-excel').show();
     $('#table-data').DataTable().destroy();
 
     var type_report = "<?= $this->uri->segment(3); ?>";
@@ -221,7 +224,7 @@
     if (type_report && daterange) {
 
       //
-       table = $('#table-data').DataTable({
+      table = $('#table-data').DataTable({
         "deferRender": true,
         "ordering": false,
         "scrollCollapse": true,
@@ -234,7 +237,7 @@
           type: "POST",
           data: function(data) {
             data.type_report = type_report,
-            data.daterange = daterange
+              data.daterange = daterange
           }
         },
         "columnDefs": [{
@@ -245,9 +248,9 @@
       });
 
       $('#result-data').slideDown('slow');
-      $("#check-all").click(function () {
+      $("#check-all").click(function() {
         $(".data-check").prop('checked', $(this).prop('checked'));
-    });
+      });
       $('#btn-download-excel').attr('href', base_url + 'report/download_excel_ltdbb?type_report=' + type_report + '&daterange=' + daterange);
 
     } else {
@@ -282,101 +285,99 @@
       alert('Fields Is Required');
     }
   });
-  
-  function reload_table()
-  {
-    table.ajax.reload(null,false);
-  }
-  
 
-  function delete_selected()
-  {
+  function reload_table() {
+    table.ajax.reload(null, false);
+  }
+
+
+  function delete_selected() {
     var list_id = [];
     $(".data-check:checked").each(function() {
       list_id.push(this.value);
     });
-    if(list_id.length > 0)
-    {
+    if (list_id.length > 0) {
       swal({
-        title: 'Are you sure?',
-        text: 'Are you sure delete '+list_id.length+' data?',
-        icon: 'warning',
-        timerProgressBar: true,
-        buttons: true,
-        dangerMode: true,
-      })
-      .then((willDelete) => {
-        if (willDelete) {
-          loading();
-          $.ajax({
-            url: "<?php echo site_url('clean/ajax_bulk_delete_ltdbb')?>",
-            data: {id:list_id},
-            type: 'POST',
-            dataType : 'JSON',
-            success : function(response){
-              reload_table();
-              swal({
-                title: 'Success',
-                text: list_id.length + ' Deleted' ,
-                icon: 'warning',
-                icon: 'success',
-              });
-            }
-          })
-        } else {
-          swal('Delete Data Canceled');
-        }
-      });
-    }
-    else
-    {
+          title: 'Are you sure?',
+          text: 'Are you sure delete ' + list_id.length + ' data?',
+          icon: 'warning',
+          timerProgressBar: true,
+          buttons: true,
+          dangerMode: true,
+        })
+        .then((willDelete) => {
+          if (willDelete) {
+            loading();
+            $.ajax({
+              url: "<?php echo site_url('clean/ajax_bulk_delete_ltdbb') ?>",
+              data: {
+                id: list_id
+              },
+              type: 'POST',
+              dataType: 'JSON',
+              success: function(response) {
+                reload_table();
+                swal({
+                  title: 'Success',
+                  text: list_id.length + ' Deleted',
+                  icon: 'warning',
+                  icon: 'success',
+                });
+              }
+            })
+          } else {
+            swal('Delete Data Canceled');
+          }
+        });
+    } else {
       swal('no data selected');
     }
   }
-  function rollback_selected()
-  {
+
+  function rollback_selected() {
     var list_id = [];
     $(".data-check:checked").each(function() {
       list_id.push(this.value);
     });
-    if(list_id.length > 0)
-    {
+    if (list_id.length > 0) {
       swal({
-        title: 'Are you sure?',
-        text: 'Are you sure rollback this '+list_id.length+' data?',
-        icon: 'warning',
-        timerProgressBar: true,
-        buttons: true,
-        dangerMode: true,
-      })
-      .then((willDelete) => {
-        if (willDelete) {
-          loading();
-          $.ajax({
-            url: "<?php echo site_url('clean/ajax_bulk_rollback_ltdbb')?>",
-            data: {id:list_id},
-            type: 'POST',
-            dataType : 'JSON',
-            success : function(response){
-              reload_table();
-              swal({
-                title: 'Success',
-                text: response.rollback + ' data rollback' ,
-                icon: 'warning',
-                icon: 'success',
-              });
-            }
-          })
-        } else {
-          swal('Rollback Data Canceled');
-        }
-      });
-    }else{
+          title: 'Are you sure?',
+          text: 'Are you sure rollback this ' + list_id.length + ' data?',
+          icon: 'warning',
+          timerProgressBar: true,
+          buttons: true,
+          dangerMode: true,
+        })
+        .then((willDelete) => {
+          if (willDelete) {
+            loading();
+            $.ajax({
+              url: "<?php echo site_url('clean/ajax_bulk_rollback_ltdbb') ?>",
+              data: {
+                id: list_id
+              },
+              type: 'POST',
+              dataType: 'JSON',
+              success: function(response) {
+                reload_table();
+                swal({
+                  title: 'Success',
+                  text: response.rollback + ' data rollback',
+                  icon: 'warning',
+                  icon: 'success',
+                });
+              }
+            })
+          } else {
+            swal('Rollback Data Canceled');
+          }
+        });
+    } else {
       swal('No data selected');
     }
   }
-  function delete_row(id)
-  {
+
+  function delete_row(id) {
     swal({
         title: 'Are you sure?',
         text: 'Are you sure delete this data?',
@@ -389,15 +390,17 @@
         if (willDelete) {
           loading();
           $.ajax({
-            url: "<?php echo site_url('clean/ajax_delete_ltdbb')?>",
-            data: {id:id},
+            url: "<?php echo site_url('clean/ajax_delete_ltdbb') ?>",
+            data: {
+              id: id
+            },
             type: 'POST',
-            dataType : 'JSON',
-            success : function(response){
+            dataType: 'JSON',
+            success: function(response) {
               reload_table();
               swal({
                 title: 'Success',
-                text:  'Deleted Successfuly' ,
+                text: 'Deleted Successfuly',
                 icon: 'warning',
                 icon: 'success',
               });
@@ -409,11 +412,10 @@
       });
   }
 
-  function edit_ltdbb(id)
-  {
+  function edit_ltdbb(id) {
     $('#form-ltdbb')[0].reset();
     $.ajax({
-      url: "<?php echo site_url('clean/get_ltdbb_by_id')?>/" + id,
+      url: "<?php echo site_url('clean/get_ltdbb_by_id') ?>/" + id,
       type: "GET",
       dataType: "JSON",
       success: function(data) {
@@ -438,18 +440,17 @@
     });
   }
 
-  function save_modify()
-  {
+  function save_modify() {
     $.ajax({
-      url: "<?php echo site_url('clean/update_clean_ltdbb')?>",
+      url: "<?php echo site_url('clean/update_clean_ltdbb') ?>",
       type: "POST",
       data: $('#form-ltdbb').serialize(),
       dataType: "JSON",
       success: function(data, response) {
-        if(data.status) //if success close modal and reload ajax table
+        if (data.status) //if success close modal and reload ajax table
         {
           $('#btnSave').text('save'); //change button text
-          $('#btnSave').attr('disabled',false); //set button enable 
+          $('#btnSave').attr('disabled', false); //set button enable 
           //if success close modal and reload ajax table
           $('#modal_modify_ltdbb').modal('hide');
           iziToast.success({
@@ -459,18 +460,15 @@
           });
           $('#table').DataTable().ajax.reload();
           // location.reload();// for reload a page
-        }
-        else
-        {
-          for (var i = 0; i < data.inputerror.length; i++) 
-          {
-              $('[name="'+data.inputerror[i]+'"]').addClass('is-invalid'); //select parent twice to select div form-group class and add has-error class
-              $('[name="'+data.inputerror[i]+'"]').next().text(data.error_string[i]); //select span help-block class set text error string
+        } else {
+          for (var i = 0; i < data.inputerror.length; i++) {
+            $('[name="' + data.inputerror[i] + '"]').addClass('is-invalid'); //select parent twice to select div form-group class and add has-error class
+            $('[name="' + data.inputerror[i] + '"]').next().text(data.error_string[i]); //select span help-block class set text error string
           }
         }
 
       }
-    }) 
+    })
   }
 
 

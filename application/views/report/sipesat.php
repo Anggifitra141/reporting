@@ -169,10 +169,11 @@
     $(this).removeClass('is-invalid');
     $(this).next().empty();
   });
-
+  $('#btn-download-excel').hide();
   $('#btn-view').click(function() {
     $('#notif-available').hide();
     $('#result-data').hide();
+    $('#btn-download-excel').show();
     $('#table-data').DataTable().destroy();
 
     var daterange = $('[name="daterange"]').val();
@@ -225,7 +226,7 @@
     if (type_report && daterange) {
       $.ajax({
         url: base_url + 'report/download_excel_sipesat',
-        type: 'POST',
+        type: 'GET',
         dataType: 'JSON',
         data: {
           daterange: daterange

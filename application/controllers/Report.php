@@ -77,7 +77,7 @@ class Report extends CI_Controller {
         $row[] = $raw_data->recept_name;
         $row[] = $raw_data->sender_name;
         $row[] = '1';
-        $row[] = $this->lib->rupiah($raw_data->amount);
+        $row[] = $this->lib->rupiah($raw_data->trx_amount);
         $row[] = '3-Non Usaha – Lainnya';
       } else if ($type_report == 'G002') {
         $row[] = $raw_data->sender_country;
@@ -85,14 +85,14 @@ class Report extends CI_Controller {
         $row[] = $raw_data->recept_name;
         $row[] = $raw_data->sender_name;
         $row[] = '1';
-        $row[] = $this->lib->rupiah($raw_data->amount);
+        $row[] = $this->lib->rupiah($raw_data->trx_amount);
       } else if ($type_report == 'G003') {
         $row[] = $raw_data->sender_city;
         $row[] = $raw_data->recept_city;
         $row[] = $raw_data->recept_name;
         $row[] = $raw_data->sender_name;
         $row[] = '1';
-        $row[] = $this->lib->rupiah($raw_data->amount);
+        $row[] = $this->lib->rupiah($raw_data->trx_amount);
         $row[] = '3-Non Usaha – Lainnya';
       }
 
@@ -162,7 +162,7 @@ class Report extends CI_Controller {
           ->setCellValue('C'. $baris, $row->recept_country)
           ->setCellValue('D'. $baris, $row->recept_name)
           ->setCellValue('E'. $baris, $row->sender_name)
-          ->setCellValue('F'. $baris, "1")
+          ->setCellValue('F'. $baris, $row->trx_traffic)
           ->setCellValue('G'. $baris, $row->trx_amount)
           ->setCellValue('H'. $baris, "3-Non Usaha – Lainnya");
           $baris++;
@@ -185,7 +185,7 @@ class Report extends CI_Controller {
           ->setCellValue('C'. $baris, $row->recept_city)
           ->setCellValue('D'. $baris, $row->recept_name)
           ->setCellValue('E'. $baris, $row->sender_name)
-          ->setCellValue('F'. $baris, "1")
+          ->setCellValue('F'. $baris, $row->trx_traffic)
           ->setCellValue('G'. $baris, $row->trx_amount);
 
 
@@ -212,7 +212,7 @@ class Report extends CI_Controller {
           ->setCellValue('C'. $baris, $row->recept_city)
           ->setCellValue('D'. $baris, $row->recept_name)
           ->setCellValue('E'. $baris, $row->sender_name)
-          ->setCellValue('F'. $baris, "1")
+          ->setCellValue('F'. $baris, $row->trx_traffic)
           ->setCellValue('G'. $baris, $row->trx_amount)
           ->setCellValue('H'. $baris, "3-Non Usaha – Lainnya");
           $baris++;

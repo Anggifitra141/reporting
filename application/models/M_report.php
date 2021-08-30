@@ -23,13 +23,13 @@ class M_report extends CI_model {
 
   private function _get_datatables_query_ltdbb()
   {
-    $start_date = date('Y-m-d', strtotime(substr($this->input->post('daterange'), 0, 10)));
-    $end_date =  date('Y-m-d', strtotime(substr($this->input->post('daterange'), 13, 23)));
+    $start_date = date('Ymd', strtotime(substr($this->input->post('daterange'), 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($this->input->post('daterange'), 13, 23)));
     $type_report = $this->input->post('type_report');
 
     $this->db->where('status', "cleaned");
-    $this->db->where('DATE(datestamp) >=', $start_date);
-    $this->db->where('DATE(datestamp) <=', $end_date);
+    $this->db->where('datestamp >=', $start_date);
+    $this->db->where('datestamp <=', $end_date);
 
     if ($type_report == 'G001') {
       $this->db->where_in('sender_country', array('INDONESIA', '86'));
