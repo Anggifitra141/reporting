@@ -31,9 +31,9 @@ class Utilities extends CI_Controller {
 
   public function role_clean()
   {
-    $data['sender_country'] = $this->db->query("SELECT DISTINCT tltdbb_clean.sender_country FROM tltdbb_clean WHERE status='cleansing'")->result_array();;
-		$data['recept_country'] = $this->db->query("SELECT DISTINCT tltdbb_clean.recept_country FROM tltdbb_clean WHERE status='cleansing'")->result_array();
-    // $data['country'] = $this->db->query("SELECT name FROM tcountrycode")->result();
+    $data['sender_country'] = $this->db->query("SELECT DISTINCT t1clean_ltdbb.sender_country FROM t1clean_ltdbb WHERE status='cleaned'")->result_array();;
+		$data['recept_country'] = $this->db->query("SELECT DISTINCT t1clean_ltdbb.recept_country FROM t1clean_ltdbb WHERE status='cleaned'")->result_array();
+    $data['country'] = $this->db->query("SELECT country name FROM tltdbb_bi_country")->result();
     $data['content'] = $this->load->view('utilities/role_clean', $data, TRUE);
 		$this->load->view('layout', $data);
   }
@@ -42,8 +42,8 @@ class Utilities extends CI_Controller {
 		// $sender = str_replace("_", " ",$value);
 		$data['header']			= $value ;
 		$data['page']  			= 'lists country';
-    // $data['city_result']       = $this->db->query("SELECT alto FROM tregioncode")->result();
-		$data['sender_country'] 	= $this->db->query("SELECT DISTINCT sender_city, sender_city,sender_country From tltdbb_clean WHERE sender_country='$value'")->result_array();
+    $data['city_result']       = $this->db->query("SELECT bi_code, bi_city FROM tltdbb_bi_city")->result();
+		$data['sender_country'] 	= $this->db->query("SELECT DISTINCT sender_city, sender_city,sender_country From t1clean_ltdbb WHERE sender_country='$value'")->result_array();
 		$data['content'] = $this->load->view('utilities/list_country', $data, TRUE);
 		$this->load->view('layout', $data);
 	}
@@ -55,7 +55,7 @@ class Utilities extends CI_Controller {
 		$data['sender_city'] = $name;
 		$this->db->trans_start();
 		$this->db->where('sender_city', $id);
-		$this->db->update('tltdbb_clean', $data);
+		$this->db->update('t1clean_ltdbb', $data);
 		$this->db->trans_complete();
 		$this->session->set_flashdata("msg", "<div class='alert alert-success' role='alert' style='font-size: 10px; margin:15px 0px -15px 0px;'>
 		Upadated Done!
@@ -70,7 +70,7 @@ class Utilities extends CI_Controller {
 	}
   function sender_country($value=''){
 		$sender = str_replace("_", " ",$value);
-		$data['sender_country'] 	= $this->db->query("SELECT sender_country FROM tltdbb_clean WHERE sender_country = '$sender' LIMIT 1")->result_array();
+		$data['sender_country'] 	= $this->db->query("SELECT sender_country FROM t1clean_ltdbb WHERE sender_country = '$sender' LIMIT 1")->result_array();
 		$data['country']		= $this->db->query("SELECT name FROM tcountrycode")->result();
 		$data['content'] = $this->load->view('utilities/sender_country', $data, TRUE);
 		$this->load->view('layout', $data);
@@ -82,12 +82,13 @@ class Utilities extends CI_Controller {
 		$data['sender_country'] = $name;
 		$this->db->trans_start();
 		$this->db->where('sender_country', $id);
-		$this->db->update('tltdbb_clean', $data);
+		$this->db->where('status', 'cleaned');
+		$this->db->update('t1clean_ltdbb', $data);
 		$this->db->trans_complete();
 		$this->session->set_flashdata("msg", "<div class='alert alert-success' role='alert' style='font-size: 10px; margin:15px 0px -15px 0px;'>
 		Upadated Done!
 		</div><br/><br/>");
-		redirect('utilities/manual');
+		redirect('utilities/role_clean');
 	}
 
   // START :: RECEIPT COUNTRY
@@ -96,8 +97,8 @@ class Utilities extends CI_Controller {
     $receipt				= str_replace("_", " ",$value);
 		$data['header']			= $receipt ;
 		$data['page']  			= 'listrcountry';
-		$data['recept_country']	= $this->db->query("SELECT DISTINCT recept_city, recept_country From tltdbb_clean WHERE recept_country='$receipt'")->result_array();
-    $data['receipt'] = $this->db->query("SELECT alto FROM tregioncode")->result();
+		$data['receptcountry']	= $this->db->query("SELECT DISTINCT recept_city, recept_country From t1clean_ltdbb WHERE recept_country='$receipt'")->result_array();
+    $data['recept']       = $this->db->query("SELECT bi_code, bi_city FROM tltdbb_bi_city")->result();
 		$data['content'] = $this->load->view('utilities/listreceipt', $data, TRUE);
 		$this->load->view('layout', $data);
   }
@@ -109,7 +110,8 @@ class Utilities extends CI_Controller {
 		$data['recept_city'] = $name;
 		$this->db->trans_start();
 		$this->db->where('recept_city', $id);
-		$this->db->update('tltdbb_clean', $data);
+		$this->db->where('status', 'cleaned');
+		$this->db->update('t1clean_ltdbb', $data);
 		$this->db->trans_complete();
 		$this->session->set_flashdata("msg", "<div class='alert alert-success' role='alert' style='font-size: 10px; margin:15px 0px -15px 0px;'>
 		Upadated Done!
@@ -129,12 +131,13 @@ class Utilities extends CI_Controller {
 		$data['recept_country'] = $name;
 		$this->db->trans_start();
 		$this->db->where('recept_country', $id);
-		$this->db->update('tltdbb_clean', $data);
+		$this->db->where('status', 'cleaned');
+		$this->db->update('t1clean_ltdbb', $data);
 		$this->db->trans_complete();
 		$this->session->set_flashdata("msg", "<div class='alert alert-success' role='alert' style='font-size: 10px; margin:15px 0px -15px 0px;'>
 		Upadated Done!
 		</div><br/><br/>");
-		redirect('utilities/manual');
+		redirect('utilities/role_clean');
 	}
   // END :: RECEIPT COUNTRY
 
@@ -181,7 +184,7 @@ class Utilities extends CI_Controller {
   {
 		$data['page'] 	= 'displayClean';
 		$status  			= $this->input->post('status');
-		$test = $this->db->query("SELECT * FROM tltdbb_source WHERE  status = 'new' ")->result_array();
+		$test = $this->db->query("SELECT * FROM t0source_ltdbb WHERE  status = 'new' ")->result_array();
 		$datestamp = date("Ymd");
 		$success = 0;
 		$false = 0;
@@ -198,33 +201,34 @@ class Utilities extends CI_Controller {
 			$recept_phone		= $SheetDataKey['recept_phone'];
 			$description		= $SheetDataKey['description'];
 			$trx_amount		= $SheetDataKey['trx_amount'];
+			$trx_freq		= $SheetDataKey['trx_freq'];
 			$trx_date		= $SheetDataKey['trx_date'];
 			$trx_type		= $SheetDataKey['trx_type'];
 
 
 			//Cleanser sender_country
-			$cek_sender_country = $this->db->query("SELECT `to` as `to` FROM trole_model WHERE `from` = '".$sender_country."' AND `table` = 'tltdbb' AND field = 'sender_country'  ")->row();
+			$cek_sender_country = $this->db->query("SELECT `to` as `to` FROM t3role_model WHERE `from` = '".$sender_country."' AND `table` = 'tltdbb' AND field = 'sender_country'  ")->row();
 			if($cek_sender_country){
 				$sender_country = $cek_sender_country->to;
 			}
 			//Cleanser sender_city
-			$cek_sender_city = $this->db->query("SELECT `to` as `to` FROM trole_model WHERE `from` = '".$sender_city."' AND `table` = 'tltdbb' AND field = 'sender_city'  ")->row();
+			$cek_sender_city = $this->db->query("SELECT `to` as `to` FROM t3role_model WHERE `from` = '".$sender_city."' AND `table` = 'tltdbb' AND field = 'sender_city'  ")->row();
 			if($cek_sender_city){
 				$sender_city = $cek_sender_city->to;
 			}
 			//Cleanser recept_country
-			$cek_recept_country = $this->db->query("SELECT `to` as `to` FROM trole_model WHERE `from` = '".$recept_country."' AND `table` = 'tltdbb' AND field = 'recept_country'  ")->row();
+			$cek_recept_country = $this->db->query("SELECT `to` as `to` FROM t3role_model WHERE `from` = '".$recept_country."' AND `table` = 'tltdbb' AND field = 'recept_country'  ")->row();
 			if($cek_recept_country){
 				$recept_country = $cek_recept_country->to;
 			}
 			//Cleanser recept_city
-			$cek_recept_city = $this->db->query("SELECT `to` as `to` FROM trole_model WHERE `from` = '".$recept_city."' AND `table` = 'tltdbb' AND field = 'recept_city'  ")->row();
+			$cek_recept_city = $this->db->query("SELECT `to` as `to` FROM t3role_model WHERE `from` = '".$recept_city."' AND `table` = 'tltdbb' AND field = 'recept_city'  ")->row();
 			if($cek_recept_city){
 				$recept_city = $cek_recept_city->to;
 			}
 			if($cek_sender_country && $cek_sender_city && $cek_recept_country && $cek_recept_city ){
-				$result = $this->db->insert('tltdbb_clean', [
-					'source_id'					=> $id,
+				$result = $this->db->insert('t1clean_ltdbb', [
+					'id_source'					=> $id,
 					'sender_country'		=> $sender_country,
 					'sender_city'				=> $sender_city,
 					'recept_country'		=> $recept_country,
@@ -233,16 +237,17 @@ class Utilities extends CI_Controller {
 					'recept_name'				=> $recept_name,
 					'recept_phone'			=> $recept_phone,
 					'description'				=> $description,
-					'amount'						=> $trx_amount,
+					'trx_amount'				=> $trx_amount,
+					'trx_freq'					=> $trx_freq,
 					'trx_type'					=> $trx_type,
 					'trx_date'					=> $trx_date,
 					'datestamp'					=> date('YmdHis'),
 					'status'						=> 'cleaned'
 				]);
-				$this->db->update('tltdbb_source', ['status' => 'old'], ['id' => $id]);
+				$this->db->update('t0source_ltdbb', ['status' => 'old'], ['id' => $id]);
 				$success++;
 			}else{
-				// $this->db->update('tltdbb_source', ['status' => 'failed'], ['id' => $id]);
+				// $this->db->update('t0source_ltdbb', ['status' => 'failed'], ['id' => $id]);
 				$false++;
 			}
 		}
@@ -255,8 +260,8 @@ class Utilities extends CI_Controller {
 	public function manual()
 	{
 		$data= [];
-		$data['sender_country'] = $this->db->query("SELECT DISTINCT tltdbb_clean.sender_country FROM tltdbb_clean WHERE status='unverified'")->result_array();
-		$data['recept_country'] = $this->db->query("SELECT DISTINCT tltdbb_clean.recept_country FROM tltdbb_clean WHERE status='unverified'")->result_array();
+		$data['sender_country'] = $this->db->query("SELECT DISTINCT t1clean_ltdbb.sender_country FROM t1clean_ltdbb WHERE status='unverified'")->result_array();
+		$data['recept_country'] = $this->db->query("SELECT DISTINCT t1clean_ltdbb.recept_country FROM t1clean_ltdbb WHERE status='unverified'")->result_array();
     $data['content'] = $this->load->view('utilities/manual_clean', $data, TRUE);
 		$this->load->view('layout', $data);
 	}
@@ -291,7 +296,7 @@ class Utilities extends CI_Controller {
 			$row[] = $raw_data->recept_city;
 			$row[] = $raw_data->sender_name;
 			$row[] = $raw_data->recept_city;
-			$row[] = $this->lib->rupiah($raw_data->amount);
+			$row[] = $this->lib->rupiah($raw_data->trx_amount);
 			$data[] = $row;
 		}
 		if($this->input->post('daterange') != ''){
@@ -338,7 +343,7 @@ class Utilities extends CI_Controller {
 		$description 		= $this->input->post('description');
 		$status 				= $this->input->post('status');
 		if($rollback == 'Y'){
-			$this->db->update('tltdbb_clean', ['status' => 'rollback'], ['id' => $id]);
+			$this->db->update('t1clean_ltdbb', ['status' => 'rollback'], ['id' => $id]);
 			$this->db->where_in('id', $id);
 		}else{
 			/* $update = "status";
@@ -346,7 +351,7 @@ class Utilities extends CI_Controller {
 				'status' => $update;
 				);	
 			$where = array('id' => $id);
-			$this->corelib->update($where,$data2,'tdatasource1'); */
+			$this->corelib->update($where,$data2,'t0source_ltdbb'); */
 			$dataInsert = array(
 				'sender_city' 			=> $sender_city,
 				'sender_country' 	=> $sender_country,
@@ -360,11 +365,11 @@ class Utilities extends CI_Controller {
 				'status' 					=> $status
 				);	
 			$where = array('id' => $id);
-			$this->db->update('tltdbb_clean',$dataInsert,$where);
+			$this->db->update('t1clean_ltdbb',$dataInsert,$where);
 			//die(print_r($dataInsert));
-			//$insertdata  = $this->corelib->input_data($dataInsert,'tltdbb_clean');
+			//$insertdata  = $this->corelib->input_data($dataInsert,'t1clean_ltdbb');
 			/* if($insertdata == TRUE) {
-				$this->db->query("UPDATE tdatasource1 SET status = 'old' WHERE id='".$id."'");
+				$this->db->query("UPDATE t0source_ltdbb SET status = 'old' WHERE id='".$id."'");
 			} */
 		}
 		$this->session->set_flashdata("msg", "<div class='alert alert-success' role='alert' style='font-size: 10px; margin:15px 0px -15px 0px;'>
@@ -386,24 +391,25 @@ class Utilities extends CI_Controller {
 		$update_source_data = [];
 		$delete_clean_data = [];
 		foreach ($list_id as $id) {
-			$result = $this->db->query("SELECT * FROM tltdbb_clean WHERE id = '".$id."'")->row();
+			$result = $this->db->query("SELECT * FROM t1clean_ltdbb WHERE id = '".$id."'")->row();
 			$update_source_data[] = array(
-				'id'				=> $result->id_data_source,
-				'status'		=> 'rollback'
+				'id'				=> $result->id_source,
+				'status'		=> 'new'
 			);
 			$delete_clean_data[] = $id;
 
 		}
-		$this->db->update_batch('tdatasource1', $update_source_data, 'id');
+		$this->db->update_batch('t0source_ltdbb', $update_source_data, 'id');
 		$this->db->where_in('id', $delete_clean_data);
-		$this->db->delete('tltdbb_clean');
+		$this->db->delete('t1clean_ltdbb');
 		echo json_encode(['status' => true, 'rollback' => count($update_source_data)]);
 	}
 	public function ajax_delete_manual_clean()
 	{
 		$id = $this->input->post('id');
-		$this->db->delete('tltdbb_clean', ['id' => $id]);
+		$this->db->delete('t1clean_ltdbb', ['id' => $id]);
 		echo json_encode(['status' => true]);
 	}
 	// END :: MANUAL CLEAN
 }
+

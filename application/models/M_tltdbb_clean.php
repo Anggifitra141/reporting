@@ -14,7 +14,7 @@ class M_tltdbb_clean extends CI_model {
 		parent::__construct();
 	}
 
-	var $table = 'tltdbb_clean';
+	var $table = 't1clean_ltdbb';
   var $column_order = array('trx_date','sender_name','recept_name','trx_amount');
   var $column_search = array('trx_date','sender_name','recept_name','trx_amount');
   var $order = array('id' => 'desc');

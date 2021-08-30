@@ -14,7 +14,7 @@ class M_tltdbb_source extends CI_model {
 		parent::__construct();
 	}
 
-	var $table = 'tltdbb_source';
+	var $table = 't0source_ltdbb';
   var $column_order = array('trx_date','sender_name','recept_name','trx_amount');
   var $column_search = array('trx_date','sender_name','recept_name','trx_amount');
   var $order = array('id' => 'desc');

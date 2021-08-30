@@ -25,19 +25,19 @@ class App extends CI_Controller {
 	public function index()
 	{
     $data= [];
-    $sqltoday								  = "SELECT COUNT(*) as reportcount FROM tcalendar WHERE datestamp = CURRENT_DATE();";
+    $sqltoday								  = "SELECT COUNT(*) as reportcount FROM t3calendar WHERE datestamp = CURRENT_DATE();";
     $row_today								= $this->db->query($sqltoday)->row();
 		$data['totaltoday']				= $row_today->reportcount;
 		
-		$sqlunprocessed						= "SELECT COUNT(*) as reportcount  FROM tcalendar WHERE datestamp < CURRENT_DATE() and status <>'printed'";
+		$sqlunprocessed						= "SELECT COUNT(*) as reportcount  FROM t3calendar WHERE datestamp < CURRENT_DATE() and status <>'printed'";
     $row_unprocessed					= $this->db->query($sqlunprocessed)->row();
 		$data['totalunprocessed'] = $row_unprocessed->reportcount;
 		
-		$sqlnext								  = "SELECT COUNT(*) as reportcount FROM tcalendar WHERE datestamp > CURRENT_DATE() AND MONTH(datestamp) = MONTH(CURRENT_DATE()) AND status <>'printed'";
+		$sqlnext								  = "SELECT COUNT(*) as reportcount FROM t3calendar WHERE datestamp > CURRENT_DATE() AND MONTH(datestamp) = MONTH(CURRENT_DATE()) AND status <>'printed'";
     $row_next							    = $this->db->query($sqlnext)->row();
 		$data['totalnext']				= $row_next->reportcount;
 		
-		$sqlmonth								  = "SELECT COUNT(*) as reportcount FROM tcalendar WHERE MONTH(datestamp) = MONTH(CURRENT_DATE());";
+		$sqlmonth								  = "SELECT COUNT(*) as reportcount FROM t3calendar WHERE MONTH(datestamp) = MONTH(CURRENT_DATE());";
         $row_month						= $this->db->query($sqlmonth)->row();
 		$data['totalmonth'] 			= $row_month->reportcount;
 		
@@ -47,7 +47,7 @@ class App extends CI_Controller {
 		
 		// $data['activity'] = $this->db->query("SELECT username,actcategory, actlog,datestamp FROM tlogact JOIN user ON tlogact.uid = user.user_id WHERE MONTH(datestamp) = MONTH(CURRENT_DATE()) ORDER BY id DESC LIMIT 5")->result_array();
 		
-		$data['result'] = $this->db->get("tcalendar")->result();
+		$data['result'] = $this->db->get("t3calendar")->result();
     foreach ($data['result'] as $key => $value) {
     $data['calender'][$key]['start'] = $value->datestamp;
 		$data['calender'][$key]['end'] = $value->datestamp;
@@ -76,7 +76,7 @@ class App extends CI_Controller {
 			$data['title'] 	 = 'sourceAll';
 			$data['sourceAll'] = $this->db->query("SELECT a.datestamp as date ,a.tcal_message as name ,
 			b.regulator as regulator, c.period_name as period, a.status as status, b.status as status_rep , b.link
-			FROM tcalendar a INNER JOIN treport_settings b ON a.trepid = b.id INNER JOIN treport_period c ON b.period = c.period_code 
+			FROM t3calendar a INNER JOIN t3report_settings b ON a.trepid = b.id INNER JOIN t3report_period c ON b.period = c.period_code 
 			WHERE a.datestamp = CURRENT_DATE()")->result_array();
 			$data['content'] = $this->load->view('dashboard/reminder', $data, TRUE);
 			$this->load->view('layout', $data);
@@ -86,7 +86,7 @@ class App extends CI_Controller {
 		$data['title'] 	 = 'Unprocess';
      $data['sourceAll'] = $this->db->query("SELECT a.`datestamp` as date ,a.`tcal_message` as name , 
      b.regulator as regulator, c.period_name as period, a.`status` as status, b.status as status_rep, b.link 
-     FROM tcalendar a INNER JOIN treport_settings b ON a.trepid = b.id INNER JOIN treport_period c ON b.period = c.period_code 
+     FROM t3calendar a INNER JOIN t3report_settings b ON a.trepid = b.id INNER JOIN t3report_period c ON b.period = c.period_code 
      WHERE a.datestamp < CURRENT_DATE() and a.status <>'printed';")->result_array();
      $data['content'] = $this->load->view('dashboard/reminder', $data, TRUE);
      $this->load->view('layout', $data);
@@ -96,7 +96,7 @@ class App extends CI_Controller {
 		$data['title'] 	 = 'Next';
 		$data['sourceAll'] = $this->db->query("SELECT a.`datestamp` as date ,a.`tcal_message` as name , 
 		b.regulator as regulator, c.period_name as period, a.`status` as status , b.status as status_rep, b.link
-		FROM tcalendar a INNER JOIN treport_settings b ON a.trepid = b.id INNER JOIN treport_period c ON b.period = c.period_code 
+		FROM t3calendar a INNER JOIN t3report_settings b ON a.trepid = b.id INNER JOIN t3report_period c ON b.period = c.period_code 
 		WHERE a.datestamp > CURRENT_DATE() AND MONTH(a.datestamp) = MONTH(CURRENT_DATE()) AND a.status <>'printed'")->result_array();
 		$data['content'] = $this->load->view('dashboard/reminder', $data, TRUE);
 		$this->load->view('layout', $data);
@@ -106,7 +106,7 @@ class App extends CI_Controller {
 		$data['title'] 	 = 'Month';
 		$data['sourceAll'] = $this->db->query("SELECT a.`datestamp` as date ,a.`tcal_message` as name ,
 		b.regulator as regulator, c.period_name as period, a.`status` as status , b.status as status_rep, b.link
-		FROM tcalendar a INNER JOIN treport_settings b ON a.trepid = b.id INNER JOIN treport_period c ON b.period = c.period_code
+		FROM t3calendar a INNER JOIN t3report_settings b ON a.trepid = b.id INNER JOIN t3report_period c ON b.period = c.period_code
 		WHERE MONTH(a.datestamp) = MONTH(CURRENT_DATE())")->result_array();
 		$data['content'] = $this->load->view('dashboard/reminder', $data, TRUE);
 		$this->load->view('layout', $data);
@@ -119,18 +119,18 @@ class App extends CI_Controller {
 		//die(print_r($value));
 		if($value=="cetakg1"){
 			$test = $this->db->query("SELECT A.sender_city, A.recept_country, A.recept_name, 
-			A.sender_name, COUNT(A.amount) as trxvolume, SUM(A.amount) as trxnominal FROM tltdbb_clean A 
+			A.sender_name, COUNT(A.trx_amount) as trxvolume, SUM(A.trx_amount) as trxnominal FROM t1clean_ltdbb A 
 			WHERE A.sender_country = 'INDONESIA' AND not A.recept_country='INDONESIA' 
 			GROUP BY A.sender_city, A.recept_country, A.recept_name, A.sender_name");
 		}elseif($value == "cetakg2"){
 			$test = $this->db->query("SELECT A.sender_city, A.recept_country, A.recept_name, 
-			A.sender_name, COUNT(A.amount) as trxvolume, SUM(A.amount) as trxnominal FROM tltdbb_clean A 
+			A.sender_name, COUNT(A.trx_amount) as trxvolume, SUM(A.trx_amount) as trxnominal FROM t1clean_ltdbb A 
 			WHERE not A.sender_country = 'INDONESIA' AND A.recept_country='INDONESIA' 
 			GROUP BY A.sender_city, A.recept_country, A.recept_name, A.sender_name");
 		}elseif($value == "cetakg3"){
 			$test = $this->db->query("SELECT A.sender_city, A.recept_country, A.recept_name,
-			A.sender_name, COUNT(A.amount) as trxvolume, SUM(A.amount) as trxnominal 
-			FROM tltdbb_clean A 
+			A.sender_name, COUNT(A.trx_amount) as trxvolume, SUM(A.trx_amount) as trxnominal 
+			FROM t1clean_ltdbb A 
 			WHERE A.sender_country='INDONESIA' AND A.recept_country='INDONESIA' 
 			GROUP BY A.sender_city, A.recept_country, A.recept_name, A.sender_name");	
 		}
@@ -154,7 +154,7 @@ class App extends CI_Controller {
 
 	public function generate_report()
 	{
-		$query_get_report_setting = $this->db->get('treport_settings')->result();
+		$query_get_report_setting = $this->db->get('t3report_settings')->result();
 
 		foreach ($query_get_report_setting as $row){
 			if($row->period  == '1D'){
@@ -169,7 +169,7 @@ class App extends CI_Controller {
 					'status'       	=> 'unverified'
 				);
 
-				$this->db->insert('tcalendar', $data);
+				$this->db->insert('t3calendar', $data);
 				echo json_encode(array("status" => TRUE));
 
 			}else if($row->period == '1W'){
@@ -183,7 +183,7 @@ class App extends CI_Controller {
 					'tcal_message'	=> $row->code,
 					'status'       	=> 'unverified'
 				);
-				$this->db->insert('tcalendar', $data);
+				$this->db->insert('t3calendar', $data);
 				echo json_encode(array("status" => TRUE));
 
 			}else if($row->period == '1M'){
@@ -198,7 +198,7 @@ class App extends CI_Controller {
 					'tcal_message'	=> $row->code,
 					'status'       	=> 'unverified'
 				);
-				$this->db->insert('tcalendar', $data);
+				$this->db->insert('t3calendar', $data);
 				echo json_encode(array("status" => TRUE));
 
 			}else{

@@ -12,7 +12,7 @@ class Clean extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-    $this->load->model(['M_raw_data', 'M_tltdbb_clean', 'M_danafloat_clean', 'M_sipesat_clean']);
+    $this->load->model(['M_tltdbb_clean', 'M_tltdbb_clean', 'M_danafloat_clean', 'M_sipesat_clean']);
     // $this->load->model(['M_clean_data']);
     if(!$this->session->userdata('logged_in'))
     {
@@ -71,7 +71,7 @@ class Clean extends CI_Controller {
   public function ajax_list_tltdbb_clean()
    {
      $type_report = $this->input->post('type_report');
-     $this->db->where('status', "cleansing");
+     $this->db->where('status', "cleaned");
      if($type_report == 'G001'){
       $this->db->where_in('sender_country', array('INDONESIA', '86'));
       $this->db->where_not_in('recept_country', array('INDONESIA', '86'));
@@ -94,23 +94,23 @@ class Clean extends CI_Controller {
         $row[] = $raw_data->recept_country;
         $row[] = $raw_data->recept_name;
         $row[] = $raw_data->sender_name;
-        $row[] = '1';
-        $row[] = $this->lib->rupiah($raw_data->amount);
+        $row[] = $raw_data->trx_freq;
+        $row[] = $this->lib->rupiah($raw_data->trx_amount);
         $row[] = '3-Non Usaha – Lainnya';
       }else if($type_report == 'G002') {
         $row[] = $raw_data->sender_country;
         $row[] = $raw_data->recept_city;
         $row[] = $raw_data->recept_name;
         $row[] = $raw_data->sender_name;
-        $row[] = '1';
-        $row[] = $this->lib->rupiah($raw_data->amount);
+        $row[] = $raw_data->trx_freq;
+        $row[] = $this->lib->rupiah($raw_data->trx_amount);
       }else if($type_report == 'G003'){
         $row[] = $raw_data->sender_city;
         $row[] = $raw_data->recept_city;
         $row[] = $raw_data->recept_name;
         $row[] = $raw_data->sender_name;
-        $row[] = '1';
-        $row[] = $this->lib->rupiah($raw_data->amount);
+        $row[] = $raw_data->trx_freq;
+        $row[] = $this->lib->rupiah($raw_data->trx_amount);
         $row[] = '3-Non Usaha – Lainnya';
       }
 
@@ -127,7 +127,7 @@ class Clean extends CI_Controller {
       $this->db->where_in('sender_country', array('INDONESIA', '86'));
       $this->db->where_in('recept_country', array('INDONESIA', '86'));
     }
-    $recordsTotal = $this->M_raw_data->count_all();
+    $recordsTotal = $this->M_tltdbb_clean->count_all();
 
     if($type_report == 'G001'){
       $this->db->where_in('sender_country', array('INDONESIA', '86'));
@@ -139,7 +139,7 @@ class Clean extends CI_Controller {
       $this->db->where_in('sender_country', array('INDONESIA', '86'));
       $this->db->where_in('recept_country', array('INDONESIA', '86'));
     }
-    $recordsFiltered = $this->M_raw_data->count_filtered();
+    $recordsFiltered = $this->M_tltdbb_clean->count_filtered();
      $output = array(
                "draw" => $_POST['draw'],
                "recordsTotal" => $recordsTotal,

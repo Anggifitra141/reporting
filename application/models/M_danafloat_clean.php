@@ -14,7 +14,7 @@ class M_danafloat_clean extends CI_model {
 		parent::__construct();
 	}
 
-	var $table = 'tdanafloat_clean';
+	var $table = 't1clean_danafloat';
   var $column_order = array('wallet_code','trx_code','trx_id','trx_type', 'trx_value', 'description', 'status');
   var $column_search = array('wallet_code','trx_code','trx_id','trx_type', 'trx_value', 'description', 'status');
   var $order = array('id' => 'desc');

@@ -14,7 +14,7 @@ class M_user extends CI_model {
 		parent::__construct();
 	}
 
-	var $table = 'tuser';
+	var $table = 't4user';
   var $column_order = array('username', 'fullname', 'user_group', 'activation_date', 'status');
   var $column_search = array('username', 'fullname', 'user_group', 'activation_date', 'status');
   var $order = array('id' => 'desc');

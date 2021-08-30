@@ -15,7 +15,7 @@ class M_user_group extends CI_model {
 		parent::__construct();
 	}
 
-	var $table = 'tuser_group';
+	var $table = 't4user_group';
   var $column_order = array('group_name','access','action');
   var $column_search = array('group_name','access','action');
   var $order = array('id' => 'desc');

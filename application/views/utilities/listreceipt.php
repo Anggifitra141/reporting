@@ -22,11 +22,11 @@
                   </tr>
                 </thead>
                 <tbody>
-									<?php foreach ($receiptcountry as $row) : $city = str_replace(" ", "_",$row['receiptcity']); ?>
+									<?php foreach ($receptcountry as $row) : $city = str_replace(" ", "_",$row['recept_city']); ?>
 										<tr>
-                      <td width="100%"><?php echo $row['receiptcity'] ?></td>
+                      <td width="100%"><?php echo $row['recept_city'] ?></td>
 											<td>
-                        <a href="javascript:void(0)" onClick="modal_list('<?= $row['receiptcity']."','".$row['receiptcountry'] ?>')"  class="btn btn-success btn-xs" title="Edit Data"> <i class="fas fa-pen"></i></a>
+                        <a href="javascript:void(0)" onClick="modal_list('<?= $row['recept_city']."','".$row['recept_country'] ?>')"  class="btn btn-success btn-xs" title="Edit Data"> <i class="fas fa-pen"></i></a>
                       </td>
                     </tr>
 									<?php endforeach; ?>
@@ -67,8 +67,8 @@
               <label for="">Sender After</label>
               <select class="form-control select2" name="name">
                 <option value="">Choice City</option>
-                <?php foreach($receipt as $key) :  ?>
-                  <option value="<?= $key->alto ?>"><?= $key->alto ?></option>
+                <?php foreach($recept as $key) :  ?>
+                  <option value="<?= $key->bi_code .' - '. $key->bi_city ?>"><?= $key->bi_code .' - '. $key->bi_city ?></option>
                 <?php endforeach; ?>
               
               </select>
@@ -86,6 +86,18 @@
 </div>
 
 <script src="<?php echo base_url(); ?>assets/modules/jquery.min.js"></script>
+<?php if($this->session->flashdata('msg')) : ?>
+  <script>
+    $(document).ready(function(){
+      swal({
+      title: 'Success',
+      text: 'Updated Done' ,
+      icon: 'warning',
+      icon: 'success',
+    });
+    })
+  </script>
+<?php endif; ?>
 <script>
   $('#nav-utilities-source').addClass('dropdown active');
   $('#nav-role-clean').addClass('active');
@@ -99,12 +111,12 @@
       });
    })
 
-   function modal_list(receiptcity, receiptcountry) {
+   function modal_list(recept_city, recept_country) {
       save_method = 'update';
       $('#form')[0].reset();
       $('#modal_list').modal('show');
-      $('[name="id"]').val(receiptcity);
-      $('[name="senderbefore"]').val(receiptcity);
-      $('[name="contry"]').val(receiptcountry);
+      $('[name="id"]').val(recept_city);
+      $('[name="senderbefore"]').val(recept_city);
+      $('[name="contry"]').val(recept_country);
     }
 </script>

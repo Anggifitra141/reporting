@@ -14,7 +14,7 @@ class M_role_model extends CI_model {
 		parent::__construct();
 	}
 
-	var $table = 'trole_model';
+	var $table = 't3role_model';
   var $column_order = array('report_code', 'table', 'field', 'from', 'to');
   var $column_search = array('report_code', 'table', 'field', 'from', 'to');
   var $order = array('id' => 'desc');

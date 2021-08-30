@@ -163,7 +163,18 @@
   </div>
 </div>
 
-
+<?php if($this->session->flashdata('msg')) : ?>
+  <script>
+    $(document).ready(function(){
+      swal({
+      title: 'Success',
+      text: 'Updated Done' ,
+      icon: 'warning',
+      icon: 'success',
+    });
+    })
+  </script>
+<?php endif; ?>
 <script>
   $('#nav-utilities-source').addClass('dropdown active');
   $('#nav-role-clean').addClass('active');

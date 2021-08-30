@@ -14,7 +14,7 @@ class M_sipesat_source extends CI_model {
 		parent::__construct();
 	}
 
-	var $table = 'tsipesat_source';
+	var $table = 't0source_sipesat';
   var $column_order = array('trx_date','customer_code','customer_cif','customer_name', 'birth_place', 'birth_date', 'address', 'phone_number', 'status');
   var $column_search = array('trx_date','customer_code','customer_cif','customer_name', 'birth_place', 'birth_date', 'address', 'phone_number', 'status');
   var $order = array('id' => 'desc');

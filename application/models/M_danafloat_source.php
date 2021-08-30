@@ -14,7 +14,7 @@ class M_danafloat_source extends CI_model {
 		parent::__construct();
 	}
 
-	var $table = 'tdanafloat_source';
+	var $table = 't0source_danafloat';
   var $column_order = array('wallet_code','trx_code','trx_id','trx_type', 'trx_value', 'description', 'status');
   var $column_search = array('wallet_code','trx_code','trx_id','trx_type', 'trx_value', 'description', 'status');
   var $order = array('id' => 'desc');

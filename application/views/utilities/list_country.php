@@ -69,7 +69,7 @@
               <select class="form-control select2" name="sender">
                 <option value="">Choice City</option>
                 <?php foreach($city_result as $key) :  ?>
-                  <option value="<?= $key->alto ?>"><?= $key->alto ?></option>
+                  <option value="<?= $key->bi_code .' - '. $key->bi_city ?>"><?= $key->bi_code .' - '. $key->bi_city ?></option>
                 <?php endforeach; ?>
               
               </select>
@@ -87,6 +87,18 @@
 </div>
 
 <script src="<?php echo base_url(); ?>assets/modules/jquery.min.js"></script>
+<?php if($this->session->flashdata('msg')) : ?>
+  <script>
+    $(document).ready(function(){
+      swal({
+      title: 'Success',
+      text: 'Updated Done' ,
+      icon: 'warning',
+      icon: 'success',
+    });
+    })
+  </script>
+<?php endif; ?>
 <script>
   $('#nav-utilities-source').addClass('dropdown active');
   $('#nav-role-clean').addClass('active');
