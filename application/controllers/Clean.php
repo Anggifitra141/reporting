@@ -248,5 +248,11 @@ class Clean extends CI_Controller {
             );
     echo json_encode($output);
   }
+
+  public function get_sipesat_by_id($id)
+  {
+    $data = $this->db->get_where('t1clean_sipesat', ['id' => $id])->row();
+    echo json_encode($data);
+  }
   // END :: AJAX SI PESAT
 }

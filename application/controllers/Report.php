@@ -77,7 +77,7 @@ class Report extends CI_Controller {
         $row[] = $raw_data->recept_name;
         $row[] = $raw_data->sender_name;
         $row[] = '1';
-        $row[] = $this->lib->rupiah($raw_data->amount);
+        $row[] = $this->lib->rupiah($raw_data->trx_amount);
         $row[] = '3-Non Usaha – Lainnya';
       } else if ($type_report == 'G002') {
         $row[] = $raw_data->sender_country;
@@ -85,14 +85,14 @@ class Report extends CI_Controller {
         $row[] = $raw_data->recept_name;
         $row[] = $raw_data->sender_name;
         $row[] = '1';
-        $row[] = $this->lib->rupiah($raw_data->amount);
+        $row[] = $this->lib->rupiah($raw_data->trx_amount);
       } else if ($type_report == 'G003') {
         $row[] = $raw_data->sender_city;
         $row[] = $raw_data->recept_city;
         $row[] = $raw_data->recept_name;
         $row[] = $raw_data->sender_name;
         $row[] = '1';
-        $row[] = $this->lib->rupiah($raw_data->amount);
+        $row[] = $this->lib->rupiah($raw_data->trx_amount);
         $row[] = '3-Non Usaha – Lainnya';
       }
 
@@ -258,7 +258,7 @@ class Report extends CI_Controller {
       $row = array();
       $row[] = '<input type="checkbox" class="data-check" value="'.$raw_data->id.'">';
 			$row[] = '
-				<a href="javascript:void(0)" onClick="edit_ltdbb('.$raw_data->id.')"  class="btn btn-primary btn-sm"> <i class="far fa-edit"></i></a>
+				<a href="javascript:void(0)" onClick="edit_sipesat('.$raw_data->id.')"  class="btn btn-primary btn-sm"> <i class="far fa-edit"></i></a>
 				<a href="javascript:void(0)" onclick="delete_row('.$raw_data->id.')"  class="btn btn-danger btn-sm"> <i class="fas fa-trash"></i></a>
 			';
       $row[] = $raw_data->customer_code;

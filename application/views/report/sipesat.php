@@ -97,85 +97,47 @@
 
             <input type="hidden" name="id" value="">
             <div class="row">
-              <div class="col-6">
+              <div class="col-12">
                 <div class="form-group">
-                  <label for="lastName">Customer code</label>
-                    <input class="form-control" name="sender_name" placeholder="" value="" type="text">
+                  <label for="lastName">Kode Nasabah</label>
+                  <input class="form-control" name="customer_code" placeholder="" value="" type="text">
                   <span class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                  <label for="">Kota/Kabupaten Asal Pengiriman</label>
-                  <select name="sender_city" class="form-control" id="">
-                    <?php foreach ($city as $key) : ?>
-                      <option value="<?= $key->bi_code . ' - ' . $key->city ?>"><?= $key->bi_code . ' - ' . $key->city ?></option>
-                    <?php endforeach; ?>
-                  </select>
+                  <label for="">Nama Nasabah</label>
+                  <input class="form-control" name="customer_name" placeholder="" value="" type="text">
                   <span class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                  <label for="firstName">Nama Pengirim</label>
-                  <input class="form-control" name="sender_name" placeholder="" value="" type="text">
+                  <label for="firstName">Tempat Lahir Nasabah</label>
+                  <input class="form-control" name="birth_place" placeholder="" value="" type="text">
                 </div>
                 <div class="form-group">
-                  <label for="firstName">Telepon Pengirim</label>
-                  <input class="form-control" name="sender_phone" placeholder="" value="" type="text">
+                  <label for="firstName">Tanggal Lahir Nasabah</label>
+                  <input class="form-control" name="birth_date" placeholder="" value="" type="text">
                   <span class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                  <label for="firstName">Nominal</label>
-                  <input class="form-control" name="amount" placeholder="" value="" type="text" readonly>
-                  <span class="text-danger"></span>
-                </div>
-
-              </div>
-              <div class="col-6">
-                <div class="form-group">
-                  <label for="lastName">Negara Penerima</label>
-                  <select name="recept_country" class="form-control" id="">
-                    <?php foreach ($country as $key) : ?>
-                      <option value="<?= $key->country ?>"><?= $key->country ?></option>
-                    <?php endforeach; ?>
-                  </select>
+                  <label for="firstName">Alamat</label>
+                  <input class="form-control" name="address" placeholder="" value="" type="text">
                   <span class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                  <label for="firstName">Kota/Kabupaten Asal Pengiriman</label>
-                  <select name="recept_city" class="form-control" id="">
-                    <?php foreach ($city as $key) : ?>
-                      <option value="<?= $key->bi_code . ' - ' . $key->city ?>"><?= $key->bi_code . ' - ' . $key->city ?></option>
-                    <?php endforeach; ?>
-                  </select>
+                  <label for="lastName">Nomor Induk Kependudukan / No KTP</label>
+                  <input class="form-control" name="id_card_number" placeholder="" value="" type="text">
                   <span class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                  <label for="lastName">Nama Penerima</label>
-                  <input class="form-control" name="recept_name" placeholder="" value="" type="text">
-                </div>
-                <div class="form-group">
-                  <label for="lastName">Telepon Penerima</label>
-                  <input class="form-control" name="recept_phone" placeholder="" value="" type="text">
+                  <label for="firstName">Nomor Dukumen Identitas (Selain KTP)</label>
+                  <input class="form-control" name="id_card_number_other" placeholder="" value="" type="text">
                   <span class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                  <label for="lastName">Status</label>
-                  <select name="status" class="form-control" required>
-                    <option value="verified">Verified</option>
-                    <option value="unverified">Unverified</option>
-                  </select>
-                  <span class="text-danger"></span>
+                  <label for="lastName">Nomor CIF Kepersertaan</label>
+                  <input class="form-control" name="customer_cif" placeholder="" value="" type="text">
                 </div>
-              </div>
-              <div class="col-md-12 form-group">
-                <label for="lastName">Description</label>
-                <textarea class="form-control" name="description" type="text" readonly></textarea>
-                <span class="text-danger"></span>
               </div>
             </div>
-
-
-
-
-
 
           </div>
 
