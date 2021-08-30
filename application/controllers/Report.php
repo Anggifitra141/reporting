@@ -243,14 +243,14 @@ class Report extends CI_Controller {
   {
 
     $data = [];
-    $data['content'] = $this->load->view('report/ltdbb', $data, TRUE);
+    $data['content'] = $this->load->view('report/sipesat', $data, TRUE);
     $this->load->view('layout', $data);
   }
 
   public function ajax_list_sipesat()
   {
 
-    $list = $this->M_report->get_datatables_sipesat();
+    $list = $this->M_report->get_datatables_t1clean_sipesat();
     $data = array();
     $no = $_POST['start'];
     foreach ($list as $raw_data) {
@@ -261,23 +261,24 @@ class Report extends CI_Controller {
 				<a href="javascript:void(0)" onClick="edit_ltdbb('.$raw_data->id.')"  class="btn btn-primary btn-sm"> <i class="far fa-edit"></i></a>
 				<a href="javascript:void(0)" onclick="delete_row('.$raw_data->id.')"  class="btn btn-danger btn-sm"> <i class="fas fa-trash"></i></a>
 			';
-        $row[] = $raw_data->customer_code;
-        $row[] = $raw_data->customer_name;
-        $row[] = $raw_data->birth_place;
-        $row[] = $raw_data->birth_date;
-        $row[] = $raw_data->address;
-        $row[] = $raw_data->id_card_number;
-        $row[] = $raw_data->id_card_number_other;
-        $row[] = $raw_data->customer_cif;
-        $row[] = $raw_data->birth_date;
-        $row[] = $raw_data->birth_date;
-        $row[] = $raw_data->birth_date;
-        $row[] = $raw_data->birth_date;
-        $row[] = $raw_data->birth_date;
-
+      $row[] = $raw_data->customer_code;
+      $row[] = $raw_data->customer_name;
+      $row[] = $raw_data->birth_place;
+      $row[] = $raw_data->birth_date;
+      $row[] = $raw_data->address;
+      $row[] = $raw_data->id_card_number;
+      $row[] = $raw_data->id_card_number_other;
+      $row[] = $raw_data->customer_cif;
 
       $data[] = $row;
     }
+      $output = array(
+        "draw" => $_POST['draw'],
+        "recordsTotal" => $this->M_report->count_all_t1clean_sipesat(),
+        "recordsFiltered" => $this->M_report->count_filtered_t1clean_sipesat(),
+        "data" => $data,
+      );
+      echo json_encode($output);
 
   }
 

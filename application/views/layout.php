@@ -415,7 +415,7 @@
                 <li id="nav-dana-float-source"><a class="nav-link" href="<?php echo site_url('source/qris'); ?>"><i class="fas fa-list"></i> QRIS</a></li>
                 <li id="nav-dana-float-source"><a class="nav-link" href="<?php echo site_url('source/dana_float'); ?>"><i class="fas fa-list"></i> Dana Float</a></li>
                 <li id="nav-dana-float-source"><a class="nav-link" href="<?php echo site_url('source/qris'); ?>"><i class="fas fa-list"></i> Payment Gateway</a></li>
-                <li id="nav-sipesat-source"><a class="nav-link" href="<?php echo site_url('source/si_pesat'); ?>"><i class="fas fa-list"></i> Si Pesat</a></li>
+                <li id="nav-sipesat-source"><a class="nav-link" href="<?php echo site_url('report/sipesat'); ?>"><i class="fas fa-list"></i> Sipesat</a></li>
                 <li class="dropdown" id="nav-ltdbb-source">
                   <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-list"></i>LKPBU</a>
                   <ul class="dropdown-menu">

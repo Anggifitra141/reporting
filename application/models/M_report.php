@@ -90,6 +90,70 @@ class M_report extends CI_model {
     return $this->db->count_all_results();
   }
 
+  //SIPESAT
+  var $t1clean_sipesat = 't1clean_sipesat';
+  var $column_order_t1clean_sipesat = array('trx_date', 'sender_name', 'recept_name', 'trx_amount', '', '', '', '');
+  var $column_search_t1clean_sipesat = array('trx_date', 'sender_country', 'sender_city', 'recept_country', 'recept_city', 'sender_name', 'recept_name', 'trx_amount');
+  var $order_t1clean_sipesat = array('id' => 'desc');
+
+  private function _get_datatables_query_t1clean_sipesat()
+  {
+    $start_date = date('Y-m-d', strtotime(substr($this->input->post('daterange'), 0, 10)));
+    $end_date =  date('Y-m-d', strtotime(substr($this->input->post('daterange'), 13, 23)));
+
+    $this->db->where('DATE(datestamp) >=', $start_date);
+    $this->db->where('DATE(datestamp) <=', $end_date);
+
+    $this->db->select('*');
+    $this->db->from($this->t1clean_sipesat);
+
+    $i = 0;
+    foreach ($this->column_search_t1clean_sipesat as $item) {
+      if ($_POST['search']['value']) {
+        if ($i === 0) {
+          $this->db->group_start();
+          $this->db->like($item, $_POST['search']['value']);
+        } else {
+          $this->db->or_like($item, $_POST['search']['value']);
+        }
+
+        if (count($this->column_search_t1clean_sipesat) - 1 == $i)
+          $this->db->group_end();
+      }
+      $i++;
+    }
+
+    if (isset($_POST['order'])) {
+      $this->db->order_by($this->column_order_t1clean_sipesat[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+    } else if (isset($this->order_t1clean_sipesat)) {
+      $order_t1clean_sipesat = $this->order_t1clean_sipesat;
+      $this->db->order_by(key($order_t1clean_sipesat), $order_t1clean_sipesat[key($order_t1clean_sipesat)]);
+    }
+  }
+
+  function get_datatables_t1clean_sipesat()
+  {
+    $this->_get_datatables_query_t1clean_sipesat();
+    if ($_POST['length'] != -1)
+    $this->db->limit($_POST['length'], $_POST['start']);
+    $query = $this->db->get();
+    return $query->result();
+  }
+
+  function count_filtered_t1clean_sipesat()
+  {
+    $this->_get_datatables_query_t1clean_sipesat();
+    $query = $this->db->get();
+    return $query->num_rows();
+  }
+
+  public function count_all_t1clean_sipesat()
+  {
+    $this->db->from($this->t1clean_sipesat);
+    return $this->db->count_all_results();
+  }
+
+
   // REPORT SETTINGS
 	var $table = 'treportsettings';
   var $column_order = array('code', 'name');
