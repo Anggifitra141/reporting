@@ -149,6 +149,46 @@ class Clean extends CI_Controller {
      echo json_encode($output);
    }
 
+   public function ajax_bulk_delete_ltdbb()
+   {
+     $list_id = $this->input->post('id');
+     foreach ($list_id as $id) {
+         $this->M_tltdbb_clean->delete_by_id($id);
+     }
+     echo json_encode(array("status" => TRUE));
+   }
+   public function ajax_bulk_rollback_ltdbb()
+   {
+     $list_id = $this->input->post('id');
+     $update_source_data = [];
+     $delete_clean_data = [];
+     foreach ($list_id as $id) {
+       $result = $this->db->query("SELECT * FROM tltdbb_clean WHERE id = '".$id."'")->row();
+       $update_source_data[] = array(
+         'id'				=> $result->source_id,
+         'status'		=> 'new'
+       );
+       $delete_clean_data[] = array(
+        'id'				=> $id,
+        'status'		=> 'deleted'
+      );
+
+     }
+     $this->db->update_batch('tltdbb_source', $update_source_data, 'id');
+     $this->db->update_batch('tltdbb_clean', $delete_clean_data, 'id');
+     echo json_encode(['status' => true, 'rollback' => count($update_source_data)]);
+   }
+   public function ajax_delete_ltdbb()
+   {
+     $id = $this->input->post('id');
+     $this->db->update('tltdbb_clean', ['status' => 'deleted'], ['id' => $id]);
+     echo json_encode(['status' => true]);
+   }
+   public function get_ltdbb_by_id($id)
+   {
+     $data = $this->db->get_where('tltdbb_clean', ['id' => $id])->row();
+     echo json_encode($data);
+   }
    
   // END :: AJAX LTDBB
 

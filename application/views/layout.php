@@ -302,14 +302,7 @@
             <li class="dropdown" id="nav-data-source">
               <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-layer-group"></i> <span>Data Source</span></a>
               <ul class="dropdown-menu">
-                <li class="dropdown" id="nav-ltdbb-source">
-                  <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-database"></i>LTDBB</a>
-                  <ul class="dropdown-menu">
-                    <li id="nav-ltdbb-source-g001"><a class="nav-link" href="<?php echo site_url('source/tltdbb_source/G001'); ?>"><i class="fas fa-circle"></i> G001</a></li>
-                    <li id="nav-ltdbb-source-g002"><a class="nav-link" href="<?php echo site_url('source/tltdbb_source/G002'); ?>"><i class="fas fa-circle"></i> G002</a></li>
-                    <li id="nav-ltdbb-source-g003"><a class="nav-link" href="<?php echo site_url('source/tltdbb_source/G003'); ?>"><i class="fas fa-circle"></i> G003</a></li>
-                  </ul>
-                </li>
+                <li id="nav-ltdbb-source-g001"><a class="nav-link" href="<?php echo site_url('source/tltdbb_source'); ?>"><i class="fas fa-database"></i> Ltdbb</a></li>
                 <li id="nav-dana-float-source"><a class="nav-link" href="<?php echo site_url('source/ltkl'); ?>"><i class="fas fa-database"></i> LTKL</a></li>
                 <li id="nav-dana-float-source"><a class="nav-link" href="<?php echo site_url('source/qris'); ?>"><i class="fas fa-database"></i> QRIS</a></li>
                 <li id="nav-dana-float-source"><a class="nav-link" href="<?php echo site_url('source/dana_float'); ?>"><i class="fas fa-database"></i> Dana Float</a></li>

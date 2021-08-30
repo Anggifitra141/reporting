@@ -22,16 +22,9 @@ class Source extends CI_Controller {
     }
 	}
 
-	public function tltdbb_source($type="")
+	public function tltdbb_source()
 	{
-    if($type == ""){
-      $data['msg'] = "Access Forbidden !";
-			$content = $this->load->view('errors/html/error_sessi', $data, TRUE);
-			exit($content);
-    }
-    $cek_report_type = $this->_get_header($type);
     $data= [];
-    $data['header'] = $cek_report_type;
     $data['content'] = $this->load->view('source/tltdbb_source', $data, TRUE);
 		$this->load->view('layout', $data);
 	}
@@ -72,18 +65,6 @@ class Source extends CI_Controller {
   // START :: AJAX LTDBB
   public function ajax_list_tltdbb_source()
    {
-     $type_report = $this->input->post('type_report');
-     $this->db->where('status', "new");
-     if($type_report == 'G001'){
-      $this->db->where_in('sender_country', array('Indonesia', '86'));
-      $this->db->where_not_in('recept_country', array('Indonesia', '86'));
-    }else if($type_report == 'G002'){
-      $this->db->where_not_in('sender_country', array('Indonesia', '86'));
-      $this->db->where_in('recept_country', array('Indonesia', '86'));
-    }else if($type_report == 'G003'){
-      $this->db->where_in('sender_country', array('Indonesia', '86'));
-      $this->db->where_in('recept_country', array('Indonesia', '86'));
-    }
      $list = $this->M_tltdbb_source->get_datatables();
      $data = array();
      $no = $_POST['start'];
@@ -91,56 +72,20 @@ class Source extends CI_Controller {
       $no++;
       $row = array();
       $row[] = $no; 
-      if($type_report == 'G001'){
-        $row[] = $raw_data->recept_city;
-        $row[] = $raw_data->recept_country;
-        $row[] = $raw_data->recept_name;
-        $row[] = $raw_data->sender_name;
-        $row[] = $raw_data->trx_freq;
-        $row[] = $this->lib->rupiah($raw_data->trx_amount);
-        $row[] = '3-Non Usaha – Lainnya';
-      }else if($type_report == 'G002') {
-        $row[] = $raw_data->sender_country;
-        $row[] = $raw_data->recept_city;
-        $row[] = $raw_data->recept_name;
-        $row[] = $raw_data->sender_name;
-        $row[] = $raw_data->trx_freq;
-        $row[] = $this->lib->rupiah($raw_data->trx_amount);
-      }else if($type_report == 'G003'){
-        $row[] = $raw_data->sender_city;
-        $row[] = $raw_data->recept_city;
-        $row[] = $raw_data->recept_name;
-        $row[] = $raw_data->sender_name;
-        $row[] = $raw_data->trx_freq;
-        $row[] = $this->lib->rupiah($raw_data->trx_amount);
-        $row[] = '3-Non Usaha – Lainnya';
-      }
+      $row[] = $raw_data->sender_country;
+      $row[] = $raw_data->sender_city;
+      $row[] = $raw_data->recept_country;
+      $row[] = $raw_data->recept_city;
+      $row[] = $raw_data->sender_name;
+      $row[] = $raw_data->recept_name;
+      $row[] = $raw_data->trx_freq;
+      $row[] = $this->lib->rupiah($raw_data->trx_amount);
+      $row[] = '3-Non Usaha – Lainnya';
 
       $data[] = $row;
       
      } 
-     if($type_report == 'G001'){
-      $this->db->where_in('sender_country', array('Indonesia', '86'));
-      $this->db->where_not_in('recept_country', array('Indonesia', '86'));
-    }else if($type_report == 'G002'){
-      $this->db->where_not_in('sender_country', array('Indonesia', '86'));
-      $this->db->where_in('recept_country', array('Indonesia', '86'));
-    }else if($type_report == 'G003'){
-      $this->db->where_in('sender_country', array('Indonesia', '86'));
-      $this->db->where_in('recept_country', array('Indonesia', '86'));
-    }
     $recordsTotal = $this->M_tltdbb_source->count_all();
-
-    if($type_report == 'G001'){
-      $this->db->where_in('sender_country', array('Indonesia', '86'));
-      $this->db->where_not_in('recept_country', array('Indonesia', '86'));
-    }else if($type_report == 'G002'){
-      $this->db->where_not_in('sender_country', array('Indonesia', '86'));
-      $this->db->where_in('recept_country', array('Indonesia', '86'));
-    }else if($type_report == 'G003'){
-      $this->db->where_in('sender_country', array('Indonesia', '86'));
-      $this->db->where_in('recept_country', array('Indonesia', '86'));
-    }
     $recordsFiltered = $this->M_tltdbb_source->count_filtered();
      $output = array(
                "draw" => $_POST['draw'],

@@ -6,11 +6,11 @@
 
 <section class="section">
   <div class="section-header">
-    <h1><?= $header['title'] ?></h1>
+    <h1>Data Source</h1>
   </div>
 
   <div class="section-body">
-    <h2 class="section-title"><?= $header['sub_title'] ?></h2>
+    <h2 class="section-title">Data Source Ltdbb</h2>
     
     <div class="row">
       <div class="col-12">
@@ -26,9 +26,15 @@
                     <th class="text-center" width="1px">
                       No
                     </th>
-                    <?php foreach($header['header'] as $key) : ?>
-                    <th><?= $key; ?></th>
-                    <?php endforeach; ?>
+                    <th>Sender Country</th>
+                    <th>Sender City</th>
+                    <th>Recept Country</th>
+                    <th>Recept City</th>
+                    <th>Sender Name</th>
+                    <th>Recept Name</th>
+                    <th>Volume</th>
+                    <th>Amount</th>
+                    <th>Transaction Purpose</th>
                   </tr>
                 </thead>
 
