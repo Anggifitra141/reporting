@@ -116,10 +116,10 @@ class M_user extends CI_model {
 
   // User Acitivity
 
-  var $tlog_user = 'tlog_user';
-  var $column_order_tlog_user = array('event_time', 'id_user', 'ip_address', 'event_modul', 'event_type','record_id','event_notes');
-  var $column_search_tlog_user = array('event_time', 'username', 'ip_address', 'event_modul', 'event_type', 'record_id', 'event_notes');
-  var $order_tlog_user = array('tlog_user.id' => 'desc');
+  var $t4log_user = 't4log_user';
+  var $column_order_t4log_user = array('event_time', 'id_user', 'ip_address', 'event_modul', 'event_type','record_id','event_notes');
+  var $column_search_t4log_user = array('event_time', 'username', 'ip_address', 'event_modul', 'event_type', 'record_id', 'event_notes');
+  var $order_t4log_user = array('t4log_user.id' => 'desc');
 
   private function _get_datatables_query_user_activity()
   {
@@ -135,13 +135,13 @@ class M_user extends CI_model {
     if($this->input->post('id_user')){
       $this->db->where('id_user', $this->input->post('id_user'));
     }
-    $this->db->select('event_time, tuser.username, ip_address, event_modul, event_type, record_id, event_notes');
-    $this->db->from($this->tlog_user);
-    $this->db->join('tuser', 'tlog_user.id_user = tuser.id');
+    $this->db->select('event_time, t4user.username, ip_address, event_modul, event_type, record_id, event_notes');
+    $this->db->from($this->t4log_user);
+    $this->db->join('t4user', 't4log_user.id_user = t4user.id');
 
     $i = 0;
 
-    foreach ($this->column_search_tlog_user as $row) {
+    foreach ($this->column_search_t4log_user as $row) {
       if ($_POST['search']['value']) {
 
         if ($i === 0) {
@@ -151,17 +151,17 @@ class M_user extends CI_model {
           $this->db->or_like($row, $_POST['search']['value']);
         }
 
-        if (count($this->column_search_tlog_user) - 1 == $i)
+        if (count($this->column_search_t4log_user) - 1 == $i)
           $this->db->group_end();
       }
       $i++;
     }
 
     if (isset($_POST['order'])) {
-      $this->db->order_by($this->column_order_tlog_user[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
-    } else if (isset($this->order_tlog_user)) {
-      $order_tlog_user = $this->order_tlog_user;
-      $this->db->order_by(key($order_tlog_user), $order_tlog_user[key($order_tlog_user)]);
+      $this->db->order_by($this->column_order_t4log_user[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+    } else if (isset($this->order_t4log_user)) {
+      $order_t4log_user = $this->order_t4log_user;
+      $this->db->order_by(key($order_t4log_user), $order_t4log_user[key($order_t4log_user)]);
     }
   }
 
@@ -183,7 +183,7 @@ class M_user extends CI_model {
 
   public function count_all_user_activity()
   {
-    $this->db->from($this->tlog_user);
+    $this->db->from($this->t4log_user);
     return $this->db->count_all_results();
   }
 

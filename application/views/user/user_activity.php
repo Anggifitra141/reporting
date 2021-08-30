@@ -94,8 +94,7 @@
 <script src="<?php echo base_url(); ?>assets/modules/jquery.min.js"></script>
 <script>
   var base_url = "<?= base_url() ?>";
-  $('#nav-data-clean').addClass('dropdown active');
-  $('#nav-raw-data').addClass('active');
+  $('#nav-user-activity').addClass('active');
 
   $("input").change(function() {
     $(this).removeClass('is-invalid');

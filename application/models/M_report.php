@@ -16,7 +16,7 @@ class M_report extends CI_model {
 	}
 
   // LTDBB
-  var $tltdbb_clean = 'tltdbb_clean';
+  var $t1clean_ltdbb = 't1clean_ltdbb';
   var $column_order_tltdbb = array('trx_date', 'sender_name', 'recept_name', 'trx_amount', '','','','');
   var $column_search_tltdbb = array('trx_date', 'sender_country', 'sender_city', 'recept_country', 'recept_city', 'sender_name', 'recept_name', 'trx_amount');
   var $order_tltdbb = array('id' => 'desc');
@@ -42,7 +42,7 @@ class M_report extends CI_model {
       $this->db->where_in('recept_country', array('INDONESIA', '86'));
     }
     $this->db->select('*');
-    $this->db->from($this->tltdbb_clean);
+    $this->db->from($this->t1clean_ltdbb);
 
     $i = 0;
     foreach ($this->column_search_tltdbb as $item) {
@@ -86,7 +86,7 @@ class M_report extends CI_model {
 
   public function count_all_ltdbb()
   {
-    $this->db->from($this->tltdbb_clean);
+    $this->db->from($this->t1clean_ltdbb);
     return $this->db->count_all_results();
   }
 
