@@ -437,7 +437,7 @@
     });
   }
 
-   function save_modify()
+  function save_modify()
   {
     $.ajax({
       url: "<?php echo site_url('clean/update_clean_ltdbb')?>",

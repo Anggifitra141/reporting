@@ -50,6 +50,7 @@
                         No
                       </th>
                       <th>Action</th>
+                      <th>Kode Nasabah</th>
                       <th>Nama Nasabah</th>
                       <th>Tempat Lahir</th>
                       <th>Tanggal Lahir</th>
@@ -372,17 +373,15 @@
       dataType: "JSON",
       success: function(data) {
         $('[name="id"]').val(data.id);
-        $('[name="sender_country"]').val(data.sender_country);
-        $('[name="sender_city"]').val(data.sender_city);
-        $('[name="sender_name"]').val(data.sender_name);
-        $('[name="sender_phone"]').val(data.sender_phone);
-        $('[name="amount"]').val(data.amount);
-        $('[name="recept_country"]').val(data.recept_country);
-        $('[name="recept_city"]').val(data.recept_city);
-        $('[name="recept_name"]').val(data.recept_name);
-        $('[name="recept_phone"]').val(data.recept_phone);
-        $('[name="status"]').val(data.status);
-        $('[name="description"]').val(data.description);
+        $('[name="customer_code"]').val(data.customer_code);
+        $('[name="customer_name"]').val(data.customer_name);
+        $('[name="birth_place"]').val(data.birth_place);
+        $('[name="birth_date"]').val(data.birth_date);
+        $('[name="address"]').val(data.address);
+        $('[name="id_card_number"]').val(data.id_card_number);
+        $('[name="id_card_number_other"]').val(data.id_card_number_other);
+        $('[name="customer_cif"]').val(data.customer_cif);
+
 
         $('#modal_modify_sipesat').modal('show');
         $('.modal-title').text('Update sipesat');
@@ -393,6 +392,36 @@
     });
   }
 
+  function save_modify() {
+    $.ajax({
+      url: "<?php echo site_url('clean/update_sipesat') ?>",
+      type: "POST",
+      data: $('#form-sipesat').serialize(),
+      dataType: "JSON",
+      success: function(data, response) {
+        if (data.status) //if success close modal and reload ajax table
+        {
+          $('#btnSave').text('save'); //change button text
+          $('#btnSave').attr('disabled', false); //set button enable 
+          //if success close modal and reload ajax table
+          $('#modal_modify_sipesat').modal('hide');
+          iziToast.success({
+            title: 'Success !',
+            message: 'Data updated successfully ',
+            position: 'topRight'
+          });
+          $('#table').DataTable().ajax.reload();
+          // location.reload();// for reload a page
+        } else {
+          for (var i = 0; i < data.inputerror.length; i++) {
+            $('[name="' + data.inputerror[i] + '"]').addClass('is-invalid'); //select parent twice to select div form-group class and add has-error class
+            $('[name="' + data.inputerror[i] + '"]').next().text(data.error_string[i]); //select span help-block class set text error string
+          }
+        }
+
+      }
+    })
+  }
 
 
   function loading() {
