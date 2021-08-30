@@ -117,9 +117,9 @@ class Report extends CI_Controller {
     include APPPATH . 'third_party/PHPExcel/PHPExcel.php';
     // $type_report = $this->input->post('type_report');
 
-    $start_date = date('Y-m-d', strtotime(substr($_GET['daterange'], 0, 10)));
-    $end_date =  date('Y-m-d', strtotime(substr($_GET['daterange'], 13, 23)));
-    $type_report = $_GET['report_type'];
+    $start_date = date('Ymd', strtotime(substr($_GET['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_GET['daterange'], 13, 23)));
+    $type_report = $_GET['type_report'];
 
     $this->db->where('status', "cleaned");
     $this->db->where('datestamp >=', $start_date);
@@ -157,14 +157,14 @@ class Report extends CI_Controller {
     foreach ($list as $row) {
         if ($type_report == 'G001') {
           $objPHPExcel->setActiveSheetIndex(0)
-          ->setCellValue('A' . $baris, $no)
-          ->setCellValue('B' . $baris, $row->recept_city)
-          ->setCellValue('C' . $baris, $row->recept_country)
-          ->setCellValue('D' . $baris, $row->recept_name)
-          ->setCellValue('E' . $baris, $row->sender_name)
-          ->setCellValue('F' . $baris, "1")
-          ->setCellValue('G' . $baris, $row->trx_amount)
-          ->setCellValue('H' . $baris, "3-Non Usaha – Lainnya");
+          ->setCellValue('A'. $baris, $no)
+          ->setCellValue('B'. $baris, $row->recept_city)
+          ->setCellValue('C'. $baris, $row->recept_country)
+          ->setCellValue('D'. $baris, $row->recept_name)
+          ->setCellValue('E'. $baris, $row->sender_name)
+          ->setCellValue('F'. $baris, "1")
+          ->setCellValue('G'. $baris, $row->trx_amount)
+          ->setCellValue('H'. $baris, "3-Non Usaha – Lainnya");
           $baris++;
           $no++;
         } else if ($type_report == 'G002') {
@@ -180,13 +180,13 @@ class Report extends CI_Controller {
           ->setCellValue('L'. 3, $tgl_code)
           ->setCellValue('L'. 4, $format_code)
 
-          ->setCellValue('A'.$baris, $no)
-          ->setCellValue('B'.$baris, $row->sender_country)
-          ->setCellValue('C'.$baris, $row->recept_city)
-          ->setCellValue('D'.$baris, $row->recept_name)
-          ->setCellValue('E'.$baris, $row->sender_name)
-          ->setCellValue('F'.$baris, "1")
-          ->setCellValue('G'.$baris, $row->trx_amount);
+          ->setCellValue('A'. $baris, $no)
+          ->setCellValue('B'. $baris, $row->sender_country)
+          ->setCellValue('C'. $baris, $row->recept_city)
+          ->setCellValue('D'. $baris, $row->recept_name)
+          ->setCellValue('E'. $baris, $row->sender_name)
+          ->setCellValue('F'. $baris, "1")
+          ->setCellValue('G'. $baris, $row->trx_amount);
 
          
           $baris++;
@@ -195,26 +195,26 @@ class Report extends CI_Controller {
           $baris++;
           $no++;
         } else {
-        $tgl_code = date('Ym') . substr($report_setting->code, 1);
-        $report_code = $report_setting->header2.'M'.date('Ymd').$report_setting->code.str_pad(count($list), 9, "0", STR_PAD_LEFT);
+          $tgl_code = date('Ym') . substr($report_setting->code, 1);
+          $report_code = $report_setting->header2.'M'.date('Ymd').$report_setting->code.str_pad(count($list), 9, "0", STR_PAD_LEFT);
           $objPHPExcel->setActiveSheetIndex(0)
           
-          ->setCellValue('C' . 2, $report_setting->header2)
-          ->setCellValue('C' . 4, date('Y'))
-          ->setCellValue('D' . 4, date('m'))
-          ->setCellValue('K' . 2, $report_setting->code)
-          ->setCellValue('K' . 3, count($list)) //jumlah record
-          ->setCellValue('M' . 2,  $tgl_code) // tglcode
-          ->setCellValue('M' . 3, $report_code) // reportcode
+          ->setCellValue('C'. 2, $report_setting->header2)
+          ->setCellValue('C'. 4, date('Y'))
+          ->setCellValue('D'. 4, date('m'))
+          ->setCellValue('K'. 2, $report_setting->code)
+          ->setCellValue('K'. 3, count($list)) //jumlah record
+          ->setCellValue('M'. 2,  $tgl_code) // tglcode
+          ->setCellValue('M'. 3, $report_code) // reportcode
 
-          ->setCellValue('A'.$baris, $no)
-          ->setCellValue('B'.$baris, $row->sender_country)
-          ->setCellValue('C'.$baris, $row->recept_city)
-          ->setCellValue('D'.$baris, $row->recept_name)
-          ->setCellValue('E'.$baris, $row->sender_name)
-          ->setCellValue('F'.$baris, "1")
-          ->setCellValue('G'.$baris, $row->trx_amount)
-          ->setCellValue('H'.$baris, "3-Non Usaha – Lainnya");
+          ->setCellValue('A'. $baris, $no)
+          ->setCellValue('B'. $baris, $row->sender_country)
+          ->setCellValue('C'. $baris, $row->recept_city)
+          ->setCellValue('D'. $baris, $row->recept_name)
+          ->setCellValue('E'. $baris, $row->sender_name)
+          ->setCellValue('F'. $baris, "1")
+          ->setCellValue('G'. $baris, $row->trx_amount)
+          ->setCellValue('H'. $baris, "3-Non Usaha – Lainnya");
           $baris++;
           $no++;
         }
@@ -233,7 +233,6 @@ class Report extends CI_Controller {
     ini_set('memory_limit', '1G');
     ob_end_clean();
     exit;
-
   }
 
 
@@ -289,8 +288,8 @@ class Report extends CI_Controller {
     include APPPATH . 'third_party/PHPExcel/PHPExcel.php';
     //$type_report = $this->input->post('type_report');
 
-    $start_date = date('Y-m-d', strtotime(substr($_GET['daterange'], 0, 10)));
-    $end_date =  date('Y-m-d', strtotime(substr($_GET['daterange'], 13, 23)));
+    $start_date = date('Ymd', strtotime(substr($_GET['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_GET['daterange'], 13, 23)));
 
     $this->db->where('status', "cleaned");
     $this->db->where('datestamp >=', $start_date);
@@ -298,12 +297,13 @@ class Report extends CI_Controller {
 
 
     $list = $this->db->get('t1clean_sipesat')->result();
-
-    $report_setting = $this->M_report->get_report_setting('SIPESAT');
+    
+    $type_report = "SIPESAT";
+    $report_setting = $this->M_report->get_report_setting($type_report);
 
     $data = array();
     $no = 1;
-    $baris = 6;
+    $baris = 3;
     //$objPHPExcel    = new PHPExcel();
 
 
@@ -313,23 +313,22 @@ class Report extends CI_Controller {
     foreach ($list as $row) {
 
         $objPHPExcel->setActiveSheetIndex(0)
-          ->setCellValue('A' . $baris, $no)
-          ->setCellValue('B' . $baris, $row->recept_city)
-          ->setCellValue('C' . $baris, $row->recept_country)
-          ->setCellValue('D' . $baris, $row->recept_name)
-          ->setCellValue('E' . $baris, $row->sender_name)
-          ->setCellValue('F' . $baris, "1")
-          ->setCellValue('G' . $baris, $row->trx_amount)
-          ->setCellValue('H' . $baris, "3-Non Usaha – Lainnya");
+        ->setCellValue('A'. $baris, $row->customer_code)
+        ->setCellValue('B'. $baris, $row->customer_name)
+        ->setCellValue('C'. $baris, $row->birth_place)
+        ->setCellValue('D'. $baris, $row->birth_date)
+        ->setCellValue('E'. $baris, $row->address)
+        ->setCellValue('F'. $baris, $row->id_card_number)
+        ->setCellValue('G'. $baris, $row->id_card_number_other)
+        ->setCellValue('H'. $baris, $row->customer_cif);
         $baris++;
         $no++;
       
       $data[] = $row;
     }
-
     $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
     header('Content-Type: application/vnd.ms-excel');
-    header('Content-Disposition: attachment;filename="Laporan LTDBB ' . $report_setting->code . ' - ' . date('Y-m-d') . '.xlsx"');
+    header('Content-Disposition: attachment;filename="SIPESAT_41740_TW '.ceil(date("n")/3).date('Y').'_'.date('dmY').'_1.xlsx"');
     header('Cache-Control: max-age=0');
     $objWriter->save('php://output');
 
@@ -337,6 +336,7 @@ class Report extends CI_Controller {
     ini_set('memory_limit', '1G');
     ob_end_clean();
     exit;
+
   }
 
   // START :: SETTING REPORT

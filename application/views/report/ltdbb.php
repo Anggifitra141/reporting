@@ -234,7 +234,7 @@
           type: "POST",
           data: function(data) {
             data.type_report = type_report,
-              data.daterange = daterange
+            data.daterange = daterange
           }
         },
         "columnDefs": [{
@@ -248,7 +248,7 @@
       $("#check-all").click(function () {
         $(".data-check").prop('checked', $(this).prop('checked'));
     });
-      $('#btn-download-excel').attr('href', base_url + 'report/download_excel_ltdbb?report_type=' + type_report + '&daterange=' + daterange);
+      $('#btn-download-excel').attr('href', base_url + 'report/download_excel_ltdbb?type_report=' + type_report + '&daterange=' + daterange);
 
     } else {
       alert('Fields Is Required');
@@ -282,6 +282,7 @@
       alert('Fields Is Required');
     }
   });
+  
   function reload_table()
   {
     table.ajax.reload(null,false);

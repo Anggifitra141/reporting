@@ -256,7 +256,7 @@ class M_report extends CI_model {
 
   public function get_report_setting($type_report)
   {
-    $this->db->from('treport_settings');
+    $this->db->from('t3report_settings');
     $this->db->where('code', $type_report);
     $query = $this->db->get();
     return $query->row();
