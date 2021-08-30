@@ -23,7 +23,7 @@ class Clean extends CI_Controller {
     }
 	}
 
-	public function tltdbb_clean($type="")
+	public function t1clean_ltdbb($type="")
 	{
     if($type == ""){
       $data['msg'] = "Access Forbidden !";
@@ -33,7 +33,7 @@ class Clean extends CI_Controller {
     $cek_report_type = $this->_get_header($type);
     $data= [];
     $data['header'] = $cek_report_type;
-    $data['content'] = $this->load->view('clean/tltdbb_clean', $data, TRUE);
+    $data['content'] = $this->load->view('clean/t1clean_ltdbb', $data, TRUE);
 		$this->load->view('layout', $data);
 	}
   private function _get_header($type)
@@ -68,7 +68,7 @@ class Clean extends CI_Controller {
 		$this->load->view('layout', $data);
 	}
   // START :: AJAX LTDBB
-  public function ajax_list_tltdbb_clean()
+  public function ajax_list_t1clean_ltdbb()
    {
      $type_report = $this->input->post('type_report');
      $this->db->where('status', "cleaned");
@@ -163,9 +163,9 @@ class Clean extends CI_Controller {
      $update_source_data = [];
      $delete_clean_data = [];
      foreach ($list_id as $id) {
-       $result = $this->db->query("SELECT * FROM tltdbb_clean WHERE id = '".$id."'")->row();
+       $result = $this->db->query("SELECT * FROM t1clean_ltdbb WHERE id = '".$id."'")->row();
        $update_source_data[] = array(
-         'id'				=> $result->source_id,
+         'id'				=> $result->id_source,
          'status'		=> 'new'
        );
        $delete_clean_data[] = array(
@@ -174,19 +174,19 @@ class Clean extends CI_Controller {
       );
 
      }
-     $this->db->update_batch('tltdbb_source', $update_source_data, 'id');
-     $this->db->update_batch('tltdbb_clean', $delete_clean_data, 'id');
+     $this->db->update_batch('t0source_ltdbb', $update_source_data, 'id');
+     $this->db->update_batch('t1clean_ltdbb', $delete_clean_data, 'id');
      echo json_encode(['status' => true, 'rollback' => count($update_source_data)]);
    }
    public function ajax_delete_ltdbb()
    {
      $id = $this->input->post('id');
-     $this->db->update('tltdbb_clean', ['status' => 'deleted'], ['id' => $id]);
+     $this->db->update('t1clean_ltdbb', ['status' => 'deleted'], ['id' => $id]);
      echo json_encode(['status' => true]);
    }
    public function get_ltdbb_by_id($id)
    {
-     $data = $this->db->get_where('tltdbb_clean', ['id' => $id])->row();
+     $data = $this->db->get_where('t1clean_ltdbb', ['id' => $id])->row();
      echo json_encode($data);
    }
    

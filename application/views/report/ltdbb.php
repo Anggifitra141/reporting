@@ -86,7 +86,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form class="form-horizontal"  id="form" method="POST" >
+      <form class="form-horizontal" action=""  id="form-ltdbb" method="POST" >
       <div class="modal-body">
         <div class="alert alert-info">
           <i class="fas fa-info-circle"></i> Verify manual data on your system
@@ -159,14 +159,14 @@
                     <input class="form-control" name="recept_phone" placeholder="" value="" type="text">
                     <span class="text-danger"></span>
                   </div>
-                  <div class="form-group">
+                  <!-- <div class="form-group">
                     <label for="lastName">Status</label>
                     <select name="status" class="form-control" required>
                       <option value="verified" >Verified</option>
                       <option value="unverified" >Unverified</option>
                     </select>
                     <span class="text-danger"></span>
-                  </div>
+                  </div> -->
                 </div>
                 <div class="col-md-12 form-group">
                   <label for="lastName">Description</label>
@@ -185,7 +185,7 @@
       </div>
       <div class="modal-footer bg-whitesmoke br">
         <button type="button" class="btn btn-secondary float-left" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-outline-primary float-right">Save</button>
+        <button type="submit" onclick="save_modify()" id="btnSave" class="btn btn-outline-primary float-right">Save</button>
       </div>
       </form>
     </div>
@@ -438,6 +438,40 @@
     });
   }
 
+   function save_modify()
+  {
+    $.ajax({
+      url: "<?php echo site_url('clean/update_ltdbb')?>",
+      type: "POST",
+      data: $('#form-ltdbb').serialize(),
+      dataType: "JSON",
+      success: function(data, response) {
+        if(data.status) //if success close modal and reload ajax table
+        {
+          $('#btnSave').text('save'); //change button text
+          $('#btnSave').attr('disabled',false); //set button enable 
+          //if success close modal and reload ajax table
+          $('#modal_modify_ltdbb').modal('hide');
+          iziToast.success({
+            title: 'Success !',
+            message: 'Data updated successfully ',
+            position: 'topRight'
+          });
+          $('#table').DataTable().ajax.reload();
+          // location.reload();// for reload a page
+        }
+        else
+        {
+          for (var i = 0; i < data.inputerror.length; i++) 
+          {
+              $('[name="'+data.inputerror[i]+'"]').addClass('is-invalid'); //select parent twice to select div form-group class and add has-error class
+              $('[name="'+data.inputerror[i]+'"]').next().text(data.error_string[i]); //select span help-block class set text error string
+          }
+        }
+
+      }
+    }) 
+  }
 
 
   function loading() {
