@@ -77,7 +77,7 @@ class Report extends CI_Controller {
         $row[] = $raw_data->recept_name;
         $row[] = $raw_data->sender_name;
         $row[] = '1';
-        $row[] = $this->lib->rupiah($raw_data->trx_amount);
+        $row[] = $this->lib->rupiah($raw_data->amount);
         $row[] = '3-Non Usaha – Lainnya';
       } else if ($type_report == 'G002') {
         $row[] = $raw_data->sender_country;
@@ -85,20 +85,20 @@ class Report extends CI_Controller {
         $row[] = $raw_data->recept_name;
         $row[] = $raw_data->sender_name;
         $row[] = '1';
-        $row[] = $this->lib->rupiah($raw_data->trx_amount);
+        $row[] = $this->lib->rupiah($raw_data->amount);
       } else if ($type_report == 'G003') {
         $row[] = $raw_data->sender_city;
         $row[] = $raw_data->recept_city;
         $row[] = $raw_data->recept_name;
         $row[] = $raw_data->sender_name;
         $row[] = '1';
-        $row[] = $this->lib->rupiah($raw_data->trx_amount);
+        $row[] = $this->lib->rupiah($raw_data->amount);
         $row[] = '3-Non Usaha – Lainnya';
       }
 
       $data[] = $row;
     }
- 
+
     $recordsTotal = $this->M_report->count_all_ltdbb();
     $recordsFiltered = $this->M_report->count_filtered_ltdbb();
     $output = array(
@@ -109,10 +109,10 @@ class Report extends CI_Controller {
     );
     echo json_encode($output);
   }
-  
+
   public function download_excel_ltdbb()
   {
-    
+
 
     include APPPATH . 'third_party/PHPExcel/PHPExcel.php';
     // $type_report = $this->input->post('type_report');
@@ -121,7 +121,7 @@ class Report extends CI_Controller {
     $end_date =  date('Ymd', strtotime(substr($_GET['daterange'], 13, 23)));
     $type_report = $_GET['type_report'];
 
-    $this->db->where('status', "cleaned");
+    $this->db->where('status', "new");
     $this->db->where('datestamp >=', $start_date);
     $this->db->where('datestamp <=', $end_date);
 
@@ -135,7 +135,7 @@ class Report extends CI_Controller {
       $this->db->where_in('sender_country', array('INDONESIA', '86'));
       $this->db->where_in('recept_country', array('INDONESIA', '86'));
     }
-    $list = $this->db->get('t1clean_ltdbb')->result();
+    $list = $this->db->get('tltdbb_source')->result();
 
 
     $report_setting = $this->M_report->get_report_setting($type_report);
@@ -152,7 +152,7 @@ class Report extends CI_Controller {
       $objPHPExcel = PHPExcel_IOFactory::load("./assets/template-excel/template-ltdbb-g002.xlsx");
     }else{
       $objPHPExcel = PHPExcel_IOFactory::load("./assets/template-excel/template-ltdbb-g003.xlsx");
-    } 
+    }
 
     foreach ($list as $row) {
         if ($type_report == 'G001') {
@@ -188,7 +188,7 @@ class Report extends CI_Controller {
           ->setCellValue('F'. $baris, "1")
           ->setCellValue('G'. $baris, $row->trx_amount);
 
-         
+
           $baris++;
           $no++;
 
@@ -198,7 +198,7 @@ class Report extends CI_Controller {
           $tgl_code = date('Ym') . substr($report_setting->code, 1);
           $report_code = $report_setting->header2.'M'.date('Ymd').$report_setting->code.str_pad(count($list), 9, "0", STR_PAD_LEFT);
           $objPHPExcel->setActiveSheetIndex(0)
-          
+
           ->setCellValue('C'. 2, $report_setting->header2)
           ->setCellValue('C'. 4, date('Y'))
           ->setCellValue('D'. 4, date('m'))
@@ -219,8 +219,8 @@ class Report extends CI_Controller {
           $no++;
         }
         $data[] = $row;
-    
-      
+
+
     }
 
     $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
@@ -242,14 +242,14 @@ class Report extends CI_Controller {
   {
 
     $data = [];
-    $data['content'] = $this->load->view('report/sipesat', $data, TRUE);
+    $data['content'] = $this->load->view('report/ltdbb', $data, TRUE);
     $this->load->view('layout', $data);
   }
 
   public function ajax_list_sipesat()
   {
 
-    $list = $this->M_report->get_datatables_t1clean_sipesat();
+    $list = $this->M_report->get_datatables_sipesat();
     $data = array();
     $no = $_POST['start'];
     foreach ($list as $raw_data) {
@@ -257,85 +257,26 @@ class Report extends CI_Controller {
       $row = array();
       $row[] = '<input type="checkbox" class="data-check" value="'.$raw_data->id.'">';
 			$row[] = '
-				<a href="javascript:void(0)" onClick="edit_sipesat('.$raw_data->id.')"  class="btn btn-primary btn-sm"> <i class="far fa-edit"></i></a>
+				<a href="javascript:void(0)" onClick="edit_ltdbb('.$raw_data->id.')"  class="btn btn-primary btn-sm"> <i class="far fa-edit"></i></a>
 				<a href="javascript:void(0)" onclick="delete_row('.$raw_data->id.')"  class="btn btn-danger btn-sm"> <i class="fas fa-trash"></i></a>
 			';
-      $row[] = $raw_data->customer_code;
-      $row[] = $raw_data->customer_name;
-      $row[] = $raw_data->birth_place;
-      $row[] = $raw_data->birth_date;
-      $row[] = $raw_data->address;
-      $row[] = $raw_data->id_card_number;
-      $row[] = $raw_data->id_card_number_other;
-      $row[] = $raw_data->customer_cif;
+        $row[] = $raw_data->customer_code;
+        $row[] = $raw_data->customer_name;
+        $row[] = $raw_data->birth_place;
+        $row[] = $raw_data->birth_date;
+        $row[] = $raw_data->address;
+        $row[] = $raw_data->id_card_number;
+        $row[] = $raw_data->id_card_number_other;
+        $row[] = $raw_data->customer_cif;
+        $row[] = $raw_data->birth_date;
+        $row[] = $raw_data->birth_date;
+        $row[] = $raw_data->birth_date;
+        $row[] = $raw_data->birth_date;
+        $row[] = $raw_data->birth_date;
+
 
       $data[] = $row;
     }
-      $output = array(
-        "draw" => $_POST['draw'],
-        "recordsTotal" => $this->M_report->count_all_t1clean_sipesat(),
-        "recordsFiltered" => $this->M_report->count_filtered_t1clean_sipesat(),
-        "data" => $data,
-      );
-      echo json_encode($output);
-
-  }
-
-  public function download_excel_sipesat()
-  {
-
-
-    include APPPATH . 'third_party/PHPExcel/PHPExcel.php';
-    //$type_report = $this->input->post('type_report');
-
-    $start_date = date('Ymd', strtotime(substr($_GET['daterange'], 0, 10)));
-    $end_date =  date('Ymd', strtotime(substr($_GET['daterange'], 13, 23)));
-
-    $this->db->where('status', "cleaned");
-    $this->db->where('datestamp >=', $start_date);
-    $this->db->where('datestamp <=', $end_date);
-
-
-    $list = $this->db->get('t1clean_sipesat')->result();
-    
-    $type_report = "SIPESAT";
-    $report_setting = $this->M_report->get_report_setting($type_report);
-
-    $data = array();
-    $no = 1;
-    $baris = 3;
-    //$objPHPExcel    = new PHPExcel();
-
-
-    $objPHPExcel = PHPExcel_IOFactory::load("./assets/template-excel/template-sipesat.xlsx");
-    
-
-    foreach ($list as $row) {
-
-        $objPHPExcel->setActiveSheetIndex(0)
-        ->setCellValue('A'. $baris, $row->customer_code)
-        ->setCellValue('B'. $baris, $row->customer_name)
-        ->setCellValue('C'. $baris, $row->birth_place)
-        ->setCellValue('D'. $baris, $row->birth_date)
-        ->setCellValue('E'. $baris, $row->address)
-        ->setCellValue('F'. $baris, $row->id_card_number)
-        ->setCellValue('G'. $baris, $row->id_card_number_other)
-        ->setCellValue('H'. $baris, $row->customer_cif);
-        $baris++;
-        $no++;
-      
-      $data[] = $row;
-    }
-    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-    header('Content-Type: application/vnd.ms-excel');
-    header('Content-Disposition: attachment;filename="SIPESAT_41740_TW '.ceil(date("n")/3).date('Y').'_'.date('dmY').'_1.xlsx"');
-    header('Cache-Control: max-age=0');
-    $objWriter->save('php://output');
-
-    set_time_limit(0);
-    ini_set('memory_limit', '1G');
-    ob_end_clean();
-    exit;
 
   }
 
@@ -376,9 +317,9 @@ class Report extends CI_Controller {
   function in($value='')
     {
 		$data['page'] 	 = 'sourceAll';
-		$data['sourceAll'] = $this->db->query("SELECT a.tcal_date as date ,a.tcal_message as name , 
+		$data['sourceAll'] = $this->db->query("SELECT a.tcal_date as date ,a.tcal_message as name ,
 		b.regulator as regulator, c.periodname as period, a.status as status, b.status as status_rep , b.link
-		FROM tcalendar a INNER JOIN treport_settings b ON a.trepid = b.id INNER JOIN treportperiod c ON b.period = c.periodcode 
+		FROM tcalendar a INNER JOIN treport_settings b ON a.trepid = b.id INNER JOIN treportperiod c ON b.period = c.periodcode
 		WHERE a.tcal_date = '$value'")->result_array();
 		// $this->load->view('dataSmall',$data, FALSE);
     echo json_encode($data);
