@@ -189,6 +189,23 @@ class Clean extends CI_Controller {
      $data = $this->db->get_where('t1clean_ltdbb', ['id' => $id])->row();
      echo json_encode($data);
    }
+   public function update_clean_ltdbb()
+   {
+    $data = [
+      'sender_country'    => $this->input->post('sender_country'),
+      'sender_city'    => $this->input->post('sender_city'),
+      'sender_name'    => $this->input->post('sender_name'),
+      'sender_phone'    => $this->input->post('sender_phone'),
+      'trx_amount'    => $this->input->post('trx_amount'),
+      'recept_country'    => $this->input->post('recept_country'),
+      'recept_city'    => $this->input->post('recept_city'),
+      'recept_name'    => $this->input->post('recept_name'),
+      'recept_phone'    => $this->input->post('recept_phone'),
+      'description'    => $this->input->post('description'),
+    ];
+    $this->db->update('t1clean_ltdbb', $data, ['id' => $this->input->post('id')]);
+    echo json_encode(['status' => true]);
+   }
    
   // END :: AJAX LTDBB
 
@@ -253,6 +270,17 @@ class Clean extends CI_Controller {
   {
     $data = $this->db->get_where('t1clean_sipesat', ['id' => $id])->row();
     echo json_encode($data);
+  }
+
+  public function update_ltdbb()
+  {
+    $data = array(
+      'bi_code'            => $this->input->post('bi_code'),
+      'city'            => $this->input->post('city'),
+      'bi_city'         => $this->input->post('bi_city')
+    );
+     $this->M_master->update_ltdbb_bi_city(array('id' => $this->input->post('id')), $data);
+     echo json_encode(array("status" => TRUE ));
   }
   // END :: AJAX SI PESAT
 }

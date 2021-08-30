@@ -126,7 +126,7 @@
                   </div>
                   <div class="form-group">
                     <label for="firstName">Nominal</label>
-                    <input class="form-control" name="amount" placeholder="" value="" type="text" readonly>
+                    <input class="form-control" name="trx_amount" placeholder="" value="" type="text" readonly>
                     <span class="text-danger"></span>
                   </div>
 											          
@@ -185,7 +185,7 @@
       </div>
       <div class="modal-footer bg-whitesmoke br">
         <button type="button" class="btn btn-secondary float-left" data-dismiss="modal">Close</button>
-        <button type="submit" onclick="save_modify()" id="btnSave" class="btn btn-outline-primary float-right">Save</button>
+        <button type="button" onclick="save_modify()" id="btnSave" class="btn btn-outline-primary float-right">Save</button>
       </div>
       </form>
     </div>
@@ -410,7 +410,7 @@
 
   function edit_ltdbb(id)
   {
-    $('#form')[0].reset();
+    $('#form-ltdbb')[0].reset();
     $.ajax({
       url: "<?php echo site_url('clean/get_ltdbb_by_id')?>/" + id,
       type: "GET",
@@ -421,12 +421,11 @@
         $('[name="sender_city"]').val(data.sender_city);
         $('[name="sender_name"]').val(data.sender_name);
         $('[name="sender_phone"]').val(data.sender_phone);
-        $('[name="amount"]').val(data.amount);
+        $('[name="trx_amount"]').val(data.trx_amount);
         $('[name="recept_country"]').val(data.recept_country);
         $('[name="recept_city"]').val(data.recept_city);
         $('[name="recept_name"]').val(data.recept_name);
         $('[name="recept_phone"]').val(data.recept_phone);
-        $('[name="status"]').val(data.status);
         $('[name="description"]').val(data.description);
 
         $('#modal_modify_ltdbb').modal('show');
@@ -441,7 +440,7 @@
    function save_modify()
   {
     $.ajax({
-      url: "<?php echo site_url('clean/update_ltdbb')?>",
+      url: "<?php echo site_url('clean/update_clean_ltdbb')?>",
       type: "POST",
       data: $('#form-ltdbb').serialize(),
       dataType: "JSON",
