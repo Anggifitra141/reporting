@@ -39,7 +39,7 @@
               <div class="col-md-12">
                 <div class="row">
                   <div class="col-md-6 mb-3">
-                    <a href="javascript:void(0)" onclick="rollback_selected()" class="btn btn-warning"><i class="fas fa-redo-alt"></i> Rollback Selected</a>
+                    <!-- <a href="javascript:void(0)" onclick="rollback_selected()" class="btn btn-warning"><i class="fas fa-redo-alt"></i> Rollback Selected</a> -->
                     <a href="javascript:void(0)" onclick="delete_selected()" class="btn btn-danger"><i class="fas fa-times"></i> Delete Selected</a>
                   </div>
                 </div>
@@ -88,7 +88,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form class="form-horizontal" id="form" method="POST">
+      <form class="form-horizontal" id="form-sipesat" method="POST">
         <div class="modal-body">
           <div class="alert alert-info">
             <i class="fas fa-info-circle"></i> Verify manual data on your system
@@ -145,7 +145,7 @@
         </div>
         <div class="modal-footer bg-whitesmoke br">
           <button type="button" class="btn btn-secondary float-left" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-outline-primary float-right">Save</button>
+          <button type="button" onclick="save_modify()" id="btnSave" class="btn btn-outline-primary float-right">Save</button>
         </div>
       </form>
     </div>
@@ -223,7 +223,7 @@
   $('#btn-download-excel').click(function() {
     var daterange = $('[name="daterange"]').val();
 
-    if (type_report && daterange) {
+    if (daterange) {
       $.ajax({
         url: base_url + 'report/download_excel_sipesat',
         type: 'GET',
@@ -367,7 +367,7 @@
   }
 
   function edit_sipesat(id) {
-    $('#form')[0].reset();
+    $('#form-sipesat')[0].reset();
     $.ajax({
       url: "<?php echo site_url('clean/get_sipesat_by_id') ?>/" + id,
       type: "GET",
@@ -395,7 +395,7 @@
 
   function save_modify() {
     $.ajax({
-      url: "<?php echo site_url('clean/update_sipesat') ?>",
+      url: "<?php echo site_url('clean/update_clean_sipesat') ?>",
       type: "POST",
       data: $('#form-sipesat').serialize(),
       dataType: "JSON",
@@ -411,7 +411,7 @@
             message: 'Data updated successfully ',
             position: 'topRight'
           });
-          $('#table').DataTable().ajax.reload();
+          reload_table();
           // location.reload();// for reload a page
         } else {
           for (var i = 0; i < data.inputerror.length; i++) {

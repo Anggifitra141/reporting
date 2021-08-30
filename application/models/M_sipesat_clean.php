@@ -81,5 +81,11 @@ class M_sipesat_clean extends CI_model {
     return $this->db->count_all_results();
   }
 
+  public function delete_by_id($id)
+  {
+    $this->db->where('id', $id);
+    $this->db->delete($this->table);
+  }
+  
 
 }

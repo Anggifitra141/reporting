@@ -103,8 +103,10 @@ class M_report extends CI_model {
 
     $this->db->where('DATE(datestamp) >=', $start_date);
     $this->db->where('DATE(datestamp) <=', $end_date);
-
+    $this->db->where('status', "cleaned");
+    
     $this->db->select('*');
+    
     $this->db->from($this->t1clean_sipesat);
 
     $i = 0;

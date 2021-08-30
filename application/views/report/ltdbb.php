@@ -458,7 +458,7 @@
             message: 'Data updated successfully ',
             position: 'topRight'
           });
-          $('#table').DataTable().ajax.reload();
+          reload_table()
           // location.reload();// for reload a page
         } else {
           for (var i = 0; i < data.inputerror.length; i++) {

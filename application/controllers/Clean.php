@@ -23,7 +23,7 @@ class Clean extends CI_Controller {
     }
 	}
 
-	public function t1clean_ltdbb($type="")
+	public function tltdbb_clean($type="")
 	{
     if($type == ""){
       $data['msg'] = "Access Forbidden !";
@@ -33,7 +33,7 @@ class Clean extends CI_Controller {
     $cek_report_type = $this->_get_header($type);
     $data= [];
     $data['header'] = $cek_report_type;
-    $data['content'] = $this->load->view('clean/t1clean_ltdbb', $data, TRUE);
+    $data['content'] = $this->load->view('clean/tltdbb_clean', $data, TRUE);
 		$this->load->view('layout', $data);
 	}
   private function _get_header($type)
@@ -68,7 +68,7 @@ class Clean extends CI_Controller {
 		$this->load->view('layout', $data);
 	}
   // START :: AJAX LTDBB
-  public function ajax_list_t1clean_ltdbb()
+  public function ajax_list_tltdbb_clean()
    {
      $type_report = $this->input->post('type_report');
      $this->db->where('status', "cleaned");
@@ -157,6 +157,7 @@ class Clean extends CI_Controller {
      }
      echo json_encode(array("status" => TRUE));
    }
+   
    public function ajax_bulk_rollback_ltdbb()
    {
      $list_id = $this->input->post('id');
@@ -178,17 +179,20 @@ class Clean extends CI_Controller {
      $this->db->update_batch('t1clean_ltdbb', $delete_clean_data, 'id');
      echo json_encode(['status' => true, 'rollback' => count($update_source_data)]);
    }
+
    public function ajax_delete_ltdbb()
    {
      $id = $this->input->post('id');
      $this->db->update('t1clean_ltdbb', ['status' => 'deleted'], ['id' => $id]);
      echo json_encode(['status' => true]);
    }
+
    public function get_ltdbb_by_id($id)
    {
      $data = $this->db->get_where('t1clean_ltdbb', ['id' => $id])->row();
      echo json_encode($data);
    }
+
    public function update_clean_ltdbb()
    {
     $data = [
@@ -206,7 +210,18 @@ class Clean extends CI_Controller {
     $this->db->update('t1clean_ltdbb', $data, ['id' => $this->input->post('id')]);
     echo json_encode(['status' => true]);
    }
-   
+
+  public function update_ltdbb()
+  {
+    $data = array(
+      'bi_code'            => $this->input->post('bi_code'),
+      'city'            => $this->input->post('city'),
+      'bi_city'         => $this->input->post('bi_city')
+    );
+    $this->M_master->update_ltdbb_bi_city(array('id' => $this->input->post('id')), $data);
+    echo json_encode(array("status" => TRUE));
+  }
+
   // END :: AJAX LTDBB
 
   // START :: AJAX DANA FLOAT
@@ -272,15 +287,37 @@ class Clean extends CI_Controller {
     echo json_encode($data);
   }
 
-  public function update_ltdbb()
+  public function update_clean_sipesat()
   {
-    $data = array(
-      'bi_code'            => $this->input->post('bi_code'),
-      'city'            => $this->input->post('city'),
-      'bi_city'         => $this->input->post('bi_city')
-    );
-     $this->M_master->update_ltdbb_bi_city(array('id' => $this->input->post('id')), $data);
-     echo json_encode(array("status" => TRUE ));
+    $data = [
+      'customer_code'  => $this->input->post('customer_code'),
+      'customer_name'     => $this->input->post('customer_name'),
+      'birth_place'     => $this->input->post('birth_place'),
+      'birth_date'    => $this->input->post('birth_date'),
+      'address'      => $this->input->post('address'),
+      'id_card_number'  => $this->input->post('id_card_number'),
+      'id_card_number_other'     => $this->input->post('id_card_number_other'),
+      'customer_cif'     => $this->input->post('customer_cif'),
+    ];
+    $this->db->update('t1clean_sipesat', $data, ['id' => $this->input->post('id')]);
+    echo json_encode(['status' => true]);
   }
+
+  public function ajax_bulk_delete_sipesat()
+  {
+    $list_id = $this->input->post('id');
+    foreach ($list_id as $id) {
+      $this->M_sipesat_clean->delete_by_id($id);
+    }
+    echo json_encode(array("status" => TRUE));
+  }
+
+  public function ajax_delete_sipesat()
+  {
+    $id = $this->input->post('id');
+    $this->db->update('t1clean_sipesat', ['status' => 'deleted'], ['id' => $id]);
+    echo json_encode(['status' => true]);
+  }
+
   // END :: AJAX SI PESAT
 }
