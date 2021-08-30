@@ -155,7 +155,7 @@ class M_report extends CI_model {
 
 
   // REPORT SETTINGS
-	var $table = 'treportsettings';
+	var $table = 't3report_settings';
   var $column_order = array('code', 'name');
   var $column_search = array('code', 'name');
   var $order = array('id' => 'desc');
@@ -256,7 +256,7 @@ class M_report extends CI_model {
 
   public function get_report_setting($type_report)
   {
-    $this->db->from('treport_settings');
+    $this->db->from('t3report_settings');
     $this->db->where('code', $type_report);
     $query = $this->db->get();
     return $query->row();

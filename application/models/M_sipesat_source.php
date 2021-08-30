@@ -23,7 +23,7 @@ class M_sipesat_source extends CI_model {
   {
     $this->db->select('*');
     $this->db->from($this->table);
-    
+    $this->db->where('status', 'new');
     if ($where) {
       $this->db->where($where);
     }
@@ -34,7 +34,7 @@ class M_sipesat_source extends CI_model {
   {
     $this->db->select('*');
     $this->db->from($this->table);
-    
+    $this->db->where('status', 'new');
     $i = 0;
     foreach ($this->column_search as $item)
     {
@@ -78,6 +78,7 @@ class M_sipesat_source extends CI_model {
   public function count_all()
   {
     $this->db->from($this->table);
+    $this->db->where('status', 'new');
     return $this->db->count_all_results();
   }
 
