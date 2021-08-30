@@ -35,7 +35,7 @@ class Login extends CI_Controller {
 		if($this->form_validation->run() == TRUE)
 		{
 			$data = $this->M_login->check();
-
+			
 			if($data == TRUE)
 			{
 					$output = array();
@@ -47,12 +47,14 @@ class Login extends CI_Controller {
 							}
                             setTimeout("refresh()", 1200);
 						</script>';
+				//user_log($this->session->userdata('id'), 'LOGIN', "LOGIN", '', "Successfuly user login", '');
 			}
 			else
 			{
 					$output = array();
           $output["error"] = "Username Or Password Doesn't match !.";
           $this->load->view("login", $output);
+					//user_log('', 'LOGIN', "LOGIN", '', "Wrong Authentication", '');
 
 			}
 		}
@@ -65,11 +67,13 @@ class Login extends CI_Controller {
 											,
 										'</div>
 									</div>');
+			//user_log('', 'LOGIN', "LOGIN", '', "Error Validation", '');						
 		}
 	}
 
 	function signout()
 	{
+		user_log($this->session->userdata('id'), 'LOGOUT', "LOGOUT", '', "User Logout", '');
 		$this->session->sess_destroy();
 		redirect('login');
 	}

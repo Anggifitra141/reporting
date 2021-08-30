@@ -26,7 +26,7 @@ class User extends CI_Controller {
 	{
     $data= [];
     $data['user_group'] = $this->M_user_group->get()->result();
-    $data['content'] = $this->load->view('master/user', $data, TRUE);
+    $data['content'] = $this->load->view('user/user', $data, TRUE);
 		$this->load->view('layout', $data);
 	}
 

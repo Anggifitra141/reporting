@@ -25,7 +25,7 @@ class User_group extends CI_Controller {
 	public function index()
 	{
     $data= [];
-    $data['content'] = $this->load->view('user_group/user_group', $data, TRUE);
+    $data['content'] = $this->load->view('user/user_group', $data, TRUE);
 		$this->load->view('layout', $data);
 	}
 

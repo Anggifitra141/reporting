@@ -27,6 +27,7 @@ class M_login extends CI_Model {
 						'logged_in' => TRUE
 						);
 				$this->session->set_userdata($data);
+				user_log($this->session->userdata('id'), 'LOGIN', "LOGIN", '', "Successfuly user login", '');
 				return TRUE;
 			}
 		}

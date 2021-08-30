@@ -442,7 +442,7 @@
               <a href="<?php echo site_url('user'); ?>" class="nav-link"><i class="fas fa-user"></i><span>User</span></a>
             </li>
             <li id="nav-user-activity">
-              <a href="<?php echo site_url('source/user_activity'); ?>" class="nav-link"><i class="fas fa-history"></i><span>User Activity</span></a>
+              <a href="<?php echo site_url('user_activity'); ?>" class="nav-link"><i class="fas fa-history"></i><span>User Activity</span></a>
             </li>
             <li id="nav-archive">
               <a href="<?php echo site_url('source/archive'); ?>" class="nav-link"><i class="fas fa-archive"></i><span>Archive</span></a>
