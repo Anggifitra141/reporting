@@ -17,6 +17,7 @@ class M_login extends CI_Model {
 		{
 			$result = $query->row_array();
 			if(password_verify($this->input->post('password', TRUE), $result['password'])){
+
 				$user_group = $this->db->get_where('tuser_group', ['group_name' => $result['user_group']])->row();
 				$data = array(
 						'id' => $result['id'],
@@ -27,6 +28,7 @@ class M_login extends CI_Model {
 						'logged_in' => TRUE
 						);
 				$this->session->set_userdata($data);
+				user_log($this->session->userdata('id'), 'LOGIN', "LOGIN", '', "Successfuly user login", '');
 				return TRUE;
 			}
 		}

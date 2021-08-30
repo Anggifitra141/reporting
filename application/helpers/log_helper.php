@@ -28,12 +28,6 @@ function helper_log($action = "", $table ="", $key_log="", $event_query=""){
 function trx_log($id_user = "", $event_modul = "", $event_type = "", $record_id = "", $event_notes = "")
 {
     $CI = &get_instance();
-
-    if ($CI->session->userdata('username') == "") {
-      $key_user = "Telesales";
-    } else {
-      $key_user = $CI->session->userdata('username');
-    }
     // paramter
     $param['event_time']    = date('YmdHis');
     $param['id_user']       = $id_user;
@@ -49,15 +43,10 @@ function trx_log($id_user = "", $event_modul = "", $event_type = "", $record_id 
     $CI->M_log->trx_log($param);
 }
 
-function user_log($id_user = "", $event_modul = "", $event_type = "", $record_id = "", $event_notes = "")
+function user_log($id_user = "", $event_modul = "", $event_type = "", $record_id = "", $event_notes = "", $event_sql)
 {
   $CI = &get_instance();
 
-  if ($CI->session->userdata('username') == "") {
-    $key_user = "Telesales";
-  } else {
-    $key_user = $CI->session->userdata('username');
-  }
   // paramter
   $param['event_time']    = date('YmdHis');
   $param['id_user']       = $id_user;
@@ -72,5 +61,5 @@ function user_log($id_user = "", $event_modul = "", $event_type = "", $record_id
   $CI->load->model('M_log');
 
   //save to database
-  $CI->M_log->trx_log($param);
+  $CI->M_log->user_log($param);
 }
