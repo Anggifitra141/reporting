@@ -403,19 +403,19 @@
               <ul class="dropdown-menu">
 
 
-                <li class="dropdown" id="nav-ltdbb-source">
+                <li class="dropdown" id="nav-ltdbb-report">
                   <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-list"></i>LTDBB</a>
                   <ul class="dropdown-menu">
-                    <li id="nav-ltdbb-source-g001"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G001'); ?>"><i class="fas fa-circle"></i> G001</a></li>
-                    <li id="nav-ltdbb-source-g002"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G002'); ?>"><i class="fas fa-circle"></i> G002</a></li>
-                    <li id="nav-ltdbb-source-g003"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G003'); ?>"><i class="fas fa-circle"></i> G003</a></li>
+                    <li id="nav-ltdbb-report-g001"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G001'); ?>"><i class="fas fa-circle"></i> G001</a></li>
+                    <li id="nav-ltdbb-report-g002"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G002'); ?>"><i class="fas fa-circle"></i> G002</a></li>
+                    <li id="nav-ltdbb-report-g003"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G003'); ?>"><i class="fas fa-circle"></i> G003</a></li>
                   </ul>
                 </li>
-                <li id="nav-dana-float-source"><a class="nav-link" href="<?php echo site_url('source/ltkl'); ?>"><i class="fas fa-list"></i> LTKL</a></li>
-                <li id="nav-dana-float-source"><a class="nav-link" href="<?php echo site_url('source/qris'); ?>"><i class="fas fa-list"></i> QRIS</a></li>
-                <li id="nav-dana-float-source"><a class="nav-link" href="<?php echo site_url('source/dana_float'); ?>"><i class="fas fa-list"></i> Dana Float</a></li>
-                <li id="nav-dana-float-source"><a class="nav-link" href="<?php echo site_url('source/qris'); ?>"><i class="fas fa-list"></i> Payment Gateway</a></li>
-                <li id="nav-sipesat-source"><a class="nav-link" href="<?php echo site_url('report/sipesat'); ?>"><i class="fas fa-list"></i> Sipesat</a></li>
+                <li id="nav-dana-float-report"><a class="nav-link" href="<?php echo site_url('report/ltkl'); ?>"><i class="fas fa-list"></i> LTKL</a></li>
+                <li id="nav-dana-float-report"><a class="nav-link" href="<?php echo site_url('report/qris'); ?>"><i class="fas fa-list"></i> QRIS</a></li>
+                <li id="nav-dana-float-report"><a class="nav-link" href="<?php echo site_url('report/dana_float'); ?>"><i class="fas fa-list"></i> Dana Float</a></li>
+                <li id="nav-dana-float-report"><a class="nav-link" href="<?php echo site_url('report/qris'); ?>"><i class="fas fa-list"></i> Payment Gateway</a></li>
+                <li id="nav-sipesat-report"><a class="nav-link" href="<?php echo site_url('report/sipesat'); ?>"><i class="fas fa-list"></i> Sipesat</a></li>
                 <li class="dropdown" id="nav-ltdbb-source">
                   <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-list"></i>LKPBU</a>
                   <ul class="dropdown-menu">

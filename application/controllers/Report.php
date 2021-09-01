@@ -12,7 +12,7 @@ class Report extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-    $this->load->model(['M_report']);
+    $this->load->model(['M_report', 'M_danafloat_clean']);
     if(!$this->session->userdata('logged_in'))
     {
       $data=array();
@@ -121,7 +121,7 @@ class Report extends CI_Controller {
     $end_date =  date('Ymd', strtotime(substr($_GET['daterange'], 13, 23)));
     $type_report = $_GET['type_report'];
 
-    $this->db->where('status', "new");
+    $this->db->where('status', "cleaned");
     $this->db->where('datestamp >=', $start_date);
     $this->db->where('datestamp <=', $end_date);
 
@@ -135,7 +135,7 @@ class Report extends CI_Controller {
       $this->db->where_in('sender_country', array('INDONESIA', '86'));
       $this->db->where_in('recept_country', array('INDONESIA', '86'));
     }
-    $list = $this->db->get('tltdbb_source')->result();
+    $list = $this->db->get('t1clean_ltdbb')->result();
 
 
     $report_setting = $this->M_report->get_report_setting($type_report);
@@ -231,7 +231,7 @@ class Report extends CI_Controller {
 
     set_time_limit(0);
     ini_set('memory_limit', '1G');
-    ob_end_clean();
+    
     exit;
   }
 
@@ -282,35 +282,34 @@ class Report extends CI_Controller {
 
   public function download_excel_sipesat()
   {
-
-
+ 
+ 
     include APPPATH . 'third_party/PHPExcel/PHPExcel.php';
     //$type_report = $this->input->post('type_report');
-
+ 
     $start_date = date('Ymd', strtotime(substr($_GET['daterange'], 0, 10)));
     $end_date =  date('Ymd', strtotime(substr($_GET['daterange'], 13, 23)));
-
+ 
     $this->db->where('status', "cleaned");
     $this->db->where('datestamp >=', $start_date);
     $this->db->where('datestamp <=', $end_date);
-
-
+ 
+ 
     $list = $this->db->get('t1clean_sipesat')->result();
-
     $type_report = "SIPESAT";
     $report_setting = $this->M_report->get_report_setting($type_report);
-
+ 
     $data = array();
     $no = 1;
     $baris = 3;
     //$objPHPExcel    = new PHPExcel();
-
-
+ 
+ 
     $objPHPExcel = PHPExcel_IOFactory::load("./assets/template-excel/template-sipesat.xlsx");
-
-
+ 
+ 
     foreach ($list as $row) {
-
+ 
       $objPHPExcel->setActiveSheetIndex(0)
         ->setCellValue('A' . $baris, $row->customer_code)
         ->setCellValue('B' . $baris, $row->customer_name)
@@ -322,20 +321,141 @@ class Report extends CI_Controller {
         ->setCellValue('H' . $baris, $row->customer_cif);
       $baris++;
       $no++;
-
+ 
       $data[] = $row;
     }
+
     $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
     header('Content-Type: application/vnd.ms-excel');
     header('Content-Disposition: attachment;filename="SIPESAT_41740_TW ' . ceil(date("n") / 3) . date('Y') . '_' . date('dmY') . '_1.xlsx"');
     header('Cache-Control: max-age=0');
     $objWriter->save('php://output');
+ 
+    //set_time_limit(0);
+   // ini_set('memory_limit', '1G');
+    //
+    exit;
+  }
+
+
+
+  // START :: DANA FLOAT
+  public function dana_float()
+  {
+
+    $data = [];
+    $data['content'] = $this->load->view('report/dana_float', $data, TRUE);
+    $this->load->view('layout', $data);
+  }
+
+  public function ajax_list_dana_float()
+  {
+    $start_date = date('Ymd', strtotime(substr($_POST['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
+
+    $this->db->where('status', "cleaned");
+    $this->db->where('datestamp >=', $start_date);
+    $this->db->where('datestamp <=', $end_date);
+    $list = $this->M_danafloat_clean->get_datatables();
+    $data = array();
+    $no = $_POST['start'];
+    foreach ($list as $raw_data) {
+      $no++;
+      $row = array();
+      $row[] = '<input type="checkbox" class="data-check" value="'.$raw_data->id.'">';
+			$row[] = '
+				<a href="javascript:void(0)" onClick="edit_sipesat('.$raw_data->id.')"  class="btn btn-primary btn-sm"> <i class="far fa-edit"></i></a>
+				<a href="javascript:void(0)" onclick="delete_row('.$raw_data->id.')"  class="btn btn-danger btn-sm"> <i class="fas fa-trash"></i></a>
+			';
+      $row[] = date('d-m-Y', strtotime($raw_data->trx_datetime));
+      $row[] = date('H:i:s', strtotime($raw_data->trx_datetime));
+      $row[] =  $raw_data->wallet_code;
+      $row[] =  $raw_data->trx_type;
+      $row[] =  $raw_data->description;
+      $row[] =  $raw_data->trx_value;
+      $row[] =  $raw_data->trx_code;
+      $row[] =  $raw_data->trx_id;
+      $row[] =  $raw_data->credit;
+      $row[] =  $raw_data->debit;
+      $row[] =  $raw_data->syslogno;
+      $row[] =  $raw_data->channel_id;
+      $row[] =  $raw_data->srac;
+      $row[] =  $raw_data->dsac;;
+
+      $data[] = $row;
+    }
+    $output = array(
+      "draw" => $_POST['draw'],
+      "recordsTotal" => $this->M_danafloat_clean->count_all(),
+      "recordsFiltered" => $this->M_danafloat_clean->count_filtered(),
+      "data" => $data,
+    );
+    echo json_encode($output);
+  }
+
+  public function download_excel_dana_float()
+  {
+
+
+    include APPPATH . 'third_party/PHPExcel/PHPExcel.php';
+    //$type_report = $this->input->post('type_report');
+
+    $start_date = date('Ymd', strtotime(substr($_GET['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_GET['daterange'], 13, 23)));
+    $this->db->where('status', "cleaned");
+    $this->db->where('datestamp >=', $start_date);
+    $this->db->where('datestamp <=', $end_date);
+
+
+    $list = $this->db->get('t1clean_danafloat')->result();
+
+    $type_report = "DANA FLOAT";
+    $report_setting = $this->M_report->get_report_setting($type_report);
+
+    $data = array();
+    $no = 1;
+    $baris = 3;
+    //$objPHPExcel    = new PHPExcel();
+
+
+    $objPHPExcel = PHPExcel_IOFactory::load("./assets/template-excel/template-dana-float.xlsx");
+
+
+    foreach ($list as $row) {
+
+      $objPHPExcel->setActiveSheetIndex(0)
+        ->setCellValue('A' . $baris, date('d-m-Y', strtotime($row->trx_datetime)))
+        ->setCellValue('B' . $baris, date('H:i:s', strtotime($row->trx_datetime)))
+        ->setCellValue('C' . $baris, $row->wallet_code)
+        ->setCellValue('D' . $baris, $row->trx_type)
+        ->setCellValue('E' . $baris, $row->description)
+        ->setCellValue('F' . $baris, $row->trx_value)
+        ->setCellValue('G' . $baris, $row->trx_code)
+        ->setCellValue('H' . $baris, $row->trx_id)
+        ->setCellValue('I' . $baris, $row->credit)
+        ->setCellValue('J' . $baris, $row->debit)
+        ->setCellValue('K' . $baris, $row->syslogno)
+        ->setCellValue('L' . $baris, $row->channel_id)
+        ->setCellValue('M' . $baris, $row->srac)
+        ->setCellValue('N' . $baris, $row->dsac);
+
+      $baris++;
+      $no++;
+
+      $data[] = $row;
+    }
+    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+    header('Content-Type: application/vnd.ms-excel');
+    header('Content-Disposition: attachment;filename="Dana Float' . date('d-m-Y', strtotime($start_date)) . ' S/d ' . date('d-m-Y', strtotime($start_date))  . '.xlsx"');
+    header('Cache-Control: max-age=0');
+    $objWriter->save('php://output');
 
     set_time_limit(0);
     ini_set('memory_limit', '1G');
-    ob_end_clean();
+    
     exit;
   }
+  // END :: DANA FLOAT
 
   // START :: SETTING REPORT
   public function setting_report()
