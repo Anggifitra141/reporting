@@ -33,16 +33,13 @@
               <div class="col-md-2">
                 <a href="" target="_blank" class="btn btn-icon btn-outline-success btn-block" style="margin-top:27px;" id="btn-download-excel"><i class="fas fa-file-excel"></i> Download Excel </a>
               </div>
-              <div class="col-md-2">
-                <button class="btn btn-icon btn-outline-primary btn-block" style="margin-top:27px;" id="btn-download-txt"><i class="fas fa-file-alt"></i> Download Txt </button>
-              </div>
             </div>
 
             <div class="row mt-4" id="result-data" style="display: none;">
               <div class="col-md-12">
                 <div class="row">
                   <div class="col-md-6 mb-3">
-                    <a href="javascript:void(0)" onclick="rollback_selected()" class="btn btn-warning"><i class="fas fa-redo-alt"></i> Rollback Selected</a>
+                  <a href="javascript:void(0)" onclick="rollback_selected()" class="btn btn-warning"><i class="fas fa-redo-alt"></i> Rollback Selected</a>
                     <a href="javascript:void(0)" onclick="delete_selected()" class="btn btn-danger"><i class="fas fa-times"></i> Delete Selected</a>
                   </div>
                 </div>
@@ -88,7 +85,7 @@
       </div>
     </div>
 </section>
-<div class="modal fade" tabindex="-1" role="dialog" id="modal_modify_ltdbb">
+<div class="modal fade" tabindex="-1" role="dialog" id="modal_modify_danafloat">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header  bg-primary text-white">
@@ -97,7 +94,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form class="form-horizontal" action="" id="form-ltdbb" method="POST">
+      <form class="form-horizontal" action="" id="form-danafloat" method="POST">
         <div class="modal-body">
           <div class="alert alert-info">
             <i class="fas fa-info-circle"></i> Verify manual data on your system
@@ -107,82 +104,61 @@
 
             <input type="hidden" name="id" value="">
             <div class="row">
-              <div class="col-6">
+              <div class="col-12">
                 <div class="form-group">
-                  <label for="lastName">Negara Asal Pengiriman</label>
-                  <select name="sender_country" class="form-control" id="">
-                    <?php foreach ($country as $key) : ?>
-                      <option value="<?= $key->country ?>"><?= $key->country ?></option>
-                    <?php endforeach; ?>
-                  </select>
+                  <label for="wallet_code">Wallet Code</label>
+                  <input class="form-control" name="wallet_code" placeholder="" value="" type="text">
+                </div>
+                <div class="form-group">
+                  <label for="trx_code">Trx Code</label>
+                  <input class="form-control" name="trx_code" placeholder="" value="" type="text">
+                </div>
+                <div class="form-group">
+                  <label for="trx_id">Trx ID</label>
+                  <input class="form-control" name="trx_id" placeholder="" value="" type="text">
+                </div>
+                <div class="form-group">
+                  <label for="trx_type">Trx Type</label>
+                  <input class="form-control" name="trx_type" placeholder="" value="" type="text">
+                </div>
+                <div class="form-group">
+                  <label for="trx_value">Trx Value</label>
+                  <input class="form-control" name="trx_value" placeholder="" value="" type="text">
+                </div>
+                <div class="form-group">
+                  <label for="description">Description</label>
+                  <textarea class="form-control" name="description" placeholder="" value="" ></textarea>
+                </div>
+                <div class="form-group">
+                  <label for="credit">Credit</label>
+                  <input class="form-control" name="credit" placeholder="" value="" type="text">
                   <span class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                  <label for="">Kota/Kabupaten Asal Pengiriman</label>
-                  <select name="sender_city" class="form-control" id="">
-                    <?php foreach ($city as $key) : ?>
-                      <option value="<?= $key->bi_code . ' - ' . $key->city ?>"><?= $key->bi_code . ' - ' . $key->city ?></option>
-                    <?php endforeach; ?>
-                  </select>
+                  <label for="debit">Debit</label>
+                  <input class="form-control" name="debit" placeholder="" value="" type="text">
                   <span class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                  <label for="firstName">Nama Pengirim</label>
-                  <input class="form-control" name="sender_name" placeholder="" value="" type="text">
-                </div>
-                <div class="form-group">
-                  <label for="firstName">Telepon Pengirim</label>
-                  <input class="form-control" name="sender_phone" placeholder="" value="" type="text">
+                  <label for="syslogno">Syslogno</label>
+                  <input class="form-control" name="syslogno" placeholder="" value="" type="text">
                   <span class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                  <label for="firstName">Nominal</label>
-                  <input class="form-control" name="trx_amount" placeholder="" value="" type="text" readonly>
-                  <span class="text-danger"></span>
-                </div>
-
-              </div>
-              <div class="col-6">
-                <div class="form-group">
-                  <label for="lastName">Negara Penerima</label>
-                  <select name="recept_country" class="form-control" id="">
-                    <?php foreach ($country as $key) : ?>
-                      <option value="<?= $key->country ?>"><?= $key->country ?></option>
-                    <?php endforeach; ?>
-                  </select>
+                  <label for="channel_id">Channel ID</label>
+                  <input class="form-control" name="channel_id" placeholder="" value="" type="text">
                   <span class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                  <label for="firstName">Kota/Kabupaten Asal Pengiriman</label>
-                  <select name="recept_city" class="form-control" id="">
-                    <?php foreach ($city as $key) : ?>
-                      <option value="<?= $key->bi_code . ' - ' . $key->city ?>"><?= $key->bi_code . ' - ' . $key->city ?></option>
-                    <?php endforeach; ?>
-                  </select>
+                  <label for="srac">Srac</label>
+                  <input class="form-control" name="srac" placeholder="" value="" type="text">
                   <span class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                  <label for="lastName">Nama Penerima</label>
-                  <input class="form-control" name="recept_name" placeholder="" value="" type="text">
-                </div>
-                <div class="form-group">
-                  <label for="lastName">Telepon Penerima</label>
-                  <input class="form-control" name="recept_phone" placeholder="" value="" type="text">
+                  <label for="dsac">Drac</label>
+                  <input class="form-control" name="dsac" placeholder="" value="" type="text">
                   <span class="text-danger"></span>
                 </div>
-                <!-- <div class="form-group">
-                    <label for="lastName">Status</label>
-                    <select name="status" class="form-control" required>
-                      <option value="verified" >Verified</option>
-                      <option value="unverified" >Unverified</option>
-                    </select>
-                    <span class="text-danger"></span>
-                  </div> -->
-              </div>
-              <div class="col-md-12 form-group">
-                <label for="lastName">Description</label>
-                <textarea class="form-control" name="description" type="text" readonly></textarea>
-                <span class="text-danger"></span>
               </div>
             </div>
 
@@ -417,27 +393,29 @@
       });
   }
 
-  function edit_ltdbb(id) {
-    $('#form-ltdbb')[0].reset();
+  function edit_danafloat(id) {
+    $('#form-danafloat')[0].reset();
     $.ajax({
-      url: "<?php echo site_url('clean/get_ltdbb_by_id') ?>/" + id,
+      url: "<?php echo site_url('clean/get_danafloat_by_id') ?>/" + id,
       type: "GET",
       dataType: "JSON",
       success: function(data) {
         $('[name="id"]').val(data.id);
-        $('[name="sender_country"]').val(data.sender_country);
-        $('[name="sender_city"]').val(data.sender_city);
-        $('[name="sender_name"]').val(data.sender_name);
-        $('[name="sender_phone"]').val(data.sender_phone);
-        $('[name="trx_amount"]').val(data.trx_amount);
-        $('[name="recept_country"]').val(data.recept_country);
-        $('[name="recept_city"]').val(data.recept_city);
-        $('[name="recept_name"]').val(data.recept_name);
-        $('[name="recept_phone"]').val(data.recept_phone);
+        $('[name="wallet_code"]').val(data.wallet_code);
+        $('[name="trx_code"]').val(data.trx_code);
+        $('[name="trx_id"]').val(data.trx_id);
+        $('[name="trx_type"]').val(data.trx_type);
+        $('[name="trx_value"]').val(data.trx_value);
         $('[name="description"]').val(data.description);
+        $('[name="credit"]').val(data.credit);
+        $('[name="debit"]').val(data.debit);
+        $('[name="syslogno"]').val(data.syslogno);
+        $('[name="channel_id"]').val(data.channel_id);
+        $('[name="srac"]').val(data.srac);
+        $('[name="dsac"]').val(data.dsac);
 
-        $('#modal_modify_ltdbb').modal('show');
-        $('.modal-title').text('Update Ltdbb');
+        $('#modal_modify_danafloat').modal('show');
+        $('.modal-title').text('Update Dana Float');
       },
       error: function(jqXHR, textStatus, errorThrown) {
         alert('Error get data from ajax');
@@ -447,9 +425,9 @@
 
   function save_modify() {
     $.ajax({
-      url: "<?php echo site_url('clean/update_clean_ltdbb') ?>",
+      url: "<?php echo site_url('clean/update_clean_danafloat') ?>",
       type: "POST",
-      data: $('#form-ltdbb').serialize(),
+      data: $('#form-danafloat').serialize(),
       dataType: "JSON",
       success: function(data, response) {
         if (data.status) //if success close modal and reload ajax table
@@ -457,7 +435,7 @@
           $('#btnSave').text('save'); //change button text
           $('#btnSave').attr('disabled', false); //set button enable 
           //if success close modal and reload ajax table
-          $('#modal_modify_ltdbb').modal('hide');
+          $('#modal_modify_danafloat').modal('hide');
           iziToast.success({
             title: 'Success !',
             message: 'Data updated successfully ',

@@ -32,7 +32,7 @@ while ($row=mysqli_fetch_array($data_source, MYSQLI_BOTH)) {
    $customer_type   = $row['customer_type'];
    $trx_date   = $row['trx_date'];
    $datestamp   = date('Ymd');
-   $status     = 'new';
+   $status     = 'cleaned';
     mysqli_query($conn, "UPDATE t0source_sipesat SET status = 'old' WHERE id = '".$row['id']."'  ");
     $data[] = "('', '$id_source', '$customer_code', '$customer_name', '$birth_place', '$birth_date', '$address', '$id_card_number', '$id_card_number_other', '$customer_cif', '$register_date', '$customer_type', '$trx_date', '$datestamp', '$status')";
 
@@ -63,7 +63,7 @@ while ($row=mysqli_fetch_array($data_source, MYSQLI_BOTH)) {
    $dsac   = $row['dsac'];
    $trx_datetime   = $row['trx_datetime'];
    $datestamp   = date('Ymd');
-   $status     = 'new';
+   $status     = 'cleaned';
     mysqli_query($conn, "UPDATE t0source_danafloat SET status = 'old' WHERE id = '".$row['id']."'  ");
     $data[] = "('', '$id_source', '$wallet_code', '$trx_code', '$trx_id', '$trx_type', '$trx_value', '$description', '$credit', '$debit', '$syslogno', '$channel_id', '$srac', '$dsac', '$trx_datetime', '$datestamp', '$status')";
 

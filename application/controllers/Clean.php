@@ -251,6 +251,70 @@ class Clean extends CI_Controller {
             );
     echo json_encode($output);
   }
+  public function ajax_bulk_delete_dana_float()
+   {
+     $list_id = $this->input->post('id');
+     foreach ($list_id as $id) {
+         $this->M_danafloat_clean->delete_by_id($id);
+     }
+     echo json_encode(array("status" => TRUE));
+   }
+   
+   public function ajax_bulk_rollback_dana_float()
+   {
+     $list_id = $this->input->post('id');
+     $update_source_data = [];
+     $delete_clean_data = [];
+     foreach ($list_id as $id) {
+       $result = $this->db->query("SELECT * FROM t1clean_danafloat WHERE id = '".$id."'")->row();
+       $update_source_data[] = array(
+         'id'				=> $result->id_source,
+         'status'		=> 'new'
+       );
+       $delete_clean_data[] = array(
+        'id'				=> $id,
+        'status'		=> 'deleted'
+      );
+
+     }
+     $this->db->update_batch('t0source_danafloat', $update_source_data, 'id');
+     $this->db->update_batch('t1clean_danafloat', $delete_clean_data, 'id');
+     echo json_encode(['status' => true, 'rollback' => count($update_source_data)]);
+   }
+
+   public function ajax_delete_dana_float()
+   {
+     $id = $this->input->post('id');
+     $this->db->update('t1clean_danafloat', ['status' => 'deleted'], ['id' => $id]);
+     echo json_encode(['status' => true]);
+   }
+
+   public function get_danafloat_by_id($id)
+   {
+     $data = $this->db->get_where('t1clean_danafloat', ['id' => $id])->row();
+     echo json_encode($data);
+   }
+
+   public function update_clean_danafloat()
+   {
+    $data = [
+      'id'          => $this->input->post('id'),
+      'wallet_code' => $this->input->post('wallet_code'),
+      'trx_code'    => $this->input->post('trx_code'),
+      'trx_id'      => $this->input->post('trx_id'),
+      'trx_type'    => $this->input->post('trx_type'),
+      'trx_value'   => $this->input->post('trx_value'),
+      'description' => $this->input->post('description'),
+      'credit'      => $this->input->post('credit'),
+      'debit'       => $this->input->post('debit'),
+      'syslogno'    => $this->input->post('syslogno'),
+      'channel_id'  => $this->input->post('channel_id'),
+      'srac'        => $this->input->post('srac'),
+      'dsac'        => $this->input->post('dsac')
+    ];
+    $this->db->update('t1clean_danafloat', $data, ['id' => $this->input->post('id')]);
+    echo json_encode(['status' => true]);
+   }
   // END :: AJAX DANA FLOAT
 
   // START :: AJAX SI PESAT

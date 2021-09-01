@@ -364,7 +364,7 @@ class Report extends CI_Controller {
       $row = array();
       $row[] = '<input type="checkbox" class="data-check" value="'.$raw_data->id.'">';
 			$row[] = '
-				<a href="javascript:void(0)" onClick="edit_sipesat('.$raw_data->id.')"  class="btn btn-primary btn-sm"> <i class="far fa-edit"></i></a>
+				<a href="javascript:void(0)" onClick="edit_danafloat('.$raw_data->id.')"  class="btn btn-primary btn-sm"> <i class="far fa-edit"></i></a>
 				<a href="javascript:void(0)" onclick="delete_row('.$raw_data->id.')"  class="btn btn-danger btn-sm"> <i class="fas fa-trash"></i></a>
 			';
       $row[] = date('d-m-Y', strtotime($raw_data->trx_datetime));
