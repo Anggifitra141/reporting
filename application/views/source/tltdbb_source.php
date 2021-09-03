@@ -15,32 +15,47 @@
     <div class="row">
       <div class="col-12">
         <div class="card">
-          <div class="card-header">
-          <h4></h4> 
           <div class="card-body">
-          
-            <div class="">
-              <table class="table table-striped" id="table" style="width: 100%;">
-                <thead>
-                  <tr>
-                    <th class="text-center" width="1px">
-                      No
-                    </th>
-                    <th>Sender Country</th>
-                    <th>Sender City</th>
-                    <th>Recept Country</th>
-                    <th>Recept City</th>
-                    <th>Sender Name</th>
-                    <th>Recept Name</th>
-                    <th>Volume</th>
-                    <th>Amount</th>
-                    <th>Transaction Purpose</th>
-                  </tr>
-                </thead>
-
-              </table>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Trx Date Upload</label>
+                  <div class="input-group">
+                    <div class="input-group-prepend">
+                      <div class="input-group-text">
+                        <i class="fas fa-calendar"></i>
+                      </div>
+                    </div>
+                    <input type="text" class="form-control daterange-picker" name="daterange">
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
+            <div class="row mt-4" >
+              <div class="col-md-12">
+                <div class="">
+                  <table class="table table-striped" id="table" style="width: 100%;">
+                    <thead>
+                      <tr>
+                        <th class="text-center" width="1px">
+                          No
+                        </th>
+                        <th>Sender Country</th>
+                        <th>Sender City</th>
+                        <th>Recept Country</th>
+                        <th>Recept City</th>
+                        <th>Sender Name</th>
+                        <th>Recept Name</th>
+                        <th>Volume</th>
+                        <th>Amount</th>
+                        <th>Transaction Purpose</th>
+                      </tr>
+                    </thead>
+
+                  </table>
+                </div>
+              </div>
+            </div>
         </div>
       </div>
     </div>
@@ -51,11 +66,10 @@
 <script src="<?php echo base_url(); ?>assets/modules/jquery.min.js"></script>
 <script>
 
-var base_url = "<?= base_url() ?>";
+var varbase_url = "<?= base_url() ?>";
+var table;
 $('#nav-data-source').addClass('dropdown active');
-$('#nav-raw-data').addClass('active');
-var type_report = "<?= $this->uri->segment(3);?>";
-console.log(type_report)
+$('#nav-ltdbb-source').addClass('active');
 
 
   $("input").change(function(){
@@ -64,7 +78,7 @@ console.log(type_report)
   });
   $(document).ready(function() {
 
-    var table = $('#table').DataTable({
+     table = $('#table').DataTable({
       "deferRender": true,
       "scrollCollapse": true,
       "scrollX": true,
@@ -74,9 +88,9 @@ console.log(type_report)
       "ajax": {
         url: "<?php echo site_url('source/ajax_list_tltdbb_source')?>", // json datasource
         type: "POST",
-        data : function(data){
-          data.type_report = type_report
-        }
+        data: function(data) {
+              data.daterange = $('[name="daterange"]').val();
+          }
       },
       "columnDefs": [{
         "orderable": false
@@ -141,6 +155,12 @@ console.log(type_report)
     });
 });
 
+$('[name="daterange"]').change(function(){
+  reload_table();
+})
+function reload_table() {
+    table.ajax.reload(null, false);
+  }
 
 function loading()
 {

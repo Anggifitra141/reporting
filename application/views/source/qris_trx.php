@@ -6,18 +6,17 @@
 
 <section class="section">
   <div class="section-header">
-    <h1>Data Dana Float</h1>
+    <h1>Data QRIS Trx</h1>
   </div>
 
   <div class="section-body">
-    <h2 class="section-title">Manage Data Dana Float</h2>
+    <h2 class="section-title">Manage Data QRIS Trx</h2>
     
     <div class="row">
       <div class="col-12">
         <div class="card">
-
           <div class="card-body">
-           <div class="row">
+            <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
                   <label>Trx Date Upload</label>
@@ -41,16 +40,15 @@
                         <th class="text-center" width="1px">
                           No
                         </th>
-                        <th>Wallet Code</th>
-                        <th>Trx Code</th>
-                        <th>Trx ID</th>
-                        <th>Trx Type</th>
-                        <th>Trx Value</th>
-                        <th>Description</th>
-                        <th>Status</th>
+                        <th>City</th>
+                        <th>Pjsp</th>
+                        <th>Mcc</th>
+                        <th>Merchant Criteria</th>
+                        <th>Vol Trx</th>
+                        <th>Amount Trx</th>
+                        <th>Trx Date</th>
                       </tr>
                     </thead>
-
                   </table>
                 </div>
               </div>
@@ -68,7 +66,8 @@
 var table;
 var base_url = "<?= base_url() ?>";
 $('#nav-data-source').addClass('dropdown active');
-$('#nav-dana-float-source').addClass('active');
+$('#nav-qris').addClass('active');
+$('#nav-source-qris-trx').addClass('active');
 
   $("input").change(function(){
       $(this).removeClass('is-invalid');
@@ -84,7 +83,7 @@ $('#nav-dana-float-source').addClass('active');
       "serverSide": true,
       "order": [],
       "ajax": {
-        url: "<?php echo site_url('source/ajax_list_dana_float')?>", // json datasource
+        url: "<?php echo site_url('source/ajax_list_qris_Trx_source')?>", // json datasource
         type: "POST",
         data: function(data) {
               data.daterange = $('[name="daterange"]').val();

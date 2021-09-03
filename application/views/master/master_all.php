@@ -91,9 +91,9 @@
   var table_query = "<?= $this->uri->segment(3) ?>";
   var table_query_split = table_query.split('_');
   $('#nav-master-data').addClass('dropdown active');
-  $('#nav-'+ table_query_split[2]).addClass('active');
-  $('#section-header').text(table_query_split[2].toUpperCase());
-  $('#section-title').text('Master ' +table_query_split[2]);
+  $('#nav-'+ table_query_split[1]).addClass('active');
+  $('#section-header').text(table_query_split[1].toUpperCase());
+  $('#section-title').text('Master ' +table_query_split[1]);
 
   $("input").change(function(){
       $(this).removeClass('is-invalid');

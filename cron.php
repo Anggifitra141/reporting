@@ -78,7 +78,7 @@ $data = array();
 while ($row=mysqli_fetch_array($data_source, MYSQLI_BOTH)) {
 
   $country = preg_replace('/\s*/', "", strtolower($row['sender_country']));
-  $cek_sender_country = mysqli_query($conn, "SELECT `code` FROM tltkl_14_country WHERE LOWER(REPLACE(description, ' ', '')) =  '".$country."'")->fetch_array();
+  $cek_sender_country = mysqli_query($conn, "SELECT `code` FROM tltkl_country WHERE LOWER(REPLACE(description, ' ', '')) =  '".$country."'")->fetch_array();
   if($cek_sender_country)
   {
     $sender_country = $cek_sender_country['code'];

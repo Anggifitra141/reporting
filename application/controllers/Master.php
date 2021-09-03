@@ -251,7 +251,7 @@ class Master extends CI_Controller {
   // START :: ALL MASTER DATA
   public function page($table_name = "")
   {
-    $existing_tabel = $this->db->query("SELECT count(TABLE_NAME) tot FROM information_schema.tables WHERE table_schema = 'reporting' AND table_name = '".$table_name."' LIMIT 1")->row()->tot;
+    $existing_tabel = $this->db->query("SELECT count(TABLE_NAME) tot FROM information_schema.tables WHERE table_schema = 'regulatory' AND table_name = '".$table_name."' LIMIT 1")->row()->tot;
     if($table_name && $existing_tabel > 0 ){
       $data= [];
       $data['content'] = $this->load->view('master/master_all', $data, TRUE);
