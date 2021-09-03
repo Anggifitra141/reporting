@@ -12,7 +12,7 @@ class Report extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-    $this->load->model(['M_report', 'M_danafloat_clean']);
+    $this->load->model(['M_report', 'M_danafloat_clean', 'M_ltkl_clean']);
     if(!$this->session->userdata('logged_in'))
     {
       $data=array();
@@ -456,6 +456,132 @@ class Report extends CI_Controller {
     exit;
   }
   // END :: DANA FLOAT
+
+  
+  // START :: LTKL
+  public function ltkl()
+  {
+
+    $data = [];
+    $data['content'] = $this->load->view('report/ltkl', $data, TRUE);
+    $this->load->view('layout', $data);
+  }
+
+  public function ajax_list_ltkl()
+  {
+    $start_date = date('Ymd', strtotime(substr($_POST['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
+
+    $this->db->where('status', "cleaned");
+    $this->db->where('datestamp >=', $start_date);
+    $this->db->where('datestamp <=', $end_date);
+    $list = $this->M_ltkl_clean->get_datatables();
+    $data = array();
+    $no = $_POST['start'];
+    foreach ($list as $raw_data) {
+      $no++;
+      $row = array();
+      $row[] = '<input type="checkbox" class="data-check" value="'.$raw_data->id.'">';
+			$row[] = '
+				<a href="javascript:void(0)" onclick="delete_row('.$raw_data->id.')"  class="btn btn-danger btn-sm"> <i class="fas fa-trash"></i></a>
+			';
+      // <a href="javascript:void(0)" onClick="edit_ltkl('.$raw_data->id.')"  class="btn btn-primary btn-sm"> <i class="far fa-edit"></i></a>
+      $row[] = 'Local ID';
+      $row[] = $raw_data->sender_name;
+      $row[] = $raw_data->sender_country;
+      $row[] = '';
+      $row[] = '';
+      $row[] = '';
+      $row[] = 'Person';
+      $row[] = $raw_data->recept_name;
+      $row[] = $raw_data->destbankacc;
+      $row[] = $raw_data->notes;
+      $row[] = 'ini dari kode swfit';
+      $row[] = 'account';
+      $row[] = $raw_data->recept_name;
+      $row[] = $raw_data->destamount;
+      $row[] = 'TRM';
+      $row[] = 'UT';
+      $row[] = 'REK';
+      $data[] = $row;
+    }
+    $output = array(
+      "draw" => $_POST['draw'],
+      "recordsTotal" => $this->M_ltkl_clean->count_all(),
+      "recordsFiltered" => $this->M_ltkl_clean->count_filtered(),
+      "data" => $data,
+    );
+    echo json_encode($output);
+  }
+
+  public function download_excel_ltkl()
+  {
+
+
+    include APPPATH . 'third_party/PHPExcel/PHPExcel.php';
+    //$type_report = $this->input->post('type_report');
+
+    $start_date = date('Ymd', strtotime(substr($_GET['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_GET['daterange'], 13, 23)));
+    $this->db->where('status', "cleaned");
+    $this->db->where('datestamp >=', $start_date);
+    $this->db->where('datestamp <=', $end_date);
+
+
+    $list = $this->db->get('t1clean_ltkl')->result();
+
+    $type_report = "DANA FLOAT";
+    $report_setting = $this->M_report->get_report_setting($type_report);
+
+    $data = array();
+    $no = 1;
+    $baris = 2;
+    //$objPHPExcel    = new PHPExcel();
+
+
+    $objPHPExcel = PHPExcel_IOFactory::load("./assets/template-excel/template-ltkl.xlsx");
+
+
+    foreach ($list as $row) {
+
+      $objPHPExcel->setActiveSheetIndex(0)
+        ->setCellValue('A' . $baris, 'Local ID')
+        ->setCellValue('B' . $baris, $row->sender_name)
+        ->setCellValue('C' . $baris, $row->sender_country)
+        ->setCellValue('D' . $baris, '')
+        ->setCellValue('E' . $baris, '')
+        ->setCellValue('F' . $baris, '')
+        ->setCellValue('G' . $baris, 'Person')
+        ->setCellValue('H' . $baris, $row->recept_name)
+        ->setCellValue('I' . $baris, $row->destbankacc)
+        ->setCellValue('J' . $baris, $row->notes)
+        ->setCellValue('K' . $baris, 'Ini dari kode swift')
+        ->setCellValue('L' . $baris, 'account')
+        ->setCellValue('M' . $baris, $row->recept_name)
+        ->setCellValue('N' . $baris, $row->destamount)
+        ->setCellValue('O' . $baris, 'TRM')
+        ->setCellValue('P' . $baris, 'UT')
+        ->setCellValue('Q' . $baris, 'REK');
+
+      $baris++;
+      $no++;
+
+      $data[] = $row;
+    }
+    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+    header('Content-Type: application/vnd.ms-excel');
+    header('Content-Disposition: attachment;filename="Pelaporan LTKL' . date('d-m-Y', strtotime($start_date)) . ' S/d ' . date('d-m-Y', strtotime($start_date))  . '.xlsx"');
+    header('Cache-Control: max-age=0');
+    $objWriter->save('php://output');
+
+    set_time_limit(0);
+    ini_set('memory_limit', '1G');
+    
+    exit;
+  }
+  // END :: LTKL
+
+  
 
   // START :: SETTING REPORT
   public function setting_report()

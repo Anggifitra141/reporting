@@ -12,8 +12,7 @@ class Clean extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-    $this->load->model(['M_tltdbb_clean', 'M_tltdbb_clean', 'M_danafloat_clean', 'M_sipesat_clean']);
-    // $this->load->model(['M_clean_data']);
+    $this->load->model(['M_tltdbb_clean', 'M_tltdbb_clean', 'M_danafloat_clean', 'M_sipesat_clean', 'M_ltkl_clean']);
     if(!$this->session->userdata('logged_in'))
     {
       $data=array();
@@ -65,6 +64,12 @@ class Clean extends CI_Controller {
 	{
     $data= [];
     $data['content'] = $this->load->view('clean/si_pesat', $data, TRUE);
+		$this->load->view('layout', $data);
+	}
+  public function ltkl()
+	{
+    $data= [];
+    $data['content'] = $this->load->view('clean/ltkl', $data, TRUE);
 		$this->load->view('layout', $data);
 	}
   // START :: AJAX LTDBB
@@ -384,4 +389,103 @@ class Clean extends CI_Controller {
   }
 
   // END :: AJAX SI PESAT
+
+
+  // / START :: AJAX SI LTKL
+  public function ajax_list_ltkl()
+  {
+    $list = $this->M_ltkl_clean->get_datatables();
+    $data = array();
+    $no = $_POST['start'];
+    foreach ($list as $raw_data) {
+      $no++;
+      $row = array();
+      $row[] = $no;
+      $row[] = 'Local ID';
+      $row[] = $raw_data->sender_name;
+      $row[] = $raw_data->sender_country;
+      $row[] = '';
+      $row[] = '';
+      $row[] = '';
+      $row[] = 'Person';
+      $row[] = $raw_data->recept_name;
+      $row[] = $raw_data->destbankacc;
+      $row[] = 'ini dari kode swfit';
+      $row[] = 'account';
+      $row[] = $raw_data->recept_name;
+      $row[] = $raw_data->destamount;
+      $row[] = 'TRM';
+      $row[] = 'UT';
+      $row[] = 'REK';
+      $data[] = $row;
+    } 
+    $output = array(
+              "draw" => $_POST['draw'],
+              "recordsTotal" => $this->M_ltkl_clean->count_all(),
+              "recordsFiltered" => $this->M_ltkl_clean->count_filtered(),
+              "data" => $data,
+            );
+    echo json_encode($output);
+  }
+
+  public function get_ltkl_by_id($id)
+  {
+    $data = $this->db->get_where('t1clean_ltkl', ['id' => $id])->row();
+    echo json_encode($data);
+  }
+
+  public function update_clean_ltkl()
+  {
+    $data = [
+      'customer_code'  => $this->input->post('customer_code'),
+      'customer_name'     => $this->input->post('customer_name'),
+      'birth_place'     => $this->input->post('birth_place'),
+      'birth_date'    => $this->input->post('birth_date'),
+      'address'      => $this->input->post('address'),
+      'id_card_number'  => $this->input->post('id_card_number'),
+      'id_card_number_other'     => $this->input->post('id_card_number_other'),
+      'customer_cif'     => $this->input->post('customer_cif'),
+    ];
+    $this->db->update('t1clean_ltkl', $data, ['id' => $this->input->post('id')]);
+    echo json_encode(['status' => true]);
+  }
+
+  public function ajax_bulk_delete_ltkl()
+  {
+    $list_id = $this->input->post('id');
+    foreach ($list_id as $id) {
+      $this->M_ltkl_clean->delete_by_id($id);
+    }
+    echo json_encode(array("status" => TRUE));
+  }
+
+  public function ajax_delete_ltkl()
+  {
+    $id = $this->input->post('id');
+    $this->db->update('t1clean_ltkl', ['status' => 'deleted'], ['id' => $id]);
+    echo json_encode(['status' => true]);
+  }
+  public function ajax_bulk_rollback_ltkl()
+   {
+     $list_id = $this->input->post('id');
+     $update_source_data = [];
+     $delete_clean_data = [];
+     foreach ($list_id as $id) {
+       $result = $this->db->query("SELECT * FROM t1clean_ltkl WHERE id = '".$id."'")->row();
+       $update_source_data[] = array(
+         'id'				=> $result->id_source,
+         'status'		=> 'new'
+       );
+       $delete_clean_data[] = array(
+        'id'				=> $id,
+        'status'		=> 'deleted'
+      );
+
+     }
+     $this->db->update_batch('t0source_ltkl', $update_source_data, 'id');
+     $this->db->update_batch('t1clean_ltkl', $delete_clean_data, 'id');
+     echo json_encode(['status' => true, 'rollback' => count($update_source_data)]);
+   }
+
+  // END :: AJAX LTKL
 }
