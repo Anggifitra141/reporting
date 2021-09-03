@@ -98,11 +98,11 @@ class M_report extends CI_model {
 
   private function _get_datatables_query_t1clean_sipesat()
   {
-    $start_date = date('Y-m-d', strtotime(substr($this->input->post('daterange'), 0, 10)));
-    $end_date =  date('Y-m-d', strtotime(substr($this->input->post('daterange'), 13, 23)));
+    $start_date = date('Ymd', strtotime(substr($this->input->post('daterange'), 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($this->input->post('daterange'), 13, 23)));
 
-    $this->db->where('DATE(datestamp) >=', $start_date);
-    $this->db->where('DATE(datestamp) <=', $end_date);
+    $this->db->where('datestamp >=', $start_date);
+    $this->db->where('datestamp <=', $end_date);
     $this->db->where('status', "cleaned");
     
     $this->db->select('*');

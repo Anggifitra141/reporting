@@ -88,7 +88,7 @@ class User_group extends CI_Controller {
 
   public function delete_user_group($id)
   {
-    $this->M_user_group->delete_user($id);
+    $this->M_user_group->delete_user_group($id);
     echo json_encode(array("status" => TRUE));
   }
 

@@ -1,5 +1,5 @@
 <style>
-  .modal-title{
+  .modal-title {
     margin-top: -10px;
   }
 </style>
@@ -75,43 +75,28 @@
                   <label>Allowed Menus :</label>
                 </div>
               </div>
-						<div class="col-sm-3">
-							<label>Regulator Management<br>
-              ├──<input type="checkbox" id="dashboard_regulator" name="access[]" value="dashboard_regulator"> Dashboard<br>
-							├──<input type="checkbox" id="verification" name="access[]" value="verification"> Verification<br>
-							├──<input type="checkbox" id="report_legulator" name="access[]" value="report_legulator"> Report<br>
-							├──<input type="checkbox" id="archive" name="access[]" value="archive"> Archive<br>
-							└──<input type="checkbox" id="user_activity_regulator" name="access[]" value="user_activity_regulator"> User Activity
-							</label>
-						</div>
-            <div class="col-sm-3">
-							<label>Data Source<br>
-              ├──<input type="checkbox" id="upload_source" name="access[]" value="upload_source"> Upload Source<br>
-							├──<input type="checkbox" id="raw_data" name="access[]" value="raw_data"> Raw Data<br>
-							└──<input type="checkbox" id="data_clean" name="access[]" value="data_clean"> Data Clean
-							</label>
-						</div>
-						<div class="col-sm-3">
-							<label>Document Management<br>
-							├──<input type="checkbox" id="dashboard_document" name="access[]" value="dashboard_document"> Dashboard<br>
-							├──<input type="checkbox" id="document" name="access[]" value="document"> Document<br>
-							├──<input type="checkbox" id="report_document" name="access[]" value="report_document"> Report<br>
-							├──<input type="checkbox" id="version" name="access[]" value="version"> Version<br>
-							└──<input type="checkbox" id="user_activity_document" name="access[]" value="user_activity_document"> User Activity<br>
-							</label>
-						</div>
-          </div>
-          <div class="row">
-            <div class="col-sm-2"></div>
-            <div class="col-sm-3 col-sm-offset-2">
-							<label>System Setting<br>
-							├──<input type="checkbox" id="user" name="access[]" value="user"> User<br>
-							├──<input type="checkbox" id="user_group" name="access[]" value="user_group"> User Group<br>
-							└──<input type="checkbox" id="master_data" name="access[]" value="master_data"> Master Data<br>
-							</label>
-						</div>
-					</div>
-            
+              <div class="col-sm-3">
+                <label>Regulator Management </label><br>
+                ├──<input type="checkbox" id="dashboard" name="access[]" value="dashboard"> Dashboard<br>
+                ├──<input type="checkbox" id="data_source" name="access[]" value="data_source"> Data Source<br>
+                ├──<input type="checkbox" id="data_clean" name="access[]" value="data_clean"> Data Clean<br>
+                ├──<input type="checkbox" id="utilities" name="access[]" value="utilities"> Utilities<br>
+                ├──<input type="checkbox" id="master_data" name="access[]" value="master_data"> Master Data<br>
+                └──<input type="checkbox" id="report" name="access[]" value="report"> Report<br>
+                </label>
+              </div>
+              <div class="col-sm-3">
+                <label>System Setting </label><br>
+                ├──<input type="checkbox" id="user_group" name="access[]" value="user_group"> User Group<br>
+                ├──<input type="checkbox" id="user" name="access[]" value="user"> User<br>
+                ├──<input type="checkbox" id="user_activity" name="access[]" value="user_activity"> User Activity<br />
+                └──<input type="checkbox" id="user_group" name="access[]" value="user_group"> Archive<br>
+                </label>
+              </div>
+
+            </div>
+
+
           </div>
         </form>
       </div>
@@ -125,29 +110,27 @@
 
 <script src="<?php echo base_url(); ?>assets/modules/jquery.min.js"></script>
 <script>
-  
-
-  $("input").change(function(){
-      $(this).removeClass('is-invalid');
-      $(this).next().empty();
+  $("input").change(function() {
+    $(this).removeClass('is-invalid');
+    $(this).next().empty();
   });
   $(document).ready(function() {
 
     var table = $('#table').DataTable({
-        "deferRender": true,
-        "scrollCollapse": true,
-        "scrollX": true,
-        "processing": true,
-        "serverSide": true,
-        "order": [],
-        "ajax": {
-          url: "<?php echo site_url('user_group/ajax_list')?>", // json datasource
-          type: "POST"
-        },
-        "columnDefs": [{
-          "orderable": false
-        }],
-      });
+      "deferRender": true,
+      "scrollCollapse": true,
+      "scrollX": true,
+      "processing": true,
+      "serverSide": true,
+      "order": [],
+      "ajax": {
+        url: "<?php echo site_url('user_group/ajax_list') ?>", // json datasource
+        type: "POST"
+      },
+      "columnDefs": [{
+        "orderable": false
+      }],
+    });
 
   });
 
@@ -164,27 +147,47 @@
     save_method = 'update';
     $('#form_user_group')[0].reset();
     $.ajax({
-      url: "<?php echo site_url('user_group/get_user_group')?>/" + id,
+      url: "<?php echo site_url('user_group/get_user_group') ?>/" + id,
       type: "GET",
       dataType: "JSON",
       success: function(data) {
         var access = data.access.split('#');
-				var actions = data.action;
+        var actions = data.action;
         $('[name="access[]"]').attr('checked', false)
         for (i = 0; i < access.length; i++) {
           $('#' + access[i]).attr('checked', true)
         }
-        
-        
+
+
 
         $('[name="id"]').val(data.id);
         $('[name="group_name"]').val(data.group_name);
-        
-        if(actions.match(/add/g)){ $('#add-action').attr('checked', true); }else{ $('#add-action').attr('checked', false); }
-				if(actions.match(/update/g)){ $('#update-action').attr('checked', true); }else{ $('#update-action').attr('checked', false); }
-				if(actions.match(/delete/g)){ $('#delete-action').attr('checked', true); }else{ $('#delete-action').attr('checked', false); }
-				if(actions.match(/view/g)){ $('#view-action').attr('checked', true); }else{ $('#view-action').attr('checked', false); }
-				if(actions.match(/download/g)){ $('#download-action').attr('checked', true); }else{ $('#download-action').attr('checked', false); }
+
+        if (actions.match(/add/g)) {
+          $('#add-action').attr('checked', true);
+        } else {
+          $('#add-action').attr('checked', false);
+        }
+        if (actions.match(/update/g)) {
+          $('#update-action').attr('checked', true);
+        } else {
+          $('#update-action').attr('checked', false);
+        }
+        if (actions.match(/delete/g)) {
+          $('#delete-action').attr('checked', true);
+        } else {
+          $('#delete-action').attr('checked', false);
+        }
+        if (actions.match(/view/g)) {
+          $('#view-action').attr('checked', true);
+        } else {
+          $('#view-action').attr('checked', false);
+        }
+        if (actions.match(/download/g)) {
+          $('#download-action').attr('checked', true);
+        } else {
+          $('#download-action').attr('checked', false);
+        }
 
         $('#modal_user_group').modal('show');
         $('.modal-title').text('Update user_group');
@@ -198,9 +201,9 @@
   function save() {
     var url;
     if (save_method == 'add') {
-      url = "<?php echo site_url('user_group/add_user_group')?>";
+      url = "<?php echo site_url('user_group/add_user_group') ?>";
     } else {
-      url = "<?php echo site_url('user_group/update_user_group')?>";
+      url = "<?php echo site_url('user_group/update_user_group') ?>";
     }
     // ajax adding data to database
     $.ajax({
@@ -209,10 +212,10 @@
       data: $('#form_user_group').serialize(),
       dataType: "JSON",
       success: function(data, response) {
-        if(data.status) //if success close modal and reload ajax table
+        if (data.status) //if success close modal and reload ajax table
         {
           $('#btnSave').text('save'); //change button text
-          $('#btnSave').attr('disabled',false); //set button enable 
+          $('#btnSave').attr('disabled', false); //set button enable 
           //if success close modal and reload ajax table
           $('#modal_user_group').modal('hide');
           iziToast.success({
@@ -222,14 +225,11 @@
           });
           $('#table').DataTable().ajax.reload();
           // location.reload();// for reload a page
-        }
-        else
-        {
-            for (var i = 0; i < data.inputerror.length; i++) 
-            {
-                $('[name="'+data.inputerror[i]+'"]').addClass('is-invalid'); //select parent twice to select div form-group class and add has-error class
-                $('[name="'+data.inputerror[i]+'"]').next().text(data.error_string[i]); //select span help-block class set text error string
-            }
+        } else {
+          for (var i = 0; i < data.inputerror.length; i++) {
+            $('[name="' + data.inputerror[i] + '"]').addClass('is-invalid'); //select parent twice to select div form-group class and add has-error class
+            $('[name="' + data.inputerror[i] + '"]').next().text(data.error_string[i]); //select span help-block class set text error string
+          }
         }
       },
       error: function(jqXHR, textStatus, errorThrown) {
@@ -245,38 +245,38 @@
   function delete_user_group(id) {
     var event = "<?php echo $this->session->userdata('action'); ?>";
     console.log(event)
-		if(event.match(/delete/g)){
+    if (event.match(/delete/g)) {
       swal({
-        title: "Are you sure ?",
-        text: "Once deleted, you will not be able to recover this data !",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-      })
-      .then((willDelete) => {
-        if (willDelete) {
-          $.ajax({
-            url: "<?php echo site_url('user_group/delete_user_group')?>/" + id,
-            type: "post",
-            complete: function() {
-              swal("Your data has been deleted!", {
-                icon: "success",
-              }).then(function() {
-                $('#table').DataTable().ajax.reload();
-              });
-            }
-          });
+          title: "Are you sure ?",
+          text: "Once deleted, you will not be able to recover this data !",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        })
+        .then((willDelete) => {
+          if (willDelete) {
+            $.ajax({
+              url: "<?php echo site_url('user_group/delete_user_group') ?>/" + id,
+              type: "post",
+              complete: function() {
+                swal("Your data has been deleted!", {
+                  icon: "success",
+                }).then(function() {
+                  $('#table').DataTable().ajax.reload();
+                });
+              }
+            });
 
-        } else {
-          swal("Data failed deleted !");
-        }
-      });
-    }else{
-        iziToast.error({
-          title: 'Error !',
-          message: 'You have no right to this action.',
-          position: 'bottomCenter'
+          } else {
+            swal("Data failed deleted !");
+          }
         });
+    } else {
+      iziToast.error({
+        title: 'Error !',
+        message: 'You have no right to this action.',
+        position: 'bottomCenter'
+      });
     }
   }
 </script>
