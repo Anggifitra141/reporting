@@ -271,6 +271,11 @@
                 <li id="nav-sipesat-source"><a class="nav-link" href="<?php echo site_url('source/si_pesat'); ?>"><i class="fas fa-database"></i> Gangguan Sistem</a></li>
               </ul>
             </li>
+            <style>
+              .sidebar-style-2 .sidebar-menu li.active ul.dropdown-menu li a {
+                  padding-left: 55px !important;
+              }
+            </style>
             <li class="dropdown" id="nav-data-clean">
               <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-layer-group"></i> <span>Data Clean</span></a>
               <ul class="dropdown-menu">
@@ -287,16 +292,14 @@
                 <li id="nav-dana-float-clean"><a class="nav-link" href="<?php echo site_url('clean/dana_float'); ?>"><i class="fas fa-database"></i> Dana Float</a></li>
                 <li id="nav-dana-float-clean"><a class="nav-link" href="<?php echo site_url('clean/qris'); ?>"><i class="fas fa-database"></i> Payment Gateway</a></li>
                 <li id="nav-sipesat-clean"><a class="nav-link" href="<?php echo site_url('clean/si_pesat'); ?>"><i class="fas fa-database"></i> Si Pesat</a></li>
-                <li class="dropdown" id="nav-ltdbb-clean">
+                <li class="dropdown" id="nav-lkpbu-clean">
                   <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-database"></i>LKPBU</a>
                   <ul class="dropdown-menu">
                     <li id="nav-ltdbb-clean-g001"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G001'); ?>"><i class="fas fa-circle"></i> Form 302</a></li>
                     <li id="nav-ltdbb-clean-g002"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G002'); ?>"><i class="fas fa-circle"></i> Form 303</a></li>
-                    <li id="nav-ltdbb-clean-g003"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G003'); ?>"><i class="fas fa-circle"></i> Form 304</a></li>
-                    <li id="nav-ltdbb-clean-g003"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G003'); ?>"><i class="fas fa-circle"></i> Form 306</a></li>
-                    <li id="nav-ltdbb-clean-g003"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G003'); ?>"><i class="fas fa-circle"></i> Form 309</a></li>
-                    <li id="nav-ltdbb-clean-g003"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G003'); ?>"><i class="fas fa-circle"></i> Form 310</a></li>
-                    <li id="nav-ltdbb-clean-g003"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G003'); ?>"><i class="fas fa-circle"></i> Form 311</a></li>
+                    <li id="nav-lkpbu-clean-304"><a class="nav-link" href="<?php echo site_url('lkpbu/form_304'); ?>"><i class="fas fa-circle"></i> Form 304</a></li>
+                    <li id="nav-lkpbu-clean-306"><a class="nav-link" href="<?php echo site_url('lkpbu/form_306'); ?>"><i class="fas fa-circle"></i> Form 306</a></li>
+                    <li id="nav-lkpbu-clean-309-310-311"><a class="nav-link" href="<?php echo site_url('lkpbu/form_309_310_311'); ?>" style="font-size: 11px;"><i class="fas fa-circle"></i> Form 309 310 & 311</a></li>
                     <li id="nav-ltdbb-clean-g003"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G003'); ?>"><i class="fas fa-circle"></i> Form 312</a></li>
                     <li id="nav-ltdbb-clean-g003"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G003'); ?>"><i class="fas fa-circle"></i> Form 313</a></li>
                   </ul>
