@@ -15,28 +15,43 @@
     <div class="row">
       <div class="col-12">
         <div class="card">
-          <div class="card-header">
-            <h4></h4>
-            <div class="card-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Trx Date </label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">
+                      <i class="fas fa-calendar"></i>
+                    </div>
+                  </div>
+                  <input type="text" class="form-control daterange-picker" name="daterange">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-4">
+            <div class="col-md-12">
+              <div class="card-body">
+                <div class="">
+                  <table class="table table-striped" id="table" style="width: 100%;">
+                    <thead>
+                      <tr>
+                        <th class="text-center" width="1px">
+                          No
+                        </th>
+                        <th>Wallet Code</th>
+                        <th>Trx Code</th>
+                        <th>Trx ID</th>
+                        <th>Trx Type</th>
+                        <th>Trx Value</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
 
-              <div class="">
-                <table class="table table-striped" id="table" style="width: 100%;">
-                  <thead>
-                    <tr>
-                      <th class="text-center" width="1px">
-                        No
-                      </th>
-                      <th>Wallet Code</th>
-                      <th>Trx Code</th>
-                      <th>Trx ID</th>
-                      <th>Trx Type</th>
-                      <th>Trx Value</th>
-                      <th>Description</th>
-                      <th>Status</th>
-                    </tr>
-                  </thead>
-
-                </table>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
@@ -49,8 +64,9 @@
 <script src="<?php echo base_url(); ?>assets/modules/jquery.min.js"></script>
 <script>
   var base_url = "<?= base_url() ?>";
+  var table;
   $('#nav-data-clean').addClass('dropdown active');
-  $('#nav-raw-data').addClass('active');
+  $('#nav-dana-float-clean').addClass('active');
 
   $("input").change(function() {
     $(this).removeClass('is-invalid');
@@ -58,7 +74,7 @@
   });
   $(document).ready(function() {
 
-    var table = $('#table').DataTable({
+     table = $('#table').DataTable({
       "deferRender": true,
       "ordering": false,
       "scrollCollapse": true,
@@ -68,7 +84,10 @@
       "order": [],
       "ajax": {
         url: "<?php echo site_url('clean/ajax_list_dana_float') ?>", // json dataclean
-        type: "POST"
+        type: "POST",
+        data: function(data) {
+          data.daterange = $('[name="daterange"]').val();
+        }
       },
       "columnDefs": [{
         "orderable": false
@@ -102,6 +121,13 @@
   };
 
 
+  $('[name="daterange"]').change(function() {
+    reload_table();
+  })
+
+  function reload_table() {
+    table.ajax.reload(null, false);
+  }
 
 
   function loading() {

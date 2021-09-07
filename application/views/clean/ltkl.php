@@ -15,35 +15,51 @@
     <div class="row">
       <div class="col-12">
         <div class="card">
-          <div class="card-header">
-            <h4></h4>
-            <div class="card-body">
-              <div class="">
-                <table class="table table-striped" id="table" style="width: 100%;">
-                  <thead>
-                    <tr>
-                      <th class="text-center" width="1px">
-                        No
-                      </th>
-                      <th>Trx Date</th>
-                      <th>Nama Pengirim</th>
-                      <th>Negara Pengirim</th>
-                      <th>No Rek Pengirim</th>
-                      <th>Bank Pengirim</th>
-                      <th>Swift Pengirim</th>
-                      <th>Status Pengirim</th>
-                      <th>Nama Penerima</th>
-                      <th>No Rek Penerima</th>
-                      <th>Bank Penerima</th>
-                      <th>Swift Penerima</th>
-                      <th>Status Penerima</th>
-                      <th>Nilai Uang</th>
-                      <th>Trans Mode Code</th>
-                      <th>To Founds Code</th>
-                    </tr>
-                  </thead>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Trx Date </label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">
+                      <i class="fas fa-calendar"></i>
+                    </div>
+                  </div>
+                  <input type="text" class="form-control daterange-picker" name="daterange">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-4">
+            <div class="col-md-12">
+              <div class="card-body">
+                <div class="">
+                  <table class="table table-striped" id="table" style="width: 100%;">
+                    <thead>
+                      <tr>
+                        <th class="text-center" width="1px">
+                          No
+                        </th>
+                        <th>Trx Date</th>
+                        <th>Nama Pengirim</th>
+                        <th>Negara Pengirim</th>
+                        <th>No Rek Pengirim</th>
+                        <th>Bank Pengirim</th>
+                        <th>Swift Pengirim</th>
+                        <th>Status Pengirim</th>
+                        <th>Nama Penerima</th>
+                        <th>No Rek Penerima</th>
+                        <th>Bank Penerima</th>
+                        <th>Swift Penerima</th>
+                        <th>Status Penerima</th>
+                        <th>Nilai Uang</th>
+                        <th>Trans Mode Code</th>
+                        <th>To Founds Code</th>
+                      </tr>
+                    </thead>
 
-                </table>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
@@ -57,8 +73,9 @@
 <script src="<?php echo base_url(); ?>assets/modules/jquery.min.js"></script>
 <script>
   var base_url = "<?= base_url() ?>";
+  var table;
   $('#nav-data-clean').addClass('dropdown active');
-  $('#nav-raw-data').addClass('active');
+  $('#nav-ltkl-clean').addClass('active');
 
   $("input").change(function() {
     $(this).removeClass('is-invalid');
@@ -66,7 +83,7 @@
   });
   $(document).ready(function() {
 
-    var table = $('#table').DataTable({
+     table = $('#table').DataTable({
       "deferRender": true,
       "ordering": false,
       "scrollCollapse": true,
@@ -76,7 +93,10 @@
       "order": [],
       "ajax": {
         url: "<?php echo site_url('clean/ajax_list_ltkl') ?>", // json dataclean
-        type: "POST"
+        type: "POST",
+        data: function(data) {
+          data.daterange = $('[name="daterange"]').val();
+        }
       },
       "columnDefs": [{
         "orderable": false
@@ -110,6 +130,13 @@
   };
 
 
+  $('[name="daterange"]').change(function() {
+    reload_table();
+  })
+
+  function reload_table() {
+    table.ajax.reload(null, false);
+  }
 
 
   function loading() {

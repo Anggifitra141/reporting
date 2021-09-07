@@ -87,6 +87,10 @@ class Clean extends CI_Controller {
       $this->db->where_in('sender_country', array('INDONESIA', '86'));
       $this->db->where_in('recept_country', array('INDONESIA', '86'));
     }
+    $start_date = date('Ymd', strtotime(substr($_POST['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
+    $this->db->where('trx_date >=', $start_date);
+    $this->db->where('trx_date <=', $end_date);
      $list = $this->M_tltdbb_clean->get_datatables();
      $data = array();
      $no = $_POST['start'];
@@ -132,6 +136,11 @@ class Clean extends CI_Controller {
       $this->db->where_in('sender_country', array('INDONESIA', '86'));
       $this->db->where_in('recept_country', array('INDONESIA', '86'));
     }
+    $start_date = date('Ymd', strtotime(substr($_POST['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
+
+    $this->db->where('trx_date >=', $start_date);
+    $this->db->where('trx_date <=', $end_date);
     $recordsTotal = $this->M_tltdbb_clean->count_all();
 
     if($type_report == 'G001'){
@@ -144,6 +153,11 @@ class Clean extends CI_Controller {
       $this->db->where_in('sender_country', array('INDONESIA', '86'));
       $this->db->where_in('recept_country', array('INDONESIA', '86'));
     }
+    $start_date = date('Ymd', strtotime(substr($_POST['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
+
+    $this->db->where('trx_date >=', $start_date);
+    $this->db->where('trx_date <=', $end_date);
     $recordsFiltered = $this->M_tltdbb_clean->count_filtered();
      $output = array(
                "draw" => $_POST['draw'],
@@ -153,6 +167,8 @@ class Clean extends CI_Controller {
              );
      echo json_encode($output);
    }
+
+   
 
    public function ajax_bulk_delete_ltdbb()
    {
@@ -232,6 +248,10 @@ class Clean extends CI_Controller {
   // START :: AJAX DANA FLOAT
   public function ajax_list_dana_float()
   {
+    $start_date = date('Ymd', strtotime(substr($_POST['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
+    $this->db->where('DATE_FORMAT(trx_datetime, "%Y%m%d") >=', $start_date);
+    $this->db->where('DATE_FORMAT(trx_datetime, "%Y%m%d") <=', $end_date);
     $list = $this->M_danafloat_clean->get_datatables();
     $data = array();
     $no = $_POST['start'];
@@ -248,10 +268,21 @@ class Clean extends CI_Controller {
       $row[] = $raw_data->status;
       $data[] = $row;
     } 
+    $start_date = date('Ymd', strtotime(substr($_POST['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
+    $this->db->where('DATE_FORMAT(trx_datetime, "%Y%m%d") >=', $start_date);
+    $this->db->where('DATE_FORMAT(trx_datetime, "%Y%m%d") <=', $end_date);
+    $recordsTotal = $this->M_danafloat_clean->count_all();
+    $start_date = date('Ymd', strtotime(substr($_POST['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
+    $this->db->where('DATE_FORMAT(trx_datetime, "%Y%m%d") >=', $start_date);
+    $this->db->where('DATE_FORMAT(trx_datetime, "%Y%m%d") <=', $end_date);
+    $recordsFiltered = $this->M_danafloat_clean->count_filtered();
+
     $output = array(
               "draw" => $_POST['draw'],
-              "recordsTotal" => $this->M_danafloat_clean->count_all(),
-              "recordsFiltered" => $this->M_danafloat_clean->count_filtered(),
+              "recordsTotal" => $recordsTotal,
+              "recordsFiltered" => $recordsFiltered,
               "data" => $data,
             );
     echo json_encode($output);
@@ -325,6 +356,10 @@ class Clean extends CI_Controller {
   // START :: AJAX SI PESAT
   public function ajax_list_si_pesat()
   {
+    $start_date = date('Ymd', strtotime(substr($_POST['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
+    $this->db->where('datestamp >=', $start_date);
+    $this->db->where('datestamp <=', $end_date);
     $list = $this->M_sipesat_clean->get_datatables();
     $data = array();
     $no = $_POST['start'];
@@ -341,10 +376,22 @@ class Clean extends CI_Controller {
       $row[] = $raw_data->customer_cif;
       $data[] = $row;
     } 
+    $start_date = date('Ymd', strtotime(substr($_POST['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
+    $this->db->where('datestamp >=', $start_date);
+    $this->db->where('datestamp <=', $end_date);
+    $recordsTotal = $this->M_sipesat_clean->count_all();
+
+    $start_date = date('Ymd', strtotime(substr($_POST['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
+    $this->db->where('datestamp >=', $start_date);
+    $this->db->where('datestamp <=', $end_date);
+    $recordsFiltered = $this->M_sipesat_clean->count_filtered();
+
     $output = array(
               "draw" => $_POST['draw'],
-              "recordsTotal" => $this->M_sipesat_clean->count_all(),
-              "recordsFiltered" => $this->M_sipesat_clean->count_filtered(),
+              "recordsTotal" => $recordsTotal,
+              "recordsFiltered" => $recordsFiltered,
               "data" => $data,
             );
     echo json_encode($output);
@@ -394,6 +441,10 @@ class Clean extends CI_Controller {
   // / START :: AJAX SI LTKL
   public function ajax_list_ltkl()
   {
+    $start_date = date('Ymd', strtotime(substr($_POST['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
+    $this->db->where('trx_date >=', $start_date);
+    $this->db->where('trx_date <=', $end_date);
     $list = $this->M_ltkl_clean->get_datatables();
     $data = array();
     $no = $_POST['start'];
@@ -418,11 +469,22 @@ class Clean extends CI_Controller {
       $row[] = 'UT';
       $row[] = 'REK';
       $data[] = $row;
-    } 
+    }
+    $start_date = date('Ymd', strtotime(substr($_POST['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
+    $this->db->where('trx_date >=', $start_date);
+    $this->db->where('trx_date <=', $end_date);
+    $recordsTotal = $this->M_ltkl_clean->count_all();
+    $start_date = date('Ymd', strtotime(substr($_POST['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
+    $this->db->where('trx_date >=', $start_date);
+    $this->db->where('trx_date <=', $end_date);
+    $recordsFiltered = $this->M_ltkl_clean->count_filtered();
+    
     $output = array(
               "draw" => $_POST['draw'],
-              "recordsTotal" => $this->M_ltkl_clean->count_all(),
-              "recordsFiltered" => $this->M_ltkl_clean->count_filtered(),
+              "recordsTotal" => $recordsTotal,
+              "recordsFiltered" => $recordsFiltered,
               "data" => $data,
             );
     echo json_encode($output);
@@ -489,6 +551,166 @@ class Clean extends CI_Controller {
 
   // END :: AJAX LTKL
 
+  // START :: FORM 302
+  public function form_302()
+  {
+    $data= [];
+    $data['content'] = $this->load->view('clean/lkpbu/form_302', $data, TRUE);
+		$this->load->view('layout', $data);
+  }
+  public function ajax_list_lkpbu_card()
+  {
+    $start_date = date('Ymd', strtotime(substr($_POST['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
+
+    $this->db->where('datestamp >=', $start_date);
+    $this->db->where('datestamp <=', $end_date);
+    $list = $this->M_lkpbu->get_datatables302_card();
+    $data = array();
+    $no = $_POST['start'];
+    foreach ($list as $raw_data) {
+     $no++;
+     $row = array();
+     $row[] = $no; 
+     $row[] = $raw_data->cust_code;
+     $row[] = $raw_data->cust_type_id;
+     $row[] = $raw_data->city_id;
+     $row[] = $raw_data->status_card;
+     $row[] = date('d/m/Y', strtotime($raw_data->register_date));
+
+     $data[] = $row;
+     
+    } 
+    $this->db->where('datestamp >=', $start_date);
+    $this->db->where('datestamp <=', $end_date);
+   $recordsTotal = $this->M_lkpbu->count_all302_card();
+   $this->db->where('datestamp >=', $start_date);
+    $this->db->where('datestamp <=', $end_date);
+   $recordsFiltered = $this->M_lkpbu->count_filtered302_card();
+    $output = array(
+              "draw" => $_POST['draw'],
+              "recordsTotal" => $recordsTotal,
+              "recordsFiltered" => $recordsFiltered,
+              "data" => $data,
+            );
+    echo json_encode($output);
+  }
+
+  public function ajax_list_lkpbu_dana_float()
+  {
+    $start_date = date('Ymd', strtotime(substr($_POST['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
+
+    $this->db->where('datestamp >=', $start_date);
+    $this->db->where('datestamp <=', $end_date);
+    $list = $this->M_lkpbu->get_datatables302_dana_float();
+    $data = array();
+    $no = $_POST['start'];
+    foreach ($list as $raw_data) {
+     $no++;
+     $row = array();
+     $row[] = $no; 
+     $row[] = $raw_data->cust_code;
+     $row[] = $raw_data->cust_type_id;
+     $row[] = $raw_data->city_id;
+     $row[] = $raw_data->curr_balance;
+     $row[] = date('d/m/Y H:i:s', strtotime($raw_data->trx_datetime));
+
+     $data[] = $row;
+     
+    } 
+    $this->db->where('datestamp >=', $start_date);
+    $this->db->where('datestamp <=', $end_date);
+   $recordsTotal = $this->M_lkpbu->count_all302_dana_float();
+   $this->db->where('datestamp >=', $start_date);
+    $this->db->where('datestamp <=', $end_date);
+   $recordsFiltered = $this->M_lkpbu->count_filtered302_dana_float();
+    $output = array(
+              "draw" => $_POST['draw'],
+              "recordsTotal" => $recordsTotal,
+              "recordsFiltered" => $recordsFiltered,
+              "data" => $data,
+            );
+    echo json_encode($output);
+  }
+  public function ajax_list_lkpbu_trx()
+  {
+    $start_date = date('Ymd', strtotime(substr($_POST['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
+
+    $this->db->where('datestamp >=', $start_date);
+    $this->db->where('datestamp <=', $end_date);
+    $list = $this->M_lkpbu->get_datatables302_trx();
+    $data = array();
+    $no = $_POST['start'];
+    foreach ($list as $raw_data) {
+     $no++;
+     $row = array();
+     $row[] = $no; 
+     $row[] = $raw_data->cust_code;
+     $row[] = $raw_data->cust_type_id;
+     $row[] = $raw_data->city_id;
+     $row[] = $this->lib->rupiah($raw_data->trx_value);
+     $row[] = $raw_data->trx_code;
+     $row[] = $raw_data->wstransfertype;
+     $row[] = date('d/m/Y H:i:s', strtotime($raw_data->trx_datetime));
+
+     $data[] = $row;
+     
+    } 
+    $this->db->where('datestamp >=', $start_date);
+    $this->db->where('datestamp <=', $end_date);
+   $recordsTotal = $this->M_lkpbu->count_all302_trx();
+   $this->db->where('datestamp >=', $start_date);
+    $this->db->where('datestamp <=', $end_date);
+   $recordsFiltered = $this->M_lkpbu->count_filtered302_trx();
+    $output = array(
+              "draw" => $_POST['draw'],
+              "recordsTotal" => $recordsTotal,
+              "recordsFiltered" => $recordsFiltered,
+              "data" => $data,
+            );
+    echo json_encode($output);
+  }
+  public function ajax_list_lkpbu_vol()
+  {
+    $start_date = date('Ymd', strtotime(substr($_POST['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
+
+    $this->db->where('datestamp >=', $start_date);
+    $this->db->where('datestamp <=', $end_date);
+    $list = $this->M_lkpbu->get_datatables302_vol();
+    $data = array();
+    $no = $_POST['start'];
+    foreach ($list as $raw_data) {
+     $no++;
+     $row = array();
+     $row[] = $no; 
+     $row[] = $raw_data->cust_code;
+     $row[] = $raw_data->cust_type_id;
+     $row[] = $raw_data->city_id;
+     $row[] = $this->lib->rupiah($raw_data->trx_value);
+     $row[] = $raw_data->init_amount;
+     $row[] = date('d/m/Y H:i:s', strtotime($raw_data->trx_datetime));
+
+     $data[] = $row;
+     
+    } 
+    $this->db->where('datestamp >=', $start_date);
+    $this->db->where('datestamp <=', $end_date);
+   $recordsTotal = $this->M_lkpbu->count_all302_vol();
+   $this->db->where('datestamp >=', $start_date);
+    $this->db->where('datestamp <=', $end_date);
+   $recordsFiltered = $this->M_lkpbu->count_filtered302_vol();
+    $output = array(
+              "draw" => $_POST['draw'],
+              "recordsTotal" => $recordsTotal,
+              "recordsFiltered" => $recordsFiltered,
+              "data" => $data,
+            );
+    echo json_encode($output);
+  }
+  // END :: FORM 302
   
   // START :: FORM 304
 	public function form_304()

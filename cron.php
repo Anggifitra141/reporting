@@ -109,4 +109,100 @@ $sql = "INSERT INTO t1clean_ltkl VALUES  ";
 $sql .= implode(',', $data);
 mysqli_query($conn, $sql);
 
+
+// LKPBU 302 CARD
+$data_source = mysqli_query($conn, "SELECT * FROM t0source_lkpbu_302_card WHERE status = 'new'");
+$data = array();
+while ($row=mysqli_fetch_array($data_source, MYSQLI_BOTH)) {
+
+  
+    $id_source   = $row['id'];
+   $cust_code   = $row['cust_code'];
+   $cust_type_id   = $row['cust_type_id'];
+   $city_id   = $row['city_id'];
+   $status_card   = $row['status_card'];
+   $register_date   = $row['register_date'];
+   $datestamp   = date('Ymd');
+   $status     = 'cleaned';
+    mysqli_query($conn, "UPDATE t0source_lkpbu_302_card SET status = 'old' WHERE id = '".$row['id']."'  ");
+    $data[] = "('', '$id_source', '$cust_code', '$cust_type_id', '$city_id', '$status_card', '$register_date', '$datestamp', '$status')"; 
+  
+
+}
+$sql = "INSERT INTO t1clean_lkpbu_302_card VALUES  ";
+$sql .= implode(',', $data);
+mysqli_query($conn, $sql);
+
+// LKPBU 302 DANAfloat
+$data_source = mysqli_query($conn, "SELECT * FROM t0source_lkpbu_302_danafloat WHERE status = 'new'");
+$data = array();
+while ($row=mysqli_fetch_array($data_source, MYSQLI_BOTH)) {
+
+  
+    $id_source   = $row['id'];
+   $cust_code   = $row['cust_code'];
+   $cust_type_id   = $row['cust_type_id'];
+   $city_id   = $row['city_id'];
+   $curr_balance   = $row['curr_balance'];
+   $trx_datetime   = $row['trx_datetime'];
+   $datestamp   = date('Ymd');
+   $status     = 'cleaned';
+    mysqli_query($conn, "UPDATE t0source_lkpbu_302_danafloat SET status = 'old' WHERE id = '".$row['id']."'  ");
+    $data[] = "('', '$id_source', '$cust_code', '$cust_type_id', '$city_id', '$curr_balance', '$trx_datetime', '$datestamp', '$status')"; 
+  
+
+}
+$sql = "INSERT INTO t1clean_lkpbu_302_danafloat VALUES  ";
+$sql .= implode(',', $data);
+mysqli_query($conn, $sql);
+
+// LKPBU 302 TRX
+$data_source = mysqli_query($conn, "SELECT * FROM t0source_lkpbu_302_trx WHERE status = 'new'");
+$data = array();
+while ($row=mysqli_fetch_array($data_source, MYSQLI_BOTH)) {
+
+  
+    $id_source   = $row['id'];
+   $cust_code   = $row['cust_code'];
+   $cust_type_id   = $row['cust_type_id'];
+   $city_id   = $row['city_id'];
+   $trx_value   = $row['trx_value'];
+   $trx_code   = $row['trx_code'];
+   $wstransfertype   = $row['wstransfertype'];
+   $trx_datetime   = $row['trx_datetime'];
+   $datestamp   = date('Ymd');
+   $status     = 'cleaned';
+    mysqli_query($conn, "UPDATE t0source_lkpbu_302_trx SET status = 'old' WHERE id = '".$row['id']."'  ");
+    $data[] = "('', '$id_source', '$cust_code', '$cust_type_id', '$city_id', '$trx_value', '$trx_code', '$wstransfertype', '$trx_datetime', '$datestamp', '$status')"; 
+  
+
+}
+$sql = "INSERT INTO t1clean_lkpbu_302_trx VALUES  ";
+$sql .= implode(',', $data);
+mysqli_query($conn, $sql);
+
+// LKPBU 302 VOL
+$data_source = mysqli_query($conn, "SELECT * FROM t0source_lkpbu_302_vol WHERE status = 'new'");
+$data = array();
+while ($row=mysqli_fetch_array($data_source, MYSQLI_BOTH)) {
+
+  
+    $id_source   = $row['id'];
+   $cust_code   = $row['cust_code'];
+   $cust_type_id   = $row['cust_type_id'];
+   $city_id   = $row['city_id'];
+   $trx_value   = $row['trx_value'];
+   $init_amount   = $row['init_amount'];
+   $trx_datetime   = $row['trx_datetime'];
+   $datestamp   = date('Ymd');
+   $status     = 'cleaned';
+    mysqli_query($conn, "UPDATE t0source_lkpbu_302_vol SET status = 'old' WHERE id = '".$row['id']."'  ");
+    $data[] = "('', '$id_source', '$cust_code', '$cust_type_id', '$city_id', '$trx_value', '$init_amount', '$trx_datetime', '$datestamp', '$status')"; 
+  
+
+}
+$sql = "INSERT INTO t1clean_lkpbu_302_vol VALUES  ";
+$sql .= implode(',', $data);
+mysqli_query($conn, $sql);
+
 echo "successfully";

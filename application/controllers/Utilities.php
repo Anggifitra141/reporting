@@ -207,22 +207,22 @@ class Utilities extends CI_Controller {
 
 
 			//Cleanser sender_country
-			$cek_sender_country = $this->db->query("SELECT `to` as `to` FROM t3role_model WHERE `from` = '".$sender_country."' AND `table` = 'tltdbb' AND field = 'sender_country'  ")->row();
+			$cek_sender_country = $this->db->query("SELECT `to` as `to` FROM t3role_model WHERE `from` = '".$sender_country."' AND `table` = 'ltdbb' AND field = 'sender_country'  ")->row();
 			if($cek_sender_country){
 				$sender_country = $cek_sender_country->to;
 			}
 			//Cleanser sender_city
-			$cek_sender_city = $this->db->query("SELECT `to` as `to` FROM t3role_model WHERE `from` = '".$sender_city."' AND `table` = 'tltdbb' AND field = 'sender_city'  ")->row();
+			$cek_sender_city = $this->db->query("SELECT `to` as `to` FROM t3role_model WHERE `from` = '".$sender_city."' AND `table` = 'ltdbb' AND field = 'sender_city'  ")->row();
 			if($cek_sender_city){
 				$sender_city = $cek_sender_city->to;
 			}
 			//Cleanser recept_country
-			$cek_recept_country = $this->db->query("SELECT `to` as `to` FROM t3role_model WHERE `from` = '".$recept_country."' AND `table` = 'tltdbb' AND field = 'recept_country'  ")->row();
+			$cek_recept_country = $this->db->query("SELECT `to` as `to` FROM t3role_model WHERE `from` = '".$recept_country."' AND `table` = 'ltdbb' AND field = 'recept_country'  ")->row();
 			if($cek_recept_country){
 				$recept_country = $cek_recept_country->to;
 			}
 			//Cleanser recept_city
-			$cek_recept_city = $this->db->query("SELECT `to` as `to` FROM t3role_model WHERE `from` = '".$recept_city."' AND `table` = 'tltdbb' AND field = 'recept_city'  ")->row();
+			$cek_recept_city = $this->db->query("SELECT `to` as `to` FROM t3role_model WHERE `from` = '".$recept_city."' AND `table` = 'ltdbb' AND field = 'recept_city'  ")->row();
 			if($cek_recept_city){
 				$recept_city = $cek_recept_city->to;
 			}
