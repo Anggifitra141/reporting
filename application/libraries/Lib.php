@@ -77,6 +77,24 @@ class Lib
 
 		return $pecahkan[2] . ' ' . $bulan[(int)$pecahkan[1]] . ' ' . $pecahkan[0];
 	}
+	
+	function convert_to_rupiah($angka)
+	{
+		return 'Rp. '.strrev(implode('.',str_split(strrev(strval($angka)),3)));
+	}
+	
+	/**
+	 *
+	 * @param string $rupiah
+	 * @return integer
+	 *
+	 * Usage example:
+	 * echo convert_to_number("Rp. 10.000.123,00"); -> 10000123
+	 */		 
+	function convert_to_number($rupiah)
+	{
+		return intval(preg_replace('/,.*|[^0-9]/', '', $rupiah));
+	}
  
    
 

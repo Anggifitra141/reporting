@@ -12,7 +12,7 @@ class Source extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-    $this->load->model(['M_raw_data', 'M_tltdbb_source', 'M_danafloat_source', 'M_sipesat_source', 'M_ltkl_source', 'M_qris_merchant_source', 'M_qris_trx_source']);
+    $this->load->model(['M_raw_data', 'M_tltdbb_source', 'M_danafloat_source', 'M_sipesat_source', 'M_ltkl_source', 'M_qris_merchant_source', 'M_qris_trx_source', 'M_lkpbu_source']);
     if(!$this->session->userdata('logged_in'))
     {
       $data=array();
@@ -189,10 +189,10 @@ class Source extends CI_Controller {
 public function ajax_list_si_pesat()
 {
   $start_date = date('Ymd', strtotime(substr($_POST['daterange'], 0, 10)));
-    $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
+  $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
 
-    $this->db->where('trx_date >=', $start_date);
-    $this->db->where('trx_date <=', $end_date);
+  $this->db->where('trx_date >=', $start_date);
+  $this->db->where('trx_date <=', $end_date);
   $list = $this->M_sipesat_source->get_datatables();
   $data = array();
   $no = $_POST['start'];
@@ -338,6 +338,167 @@ public function ajax_list_si_pesat()
     echo json_encode($output);
   }
   // END :: QRIS
+
+  // START LKPBU
+  public function lkpbu_source302()
+  {
+    $data= [];
+    $data['content'] = $this->load->view('source/lkpbu_302', $data, TRUE);
+		$this->load->view('layout', $data);
+  }
+  public function ajax_list_lkpbu_card()
+  {
+    $start_date = date('Ymd', strtotime(substr($_POST['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
+
+    $this->db->where('datestamp >=', $start_date);
+    $this->db->where('datestamp <=', $end_date);
+    $list = $this->M_lkpbu_source->get_datatables302_card();
+    $data = array();
+    $no = $_POST['start'];
+    foreach ($list as $raw_data) {
+     $no++;
+     $row = array();
+     $row[] = $no; 
+     $row[] = $raw_data->cust_code;
+     $row[] = $raw_data->cust_type_id;
+     $row[] = $raw_data->city_id;
+     $row[] = $raw_data->status_card;
+     $row[] = date('d/m/Y', strtotime($raw_data->register_date));
+
+     $data[] = $row;
+     
+    } 
+    $this->db->where('datestamp >=', $start_date);
+    $this->db->where('datestamp <=', $end_date);
+   $recordsTotal = $this->M_lkpbu_source->count_all302_card();
+   $this->db->where('datestamp >=', $start_date);
+    $this->db->where('datestamp <=', $end_date);
+   $recordsFiltered = $this->M_lkpbu_source->count_filtered302_card();
+    $output = array(
+              "draw" => $_POST['draw'],
+              "recordsTotal" => $recordsTotal,
+              "recordsFiltered" => $recordsFiltered,
+              "data" => $data,
+            );
+    echo json_encode($output);
+  }
+
+  public function ajax_list_lkpbu_dana_float()
+  {
+    $start_date = date('Ymd', strtotime(substr($_POST['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
+
+    $this->db->where('datestamp >=', $start_date);
+    $this->db->where('datestamp <=', $end_date);
+    $list = $this->M_lkpbu_source->get_datatables302_dana_float();
+    $data = array();
+    $no = $_POST['start'];
+    foreach ($list as $raw_data) {
+     $no++;
+     $row = array();
+     $row[] = $no; 
+     $row[] = $raw_data->cust_code;
+     $row[] = $raw_data->cust_type_id;
+     $row[] = $raw_data->city_id;
+     $row[] = $raw_data->curr_balance;
+     $row[] = date('d/m/Y H:i:s', strtotime($raw_data->trx_datetime));
+
+     $data[] = $row;
+     
+    } 
+    $this->db->where('datestamp >=', $start_date);
+    $this->db->where('datestamp <=', $end_date);
+   $recordsTotal = $this->M_lkpbu_source->count_all302_dana_float();
+   $this->db->where('datestamp >=', $start_date);
+    $this->db->where('datestamp <=', $end_date);
+   $recordsFiltered = $this->M_lkpbu_source->count_filtered302_dana_float();
+    $output = array(
+              "draw" => $_POST['draw'],
+              "recordsTotal" => $recordsTotal,
+              "recordsFiltered" => $recordsFiltered,
+              "data" => $data,
+            );
+    echo json_encode($output);
+  }
+  public function ajax_list_lkpbu_trx()
+  {
+    $start_date = date('Ymd', strtotime(substr($_POST['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
+
+    $this->db->where('datestamp >=', $start_date);
+    $this->db->where('datestamp <=', $end_date);
+    $list = $this->M_lkpbu_source->get_datatables302_trx();
+    $data = array();
+    $no = $_POST['start'];
+    foreach ($list as $raw_data) {
+     $no++;
+     $row = array();
+     $row[] = $no; 
+     $row[] = $raw_data->cust_code;
+     $row[] = $raw_data->cust_type_id;
+     $row[] = $raw_data->city_id;
+     $row[] = $this->lib->rupiah($raw_data->trx_value);
+     $row[] = $raw_data->trx_code;
+     $row[] = $raw_data->wstransfertype;
+     $row[] = date('d/m/Y H:i:s', strtotime($raw_data->trx_datetime));
+
+     $data[] = $row;
+     
+    } 
+    $this->db->where('datestamp >=', $start_date);
+    $this->db->where('datestamp <=', $end_date);
+   $recordsTotal = $this->M_lkpbu_source->count_all302_trx();
+   $this->db->where('datestamp >=', $start_date);
+    $this->db->where('datestamp <=', $end_date);
+   $recordsFiltered = $this->M_lkpbu_source->count_filtered302_trx();
+    $output = array(
+              "draw" => $_POST['draw'],
+              "recordsTotal" => $recordsTotal,
+              "recordsFiltered" => $recordsFiltered,
+              "data" => $data,
+            );
+    echo json_encode($output);
+  }
+  public function ajax_list_lkpbu_vol()
+  {
+    $start_date = date('Ymd', strtotime(substr($_POST['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
+
+    $this->db->where('datestamp >=', $start_date);
+    $this->db->where('datestamp <=', $end_date);
+    $list = $this->M_lkpbu_source->get_datatables302_vol();
+    $data = array();
+    $no = $_POST['start'];
+    foreach ($list as $raw_data) {
+     $no++;
+     $row = array();
+     $row[] = $no; 
+     $row[] = $raw_data->cust_code;
+     $row[] = $raw_data->cust_type_id;
+     $row[] = $raw_data->city_id;
+     $row[] = $this->lib->rupiah($raw_data->trx_value);
+     $row[] = $raw_data->init_amount;
+     $row[] = date('d/m/Y H:i:s', strtotime($raw_data->trx_datetime));
+
+     $data[] = $row;
+     
+    } 
+    $this->db->where('datestamp >=', $start_date);
+    $this->db->where('datestamp <=', $end_date);
+   $recordsTotal = $this->M_lkpbu_source->count_all302_vol();
+   $this->db->where('datestamp >=', $start_date);
+    $this->db->where('datestamp <=', $end_date);
+   $recordsFiltered = $this->M_lkpbu_source->count_filtered302_vol();
+    $output = array(
+              "draw" => $_POST['draw'],
+              "recordsTotal" => $recordsTotal,
+              "recordsFiltered" => $recordsFiltered,
+              "data" => $data,
+            );
+    echo json_encode($output);
+  }
+  // END :: LKPBU
   
  
 }

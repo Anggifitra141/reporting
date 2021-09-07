@@ -75,7 +75,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form class="form-horizontal" method="POST" id="form_306">
+        <form class="form-horizontal" method="POST" id="form_306" enctype="multipart/form-data">
           <input type="hidden" name="id">
           <div class="form-body">
           <div class="form-group">
@@ -151,7 +151,7 @@
         "serverSide": true,
         "order": [],
         "ajax": {
-          url: "<?php echo site_url('lkpbu/ajax_list_306')?>", // json datasource
+          url: "<?php echo site_url('clean/ajax_list_306')?>", // json datasource
           type: "POST",
           data: function(data) {
               data.daterange = $('[name="daterange"]').val();
@@ -193,7 +193,7 @@
     $('#review-pdf').hide();
     $('#form_306')[0].reset();
     $.ajax({
-      url: "<?php echo site_url('lkpbu/get_form_306')?>/" + id,
+      url: "<?php echo site_url('clean/get_form_306')?>/" + id,
       type: "GET",
       dataType: "JSON",
       success: function(data) {
@@ -228,19 +228,11 @@
   function save() {
     var url;
     if (save_method == 'add') {
-      url = "<?php echo site_url('lkpbu/add_form_306')?>";
+      url = "<?php echo site_url('clean/add_form_306')?>";
     } else {
-      url = "<?php echo site_url('lkpbu/update_form_306')?>";
+      url = "<?php echo site_url('clean/update_form_306')?>";
     }
-    var actual_loss_nominal = '';
-    var potential_loss_nominal = '';
-    if($('[name="potential_loss_nominal"]').val()) {
-      potential_loss_nominal = parseInt(convertToAngka($('[name="potential_loss_nominal"]').val()));
-    }
-    if($('[name="actual_loss_nominal"]').val()) {
-      actual_loss_nominal = parseInt(convertToAngka($('[name="actual_loss_nominal"]').val()));
-    }
-    console.log($('input[name="file_location"]')[0].files[0])
+
     var formData = new FormData($('#form_306')[0]);
     // ajax adding data to database
     $.ajax({
@@ -298,7 +290,7 @@
       .then((willDelete) => {
         if (willDelete) {
           $.ajax({
-            url: "<?php echo site_url('lkpbu/delete_form_306')?>/" + id,
+            url: "<?php echo site_url('clean/delete_form_306')?>/" + id,
             type: "post",
             complete: function() {
               swal("Your data has been deleted!", {

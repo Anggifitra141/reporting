@@ -134,7 +134,7 @@
         "serverSide": true,
         "order": [],
         "ajax": {
-          url: "<?php echo site_url('lkpbu/ajax_list_313')?>", // json datasource
+          url: "<?php echo site_url('clean/ajax_list_313')?>", // json datasource
           type: "POST",
           data: function(data) {
               data.daterange = $('[name="daterange"]').val();
@@ -162,7 +162,7 @@
     save_method = 'update';
     $('#form_313')[0].reset();
     $.ajax({
-      url: "<?php echo site_url('lkpbu/get_form_313')?>/" + id,
+      url: "<?php echo site_url('clean/get_form_313')?>/" + id,
       type: "GET",
       dataType: "JSON",
       success: function(data) {
@@ -194,9 +194,9 @@
   function save() {
     var url;
     if (save_method == 'add') {
-      url = "<?php echo site_url('lkpbu/add_form_313')?>";
+      url = "<?php echo site_url('clean/add_form_313')?>";
     } else {
-      url = "<?php echo site_url('lkpbu/update_form_313')?>";
+      url = "<?php echo site_url('clean/update_form_313')?>";
     }
     var formData = new FormData($('#form_313')[0]);
     // ajax adding data to database
@@ -255,7 +255,7 @@
       .then((willDelete) => {
         if (willDelete) {
           $.ajax({
-            url: "<?php echo site_url('lkpbu/delete_form_313')?>/" + id,
+            url: "<?php echo site_url('clean/delete_form_313')?>/" + id,
             type: "post",
             complete: function() {
               swal("Your data has been deleted!", {

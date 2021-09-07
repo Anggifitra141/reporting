@@ -187,7 +187,7 @@
         "serverSide": true,
         "order": [],
         "ajax": {
-          url: "<?php echo site_url('lkpbu/ajax_list_309_310_311')?>", // json datasource
+          url: "<?php echo site_url('clean/ajax_list_309_310_311')?>", // json datasource
           type: "POST",
           data: function(data) {
               data.daterange = $('[name="daterange"]').val();
@@ -219,7 +219,7 @@
     save_method = 'update';
     $('#form_309_310_311')[0].reset();
     $.ajax({
-      url: "<?php echo site_url('lkpbu/get_form_309_310_311')?>/" + id,
+      url: "<?php echo site_url('clean/get_form_309_310_311')?>/" + id,
       type: "GET",
       dataType: "JSON",
       success: function(data) {
@@ -253,9 +253,9 @@
   function save() {
     var url;
     if (save_method == 'add') {
-      url = "<?php echo site_url('lkpbu/add_form_309_310_311')?>";
+      url = "<?php echo site_url('clean/add_form_309_310_311')?>";
     } else {
-      url = "<?php echo site_url('lkpbu/update_form_309_310_311')?>";
+      url = "<?php echo site_url('clean/update_form_309_310_311')?>";
     }
     // ajax adding data to database
     $.ajax({
@@ -311,7 +311,7 @@
       .then((willDelete) => {
         if (willDelete) {
           $.ajax({
-            url: "<?php echo site_url('lkpbu/delete_form_309_310_311')?>/" + id,
+            url: "<?php echo site_url('clean/delete_form_309_310_311')?>/" + id,
             type: "post",
             complete: function() {
               swal("Your data has been deleted!", {
@@ -340,7 +340,7 @@
     $('#btnSaveImport').attr('disabled',true);
     var formData = new FormData($('#form_import_309_310_311')[0]);
     $.ajax({
-      url : "<?= site_url('lkpbu/import_309_310_311') ?>",
+      url : "<?= site_url('clean/import_309_310_311') ?>",
       type: "POST",
       data: formData,
       contentType: false,

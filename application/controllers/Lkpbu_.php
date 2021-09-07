@@ -162,7 +162,6 @@
   // START :: FORM 306
   public function form_306()
 	{
-    echo intval(preg_replace('/,.*|[^0-9]/', '', '')); die();
     $data= [];
     $data['fraud_type'] = $this->db->get('tlkpbu_306_fraud_type')->result();
     $data['content'] = $this->load->view('clean/lkpbu/form_306', $data, TRUE);
@@ -228,9 +227,9 @@
     $data = array(
       'fraud_code'      => $this->input->post('fraud_code'),
       'actual_loss_vol'     => $this->input->post('actual_loss_vol'),
-      'actual_loss_nominal'      => $this->input->post('actual_loss_nominal'),
+      'actual_loss_nominal'      => $this->lib->convert_to_number($this->input->post('actual_loss_nominal')),
       'potential_loss_vol'      => $this->input->post('potential_loss_vol'),
-      'potential_loss_nominal'      => $this->input->post('potential_loss_nominal'),
+      'potential_loss_nominal'      => $this->lib->convert_to_number($this->input->post('potential_loss_nominal')),
       'trx_date'          => date('Ymd', strtotime($this->input->post('trx_date'))),
       'datestamp'         => date('Ymd'),
       'status'            => 'cleaned',
@@ -247,9 +246,9 @@
     $data = array(
       'fraud_code'      => $this->input->post('fraud_code'),
       'actual_loss_vol'     => $this->input->post('actual_loss_vol'),
-      'actual_loss_nominal'      => $this->input->post('actual_loss_nominal'),
+      'actual_loss_nominal'      => $this->lib->convert_to_number($this->input->post('actual_loss_nominal')),
       'potential_loss_vol'      => $this->input->post('potential_loss_vol'),
-      'potential_loss_nominal'      => $this->input->post('potential_loss_nominal'),
+      'potential_loss_nominal'      => $this->lib->convert_to_number($this->input->post('potential_loss_nominal')),
       'datestamp'         => date('Ymd'),
       'trx_date'          => date('Ymd', strtotime($this->input->post('trx_date')))
     );
@@ -293,7 +292,7 @@
         $data['error_string'][] = 'Fraud Volume is required';
         $data['status'] = FALSE;
     }
-    if($this->input->post('actual_loss_nominal') == '')
+    if($this->lib->convert_to_number($this->input->post('actual_loss_nominal')) == '0')
     {
         $data['inputerror'][] = 'actual_loss_nominal';
         $data['error_string'][] = 'Fraud Nominal is required';
@@ -305,7 +304,7 @@
         $data['error_string'][] = 'Fraud Volume is required';
         $data['status'] = FALSE;
     }
-    if($this->input->post('potential_loss_nominal') == '')
+    if($this->lib->convert_to_number($this->input->post('potential_loss_nominal')) == '0')
     {
         $data['inputerror'][] = 'potential_loss_nominal';
         $data['error_string'][] = 'Fraud Nominal is required';
