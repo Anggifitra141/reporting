@@ -1,5 +1,5 @@
 <style>
-  .modal-title{
+  .modal-title {
     margin-top: -10px;
   }
 </style>
@@ -34,7 +34,7 @@
                 </div>
               </div>
             </div>
-            <div class="row mt-4" >
+            <div class="row mt-4">
               <div class="col-md-12">
                 <div class="">
                   <table class="table table-striped" id="table" style="width: 100%;">
@@ -75,17 +75,17 @@
         <form class="form-horizontal" method="POST" id="form_312">
           <input type="hidden" name="id">
           <div class="form-body">
-          <div class="form-group">
+            <div class="form-group">
               <label>Trx Date</label>
-              <input type="date" name="trx_date"  class="form-control" >
+              <input type="date" name="trx_date" class="form-control">
               <span class="invalid-feedback"></span>
             </div>
             <div class="form-group">
               <label>Jenis Publikasi</label>
               <select name="publication_code" class="form-control">
                 <option value="">-- Pilih Jenis Publikasi --</option>
-                <?php foreach($publication_type as $key) : ?>
-                <option value="<?= $key->code ?>"><?= $key->publication ?></option>
+                <?php foreach ($publication_type as $key) : ?>
+                  <option value="<?= $key->code ?>"><?= $key->publication ?></option>
                 <?php endforeach; ?>
               </select>
               <span class="invalid-feedback"></span>
@@ -108,35 +108,35 @@
 
 <script src="<?php echo base_url(); ?>assets/modules/jquery.min.js"></script>
 <script>
-  
   var table;
-  $("input").change(function(){
-      $(this).removeClass('is-invalid');
-      $(this).next().empty();
+  $("input").change(function() {
+    $(this).removeClass('is-invalid');
+    $(this).next().empty();
   });
   $('#nav-data-clean').addClass('dropdown active');
   $('#nav-lkpbu-clean').addClass('active');
   $('#nav-lkpbu-clean-312').addClass('active');
   $(document).ready(function() {
 
-     table = $('#table').DataTable({
-        "deferRender": true,
-        "scrollCollapse": false,
-        "scrollX": false,
-        "processing": true,
-        "serverSide": true,
-        "order": [],
-        "ajax": {
-          url: "<?php echo site_url('clean/ajax_list_312')?>", // json datasource
-          type: "POST",
-          data: function(data) {
-              data.daterange = $('[name="daterange"]').val();
-          }
-        },
-        "columnDefs": [{
-          "orderable": false
-        }],
-      });
+    table = $('#table').DataTable({
+      "deferRender": true,
+      "ordering": false,
+      "scrollCollapse": false,
+      "scrollX": false,
+      "processing": true,
+      "serverSide": true,
+      "order": [],
+      "ajax": {
+        url: "<?php echo site_url('clean/ajax_list_312') ?>", // json datasource
+        type: "POST",
+        data: function(data) {
+          data.daterange = $('[name="daterange"]').val();
+        }
+      },
+      "columnDefs": [{
+        "orderable": false
+      }],
+    });
 
   });
 
@@ -153,7 +153,7 @@
     save_method = 'update';
     $('#form_312')[0].reset();
     $.ajax({
-      url: "<?php echo site_url('clean/get_form_312')?>/" + id,
+      url: "<?php echo site_url('clean/get_form_312') ?>/" + id,
       type: "GET",
       dataType: "JSON",
       success: function(data) {
@@ -171,9 +171,10 @@
     });
   }
 
-  $('[name="daterange"]').change(function(){
+  $('[name="daterange"]').change(function() {
     reload_table();
   })
+
   function reload_table() {
     table.ajax.reload(null, false);
   }
@@ -181,9 +182,9 @@
   function save() {
     var url;
     if (save_method == 'add') {
-      url = "<?php echo site_url('clean/add_form_312')?>";
+      url = "<?php echo site_url('clean/add_form_312') ?>";
     } else {
-      url = "<?php echo site_url('clean/update_form_312')?>";
+      url = "<?php echo site_url('clean/update_form_312') ?>";
     }
     // ajax adding data to database
     $.ajax({
@@ -192,10 +193,10 @@
       data: $('#form_312').serialize(),
       dataType: "JSON",
       success: function(data, response) {
-        if(data.status) //if success close modal and reload ajax table
+        if (data.status) //if success close modal and reload ajax table
         {
           $('#btnSave').text('save'); //change button text
-          $('#btnSave').attr('disabled',false); //set button enable 
+          $('#btnSave').attr('disabled', false); //set button enable 
           //if success close modal and reload ajax table
           $('#modal_form_312').modal('hide');
           iziToast.success({
@@ -205,14 +206,11 @@
           });
           $('#table').DataTable().ajax.reload();
           // location.reload();// for reload a page
-        }
-        else
-        {
-            for (var i = 0; i < data.inputerror.length; i++) 
-            {
-                $('[name="'+data.inputerror[i]+'"]').addClass('is-invalid'); //select parent twice to select div form-group class and add has-error class
-                $('[name="'+data.inputerror[i]+'"]').next().text(data.error_string[i]); //select span help-block class set text error string
-            }
+        } else {
+          for (var i = 0; i < data.inputerror.length; i++) {
+            $('[name="' + data.inputerror[i] + '"]').addClass('is-invalid'); //select parent twice to select div form-group class and add has-error class
+            $('[name="' + data.inputerror[i] + '"]').next().text(data.error_string[i]); //select span help-block class set text error string
+          }
         }
       },
       error: function(jqXHR, textStatus, errorThrown) {
@@ -228,38 +226,38 @@
   function delete_form_312(id) {
     var event = "<?php echo $this->session->userdata('action'); ?>";
     console.log(event)
-		if(event.match(/delete/g)){
+    if (event.match(/delete/g)) {
       swal({
-        title: "Are you sure ?",
-        text: "Once deleted, you will not be able to recover this data !",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-      })
-      .then((willDelete) => {
-        if (willDelete) {
-          $.ajax({
-            url: "<?php echo site_url('clean/delete_form_312')?>/" + id,
-            type: "post",
-            complete: function() {
-              swal("Your data has been deleted!", {
-                icon: "success",
-              }).then(function() {
-                $('#table').DataTable().ajax.reload();
-              });
-            }
-          });
+          title: "Are you sure ?",
+          text: "Once deleted, you will not be able to recover this data !",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        })
+        .then((willDelete) => {
+          if (willDelete) {
+            $.ajax({
+              url: "<?php echo site_url('clean/delete_form_312') ?>/" + id,
+              type: "post",
+              complete: function() {
+                swal("Your data has been deleted!", {
+                  icon: "success",
+                }).then(function() {
+                  $('#table').DataTable().ajax.reload();
+                });
+              }
+            });
 
-        } else {
-          swal("Data failed deleted !");
-        }
-      });
-    }else{
-        iziToast.error({
-          title: 'Error !',
-          message: 'You have no right to this action.',
-          position: 'bottomCenter'
+          } else {
+            swal("Data failed deleted !");
+          }
         });
+    } else {
+      iziToast.error({
+        title: 'Error !',
+        message: 'You have no right to this action.',
+        position: 'bottomCenter'
+      });
     }
   }
 </script>

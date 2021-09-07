@@ -1,5 +1,5 @@
 <style>
-  .modal-title{
+  .modal-title {
     margin-top: -10px;
   }
 </style>
@@ -35,7 +35,7 @@
                 </div>
               </div>
             </div>
-            <div class="row mt-4" >
+            <div class="row mt-4">
               <div class="col-md-12">
                 <div class="">
                   <table class="table table-striped" id="table" style="width: 100%;">
@@ -168,35 +168,35 @@
 
 <script src="<?php echo base_url(); ?>assets/modules/jquery.min.js"></script>
 <script>
-  
   var table;
-  $("input").change(function(){
-      $(this).removeClass('is-invalid');
-      $(this).next().empty();
+  $("input").change(function() {
+    $(this).removeClass('is-invalid');
+    $(this).next().empty();
   });
   $('#nav-data-clean').addClass('dropdown active');
   $('#nav-lkpbu-clean').addClass('active');
   $('#nav-lkpbu-clean-309-310-311').addClass('active');
   $(document).ready(function() {
 
-     table = $('#table').DataTable({
-        "deferRender": true,
-        "scrollCollapse": false,
-        "scrollX": false,
-        "processing": true,
-        "serverSide": true,
-        "order": [],
-        "ajax": {
-          url: "<?php echo site_url('clean/ajax_list_309_310_311')?>", // json datasource
-          type: "POST",
-          data: function(data) {
-              data.daterange = $('[name="daterange"]').val();
-          }
-        },
-        "columnDefs": [{
-          "orderable": false
-        }],
-      });
+    table = $('#table').DataTable({
+      "deferRender": true,
+      "ordering": false,
+      "scrollCollapse": false,
+      "scrollX": false,
+      "processing": true,
+      "serverSide": true,
+      "order": [],
+      "ajax": {
+        url: "<?php echo site_url('clean/ajax_list_309_310_311') ?>", // json datasource
+        type: "POST",
+        data: function(data) {
+          data.daterange = $('[name="daterange"]').val();
+        }
+      },
+      "columnDefs": [{
+        "orderable": false
+      }],
+    });
 
   });
 
@@ -208,6 +208,7 @@
     $('#modal_form_309_310_311').modal('show'); // show bootstrap modal
     $('.modal-title').text('Import LKPBU (form 309_310_311)'); // Set Title to Bootstrap modal title
   }
+
   function import_data() {
     $('.form-control').removeClass('is-invalid'); // clear error class
     $('#form_import_309_310_311')[0].reset();
@@ -219,7 +220,7 @@
     save_method = 'update';
     $('#form_309_310_311')[0].reset();
     $.ajax({
-      url: "<?php echo site_url('clean/get_form_309_310_311')?>/" + id,
+      url: "<?php echo site_url('clean/get_form_309_310_311') ?>/" + id,
       type: "GET",
       dataType: "JSON",
       success: function(data) {
@@ -243,9 +244,10 @@
     });
   }
 
-  $('[name="daterange"]').change(function(){
+  $('[name="daterange"]').change(function() {
     reload_table();
   })
+
   function reload_table() {
     table.ajax.reload(null, false);
   }
@@ -253,9 +255,9 @@
   function save() {
     var url;
     if (save_method == 'add') {
-      url = "<?php echo site_url('clean/add_form_309_310_311')?>";
+      url = "<?php echo site_url('clean/add_form_309_310_311') ?>";
     } else {
-      url = "<?php echo site_url('clean/update_form_309_310_311')?>";
+      url = "<?php echo site_url('clean/update_form_309_310_311') ?>";
     }
     // ajax adding data to database
     $.ajax({
@@ -264,10 +266,10 @@
       data: $('#form_309_310_311').serialize(),
       dataType: "JSON",
       success: function(data, response) {
-        if(data.status) //if success close modal and reload ajax table
+        if (data.status) //if success close modal and reload ajax table
         {
           $('#btnSave').text('save'); //change button text
-          $('#btnSave').attr('disabled',false); //set button enable 
+          $('#btnSave').attr('disabled', false); //set button enable 
           //if success close modal and reload ajax table
           $('#modal_form_309_310_311').modal('hide');
           iziToast.success({
@@ -277,14 +279,11 @@
           });
           reload_table();
           // location.reload();// for reload a page
-        }
-        else
-        {
-            for (var i = 0; i < data.inputerror.length; i++) 
-            {
-                $('[name="'+data.inputerror[i]+'"]').addClass('is-invalid'); //select parent twice to select div form-group class and add has-error class
-                $('[name="'+data.inputerror[i]+'"]').next().text(data.error_string[i]); //select span help-block class set text error string
-            }
+        } else {
+          for (var i = 0; i < data.inputerror.length; i++) {
+            $('[name="' + data.inputerror[i] + '"]').addClass('is-invalid'); //select parent twice to select div form-group class and add has-error class
+            $('[name="' + data.inputerror[i] + '"]').next().text(data.error_string[i]); //select span help-block class set text error string
+          }
         }
       },
       error: function(jqXHR, textStatus, errorThrown) {
@@ -300,54 +299,54 @@
   function delete_form_309_310_311(id) {
     var event = "<?php echo $this->session->userdata('action'); ?>";
     console.log(event)
-		if(event.match(/delete/g)){
+    if (event.match(/delete/g)) {
       swal({
-        title: "Are you sure ?",
-        text: "Once deleted, you will not be able to recover this data !",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-      })
-      .then((willDelete) => {
-        if (willDelete) {
-          $.ajax({
-            url: "<?php echo site_url('clean/delete_form_309_310_311')?>/" + id,
-            type: "post",
-            complete: function() {
-              swal("Your data has been deleted!", {
-                icon: "success",
-              }).then(function() {
-                reload_table();
-              });
-            }
-          });
+          title: "Are you sure ?",
+          text: "Once deleted, you will not be able to recover this data !",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        })
+        .then((willDelete) => {
+          if (willDelete) {
+            $.ajax({
+              url: "<?php echo site_url('clean/delete_form_309_310_311') ?>/" + id,
+              type: "post",
+              complete: function() {
+                swal("Your data has been deleted!", {
+                  icon: "success",
+                }).then(function() {
+                  reload_table();
+                });
+              }
+            });
 
-        } else {
-          swal("Data failed deleted !");
-        }
-      });
-    }else{
-        iziToast.error({
-          title: 'Error !',
-          message: 'You have no right to this action.',
-          position: 'bottomCenter'
+          } else {
+            swal("Data failed deleted !");
+          }
         });
+    } else {
+      iziToast.error({
+        title: 'Error !',
+        message: 'You have no right to this action.',
+        position: 'bottomCenter'
+      });
     }
   }
-  function save_import()
-  {
+
+  function save_import() {
     $('#btnSaveImport').html('<i class="fa fa-spinner fa-spin"></i> saving...');
-    $('#btnSaveImport').attr('disabled',true);
+    $('#btnSaveImport').attr('disabled', true);
     var formData = new FormData($('#form_import_309_310_311')[0]);
     $.ajax({
-      url : "<?= site_url('clean/import_309_310_311') ?>",
+      url: "<?= site_url('clean/import_309_310_311') ?>",
       type: "POST",
       data: formData,
       contentType: false,
       processData: false,
       dataType: "JSON",
-      success: function(data){
-        if(data.status){
+      success: function(data) {
+        if (data.status) {
           // notifikasi('success', data.message);
           iziToast.success({
             title: 'Success !',
@@ -357,14 +356,14 @@
           reload_table();
           $('[name="file_import"]').val();
           $('#modal_import_309_310_311').modal('hide');
-        }else{
+        } else {
           for (var i = 0; i < data.inputerror.length; i++) {
-              $('[name="'+data.inputerror[i]+'"]').parent().addClass('has-error'); 
-              $('[name="'+data.inputerror[i]+'"]').next().text(data.error_string[i]);
-              }
+            $('[name="' + data.inputerror[i] + '"]').parent().addClass('has-error');
+            $('[name="' + data.inputerror[i] + '"]').next().text(data.error_string[i]);
+          }
         }
         $('#btnSaveImport').html('<i class="fas fa-upload"></i> Upload');
-        $('#btnSaveImport').attr('disabled',false);
+        $('#btnSaveImport').attr('disabled', false);
       }
     });
   }

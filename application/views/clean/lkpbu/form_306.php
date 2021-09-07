@@ -1,5 +1,5 @@
 <style>
-  .modal-title{
+  .modal-title {
     margin-top: -10px;
   }
 </style>
@@ -34,7 +34,7 @@
                 </div>
               </div>
             </div>
-            <div class="row mt-4" >
+            <div class="row mt-4">
               <div class="col-md-12">
                 <div class="">
                   <table class="table table-striped" id="table" style="width: 100%;">
@@ -78,17 +78,17 @@
         <form class="form-horizontal" method="POST" id="form_306" enctype="multipart/form-data">
           <input type="hidden" name="id">
           <div class="form-body">
-          <div class="form-group">
+            <div class="form-group">
               <label>Trx Date</label>
-              <input type="date" name="trx_date"  class="form-control" >
+              <input type="date" name="trx_date" class="form-control">
               <span class="invalid-feedback"></span>
             </div>
             <div class="form-group">
               <label>Fraud Type</label>
               <select name="fraud_code" class="form-control">
                 <option value="">-- Pilih Jenis Mesin --</option>
-                <?php foreach($fraud_type as $key) : ?>
-                <option value="<?= $key->code ?>"><?= $key->fraud ?></option>
+                <?php foreach ($fraud_type as $key) : ?>
+                  <option value="<?= $key->code ?>"><?= $key->fraud ?></option>
                 <?php endforeach; ?>
               </select>
               <span class="invalid-feedback"></span>
@@ -115,11 +115,11 @@
             </div>
           </div>
           <div class="form-group">
-              <label>File</label><br>
-              <a href="" id="review-pdf" class="btn btn-primary btn-xs mb-3" target="_blank"><i class="fa fa-eye"></i> Review Pdf</a>
-              <input type="file" class="form-control" name="file_location">
-              <span class="invalid-feedback"></span>
-            </div>
+            <label>File</label><br>
+            <a href="" id="review-pdf" class="btn btn-primary btn-xs mb-3" target="_blank"><i class="fa fa-eye"></i> Review Pdf</a>
+            <input type="file" class="form-control" name="file_location">
+            <span class="invalid-feedback"></span>
+          </div>
         </form>
       </div>
       <div class="modal-footer bg-whitesmoke br">
@@ -132,50 +132,50 @@
 
 <script src="<?php echo base_url(); ?>assets/modules/jquery.min.js"></script>
 <script>
-  
   var table;
-  $("input").change(function(){
-      $(this).removeClass('is-invalid');
-      $(this).next().empty();
+  $("input").change(function() {
+    $(this).removeClass('is-invalid');
+    $(this).next().empty();
   });
   $('#nav-data-clean').addClass('dropdown active');
   $('#nav-lkpbu-clean').addClass('active');
   $('#nav-lkpbu-clean-306').addClass('active');
   $(document).ready(function() {
 
-     table = $('#table').DataTable({
-        "deferRender": true,
-        "scrollCollapse": false,
-        "scrollX": false,
-        "processing": true,
-        "serverSide": true,
-        "order": [],
-        "ajax": {
-          url: "<?php echo site_url('clean/ajax_list_306')?>", // json datasource
-          type: "POST",
-          data: function(data) {
-              data.daterange = $('[name="daterange"]').val();
-          }
-        },
-        "columnDefs": [{
-          "orderable": false
-        }],
-      });
+    table = $('#table').DataTable({
+      "deferRender": true,
+      "ordering": false,
+      "scrollCollapse": false,
+      "scrollX": false,
+      "processing": true,
+      "serverSide": true,
+      "order": [],
+      "ajax": {
+        url: "<?php echo site_url('clean/ajax_list_306') ?>", // json datasource
+        type: "POST",
+        data: function(data) {
+          data.daterange = $('[name="daterange"]').val();
+        }
+      },
+      "columnDefs": [{
+        "orderable": false
+      }],
+    });
 
   });
-  $('input[name="actual_loss_nominal"]').keyup(function(){
-    let actual_loss_nominal   = convertToAngka($(this).val());
-    if(!actual_loss_nominal){
+  $('input[name="actual_loss_nominal"]').keyup(function() {
+    let actual_loss_nominal = convertToAngka($(this).val());
+    if (!actual_loss_nominal) {
       actual_loss_nominal = 0;
     }
-    $(this).val( convertToRupiah(actual_loss_nominal) );
+    $(this).val(convertToRupiah(actual_loss_nominal));
   });
-  $('input[name="potential_loss_nominal"]').keyup(function(){
-    let potential_loss_nominal   = convertToAngka($(this).val());
-    if(!potential_loss_nominal){
+  $('input[name="potential_loss_nominal"]').keyup(function() {
+    let potential_loss_nominal = convertToAngka($(this).val());
+    if (!potential_loss_nominal) {
       potential_loss_nominal = 0;
     }
-    $(this).val( convertToRupiah(potential_loss_nominal) );
+    $(this).val(convertToRupiah(potential_loss_nominal));
   });
 
   /* -- Action -- */
@@ -193,11 +193,11 @@
     $('#review-pdf').hide();
     $('#form_306')[0].reset();
     $.ajax({
-      url: "<?php echo site_url('clean/get_form_306')?>/" + id,
+      url: "<?php echo site_url('clean/get_form_306') ?>/" + id,
       type: "GET",
       dataType: "JSON",
       success: function(data) {
-        if(data.file_location){
+        if (data.file_location) {
           $('#review-pdf').attr('href', data.file_location);
           $('#review-pdf').show();
         }
@@ -218,9 +218,10 @@
     });
   }
 
-  $('[name="daterange"]').change(function(){
+  $('[name="daterange"]').change(function() {
     reload_table();
   })
+
   function reload_table() {
     table.ajax.reload(null, false);
   }
@@ -228,9 +229,9 @@
   function save() {
     var url;
     if (save_method == 'add') {
-      url = "<?php echo site_url('clean/add_form_306')?>";
+      url = "<?php echo site_url('clean/add_form_306') ?>";
     } else {
-      url = "<?php echo site_url('clean/update_form_306')?>";
+      url = "<?php echo site_url('clean/update_form_306') ?>";
     }
 
     var formData = new FormData($('#form_306')[0]);
@@ -243,10 +244,10 @@
       processData: false,
       dataType: "JSON",
       success: function(data, response) {
-        if(data.status) //if success close modal and reload ajax table
+        if (data.status) //if success close modal and reload ajax table
         {
           $('#btnSave').text('save'); //change button text
-          $('#btnSave').attr('disabled',false); //set button enable 
+          $('#btnSave').attr('disabled', false); //set button enable 
           //if success close modal and reload ajax table
           $('#modal_form_306').modal('hide');
           iziToast.success({
@@ -256,14 +257,11 @@
           });
           $('#table').DataTable().ajax.reload();
           // location.reload();// for reload a page
-        }
-        else
-        {
-            for (var i = 0; i < data.inputerror.length; i++) 
-            {
-                $('[name="'+data.inputerror[i]+'"]').addClass('is-invalid'); //select parent twice to select div form-group class and add has-error class
-                $('[name="'+data.inputerror[i]+'"]').next().text(data.error_string[i]); //select span help-block class set text error string
-            }
+        } else {
+          for (var i = 0; i < data.inputerror.length; i++) {
+            $('[name="' + data.inputerror[i] + '"]').addClass('is-invalid'); //select parent twice to select div form-group class and add has-error class
+            $('[name="' + data.inputerror[i] + '"]').next().text(data.error_string[i]); //select span help-block class set text error string
+          }
         }
       },
       error: function(jqXHR, textStatus, errorThrown) {
@@ -279,38 +277,38 @@
   function delete_form_306(id) {
     var event = "<?php echo $this->session->userdata('action'); ?>";
     console.log(event)
-		if(event.match(/delete/g)){
+    if (event.match(/delete/g)) {
       swal({
-        title: "Are you sure ?",
-        text: "Once deleted, you will not be able to recover this data !",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-      })
-      .then((willDelete) => {
-        if (willDelete) {
-          $.ajax({
-            url: "<?php echo site_url('clean/delete_form_306')?>/" + id,
-            type: "post",
-            complete: function() {
-              swal("Your data has been deleted!", {
-                icon: "success",
-              }).then(function() {
-                $('#table').DataTable().ajax.reload();
-              });
-            }
-          });
+          title: "Are you sure ?",
+          text: "Once deleted, you will not be able to recover this data !",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        })
+        .then((willDelete) => {
+          if (willDelete) {
+            $.ajax({
+              url: "<?php echo site_url('clean/delete_form_306') ?>/" + id,
+              type: "post",
+              complete: function() {
+                swal("Your data has been deleted!", {
+                  icon: "success",
+                }).then(function() {
+                  $('#table').DataTable().ajax.reload();
+                });
+              }
+            });
 
-        } else {
-          swal("Data failed deleted !");
-        }
-      });
-    }else{
-        iziToast.error({
-          title: 'Error !',
-          message: 'You have no right to this action.',
-          position: 'bottomCenter'
+          } else {
+            swal("Data failed deleted !");
+          }
         });
+    } else {
+      iziToast.error({
+        title: 'Error !',
+        message: 'You have no right to this action.',
+        position: 'bottomCenter'
+      });
     }
   }
 </script>
