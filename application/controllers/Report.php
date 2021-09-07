@@ -122,8 +122,8 @@ class Report extends CI_Controller {
     $type_report = $_GET['type_report'];
 
     $this->db->where('status', "cleaned");
-    $this->db->where('datestamp >=', $start_date);
-    $this->db->where('datestamp <=', $end_date);
+    $this->db->where('trx_date >=', $start_date);
+    $this->db->where('trx_date <=', $end_date);
 
     if ($type_report == 'G001') {
       $this->db->where_in('sender_country', array('INDONESIA', '86'));
@@ -291,8 +291,8 @@ class Report extends CI_Controller {
     $end_date =  date('Ymd', strtotime(substr($_GET['daterange'], 13, 23)));
  
     $this->db->where('status', "cleaned");
-    $this->db->where('datestamp >=', $start_date);
-    $this->db->where('datestamp <=', $end_date);
+    $this->db->where('trx_date >=', $start_date);
+    $this->db->where('trx_date <=', $end_date);
  
  
     $list = $this->db->get('t1clean_sipesat')->result();
@@ -354,8 +354,8 @@ class Report extends CI_Controller {
     $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
 
     $this->db->where('status', "cleaned");
-    $this->db->where('datestamp >=', $start_date);
-    $this->db->where('datestamp <=', $end_date);
+    $this->db->where('trx_date >=', $start_date);
+    $this->db->where('trx_date <=', $end_date);
     $list = $this->M_danafloat_clean->get_datatables();
     $data = array();
     $no = $_POST['start'];
@@ -403,8 +403,8 @@ class Report extends CI_Controller {
     $start_date = date('Ymd', strtotime(substr($_GET['daterange'], 0, 10)));
     $end_date =  date('Ymd', strtotime(substr($_GET['daterange'], 13, 23)));
     $this->db->where('status', "cleaned");
-    $this->db->where('datestamp >=', $start_date);
-    $this->db->where('datestamp <=', $end_date);
+    $this->db->where('trx_date >=', $start_date);
+    $this->db->where('trx_date <=', $end_date);
 
 
     $list = $this->db->get('t1clean_danafloat')->result();
@@ -473,8 +473,8 @@ class Report extends CI_Controller {
     $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
 
     $this->db->where('status', "cleaned");
-    $this->db->where('datestamp >=', $start_date);
-    $this->db->where('datestamp <=', $end_date);
+    $this->db->where('trx_date >=', $start_date);
+    $this->db->where('trx_date <=', $end_date);
     $list = $this->M_ltkl_clean->get_datatables();
     $data = array();
     $no = $_POST['start'];
@@ -524,8 +524,8 @@ class Report extends CI_Controller {
     $start_date = date('Ymd', strtotime(substr($_GET['daterange'], 0, 10)));
     $end_date =  date('Ymd', strtotime(substr($_GET['daterange'], 13, 23)));
     $this->db->where('status', "cleaned");
-    $this->db->where('datestamp >=', $start_date);
-    $this->db->where('datestamp <=', $end_date);
+    $this->db->where('trx_date >=', $start_date);
+    $this->db->where('trx_date <=', $end_date);
 
 
     $list = $this->db->get('t1clean_ltkl')->result();
@@ -581,6 +581,108 @@ class Report extends CI_Controller {
   }
   // END :: LTKL
 
+  // START :: LKBPU 304
+  public function lkpbu_304()
+  {
+
+    $data = [];
+    $data['content'] = $this->load->view('report/lkpbu_304', $data, TRUE);
+    $this->load->view('layout', $data);
+  }
+
+  public function ajax_list_lkpbu_304()
+  {
+    $start_date = date('Ymd', strtotime(substr($_POST['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
+
+    $this->db->where('status', "cleaned");
+    $this->db->where('trx_date >=', $start_date);
+    $this->db->where('trx_date <=', $end_date);
+    $list = $this->M_lkpbu->Get_All304();
+    $data = array();
+    $no = $_POST['start'];
+    foreach ($list as $raw_data) {
+      $no++;
+      $row = array();
+      $row[] = '<input type="checkbox" class="data-check" value="' . $raw_data->id . '">';
+      $row[] = '
+				<a href="javascript:void(0)" onclick="delete_row(' . $raw_data->id . ')"  class="btn btn-danger btn-sm"> <i class="fas fa-trash"></i></a>
+			';
+      // <a href="javascript:void(0)" onClick="edit_ltkl('.$raw_data->id.')"  class="btn btn-primary btn-sm"> <i class="far fa-edit"></i></a>
+      $row[] = $raw_data->machine_code;
+      $row[] = $raw_data->total_machine;
+      $row[] = $raw_data->total_seller;
+      $row[] = $raw_data->trx_date;
+
+      $data[] = $row;
+    }
+    $output = array(
+      "draw" => $_POST['draw'],
+      "recordsTotal" => $this->M_lkpbu_clean->count_all(),
+      "recordsFiltered" => $this->M_lkpbu_clean->count_filtered(),
+      "data" => $data,
+    );
+    echo json_encode($output);
+  }
+
+  public function download_excel_lkpbu_304()
+  {
+
+
+    include APPPATH . 'third_party/PHPExcel/PHPExcel.php';
+    //$type_report = $this->input->post('type_report');
+
+    $start_date = date('Ymd', strtotime(substr($_GET['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_GET['daterange'], 13, 23)));
+    $this->db->where('status', "cleaned");
+    $this->db->where('trx_date >=', $start_date);
+    $this->db->where('trx_date <=', $end_date);
+
+
+    $list = $this->db->query("SELECT CONCAT(CODE, ' - ', machine) jenis_mesin, COUNT(machine) AS jumlah_mesin, SUM(total_seller) AS jumlah_pedagang FROM tlkpbu_304_machine_type JOIN t1clean_lkpbu_304 ON tlkpbu_304_machine_type.CODE = t1clean_lkpbu_304.machine_code 
+                            GROUP BY CODE ORDER BY CODE ASC")->result();
+
+    $type_report = "302";
+    $report_setting = $this->M_report->get_report_setting($type_report);
+
+    $data = array();
+    $no = 1;
+    $baris = 12;
+    //$objPHPExcel    = new PHPExcel();
+
+
+    $objPHPExcel = PHPExcel_IOFactory::load("./assets/template-excel/template-lkpbu-304.xlsx");
+
+    $date_now = $this->lib->date_indonesia('2020-01-01');
+
+    foreach ($list as $row) {
+      
+      $objPHPExcel->setActiveSheetIndex(0)
+        ->setCellValue('A' . 4,$this->lib->date_indonesia(date("-m-"))) 
+        ->setCellValue('D' . 10, date("m"))
+        ->setCellValue('A' . 19, "Jakarta, $date_now")
+         
+        ->setCellValue('A' . $baris, $row->machine_type)
+
+        ->setCellValue('C' . $baris, $row->jumlah_mesin)
+        ->setCellValue('D' . $baris, $row->jumlah_pedagang);
+
+      $baris++;
+      $no++;
+
+      $data[] = $row;
+    }
+    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+    header('Content-Type: application/vnd.ms-excel');
+    header('Content-Disposition: attachment;filename="Report LKPBU F304 bulan '.date('M').'.xlsx"');
+    header('Cache-Control: max-age=0');
+    $objWriter->save('php://output');
+
+    set_time_limit(0);
+    ini_set('memory_limit', '1G');
+
+    exit;
+  }
   
 
   // START :: SETTING REPORT

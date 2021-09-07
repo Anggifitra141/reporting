@@ -50,7 +50,7 @@
 
   <style>
     .fc button.fc-state-active {
-      background-color: #fc544b;
+      background-color: #FF0000;
       color: #fff;
     }
 
