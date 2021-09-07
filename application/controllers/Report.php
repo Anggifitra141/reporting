@@ -231,7 +231,9 @@ class Report extends CI_Controller {
 
     set_time_limit(0);
     ini_set('memory_limit', '1G');
-    
+
+    user_log($this->session->userdata('id'), 'REPORT', "DOWNLOAD", '', "Download Report LTDBB $type_report", '');
+    trx_log($this->session->userdata('id'), 'REPORT', "DOWNLOAD", '', "Download Report LTDBB $type_report");
     exit;
   }
 
@@ -330,10 +332,13 @@ class Report extends CI_Controller {
     header('Content-Disposition: attachment;filename="SIPESAT_41740_TW ' . ceil(date("n") / 3) . date('Y') . '_' . date('dmY') . '_1.xlsx"');
     header('Cache-Control: max-age=0');
     $objWriter->save('php://output');
- 
-    //set_time_limit(0);
-   // ini_set('memory_limit', '1G');
-    //
+
+    set_time_limit(0);
+    ini_set('memory_limit', '1G');
+
+    user_log($this->session->userdata('id'), 'REPORT', "DOWNLOAD", '', "Download Report SIPESAT", '');
+    trx_log($this->session->userdata('id'), 'REPORT', "DOWNLOAD", '', "Download Report SIPESAT");
+
     exit;
   }
 
@@ -452,7 +457,10 @@ class Report extends CI_Controller {
 
     set_time_limit(0);
     ini_set('memory_limit', '1G');
-    
+
+    user_log($this->session->userdata('id'), 'REPORT', "DOWNLOAD", '', "Download Report Dana Float", '');
+    trx_log($this->session->userdata('id'), 'REPORT', "DOWNLOAD", '', "Download Report Dana Float");
+
     exit;
   }
   // END :: DANA FLOAT
@@ -576,7 +584,10 @@ class Report extends CI_Controller {
 
     set_time_limit(0);
     ini_set('memory_limit', '1G');
-    
+
+    user_log($this->session->userdata('id'), 'REPORT', "DOWNLOAD", '', "Download Report LTKL", '');
+    trx_log($this->session->userdata('id'), 'REPORT', "DOWNLOAD", '', "Download Report LTKL");
+
     exit;
   }
   // END :: LTKL
@@ -586,7 +597,7 @@ class Report extends CI_Controller {
   {
 
     $data = [];
-    $data['content'] = $this->load->view('report/lkpbu_304', $data, TRUE);
+    $data['content'] = $this->load->view('report/lkpbu/form_304', $data, TRUE);
     $this->load->view('layout', $data);
   }
 
@@ -595,31 +606,27 @@ class Report extends CI_Controller {
     $start_date = date('Ymd', strtotime(substr($_POST['daterange'], 0, 10)));
     $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
 
-    $this->db->where('status', "cleaned");
-    $this->db->where('trx_date >=', $start_date);
-    $this->db->where('trx_date <=', $end_date);
-    $list = $this->M_lkpbu->Get_All304();
+    $machine_type = $this->db->query("SELECT CONCAT(CODE, '-', machine) as machine_type, code FROM tlkpbu_304_machine_type")->result();
+    
     $data = array();
     $no = $_POST['start'];
-    foreach ($list as $raw_data) {
+    foreach ($machine_type as $raw_data) {
+      $sum_query = $this->db->query("SELECT IFNULL(SUM(total_machine), '-') as total_machine, IFNULL(SUM(total_seller), '-') as total_seller FROM t1clean_lkpbu_304 WHERE trx_date BETWEEN '$start_date' AND '$end_date' AND machine_code='$raw_data->code' AND status='cleaned'")->result();
+      foreach ($sum_query as $sum) {
+
+      
       $no++;
       $row = array();
-      $row[] = '<input type="checkbox" class="data-check" value="' . $raw_data->id . '">';
-      $row[] = '
-				<a href="javascript:void(0)" onclick="delete_row(' . $raw_data->id . ')"  class="btn btn-danger btn-sm"> <i class="fas fa-trash"></i></a>
-			';
-      // <a href="javascript:void(0)" onClick="edit_ltkl('.$raw_data->id.')"  class="btn btn-primary btn-sm"> <i class="far fa-edit"></i></a>
-      $row[] = $raw_data->machine_code;
-      $row[] = $raw_data->total_machine;
-      $row[] = $raw_data->total_seller;
-      $row[] = $raw_data->trx_date;
+      $row[] = $no++;
+      $row[] = $raw_data->machine_type;
+      $row[] = $sum->total_machine;
+      $row[] = $sum->total_seller;
 
       $data[] = $row;
+      }
     }
     $output = array(
       "draw" => $_POST['draw'],
-      "recordsTotal" => $this->M_lkpbu_clean->count_all(),
-      "recordsFiltered" => $this->M_lkpbu_clean->count_filtered(),
       "data" => $data,
     );
     echo json_encode($output);
@@ -627,6 +634,7 @@ class Report extends CI_Controller {
 
   public function download_excel_lkpbu_304()
   {
+    
 
 
     include APPPATH . 'third_party/PHPExcel/PHPExcel.php';
@@ -634,13 +642,8 @@ class Report extends CI_Controller {
 
     $start_date = date('Ymd', strtotime(substr($_GET['daterange'], 0, 10)));
     $end_date =  date('Ymd', strtotime(substr($_GET['daterange'], 13, 23)));
-    $this->db->where('status', "cleaned");
-    $this->db->where('trx_date >=', $start_date);
-    $this->db->where('trx_date <=', $end_date);
 
-
-    $list = $this->db->query("SELECT CONCAT(CODE, ' - ', machine) jenis_mesin, COUNT(machine) AS jumlah_mesin, SUM(total_seller) AS jumlah_pedagang FROM tlkpbu_304_machine_type JOIN t1clean_lkpbu_304 ON tlkpbu_304_machine_type.CODE = t1clean_lkpbu_304.machine_code 
-                            GROUP BY CODE ORDER BY CODE ASC")->result();
+    $machine_type = $this->db->query("SELECT CONCAT(CODE, '-', machine) as machine_type, code FROM tlkpbu_304_machine_type")->result();
 
     $type_report = "302";
     $report_setting = $this->M_report->get_report_setting($type_report);
@@ -653,25 +656,30 @@ class Report extends CI_Controller {
 
     $objPHPExcel = PHPExcel_IOFactory::load("./assets/template-excel/template-lkpbu-304.xlsx");
 
-    $date_now = $this->lib->date_indonesia('2020-01-01');
+    $date_now = $this->lib->date_indonesia(date('Y-m-d'));
 
-    foreach ($list as $row) {
+    foreach ($machine_type as $row) {
+      $sum_query = $this->db->query("SELECT IFNULL(SUM(total_machine), '-') as total_machine, IFNULL(SUM(total_seller), '-') as total_seller FROM t1clean_lkpbu_304 WHERE trx_date BETWEEN '$start_date' AND '$end_date' AND machine_code='$row->code' AND status='cleaned'")->result();
+      foreach ($sum_query as $sum ) {
+
       
       $objPHPExcel->setActiveSheetIndex(0)
-        ->setCellValue('A' . 4,$this->lib->date_indonesia(date("-m-"))) 
+        ->setCellValue('A' . 4, substr($this->lib->date_indonesia(date("-m-")) ,1)) 
         ->setCellValue('D' . 10, date("m"))
         ->setCellValue('A' . 19, "Jakarta, $date_now")
          
         ->setCellValue('A' . $baris, $row->machine_type)
-
-        ->setCellValue('C' . $baris, $row->jumlah_mesin)
-        ->setCellValue('D' . $baris, $row->jumlah_pedagang);
+        ->setCellValue('C' . $baris, $sum->total_machine)
+        ->setCellValue('D' . $baris, $sum->total_seller);
 
       $baris++;
       $no++;
 
       $data[] = $row;
+      }
     }
+
+
     $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
     header('Content-Type: application/vnd.ms-excel');
     header('Content-Disposition: attachment;filename="Report LKPBU F304 bulan '.date('M').'.xlsx"');
@@ -681,9 +689,114 @@ class Report extends CI_Controller {
     set_time_limit(0);
     ini_set('memory_limit', '1G');
 
+    user_log($this->session->userdata('id'), 'REPORT', "DOWNLOAD", '', "Download Report LKPBU Form 304", '');
+    trx_log($this->session->userdata('id'), 'REPORT', "DOWNLOAD", '', "Download Report LKPBU Form 304");
     exit;
+
+    
   }
-  
+  // END :: LKBPU 304
+
+  // START :: LKPBU 306
+  public function lkpbu_306()
+  {
+    $data = [];
+    $data['content'] = $this->load->view('report/lkpbu/form_306', $data, TRUE);
+    $this->load->view('layout', $data);
+  }
+
+  public function ajax_list_lkpbu_306()
+  {
+    $start_date = date('Ymd', strtotime(substr($_POST['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
+
+    $machine_type = $this->db->query("SELECT CONCAT(CODE, '-', machine) as machine_type, code FROM tlkpbu_306_machine_type")->result();
+    
+    $data = array();
+    $no = $_POST['start'];
+    foreach ($machine_type as $raw_data) {
+      $sum_query = $this->db->query("SELECT IFNULL(SUM(total_machine), '-') as total_machine, IFNULL(SUM(total_seller), '-') as total_seller FROM t1clean_lkpbu_306 WHERE trx_date BETWEEN '$start_date' AND '$end_date' AND machine_code='$raw_data->code' AND status='cleaned'")->result();
+      foreach ($sum_query as $sum) {
+
+      
+      $no++;
+      $row = array();
+      $row[] = $no++;
+      $row[] = $raw_data->machine_type;
+      $row[] = $sum->total_machine;
+      $row[] = $sum->total_seller;
+
+      $data[] = $row;
+      }
+    }
+    $output = array(
+      "draw" => $_POST['draw'],
+      "data" => $data,
+    );
+    echo json_encode($output);
+  }
+
+  public function download_excel_lkpbu_306()
+  {
+
+    include APPPATH . 'third_party/PHPExcel/PHPExcel.php';
+    //$type_report = $this->input->post('type_report');
+
+    $start_date = date('Ymd', strtotime(substr($_GET['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_GET['daterange'], 13, 23)));
+
+    $machine_type = $this->db->query("SELECT CONCAT(CODE, '-', machine) as machine_type, code FROM tlkpbu_306_machine_type")->result();
+
+    $type_report = "302";
+    $report_setting = $this->M_report->get_report_setting($type_report);
+
+    $data = array();
+    $no = 1;
+    $baris = 12;
+    //$objPHPExcel    = new PHPExcel();
+
+
+    $objPHPExcel = PHPExcel_IOFactory::load("./assets/template-excel/template-lkpbu-306.xlsx");
+
+    $date_now = $this->lib->date_indonesia(date('Y-m-d'));
+
+    foreach ($machine_type as $row) {
+      $sum_query = $this->db->query("SELECT IFNULL(SUM(total_machine), '-') as total_machine, IFNULL(SUM(total_seller), '-') as total_seller FROM t1clean_lkpbu_306 WHERE trx_date BETWEEN '$start_date' AND '$end_date' AND machine_code='$row->code' AND status='cleaned'")->result();
+      foreach ($sum_query as $sum ) {
+
+      
+      $objPHPExcel->setActiveSheetIndex(0)
+        ->setCellValue('A' . 4, substr($this->lib->date_indonesia(date("-m-")) ,1)) 
+        ->setCellValue('D' . 10, date("m"))
+        ->setCellValue('A' . 19, "Jakarta, $date_now")
+         
+        ->setCellValue('A' . $baris, $row->machine_type)
+        ->setCellValue('C' . $baris, $sum->total_machine)
+        ->setCellValue('D' . $baris, $sum->total_seller);
+
+      $baris++;
+      $no++;
+
+      $data[] = $row;
+      }
+    }
+
+
+    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+    header('Content-Type: application/vnd.ms-excel');
+    header('Content-Disposition: attachment;filename="Report LKPBU F306 bulan '.date('M').'.xlsx"');
+    header('Cache-Control: max-age=0');
+    $objWriter->save('php://output');
+
+    set_time_limit(0);
+    ini_set('memory_limit', '1G');
+
+    user_log($this->session->userdata('id'), 'REPORT', "DOWNLOAD", '', "Download Report LKPBU Form 304", '');
+    trx_log($this->session->userdata('id'), 'REPORT', "DOWNLOAD", '', "Download Report LKPBU Form 304");
+    exit;
+
+    
+  }
 
   // START :: SETTING REPORT
   public function setting_report()

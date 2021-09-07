@@ -1,5 +1,5 @@
 <style>
-  .modal-title{
+  .modal-title {
     margin-top: -10px;
   }
 </style>
@@ -44,31 +44,30 @@
 
 <script src="<?php echo base_url(); ?>assets/modules/jquery.min.js"></script>
 <script>
-  
   $('#nav-master-data').addClass('dropdown active');
   $('#nav-region').addClass('active');
-  $("input").change(function(){
-      $(this).removeClass('is-invalid');
-      $(this).next().empty();
+  $("input").change(function() {
+    $(this).removeClass('is-invalid');
+    $(this).next().empty();
   });
   $(document).ready(function() {
 
     var table = $('#table').DataTable({
-        "deferRender": true,
-        "scrollCollapse": false,
-        "scrollX": false,
-        "processing": true,
-        "serverSide": true,
-        "order": [],
-        "ajax": {
-          url: "<?php echo site_url('master/ajax_list_region')?>", // json datasource
-          type: "POST"
-        },
-        "columnDefs": [{
-          "orderable": false
-        }],
-      });
+      "deferRender": true,
+      "ordering": false,
+      "scrollCollapse": false,
+      "scrollX": false,
+      "processing": true,
+      "serverSide": true,
+      "order": [],
+      "ajax": {
+        url: "<?php echo site_url('master/ajax_list_region') ?>", // json datasource
+        type: "POST"
+      },
+      "columnDefs": [{
+        "orderable": false
+      }],
+    });
 
   });
-
 </script>

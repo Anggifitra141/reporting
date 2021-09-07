@@ -1,5 +1,5 @@
 <style>
-  .modal-title{
+  .modal-title {
     margin-top: -10px;
   }
 </style>
@@ -14,7 +14,7 @@
 
     <div class="row">
       <div class="col-12">
-      <div class="form-group">
+        <div class="form-group">
           <a href="#" onclick="add_master_all()" class="btn btn-icon icon-left btn-outline-primary"><i class="far fa-plus-square"></i> Add</a>
         </div>
         <div class="card">
@@ -91,39 +91,40 @@
   var table_query = "<?= $this->uri->segment(3) ?>";
   var table_query_split = table_query.split('_');
   $('#nav-master-data').addClass('dropdown active');
-  $('#nav-'+ table_query_split[1]).addClass('active');
+  $('#nav-' + table_query_split[1]).addClass('active');
   $('#section-header').text(table_query_split[1].toUpperCase());
-  $('#section-title').text('Master ' +table_query_split[1]);
+  $('#section-title').text('Master ' + table_query_split[1]);
 
-  $("input").change(function(){
-      $(this).removeClass('is-invalid');
-      $(this).next().empty();
+  $("input").change(function() {
+    $(this).removeClass('is-invalid');
+    $(this).next().empty();
   });
   $(document).ready(function() {
 
     var table = $('#table').DataTable({
-        "deferRender": true,
-        "scrollCollapse": false,
-        "scrollX": false,
-        "processing": true,
-        "serverSide": true,
-        "order": [],
-        "ajax": {
-          url: "<?php echo site_url('master/ajax_master_all')?>", // json datasource
-          type: "POST",
-          data : function(data){
+      "deferRender": true,
+      "ordering": false,
+      "scrollCollapse": false,
+      "scrollX": false,
+      "processing": true,
+      "serverSide": true,
+      "order": [],
+      "ajax": {
+        url: "<?php echo site_url('master/ajax_master_all') ?>", // json datasource
+        type: "POST",
+        data: function(data) {
           data.table = table_query
         },
-        },
-        "columnDefs": [{
-          "orderable": false
-        }],
-      });
+      },
+      "columnDefs": [{
+        "orderable": false
+      }],
+    });
 
   });
 
-   /* -- Action -- */
-   function add_master_all() {
+  /* -- Action -- */
+  function add_master_all() {
     save_method = 'add';
     $('.form-control').removeClass('is-invalid'); // clear error class
     $('#form_master_all')[0].reset();
@@ -135,21 +136,21 @@
     save_method = 'update';
     $('#form_master_all')[0].reset();
     $.ajax({
-      url: "<?php echo site_url('master/get_master_all')?>/" + id + '/' + table_query,
+      url: "<?php echo site_url('master/get_master_all') ?>/" + id + '/' + table_query,
       type: "GET",
       dataType: "JSON",
       success: function(data) {
         $('[name="id"]').val(data.id);
         $('[name="code"]').val(data.code);
         $('[name="description"]').val(data.description);
-        if(data.status == 'active'){
+        if (data.status == 'active') {
           $('#status-active').attr('selected', true);
-        }else{
+        } else {
           $('#status-no-active').attr('selected', true);
         }
 
         $('#modal_master_all').modal('show');
-        $('.modal-title').text('Update ' . table_query_split[2].toUpperCase());
+        $('.modal-title').text('Update '.table_query_split[2].toUpperCase());
       },
       error: function(jqXHR, textStatus, errorThrown) {
         alert('Error get data from ajax');
@@ -160,9 +161,9 @@
   function save() {
     var url;
     if (save_method == 'add') {
-      url = "<?php echo site_url('master/add_master_all/')?>" + table_query;
+      url = "<?php echo site_url('master/add_master_all/') ?>" + table_query;
     } else {
-      url = "<?php echo site_url('master/update_master_all/')?>" + table_query;
+      url = "<?php echo site_url('master/update_master_all/') ?>" + table_query;
     }
     // ajax adding data to database
     $.ajax({
@@ -171,10 +172,10 @@
       data: $('#form_master_all').serialize(),
       dataType: "JSON",
       success: function(data, response) {
-        if(data.status) //if success close modal and reload ajax table
+        if (data.status) //if success close modal and reload ajax table
         {
           $('#btnSave').text('save'); //change button text
-          $('#btnSave').attr('disabled',false); //set button enable 
+          $('#btnSave').attr('disabled', false); //set button enable 
           //if success close modal and reload ajax table
           $('#modal_master_all').modal('hide');
           iziToast.success({
@@ -184,14 +185,11 @@
           });
           $('#table').DataTable().ajax.reload();
           // location.reload();// for reload a page
-        }
-        else
-        {
-            for (var i = 0; i < data.inputerror.length; i++) 
-            {
-                $('[name="'+data.inputerror[i]+'"]').addClass('is-invalid'); //select parent twice to select div form-group class and add has-error class
-                $('[name="'+data.inputerror[i]+'"]').next().text(data.error_string[i]); //select span help-block class set text error string
-            }
+        } else {
+          for (var i = 0; i < data.inputerror.length; i++) {
+            $('[name="' + data.inputerror[i] + '"]').addClass('is-invalid'); //select parent twice to select div form-group class and add has-error class
+            $('[name="' + data.inputerror[i] + '"]').next().text(data.error_string[i]); //select span help-block class set text error string
+          }
         }
       },
       error: function(jqXHR, textStatus, errorThrown) {
@@ -207,38 +205,38 @@
   function delete_master_all(id) {
     var event = "<?php echo $this->session->userdata('action'); ?>";
     console.log(event)
-		if(event.match(/delete/g)){
+    if (event.match(/delete/g)) {
       swal({
-        title: "Are you sure ?",
-        text: "Once deleted, you will not be able to recover this data !",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-      })
-      .then((willDelete) => {
-        if (willDelete) {
-          $.ajax({
-            url: "<?php echo site_url('master/delete_master_all')?>/" + table_query + '/' + id,
-            type: "post",
-            complete: function() {
-              swal("Your data has been deleted!", {
-                icon: "success",
-              }).then(function() {
-                $('#table').DataTable().ajax.reload();
-              });
-            }
-          });
+          title: "Are you sure ?",
+          text: "Once deleted, you will not be able to recover this data !",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        })
+        .then((willDelete) => {
+          if (willDelete) {
+            $.ajax({
+              url: "<?php echo site_url('master/delete_master_all') ?>/" + table_query + '/' + id,
+              type: "post",
+              complete: function() {
+                swal("Your data has been deleted!", {
+                  icon: "success",
+                }).then(function() {
+                  $('#table').DataTable().ajax.reload();
+                });
+              }
+            });
 
-        } else {
-          swal("Data failed deleted !");
-        }
-      });
-    }else{
-        iziToast.error({
-          title: 'Error !',
-          message: 'You have no right to this action.',
-          position: 'bottomCenter'
+          } else {
+            swal("Data failed deleted !");
+          }
         });
+    } else {
+      iziToast.error({
+        title: 'Error !',
+        message: 'You have no right to this action.',
+        position: 'bottomCenter'
+      });
     }
   }
 </script>

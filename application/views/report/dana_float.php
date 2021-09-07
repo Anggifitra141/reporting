@@ -247,7 +247,8 @@
 
     // }, 1000)
 
-  })
+  });
+  
   $('#btn-download-excel').click(function() {
     var daterange = $('[name="daterange"]').val();
     console.log(daterange);

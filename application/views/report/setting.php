@@ -1,5 +1,5 @@
 <style>
-  .modal-title{
+  .modal-title {
     margin-top: -10px;
   }
 </style>
@@ -14,7 +14,7 @@
 
     <div class="row">
       <div class="col-12">
-        
+
         <div class="card">
           <div class="card-body">
             <div class="">
@@ -83,38 +83,39 @@
   $('#nav-sub-report').addClass('dropdown active');
   $('#nav-setting-report').addClass('active');
 
-  $("input").change(function(){
-      $(this).removeClass('is-invalid');
-      $(this).next().empty();
+  $("input").change(function() {
+    $(this).removeClass('is-invalid');
+    $(this).next().empty();
   });
   $(document).ready(function() {
 
     var table = $('#table').DataTable({
-        "deferRender": true,
-        "scrollCollapse": true,
-        "scrollX": true,
-        "processing": true,
-        "serverSide": true,
-        "order": [],
-        "ajax": {
-          url: "<?php echo site_url('report/ajax_setting_report')?>", // json datasource
-          type: "POST"
-        },
-        "columnDefs": [{
-          "orderable": false
-        }],
-      });
+      "deferRender": true,
+      "ordering": false,
+      "scrollCollapse": true,
+      "scrollX": true,
+      "processing": true,
+      "serverSide": true,
+      "order": [],
+      "ajax": {
+        url: "<?php echo site_url('report/ajax_setting_report') ?>", // json datasource
+        type: "POST"
+      },
+      "columnDefs": [{
+        "orderable": false
+      }],
+    });
 
   });
 
   /* -- Action -- */
-  
+
 
   function get_report(report_id) {
     save_method = 'update';
     $('#form_report')[0].reset();
     $.ajax({
-      url: "<?php echo site_url('report/get_report')?>/" + report_id,
+      url: "<?php echo site_url('report/get_report') ?>/" + report_id,
       type: "GET",
       dataType: "JSON",
       success: function(data) {
@@ -134,9 +135,9 @@
   function save() {
     var url;
     if (save_method == 'add') {
-      url = "<?php echo site_url('report/add_report')?>";
+      url = "<?php echo site_url('report/add_report') ?>";
     } else {
-      url = "<?php echo site_url('report/update_report')?>";
+      url = "<?php echo site_url('report/update_report') ?>";
     }
     // ajax adding data to database
     $.ajax({
@@ -145,10 +146,10 @@
       data: $('#form_report').serialize(),
       dataType: "JSON",
       success: function(data, response) {
-        if(data.status) //if success close modal and reload ajax table
+        if (data.status) //if success close modal and reload ajax table
         {
           $('#btnSave').text('save'); //change button text
-          $('#btnSave').attr('disabled',false); //set button enable 
+          $('#btnSave').attr('disabled', false); //set button enable 
           //if success close modal and reload ajax table
           $('#modal_report').modal('hide');
           iziToast.success({
@@ -158,14 +159,11 @@
           });
           $('#table').DataTable().ajax.reload();
           // location.reload();// for reload a page
-        }
-        else
-        {
-            for (var i = 0; i < data.inputerror.length; i++) 
-            {
-                $('[name="'+data.inputerror[i]+'"]').addClass('is-invalid'); //select parent twice to select div form-group class and add has-error class
-                $('[name="'+data.inputerror[i]+'"]').next().text(data.error_string[i]); //select span help-block class set text error string
-            }
+        } else {
+          for (var i = 0; i < data.inputerror.length; i++) {
+            $('[name="' + data.inputerror[i] + '"]').addClass('is-invalid'); //select parent twice to select div form-group class and add has-error class
+            $('[name="' + data.inputerror[i] + '"]').next().text(data.error_string[i]); //select span help-block class set text error string
+          }
         }
       },
       error: function(jqXHR, textStatus, errorThrown) {
@@ -181,38 +179,38 @@
   function delete_report(report_id) {
     var event = "<?php echo $this->session->userdata('action'); ?>";
     console.log(event)
-		if(event.match(/delete/g)){
+    if (event.match(/delete/g)) {
       swal({
-        title: "Are you sure ?",
-        text: "Once deleted, you will not be able to recover this data !",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-      })
-      .then((willDelete) => {
-        if (willDelete) {
-          $.ajax({
-            url: "<?php echo site_url('report/delete_report')?>/" + report_id,
-            type: "post",
-            complete: function() {
-              swal("Your data has been deleted!", {
-                icon: "success",
-              }).then(function() {
-                $('#table').DataTable().ajax.reload();
-              });
-            }
-          });
+          title: "Are you sure ?",
+          text: "Once deleted, you will not be able to recover this data !",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        })
+        .then((willDelete) => {
+          if (willDelete) {
+            $.ajax({
+              url: "<?php echo site_url('report/delete_report') ?>/" + report_id,
+              type: "post",
+              complete: function() {
+                swal("Your data has been deleted!", {
+                  icon: "success",
+                }).then(function() {
+                  $('#table').DataTable().ajax.reload();
+                });
+              }
+            });
 
-        } else {
-          swal("Data failed deleted !");
-        }
-      });
-    }else{
-        iziToast.error({
-          title: 'Error !',
-          message: 'You have no right to this action.',
-          position: 'bottomCenter'
+          } else {
+            swal("Data failed deleted !");
+          }
         });
+    } else {
+      iziToast.error({
+        title: 'Error !',
+        message: 'You have no right to this action.',
+        position: 'bottomCenter'
+      });
     }
   }
 </script>

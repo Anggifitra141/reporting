@@ -6,14 +6,15 @@
 
 <section class="section">
   <div class="section-header">
-    <h1>LKPBU</h1>
+    <h1>LKPBU FORM 306</h1>
   </div>
 
   <div class="section-body">
-    <h2 class="section-title">Manage LKPBU FORM 304</h2>
+    <h2 class="section-title">Laporan Alat Pembayaran Menggunakan Kartu</h2>
 
     <div class="row">
       <div class="col-12">
+
         <div class="card">
           <div class="card-body">
             <div class="row">
@@ -37,7 +38,7 @@
                 <a href="" download class="btn btn-icon btn-outline-success btn-block" style="margin-top:27px;" id="btn-download-excel"><i class="fas fa-file-excel"></i> Download Excel </a>
               </div>
             </div>
-            <div class="row mt-4" id="result-data" style="display: none;">
+            <div class="row mt-4" id="result-data" style="display:none;">
               <div class="col-md-12">
                 <div class="">
                   <table class="table table-striped" id="table" style="width: 100%;">
@@ -46,9 +47,12 @@
                         <th class="text-center" width="1px">
                           No
                         </th>
-                        <th>Jenis Mesin</th>
-                        <th>Jumlah Mesin</th>
-                        <th>Jumlah Pedagang</th>
+                        <th>Jenis kartu</th>
+                        <th>Jenis Penyebab Fraud</th>
+                        <th>Actual Fraud Volume</th>
+                        <th>Actual Fraud Nominal</th>
+                        <th>Potential Fraud Volume</th>
+                        <th>Potential Fraud Nominal</th>
                       </tr>
                     </thead>
 
@@ -63,6 +67,65 @@
   </div>
 </section>
 
+<!-- Modal -->
+<div class="modal fade" tabindex="-1" role="dialog" id="modal_form_306">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header  bg-primary text-white">
+        <h5 class="modal-title"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal" method="POST" id="form_306">
+          <input type="hidden" name="id">
+          <div class="form-body">
+            <div class="form-group">
+              <label>Trx Date</label>
+              <input type="date" name="trx_date" class="form-control">
+              <span class="invalid-feedback"></span>
+            </div>
+            <div class="form-group">
+              <label>Fraud Type</label>
+              <select name="fraud_code" class="form-control">
+                <option value="">-- Pilih Jenis Mesin --</option>
+                <?php foreach ($fraud_type as $key) : ?>
+                  <option value="<?= $key->code ?>"><?= $key->fraud ?></option>
+                <?php endforeach; ?>
+              </select>
+              <span class="invalid-feedback"></span>
+            </div>
+            <div class="form-group">
+              <label>Actual Loss Vol</label>
+              <input type="number" class="form-control" name="actual_loss_vol">
+              <span class="invalid-feedback"></span>
+            </div>
+            <div class="form-group">
+              <label>Actual Loss Nominal</label>
+              <input type="text" class="form-control" name="actual_loss_nominal">
+              <span class="invalid-feedback"></span>
+            </div>
+            <div class="form-group">
+              <label>Potential Loss Vol</label>
+              <input type="number" class="form-control" name="potential_loss_vol">
+              <span class="invalid-feedback"></span>
+            </div>
+            <div class="form-group">
+              <label>Potential Loss Nominal</label>
+              <input type="text" class="form-control" name="potential_loss_nominal">
+              <span class="invalid-feedback"></span>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer bg-whitesmoke br">
+        <button type="button" class="btn btn-secondary float-left" data-dismiss="modal">Close</button>
+        <button type="button" onclick="save();" class="btn btn-outline-primary float-right">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script src="<?php echo base_url(); ?>assets/modules/jquery.min.js"></script>
 <script>
@@ -74,7 +137,7 @@
   });
   $('#nav-report').addClass('active');
   $('#nav-lkpbu-report').addClass('active');
-  $('#nav-lkpbu-report-304').addClass('active');
+  $('#nav-lkpbu-report-306').addClass('active');
   $(document).ready(function() {
 
     $('#btn-download-excel').hide();
@@ -100,7 +163,7 @@
           "serverSide": true,
           "order": [],
           "ajax": {
-            url: "<?php echo site_url('report/ajax_list_lkpbu_304') ?>", // json datasource
+            url: "<?php echo site_url('report/ajax_list_lkpbu_306') ?>", // json datasource
             type: "POST",
             data: function(data) {
               data.daterange = $('[name="daterange"]').val();
@@ -113,7 +176,7 @@
         });
         $('#result-data').slideDown('slow');
 
-        $('#btn-download-excel').attr('href', base_url + 'report/download_excel_lkpbu_304?daterange=' + daterange);
+        $('#btn-download-excel').attr('href', base_url + 'report/download_excel_lkpbu_306?daterange=' + daterange);
 
       } else {
         alert('Fields Is Required');
@@ -126,37 +189,49 @@
 
     });
 
-
-
+  });
+  $('input[name="actual_loss_nominal"]').keyup(function() {
+    let actual_loss_nominal = convertToAngka($(this).val());
+    if (!actual_loss_nominal) {
+      actual_loss_nominal = 0;
+    }
+    $(this).val(convertToRupiah(actual_loss_nominal));
+  });
+  $('input[name="potential_loss_nominal"]').keyup(function() {
+    let potential_loss_nominal = convertToAngka($(this).val());
+    if (!potential_loss_nominal) {
+      potential_loss_nominal = 0;
+    }
+    $(this).val(convertToRupiah(potential_loss_nominal));
   });
 
-
-
   /* -- Action -- */
-  function add_form_304() {
+  function add_form_306() {
     save_method = 'add';
     $('.form-control').removeClass('is-invalid'); // clear error class
-    $('#form_304')[0].reset();
-    $('#modal_form_304').modal('show'); // show bootstrap modal
-    $('.modal-title').text('Add LKPBU (form 304)'); // Set Title to Bootstrap modal title
+    $('#form_306')[0].reset();
+    $('#modal_form_306').modal('show'); // show bootstrap modal
+    $('.modal-title').text('Add LKPBU (form 306)'); // Set Title to Bootstrap modal title
   }
 
-  function get_form_304(id) {
+  function get_form_306(id) {
     save_method = 'update';
-    $('#form_304')[0].reset();
+    $('#form_306')[0].reset();
     $.ajax({
-      url: "<?php echo site_url('report/get_form_304') ?>/" + id,
+      url: "<?php echo site_url('lkpbu/get_form_306') ?>/" + id,
       type: "GET",
       dataType: "JSON",
       success: function(data) {
         $('[name="id"]').val(data.id);
-        $('[name="machine_code"]').val(data.machine_code);
-        $('[name="total_machine"]').val(data.total_machine);
-        $('[name="total_seller"]').val(data.total_seller);
+        $('[name="fraud_code"]').val(data.fraud_code);
+        $('[name="actual_loss_vol"]').val(data.actual_loss_vol);
+        $('[name="actual_loss_nominal"]').val(convertToRupiah(data.actual_loss_nominal));
+        $('[name="potential_loss_vol"]').val(data.potential_loss_vol);
+        $('[name="potential_loss_nominal"]').val(convertToRupiah(data.potential_loss_nominal));
         $('[name="trx_date"]').val(data.trx_date);
 
-        $('#modal_form_304').modal('show');
-        $('.modal-title').text('Update LKPBU (form 304)');
+        $('#modal_form_306').modal('show');
+        $('.modal-title').text('Update LKPBU (form 306)');
       },
       error: function(jqXHR, textStatus, errorThrown) {
         alert('Error get data from ajax');
@@ -175,15 +250,31 @@
   function save() {
     var url;
     if (save_method == 'add') {
-      url = "<?php echo site_url('clean/add_form_304') ?>";
+      url = "<?php echo site_url('lkpbu/add_form_306') ?>";
     } else {
-      url = "<?php echo site_url('clean/update_form_304') ?>";
+      url = "<?php echo site_url('lkpbu/update_form_306') ?>";
+    }
+    var actual_loss_nominal = '';
+    var potential_loss_nominal = '';
+    if ($('[name="potential_loss_nominal"]').val()) {
+      potential_loss_nominal = parseInt(convertToAngka($('[name="potential_loss_nominal"]').val()));
+    }
+    if ($('[name="actual_loss_nominal"]').val()) {
+      actual_loss_nominal = parseInt(convertToAngka($('[name="actual_loss_nominal"]').val()));
     }
     // ajax adding data to database
     $.ajax({
       url: url,
       type: "POST",
-      data: $('#form_304').serialize(),
+      data: {
+        id: $('[name="id"]').val(),
+        trx_date: $('[name="trx_date"]').val(),
+        fraud_code: $('[name="fraud_code"]').val(),
+        actual_loss_vol: $('[name="actual_loss_vol"]').val(),
+        potential_loss_vol: $('[name="potential_loss_vol"]').val(),
+        actual_loss_nominal: actual_loss_nominal,
+        potential_loss_nominal: potential_loss_nominal
+      },
       dataType: "JSON",
       success: function(data, response) {
         if (data.status) //if success close modal and reload ajax table
@@ -191,7 +282,7 @@
           $('#btnSave').text('save'); //change button text
           $('#btnSave').attr('disabled', false); //set button enable 
           //if success close modal and reload ajax table
-          $('#modal_form_304').modal('hide');
+          $('#modal_form_306').modal('hide');
           iziToast.success({
             title: 'Success !',
             message: 'Data saved successfully ',
@@ -216,7 +307,7 @@
     });
   }
 
-  function delete_form_304(id) {
+  function delete_form_306(id) {
     var event = "<?php echo $this->session->userdata('action'); ?>";
     console.log(event)
     if (event.match(/delete/g)) {
@@ -230,7 +321,7 @@
         .then((willDelete) => {
           if (willDelete) {
             $.ajax({
-              url: "<?php echo site_url('clean/delete_form_304') ?>/" + id,
+              url: "<?php echo site_url('lkpbu/delete_form_306') ?>/" + id,
               type: "post",
               complete: function() {
                 swal("Your data has been deleted!", {

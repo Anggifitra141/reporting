@@ -1,5 +1,5 @@
 <style>
-  .modal-title{
+  .modal-title {
     margin-top: -10px;
   }
 </style>
@@ -96,29 +96,28 @@
 
 <script src="<?php echo base_url(); ?>assets/modules/jquery.min.js"></script>
 <script>
-  
-
-  $("input").change(function(){
-      $(this).removeClass('is-invalid');
-      $(this).next().empty();
+  $("input").change(function() {
+    $(this).removeClass('is-invalid');
+    $(this).next().empty();
   });
   $(document).ready(function() {
 
     var table = $('#table').DataTable({
-        "deferRender": true,
-        "scrollCollapse": false,
-        "scrollX": false,
-        "processing": true,
-        "serverSide": true,
-        "order": [],
-        "ajax": {
-          url: "<?php echo site_url('role_model/ajax_list')?>", // json datasource
-          type: "POST"
-        },
-        "columnDefs": [{
-          "orderable": false
-        }],
-      });
+      "deferRender": true,
+      "ordering": false,
+      "scrollCollapse": false,
+      "scrollX": false,
+      "processing": true,
+      "serverSide": true,
+      "order": [],
+      "ajax": {
+        url: "<?php echo site_url('role_model/ajax_list') ?>", // json datasource
+        type: "POST"
+      },
+      "columnDefs": [{
+        "orderable": false
+      }],
+    });
 
   });
 
@@ -135,7 +134,7 @@
     save_method = 'update';
     $('#form_role_model')[0].reset();
     $.ajax({
-      url: "<?php echo site_url('role_model/get_role_model')?>/" + id,
+      url: "<?php echo site_url('role_model/get_role_model') ?>/" + id,
       type: "GET",
       dataType: "JSON",
       success: function(data) {
@@ -158,9 +157,9 @@
   function save() {
     var url;
     if (save_method == 'add') {
-      url = "<?php echo site_url('role_model/add_role_model')?>";
+      url = "<?php echo site_url('role_model/add_role_model') ?>";
     } else {
-      url = "<?php echo site_url('role_model/update_role_model')?>";
+      url = "<?php echo site_url('role_model/update_role_model') ?>";
     }
     // ajax adding data to database
     $.ajax({
@@ -169,10 +168,10 @@
       data: $('#form_role_model').serialize(),
       dataType: "JSON",
       success: function(data, response) {
-        if(data.status) //if success close modal and reload ajax table
+        if (data.status) //if success close modal and reload ajax table
         {
           $('#btnSave').text('save'); //change button text
-          $('#btnSave').attr('disabled',false); //set button enable 
+          $('#btnSave').attr('disabled', false); //set button enable 
           //if success close modal and reload ajax table
           $('#modal_role_model').modal('hide');
           iziToast.success({
@@ -182,14 +181,11 @@
           });
           $('#table').DataTable().ajax.reload();
           // location.reload();// for reload a page
-        }
-        else
-        {
-            for (var i = 0; i < data.inputerror.length; i++) 
-            {
-                $('[name="'+data.inputerror[i]+'"]').addClass('is-invalid'); //select parent twice to select div form-group class and add has-error class
-                $('[name="'+data.inputerror[i]+'"]').next().text(data.error_string[i]); //select span help-block class set text error string
-            }
+        } else {
+          for (var i = 0; i < data.inputerror.length; i++) {
+            $('[name="' + data.inputerror[i] + '"]').addClass('is-invalid'); //select parent twice to select div form-group class and add has-error class
+            $('[name="' + data.inputerror[i] + '"]').next().text(data.error_string[i]); //select span help-block class set text error string
+          }
         }
       },
       error: function(jqXHR, textStatus, errorThrown) {
@@ -205,38 +201,38 @@
   function delete_role_model(id) {
     var event = "<?php echo $this->session->userdata('action'); ?>";
     console.log(event)
-		if(event.match(/delete/g)){
+    if (event.match(/delete/g)) {
       swal({
-        title: "Are you sure ?",
-        text: "Once deleted, you will not be able to recover this data !",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-      })
-      .then((willDelete) => {
-        if (willDelete) {
-          $.ajax({
-            url: "<?php echo site_url('role_model/delete_role_model')?>/" + id,
-            type: "post",
-            complete: function() {
-              swal("Your data has been deleted!", {
-                icon: "success",
-              }).then(function() {
-                $('#table').DataTable().ajax.reload();
-              });
-            }
-          });
+          title: "Are you sure ?",
+          text: "Once deleted, you will not be able to recover this data !",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        })
+        .then((willDelete) => {
+          if (willDelete) {
+            $.ajax({
+              url: "<?php echo site_url('role_model/delete_role_model') ?>/" + id,
+              type: "post",
+              complete: function() {
+                swal("Your data has been deleted!", {
+                  icon: "success",
+                }).then(function() {
+                  $('#table').DataTable().ajax.reload();
+                });
+              }
+            });
 
-        } else {
-          swal("Data failed deleted !");
-        }
-      });
-    }else{
-        iziToast.error({
-          title: 'Error !',
-          message: 'You have no right to this action.',
-          position: 'bottomCenter'
+          } else {
+            swal("Data failed deleted !");
+          }
         });
+    } else {
+      iziToast.error({
+        title: 'Error !',
+        message: 'You have no right to this action.',
+        position: 'bottomCenter'
+      });
     }
   }
 </script>

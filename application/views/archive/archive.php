@@ -87,6 +87,7 @@
 
     var table = $('#table').DataTable({
       "deferRender": true,
+      "ordering": false,
       "scrollCollapse": true,
       "scrollX": true,
       "processing": true,

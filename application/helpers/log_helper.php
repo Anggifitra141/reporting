@@ -43,7 +43,7 @@ function trx_log($id_user = "", $event_modul = "", $event_type = "", $record_id 
     $CI->M_log->trx_log($param);
 }
 
-function user_log($id_user = "", $event_modul = "", $event_type = "", $record_id = "", $event_notes = "", $event_sql)
+function user_log($id_user = "", $event_modul = "", $event_type = "", $record_id = "", $event_notes = "", $event_sql ="")
 {
   $CI = &get_instance();
 
