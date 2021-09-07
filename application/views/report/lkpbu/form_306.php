@@ -43,6 +43,10 @@
                 <div class="">
                   <table class="table table-striped" id="table" style="width: 100%;">
                     <thead>
+                      <tr role="row">
+                        <th colspan="4" rowspan="1" style="text-align: right;"> Actual Losses</th>
+                        <th colspan="3" rowspan="1" style="text-align: center;"> Potential Losses</th>
+                      </tr>
                       <tr>
                         <th class="text-center" width="1px">
                           No
@@ -157,8 +161,8 @@
         table = $('#table').DataTable({
           "deferRender": true,
           "ordering": false,
-          "scrollCollapse": false,
-          "scrollX": false,
+          "scrollCollapse": true,
+          "scrollX": true,
           "processing": true,
           "serverSide": true,
           "order": [],

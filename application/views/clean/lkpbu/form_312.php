@@ -121,8 +121,8 @@
     table = $('#table').DataTable({
       "deferRender": true,
       "ordering": false,
-      "scrollCollapse": false,
-      "scrollX": false,
+      "scrollCollapse": true,
+      "scrollX": true,
       "processing": true,
       "serverSide": true,
       "order": [],
