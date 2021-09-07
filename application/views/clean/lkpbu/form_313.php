@@ -6,16 +6,16 @@
 
 <section class="section">
   <div class="section-header">
-    <h1>LKPBU (form 306)</h1>
+    <h1>LKPBU</h1>
   </div>
 
   <div class="section-body">
-    <h2 class="section-title">Laporan Alat Pembayaran Menggunakan Kartu</h2>
+    <h2 class="section-title">Manage LKPBU(form 313)</h2>
 
     <div class="row">
       <div class="col-12">
         <div class="form-group">
-          <a href="#" onclick="add_form_306()" class="btn btn-icon icon-left btn-outline-primary"><i class="far fa-plus-square"></i> Add</a>
+          <a href="#" onclick="add_form_313()" class="btn btn-icon icon-left btn-outline-primary"><i class="far fa-plus-square"></i> Add</a>
         </div>
         <div class="card">
           <div class="card-body">
@@ -45,11 +45,9 @@
                         </th>
                         <th style="width: 80px;">Action</th>
                         <th>Trx Date</th>
-                        <th>Jenis Penyebab Fraud</th>
-                        <th>Actual Fraud Volume</th>
-                        <th>Actual Fraud Nominal</th>
-                        <th>Potential Fraud Volume</th>
-                        <th>Potential Fraud Nominal</th>
+                        <th>Jenis Publikasi</th>
+                        <th>Keterangan</th>
+                        <th>File Location</th>
                       </tr>
                     </thead>
 
@@ -65,7 +63,7 @@
 </section>
 
 <!-- Modal -->
-<div class="modal fade" tabindex="-1" role="dialog" id="modal_form_306">
+<div class="modal fade" tabindex="-1" role="dialog" id="modal_form_313">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header  bg-primary text-white">
@@ -75,7 +73,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form class="form-horizontal" method="POST" id="form_306">
+        <form class="form-horizontal" method="POST" id="form_313" enctype="multipart/form-data">
           <input type="hidden" name="id">
           <div class="form-body">
           <div class="form-group">
@@ -84,42 +82,27 @@
               <span class="invalid-feedback"></span>
             </div>
             <div class="form-group">
-              <label>Fraud Type</label>
-              <select name="fraud_code" class="form-control">
-                <option value="">-- Pilih Jenis Mesin --</option>
-                <?php foreach($fraud_type as $key) : ?>
-                <option value="<?= $key->code ?>"><?= $key->fraud ?></option>
+              <label>Jenis Publikasi</label>
+              <select name="publication_code" class="form-control">
+                <option value="">-- Pilih Jenis Publikasi --</option>
+                <?php foreach($publication_type as $key) : ?>
+                <option value="<?= $key->code ?>"><?= $key->publication ?></option>
                 <?php endforeach; ?>
               </select>
               <span class="invalid-feedback"></span>
             </div>
             <div class="form-group">
-              <label>Actual Loss Vol</label>
-              <input type="number" class="form-control" name="actual_loss_vol">
-              <span class="invalid-feedback"></span>
-            </div>
-            <div class="form-group">
-              <label>Actual Loss Nominal</label>
-              <input type="text" class="form-control" name="actual_loss_nominal">
-              <span class="invalid-feedback"></span>
-            </div>
-            <div class="form-group">
-              <label>Potential Loss Vol</label>
-              <input type="number" class="form-control" name="potential_loss_vol">
-              <span class="invalid-feedback"></span>
-            </div>
-            <div class="form-group">
-              <label>Potential Loss Nominal</label>
-              <input type="text" class="form-control" name="potential_loss_nominal">
-              <span class="invalid-feedback"></span>
-            </div>
-          </div>
-          <div class="form-group">
               <label>File</label><br>
               <a href="" id="review-pdf" class="btn btn-primary btn-xs mb-3" target="_blank"><i class="fa fa-eye"></i> Review Pdf</a>
               <input type="file" class="form-control" name="file_location">
               <span class="invalid-feedback"></span>
             </div>
+            <div class="form-group">
+              <label>Description</label>
+              <textarea name="description" id="" class="form-control" cols="30" rows="10"></textarea>
+              <span class="invalid-feedback"></span>
+            </div>
+          </div>
         </form>
       </div>
       <div class="modal-footer bg-whitesmoke br">
@@ -140,7 +123,7 @@
   });
   $('#nav-data-clean').addClass('dropdown active');
   $('#nav-lkpbu-clean').addClass('active');
-  $('#nav-lkpbu-clean-306').addClass('active');
+  $('#nav-lkpbu-clean-313').addClass('active');
   $(document).ready(function() {
 
      table = $('#table').DataTable({
@@ -151,7 +134,7 @@
         "serverSide": true,
         "order": [],
         "ajax": {
-          url: "<?php echo site_url('lkpbu/ajax_list_306')?>", // json datasource
+          url: "<?php echo site_url('lkpbu/ajax_list_313')?>", // json datasource
           type: "POST",
           data: function(data) {
               data.daterange = $('[name="daterange"]').val();
@@ -163,54 +146,37 @@
       });
 
   });
-  $('input[name="actual_loss_nominal"]').keyup(function(){
-    let actual_loss_nominal   = convertToAngka($(this).val());
-    if(!actual_loss_nominal){
-      actual_loss_nominal = 0;
-    }
-    $(this).val( convertToRupiah(actual_loss_nominal) );
-  });
-  $('input[name="potential_loss_nominal"]').keyup(function(){
-    let potential_loss_nominal   = convertToAngka($(this).val());
-    if(!potential_loss_nominal){
-      potential_loss_nominal = 0;
-    }
-    $(this).val( convertToRupiah(potential_loss_nominal) );
-  });
 
   /* -- Action -- */
-  function add_form_306() {
-    $('#review-pdf').hide();
+  function add_form_313() {
     save_method = 'add';
     $('.form-control').removeClass('is-invalid'); // clear error class
-    $('#form_306')[0].reset();
-    $('#modal_form_306').modal('show'); // show bootstrap modal
-    $('.modal-title').text('Add LKPBU (form 306)'); // Set Title to Bootstrap modal title
+    $('#form_313')[0].reset();
+    $('#modal_form_313').modal('show'); // show bootstrap modal
+    $('.modal-title').text('Add LKPBU (form 313)'); // Set Title to Bootstrap modal title
+    $('#review-pdf').hide();
   }
 
-  function get_form_306(id) {
-    save_method = 'update';
+  function get_form_313(id) {
     $('#review-pdf').hide();
-    $('#form_306')[0].reset();
+    save_method = 'update';
+    $('#form_313')[0].reset();
     $.ajax({
-      url: "<?php echo site_url('lkpbu/get_form_306')?>/" + id,
+      url: "<?php echo site_url('lkpbu/get_form_313')?>/" + id,
       type: "GET",
       dataType: "JSON",
       success: function(data) {
+        $('[name="id"]').val(data.id);
+        $('[name="publication_code"]').val(data.publication_code);
+        $('[name="description"]').val(data.description);
+        $('[name="total_seller"]').val(data.total_seller);
+        $('[name="trx_date"]').val(data.trx_date);
         if(data.file_location){
           $('#review-pdf').attr('href', data.file_location);
           $('#review-pdf').show();
         }
-        $('[name="id"]').val(data.id);
-        $('[name="fraud_code"]').val(data.fraud_code);
-        $('[name="actual_loss_vol"]').val(data.actual_loss_vol);
-        $('[name="actual_loss_nominal"]').val(convertToRupiah(data.actual_loss_nominal));
-        $('[name="potential_loss_vol"]').val(data.potential_loss_vol);
-        $('[name="potential_loss_nominal"]').val(convertToRupiah(data.potential_loss_nominal));
-        $('[name="trx_date"]').val(data.trx_date);
-
-        $('#modal_form_306').modal('show');
-        $('.modal-title').text('Update LKPBU (form 306)');
+        $('#modal_form_313').modal('show');
+        $('.modal-title').text('Update LKPBU (form 313)');
       },
       error: function(jqXHR, textStatus, errorThrown) {
         alert('Error get data from ajax');
@@ -228,20 +194,11 @@
   function save() {
     var url;
     if (save_method == 'add') {
-      url = "<?php echo site_url('lkpbu/add_form_306')?>";
+      url = "<?php echo site_url('lkpbu/add_form_313')?>";
     } else {
-      url = "<?php echo site_url('lkpbu/update_form_306')?>";
+      url = "<?php echo site_url('lkpbu/update_form_313')?>";
     }
-    var actual_loss_nominal = '';
-    var potential_loss_nominal = '';
-    if($('[name="potential_loss_nominal"]').val()) {
-      potential_loss_nominal = parseInt(convertToAngka($('[name="potential_loss_nominal"]').val()));
-    }
-    if($('[name="actual_loss_nominal"]').val()) {
-      actual_loss_nominal = parseInt(convertToAngka($('[name="actual_loss_nominal"]').val()));
-    }
-    console.log($('input[name="file_location"]')[0].files[0])
-    var formData = new FormData($('#form_306')[0]);
+    var formData = new FormData($('#form_313')[0]);
     // ajax adding data to database
     $.ajax({
       url: url,
@@ -256,7 +213,7 @@
           $('#btnSave').text('save'); //change button text
           $('#btnSave').attr('disabled',false); //set button enable 
           //if success close modal and reload ajax table
-          $('#modal_form_306').modal('hide');
+          $('#modal_form_313').modal('hide');
           iziToast.success({
             title: 'Success !',
             message: 'Data saved successfully ',
@@ -284,7 +241,7 @@
     });
   }
 
-  function delete_form_306(id) {
+  function delete_form_313(id) {
     var event = "<?php echo $this->session->userdata('action'); ?>";
     console.log(event)
 		if(event.match(/delete/g)){
@@ -298,7 +255,7 @@
       .then((willDelete) => {
         if (willDelete) {
           $.ajax({
-            url: "<?php echo site_url('lkpbu/delete_form_306')?>/" + id,
+            url: "<?php echo site_url('lkpbu/delete_form_313')?>/" + id,
             type: "post",
             complete: function() {
               swal("Your data has been deleted!", {

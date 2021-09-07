@@ -162,6 +162,7 @@
   // START :: FORM 306
   public function form_306()
 	{
+    echo intval(preg_replace('/,.*|[^0-9]/', '', '')); die();
     $data= [];
     $data['fraud_type'] = $this->db->get('tlkpbu_306_fraud_type')->result();
     $data['content'] = $this->load->view('clean/lkpbu/form_306', $data, TRUE);
@@ -190,6 +191,7 @@
         $row[] = $this->lib->rupiah($item->actual_loss_nominal);
         $row[] = $item->potential_loss_vol;
         $row[] = $this->lib->rupiah($item->potential_loss_nominal);
+        $row[] = '<a href="'.$item->file_location.'" target="_blank">'.$item->file_location.'</a>';
         $data[] = $row;
     }
 
@@ -212,6 +214,7 @@
         'actual_loss_nominal'     => $result->actual_loss_nominal,
         'potential_loss_vol'      => $result->potential_loss_vol,
         'potential_loss_nominal'  => $result->potential_loss_nominal,
+        'file_location'  => $result->file_location,
         'trx_date'                => date('Y-m-d', strtotime($result->trx_date))
       ];
       echo json_encode($data);
@@ -221,6 +224,7 @@
   {
     $ACT = 'add';
     $this->_validate_form306($ACT);
+    $file_location = $this->_do_upload('file_location');
     $data = array(
       'fraud_code'      => $this->input->post('fraud_code'),
       'actual_loss_vol'     => $this->input->post('actual_loss_vol'),
@@ -229,7 +233,8 @@
       'potential_loss_nominal'      => $this->input->post('potential_loss_nominal'),
       'trx_date'          => date('Ymd', strtotime($this->input->post('trx_date'))),
       'datestamp'         => date('Ymd'),
-      'status'            => 'cleaned'
+      'status'            => 'cleaned',
+      'file_location'     => $file_location
     );
     $this->M_lkpbu->add_lkpbu306($data);
     echo json_encode(array("status" => TRUE ));
@@ -248,6 +253,9 @@
       'datestamp'         => date('Ymd'),
       'trx_date'          => date('Ymd', strtotime($this->input->post('trx_date')))
     );
+    if($_FILES['file_location']['name']){
+      $data['file_location'] = $this->_do_upload('file_location');
+    }
      $this->M_lkpbu->update_lkpbu306(array('id' => $this->input->post('id')), $data);
      echo json_encode(array("status" => TRUE ));
   }
@@ -571,5 +579,289 @@
     }
     echo json_encode(['status' => true, 'message' => 'Import data berhasil']);
   }
+  // END :: FORM 309_310_311
 
+  // START ::FORM 312
+  public function form_312()
+	{
+    $data= [];
+    $data['publication_type'] = $this->db->get('tlkpbu_312_publication_type')->result();
+    $data['content'] = $this->load->view('clean/lkpbu/form_312', $data, TRUE);
+		$this->load->view('layout', $data);
+	}
+
+	public function ajax_list_312()
+  {
+    $start_date = date('Ymd', strtotime(substr($_POST['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
+
+    $this->db->where('datestamp >=', $start_date);
+    $this->db->where('datestamp <=', $end_date);
+    
+    $list = $this->M_lkpbu->Get_All312();
+    $data = array();
+    $no = 1;
+    foreach ($list as $item) {
+        $row = array();
+        $row[] = $no++;
+				$row[] = '<a href="#" onclick="get_form_312('.$item->id.')" class="btn btn-icon btn-primary btn-sm"><i class="far fa-edit"></i></a>
+                  <a href="#" onclick="delete_form_312('.$item->id.')" class="btn btn-icon btn-danger btn-sm"><i class="fas fa-trash"></i></a>';
+        $row[] = date('d/m/Y', strtotime($item->trx_date));
+				$row[] = $item->publication;
+        $row[] = $item->description;
+        $data[] = $row;
+    }
+
+    $output = array(
+                    "draw" => $_POST['draw'],
+                    "recordsTotal" => $this->M_lkpbu->count_all312(),
+                    "recordsFiltered" => $this->M_lkpbu->count_filtered312(),
+                    "data" => $data,
+            );
+    echo json_encode($output);
+  }
+
+  public function get_form_312($id)
+  {
+      $result = $this->M_lkpbu->get_lkpbu312($id);
+      $data = [
+        'id'                      => $result->id,
+        'publication_code'              => $result->publication_code,
+        'description'         => $result->description,
+        'trx_date'                => date('Y-m-d', strtotime($result->trx_date))
+      ];
+      echo json_encode($data);
+  }
+
+  public function add_form_312()
+  {
+    $ACT = 'add';
+    $this->_validate_form312($ACT);
+    $data = array(
+      'publication_code'      => $this->input->post('publication_code'),
+      'description'     => $this->input->post('description'),
+      'trx_date'          => date('Ymd', strtotime($this->input->post('trx_date'))),
+      'datestamp'         => date('Ymd'),
+      'status'            => 'cleaned'
+    );
+    $this->M_lkpbu->add_lkpbu312($data);
+    echo json_encode(array("status" => TRUE ));
+  }
+
+  public function update_form_312()
+  {
+    $ACT = 'update';
+    $this->_validate_form312($ACT);
+    $data = array(
+      'publication_code'      => $this->input->post('publication_code'),
+      'description'     => $this->input->post('description'),
+      'datestamp'         => date('Ymd'),
+      'trx_date'          => date('Ymd', strtotime($this->input->post('trx_date')))
+    );
+     $this->M_lkpbu->update_lkpbu312(array('id' => $this->input->post('id')), $data);
+     echo json_encode(array("status" => TRUE ));
+  }
+
+  public function delete_form_312($id)
+  {
+    $this->M_lkpbu->delete_lkpbu312($id);
+    echo json_encode(array("status" => TRUE));
+  }
+
+  private function _validate_form312($event)
+  {
+    $data = array();
+    $data['error_string'] = array();
+    $data['inputerror'] = array();
+    $data['status'] = TRUE;
+    $actions = explode('#', $this->session->userdata('action'));
+    $data['action'] = $actions;
+
+    if(!in_array($event, $actions))
+    {
+        $data['inputerror'][] = 'sess_act';
+        $data['error_string'][] = 'Error! You have no right to this action.';
+        $data['status'] = FALSE;
+    }
+    if($this->input->post('trx_date') == '')
+    {
+        $data['inputerror'][] = 'trx_date';
+        $data['error_string'][] = 'Trx Date is required';
+        $data['status'] = FALSE;
+    }
+    if($this->input->post('publication_code') == '')
+    {
+        $data['inputerror'][] = 'publication_code';
+        $data['error_string'][] = 'Jenis Publikasi is required';
+        $data['status'] = FALSE;
+    }
+    if($this->input->post('description') == '')
+    {
+        $data['inputerror'][] = 'description';
+        $data['error_string'][] = 'Description is required';
+        $data['status'] = FALSE;
+    }
+    if($data['status'] === FALSE)
+    {
+        echo json_encode($data);
+        exit();
+    }
+  }
+  // END :: FORM 312
+
+  // START :: FORM 313
+  public function form_313()
+	{
+    $data= [];
+    $data['publication_type'] = $this->db->get('tlkpbu_313_publication_type')->result();
+    $data['content'] = $this->load->view('clean/lkpbu/form_313', $data, TRUE);
+		$this->load->view('layout', $data);
+	}
+
+	public function ajax_list_313()
+  {
+    $start_date = date('Ymd', strtotime(substr($_POST['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
+
+    $this->db->where('datestamp >=', $start_date);
+    $this->db->where('datestamp <=', $end_date);
+    
+    $list = $this->M_lkpbu->Get_All313();
+    $data = array();
+    $no = 1;
+    foreach ($list as $item) {
+        $row = array();
+        $row[] = $no++;
+				$row[] = '<a href="#" onclick="get_form_313('.$item->id.')" class="btn btn-icon btn-primary btn-sm"><i class="far fa-edit"></i></a>
+                  <a href="#" onclick="delete_form_313('.$item->id.')" class="btn btn-icon btn-danger btn-sm"><i class="fas fa-trash"></i></a>';
+        $row[] = date('d/m/Y', strtotime($item->trx_date));
+				$row[] = $item->publication;
+        $row[] = $item->description;
+        $row[] = '<a href="'.$item->file_location.'" target="_blank">'.$item->file_location.'</a>';
+        $data[] = $row;
+    }
+
+    $output = array(
+                    "draw" => $_POST['draw'],
+                    "recordsTotal" => $this->M_lkpbu->count_all313(),
+                    "recordsFiltered" => $this->M_lkpbu->count_filtered313(),
+                    "data" => $data,
+            );
+    echo json_encode($output);
+  }
+
+  public function get_form_313($id)
+  {
+      $result = $this->M_lkpbu->get_lkpbu313($id);
+      $data = [
+        'id'                      => $result->id,
+        'publication_code'              => $result->publication_code,
+        'description'         => $result->description,
+        'file_location'         => $result->file_location,
+        'trx_date'                => date('Y-m-d', strtotime($result->trx_date))
+      ];
+      echo json_encode($data);
+  }
+
+  public function add_form_313()
+  {
+    $ACT = 'add';
+    $this->_validate_form313($ACT);
+    $file_location = $this->_do_upload('file_location');
+    $data = array(
+      'publication_code'      => $this->input->post('publication_code'),
+      'description'     => $this->input->post('description'),
+      'trx_date'          => date('Ymd', strtotime($this->input->post('trx_date'))),
+      'datestamp'         => date('Ymd'),
+      'status'            => 'cleaned',
+      'file_location'     => $file_location
+    );
+    $this->M_lkpbu->add_lkpbu313($data);
+    echo json_encode(array("status" => TRUE ));
+  }
+
+  public function update_form_313()
+  {
+    $ACT = 'update';
+    $id = $this->input->post('id');
+    $this->_validate_form313($ACT);
+    $data = array(
+      'publication_code'      => $this->input->post('publication_code'),
+      'description'     => $this->input->post('description'),
+      'datestamp'         => date('Ymd'),
+      'trx_date'          => date('Ymd', strtotime($this->input->post('trx_date')))
+    );
+    if($_FILES['file_location']['name']){
+      $data['file_location'] = $this->_do_upload('file_location');
+    }
+  
+      $this->M_lkpbu->update_lkpbu313(array('id' => $id), $data);
+      echo json_encode(array("status" => TRUE ));
+  }
+
+  public function delete_form_313($id)
+  { 
+    $this->M_lkpbu->delete_lkpbu313($id);
+    echo json_encode(array("status" => TRUE));
+  }
+
+  private function _validate_form313($event)
+  {
+    $data = array();
+    $data['error_string'] = array();
+    $data['inputerror'] = array();
+    $data['status'] = TRUE;
+    $actions = explode('#', $this->session->userdata('action'));
+    $data['action'] = $actions;
+
+    if(!in_array($event, $actions))
+    {
+        $data['inputerror'][] = 'sess_act';
+        $data['error_string'][] = 'Error! You have no right to this action.';
+        $data['status'] = FALSE;
+    }
+    if($this->input->post('trx_date') == '')
+    {
+        $data['inputerror'][] = 'trx_date';
+        $data['error_string'][] = 'Trx Date is required';
+        $data['status'] = FALSE;
+    }
+    if($this->input->post('publication_code') == '')
+    {
+        $data['inputerror'][] = 'publication_code';
+        $data['error_string'][] = 'Jenis Publikasi is required';
+        $data['status'] = FALSE;
+    }
+    if($this->input->post('description') == '')
+    {
+        $data['inputerror'][] = 'description';
+        $data['error_string'][] = 'Description is required';
+        $data['status'] = FALSE;
+    }
+  
+    if($data['status'] === FALSE)
+    {
+        echo json_encode($data);
+        exit();
+    }
+  }
+  private function _do_upload($name)
+  {
+      $config['upload_path']          = './assets/uploads/';
+      $config['allowed_types']        = 'gif|jpg|png|jpeg|pdf';
+      $config['max_size']             = 2048;
+      $config['file_name']            = round(microtime(true) * 1000);
+      $this->load->library('upload', $config);
+      $this->upload->initialize($config);
+      if (!$this->upload->do_upload($name)) {
+          $data['inputerror'][] = $name;
+          $data['error_string'][] = 'Upload error: ' . $this->upload->display_errors('', '');
+          $data['status'] = FALSE;
+          echo json_encode($data);
+          exit();
+      }
+      $file = $this->upload->data('file_name');
+      return base_url('assets/uploads/') . $file ;
+  }
+  
 }

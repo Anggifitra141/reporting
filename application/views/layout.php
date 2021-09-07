@@ -300,8 +300,8 @@
                     <li id="nav-lkpbu-clean-304"><a class="nav-link" href="<?php echo site_url('lkpbu/form_304'); ?>"><i class="fas fa-circle"></i> Form 304</a></li>
                     <li id="nav-lkpbu-clean-306"><a class="nav-link" href="<?php echo site_url('lkpbu/form_306'); ?>"><i class="fas fa-circle"></i> Form 306</a></li>
                     <li id="nav-lkpbu-clean-309-310-311"><a class="nav-link" href="<?php echo site_url('lkpbu/form_309_310_311'); ?>" style="font-size: 11px;"><i class="fas fa-circle"></i> Form 309 310 & 311</a></li>
-                    <li id="nav-ltdbb-clean-g003"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G003'); ?>"><i class="fas fa-circle"></i> Form 312</a></li>
-                    <li id="nav-ltdbb-clean-g003"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G003'); ?>"><i class="fas fa-circle"></i> Form 313</a></li>
+                    <li id="nav-lkpbu-clean-312"><a class="nav-link" href="<?php echo site_url('lkpbu/form_312'); ?>"><i class="fas fa-circle"></i> Form 312</a></li>
+                    <li id="nav-lkpbu-clean-313"><a class="nav-link" href="<?php echo site_url('lkpbu/form_313'); ?>"><i class="fas fa-circle"></i> Form 313</a></li>
                   </ul>
                 </li>
                 <li id="nav-sipesat-clean"><a class="nav-link" href="<?php echo site_url('clean/si_pesat'); ?>"><i class="fas fa-database"></i> Gangguan Sistem</a></li>

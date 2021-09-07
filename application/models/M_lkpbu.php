@@ -325,5 +325,216 @@ class M_lkpbu extends CI_model {
     $this->db->where('id', $id);
     $this->db->delete($this->table309_310_311);
   }
+  // END :::
+
+  // START :: FORM 312
+  var $table312 = 't1clean_lkpbu_312';
+  var $column_order312 = array('trx_date', 'publication', 'description');
+  var $column_search312 = array('trx_date', 'publication', 'description');
+  var $order312 = array('t1clean_lkpbu_312.id' => 'desc');
+
+  private function _get_datatables_query312()
+  {
+      $this->db->select('t1clean_lkpbu_312.*, tlkpbu_312_publication_type.publication');
+	    $this->db->from($this->table312);
+      $this->db->join('tlkpbu_312_publication_type', 't1clean_lkpbu_312.publication_code = tlkpbu_312_publication_type.code');
+      $this->db->where(['status' => 'cleaned']);
+      $i = 0;
+      foreach ($this->column_search312 as $row)
+      {
+          if($_POST['search']['value'])
+          {
+
+              if($i===0)
+              {
+                  $this->db->group_start();
+                  $this->db->like($row, $_POST['search']['value']);
+              }
+              else
+              {
+                  $this->db->or_like($row, $_POST['search']['value']);
+              }
+
+              if(count($this->column_search312) - 1 == $i)
+                  $this->db->group_end();
+          }
+          $i++;
+      }
+
+      if(isset($_POST['order']))
+      {
+          $this->db->order_by($this->column_order312[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+      }
+      else if(isset($this->order312))
+      {
+          $order = $this->order312;
+          $this->db->order_by(key($order), $order[key($order)]);
+      }
+  }
+
+  public function get312($where="")
+  {
+    if($where)
+    {
+      $this->db->where($where);
+    }
+    $this->db->where(['status' => 'cleaned']);
+    return $this->db->get($this->table312);
+  }
+
+	public function Get_All312()
+	{
+		$this->_get_datatables_query312();
+    if($_POST['length'] != -1)
+    $this->db->limit($_POST['length'], $_POST['start']);
+    $query = $this->db->get();
+    return $query->result();
+	}
+
+  public function count_filtered312()
+  {
+    $this->_get_datatables_query312();
+    $query = $this->db->get();
+    return $query->num_rows();
+  }
+
+  public function count_all312()
+  {
+    $this->db->from($this->table312);
+    $this->db->where(['status' => 'cleaned']);
+    return $this->db->count_all_results();
+  }
+
+  public function get_lkpbu312($id)
+  {
+    $this->db->from($this->table312);
+    $this->db->where('id', $id);
+    $query = $this->db->get();
+    return $query->row();
+  }
+
+  public function add_lkpbu312($data)
+  {
+    $this->db->insert($this->table312, $data);
+    return $this->db->insert_id();
+  }
+
+  public function update_lkpbu312($where, $data)
+  {
+    $this->db->update($this->table312, $data, $where);
+    return $this->db->affected_rows();
+  }
+
+  public function delete_lkpbu312($id)
+  {
+    $this->db->where('id', $id);
+    $this->db->delete($this->table312);
+  }
+  // END :: FORM 312
+  
+  // START :: FORM 313
+  var $table313 = 't1clean_lkpbu_313';
+  var $column_order313 = array('trx_date', 'publication', 'description');
+  var $column_search313 = array('trx_date', 'publication', 'description');
+  var $order313 = array('t1clean_lkpbu_313.id' => 'desc');
+
+  private function _get_datatables_query313()
+  {
+      $this->db->select('t1clean_lkpbu_313.*, tlkpbu_313_publication_type.publication');
+	    $this->db->from($this->table313);
+      $this->db->join('tlkpbu_313_publication_type', 't1clean_lkpbu_313.publication_code = tlkpbu_313_publication_type.code');
+      $this->db->where(['status' => 'cleaned']);
+      $i = 0;
+      foreach ($this->column_search313 as $row)
+      {
+          if($_POST['search']['value'])
+          {
+
+              if($i===0)
+              {
+                  $this->db->group_start();
+                  $this->db->like($row, $_POST['search']['value']);
+              }
+              else
+              {
+                  $this->db->or_like($row, $_POST['search']['value']);
+              }
+
+              if(count($this->column_search313) - 1 == $i)
+                  $this->db->group_end();
+          }
+          $i++;
+      }
+
+      if(isset($_POST['order']))
+      {
+          $this->db->order_by($this->column_order313[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+      }
+      else if(isset($this->order313))
+      {
+          $order = $this->order313;
+          $this->db->order_by(key($order), $order[key($order)]);
+      }
+  }
+
+  public function get313($where="")
+  {
+    if($where)
+    {
+      $this->db->where($where);
+    }
+    $this->db->where(['status' => 'cleaned']);
+    return $this->db->get($this->table313);
+  }
+
+	public function Get_All313()
+	{
+		$this->_get_datatables_query313();
+    if($_POST['length'] != -1)
+    $this->db->limit($_POST['length'], $_POST['start']);
+    $query = $this->db->get();
+    return $query->result();
+	}
+
+  public function count_filtered313()
+  {
+    $this->_get_datatables_query313();
+    $query = $this->db->get();
+    return $query->num_rows();
+  }
+
+  public function count_all313()
+  {
+    $this->db->from($this->table313);
+    $this->db->where(['status' => 'cleaned']);
+    return $this->db->count_all_results();
+  }
+
+  public function get_lkpbu313($id)
+  {
+    $this->db->from($this->table313);
+    $this->db->where('id', $id);
+    $query = $this->db->get();
+    return $query->row();
+  }
+
+  public function add_lkpbu313($data)
+  {
+    $this->db->insert($this->table313, $data);
+    return $this->db->insert_id();
+  }
+
+  public function update_lkpbu313($where, $data)
+  {
+    $this->db->update($this->table313, $data, $where);
+    return $this->db->affected_rows();
+  }
+
+  public function delete_lkpbu313($id)
+  {
+    $this->db->where('id', $id);
+    $this->db->delete($this->table313);
+  }
+  // END :: FORM 313
 
 }
