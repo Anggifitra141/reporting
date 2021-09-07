@@ -710,21 +710,30 @@ class Report extends CI_Controller {
     $start_date = date('Ymd', strtotime(substr($_POST['daterange'], 0, 10)));
     $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
 
-    $machine_type = $this->db->query("SELECT CONCAT(CODE, '-', machine) as machine_type, code FROM tlkpbu_306_machine_type")->result();
+    $fraud_type = $this->db->query("SELECT CONCAT(CODE, '-', fraud) as fraud_type, code FROM tlkpbu_306_fraud_type")->result();
     
     $data = array();
     $no = $_POST['start'];
-    foreach ($machine_type as $raw_data) {
-      $sum_query = $this->db->query("SELECT IFNULL(SUM(total_machine), '-') as total_machine, IFNULL(SUM(total_seller), '-') as total_seller FROM t1clean_lkpbu_306 WHERE trx_date BETWEEN '$start_date' AND '$end_date' AND machine_code='$raw_data->code' AND status='cleaned'")->result();
+    foreach ($fraud_type as $raw_data) {
+      $sum_query = $this->db->query("SELECT 
+                                    IF(COUNT(actual_loss_vol) > 0, COUNT(actual_loss_vol) , '-')  AS actual_loss_vol,
+                                    IFNULL(SUM(actual_loss_nominal), '-')  AS actual_loss_nominal,
+                                    IF(COUNT(potential_loss_vol) > 0, COUNT(potential_loss_vol) , '-')  AS potential_loss_vol,
+                                    IFNULL(SUM(potential_loss_nominal), '-') AS potential_loss_nominal
+                                    FROM t1clean_lkpbu_306
+                                    WHERE trx_date BETWEEN '$start_date' AND '$end_date' AND fraud_code='$raw_data->code' AND status='cleaned'")->result();
       foreach ($sum_query as $sum) {
 
       
       $no++;
       $row = array();
       $row[] = $no++;
-      $row[] = $raw_data->machine_type;
-      $row[] = $sum->total_machine;
-      $row[] = $sum->total_seller;
+      $row[] = "500-Uang Elektronik";
+      $row[] = $raw_data->fraud_type;
+      $row[] = $sum->actual_loss_vol;
+      $row[] = $sum->actual_loss_nominal;
+      $row[] = $sum->potential_loss_vol;
+      $row[] = $sum->potential_loss_nominal;
 
       $data[] = $row;
       }
@@ -745,14 +754,14 @@ class Report extends CI_Controller {
     $start_date = date('Ymd', strtotime(substr($_GET['daterange'], 0, 10)));
     $end_date =  date('Ymd', strtotime(substr($_GET['daterange'], 13, 23)));
 
-    $machine_type = $this->db->query("SELECT CONCAT(CODE, '-', machine) as machine_type, code FROM tlkpbu_306_machine_type")->result();
+    $fraud_type = $this->db->query("SELECT CONCAT(CODE, '-', fraud) as fraud_type, code FROM tlkpbu_306_fraud_type")->result();
 
     $type_report = "302";
     $report_setting = $this->M_report->get_report_setting($type_report);
 
     $data = array();
     $no = 1;
-    $baris = 12;
+    $baris = 14;
     //$objPHPExcel    = new PHPExcel();
 
 
@@ -760,19 +769,27 @@ class Report extends CI_Controller {
 
     $date_now = $this->lib->date_indonesia(date('Y-m-d'));
 
-    foreach ($machine_type as $row) {
-      $sum_query = $this->db->query("SELECT IFNULL(SUM(total_machine), '-') as total_machine, IFNULL(SUM(total_seller), '-') as total_seller FROM t1clean_lkpbu_306 WHERE trx_date BETWEEN '$start_date' AND '$end_date' AND machine_code='$row->code' AND status='cleaned'")->result();
+    foreach ($fraud_type as $row) {
+      $sum_query = $this->db->query("SELECT 
+                                    IF(COUNT(actual_loss_vol) > 0, COUNT(actual_loss_vol) , '-')  AS actual_loss_vol,
+                                    IFNULL(SUM(actual_loss_nominal), '-')  AS actual_loss_nominal,
+                                    IF(COUNT(potential_loss_vol) > 0, COUNT(potential_loss_vol) , '-')  AS potential_loss_vol,
+                                    IFNULL(SUM(potential_loss_nominal), '-') AS potential_loss_nominal
+                                    FROM t1clean_lkpbu_306
+                                    WHERE trx_date BETWEEN '$start_date' AND '$end_date' AND fraud_code='$row->code' AND status='cleaned'")->result();
       foreach ($sum_query as $sum ) {
 
       
       $objPHPExcel->setActiveSheetIndex(0)
-        ->setCellValue('A' . 4, substr($this->lib->date_indonesia(date("-m-")) ,1)) 
-        ->setCellValue('D' . 10, date("m"))
-        ->setCellValue('A' . 19, "Jakarta, $date_now")
+        ->setCellValue('A' . 7, substr($this->lib->date_indonesia(date("Y-m-d")) , 3)) 
+        ->setCellValue('E' . 11, date("m"))
+        ->setCellValue('B' . 23, "Jakarta, $date_now")
          
-        ->setCellValue('A' . $baris, $row->machine_type)
-        ->setCellValue('C' . $baris, $sum->total_machine)
-        ->setCellValue('D' . $baris, $sum->total_seller);
+        ->setCellValue('C' . $baris, $row->fraud_type)
+        ->setCellValue('E' . $baris, $sum->actual_loss_vol)
+        ->setCellValue('G' . $baris, number_format($sum->actual_loss_nominal))
+        ->setCellValue('I' . $baris, $sum->potential_loss_vol)
+        ->setCellValue('K' . $baris, number_format($sum->potential_loss_nominal));
 
       $baris++;
       $no++;
@@ -791,8 +808,8 @@ class Report extends CI_Controller {
     set_time_limit(0);
     ini_set('memory_limit', '1G');
 
-    user_log($this->session->userdata('id'), 'REPORT', "DOWNLOAD", '', "Download Report LKPBU Form 304", '');
-    trx_log($this->session->userdata('id'), 'REPORT', "DOWNLOAD", '', "Download Report LKPBU Form 304");
+    user_log($this->session->userdata('id'), 'REPORT', "DOWNLOAD", '', "Download Report LKPBU Form 306", '');
+    trx_log($this->session->userdata('id'), 'REPORT', "DOWNLOAD", '', "Download Report LKPBU Form 306");
     exit;
 
     

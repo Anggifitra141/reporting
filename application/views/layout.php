@@ -75,7 +75,7 @@
             <li><a href="<?php echo base_url(); ?>#" data-toggle="search" class="nav-link nav-link-lg d-sm-none"><i class="fas fa-search"></i></a></li>
           </ul>
           <div class="search-element">
-            
+
           </div>
         </form>
         <ul class="navbar-nav navbar-right">
@@ -264,8 +264,8 @@
               </ul>
             </li>
             <style>
-              .sidebar-style-2 .sidebar-menu  ul.dropdown-menu li a {
-                  padding-left: 55px !important;
+              .sidebar-style-2 .sidebar-menu ul.dropdown-menu li a {
+                padding-left: 55px !important;
               }
             </style>
             <li class="dropdown" id="nav-data-clean">
@@ -361,13 +361,13 @@
                 <li id="nav-dana-float-report"><a class="nav-link" href="<?php echo site_url('report/dana_float'); ?>"><i class="fas fa-list"></i> Dana Float</a></li>
                 <li id="nav-dana-float-report"><a class="nav-link" href="<?php echo site_url('report/qris'); ?>"><i class="fas fa-list"></i> Payment Gateway</a></li>
                 <li id="nav-sipesat-report"><a class="nav-link" href="<?php echo site_url('report/sipesat'); ?>"><i class="fas fa-list"></i> Sipesat</a></li>
-                <li class="dropdown" id="nav-ltdbb-source">
+                <li class="dropdown" id="nav-lkpbu-report">
                   <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-list"></i>LKPBU</a>
                   <ul class="dropdown-menu">
                     <li id="nav-ltdbb-source-g001"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G001'); ?>"><i class="fas fa-circle"></i> Form 302</a></li>
                     <li id="nav-ltdbb-source-g002"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G002'); ?>"><i class="fas fa-circle"></i> Form 303</a></li>
-                    <li id="nav-ltdbb-source-g003"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G003'); ?>"><i class="fas fa-circle"></i> Form 304</a></li>
-                    <li id="nav-ltdbb-source-g003"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G003'); ?>"><i class="fas fa-circle"></i> Form 306</a></li>
+                    <li id="nav-lkpbu-report-304"><a class="nav-link" href="<?php echo site_url('report/lkpbu_304'); ?>"><i class="fas fa-circle"></i> Form 304</a></li>
+                    <li id="nav-lkpbu-report-306"><a class="nav-link" href="<?php echo site_url('report/lkpbu_306'); ?>"><i class="fas fa-circle"></i> Form 306</a></li>
                     <li id="nav-ltdbb-source-g003"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G003'); ?>"><i class="fas fa-circle"></i> Form 309</a></li>
                     <li id="nav-ltdbb-source-g003"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G003'); ?>"><i class="fas fa-circle"></i> Form 310</a></li>
                     <li id="nav-ltdbb-source-g003"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G003'); ?>"><i class="fas fa-circle"></i> Form 311</a></li>
