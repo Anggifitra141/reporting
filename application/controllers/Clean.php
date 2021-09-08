@@ -12,7 +12,7 @@ class Clean extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-    $this->load->model(['M_tltdbb_clean', 'M_tltdbb_clean', 'M_danafloat_clean', 'M_sipesat_clean', 'M_ltkl_clean', 'M_lkpbu']);
+    $this->load->model(['M_tltdbb_clean', 'M_tltdbb_clean', 'M_danafloat_clean', 'M_sipesat_clean', 'M_ltkl_clean', 'M_lkpbu', 'M_qris_clean']);
     if(!$this->session->userdata('logged_in'))
     {
       $data=array();
@@ -550,6 +550,107 @@ class Clean extends CI_Controller {
    }
 
   // END :: AJAX LTKL
+
+    //  START :: QRIS
+    public function qris_merchant(){
+      $data= [];
+      $data['content'] = $this->load->view('clean/qris_merchant', $data, TRUE);
+      $this->load->view('layout', $data);
+    }
+    public function qris_trx(){
+      $data= [];
+      $data['content'] = $this->load->view('clean/qris_trx', $data, TRUE);
+      $this->load->view('layout', $data);
+    }
+    public function ajax_list_qris_merchant_clean()
+    {
+      $start_date = date('Ymd', strtotime(substr($_POST['daterange'], 0, 10)));
+      $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
+  
+      $this->db->where('datestamp >=', $start_date);
+      $this->db->where('datestamp <=', $end_date);
+      $list = $this->M_qris_clean->get_datatables_merchant();
+      $data = array();
+      $no = $_POST['start'];
+      foreach ($list as $raw_data) {
+       $no++;
+       $row = array();
+       $row[] = $no; 
+       $row[] = $raw_data->merchant_name;
+       $row[] = $raw_data->city;
+       $row[] = $raw_data->mcc;
+       $row[] = $raw_data->merchant_criteria;
+       $row[] = $raw_data->merchant_status;
+       $row[] = date('d/m/Y', strtotime($raw_data->activation_peroid));
+       $row[] = date('d/m/Y', strtotime($raw_data->datestamp));
+  
+       $data[] = $row;
+       
+      } 
+      $start_date = date('Ymd', strtotime(substr($_POST['daterange'], 0, 10)));
+      $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
+      $this->db->where('datestamp >=', $start_date);
+      $this->db->where('datestamp <=', $end_date);
+      $recordsTotal = $this->M_qris_clean->count_all_merchant();
+
+      $start_date = date('Ymd', strtotime(substr($_POST['daterange'], 0, 10)));
+      $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
+      $this->db->where('datestamp >=', $start_date);
+      $this->db->where('datestamp <=', $end_date);
+      $recordsFiltered = $this->M_qris_clean->count_filtered_merchant();
+      $output = array(
+                "draw" => $_POST['draw'],
+                "recordsTotal" => $recordsTotal,
+                "recordsFiltered" => $recordsFiltered,
+                "data" => $data,
+              );
+      echo json_encode($output);
+    }
+    public function ajax_list_qris_trx_clean()
+    {
+      $start_date = date('Ymd', strtotime(substr($_POST['daterange'], 0, 10)));
+      $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
+      $this->db->where('trx_date >=', $start_date);
+      $this->db->where('trx_date <=', $end_date);
+      $list = $this->M_qris_clean->get_datatables_trx();
+      $data = array();
+      $no = $_POST['start'];
+      foreach ($list as $raw_data) {
+       $no++;
+       $row = array();
+       $row[] = $no; 
+       $row[] = $raw_data->city;
+       $row[] = $raw_data->pjsp;
+       $row[] = $raw_data->mcc;
+       $row[] = $raw_data->merchant_criteria;
+       $row[] = $raw_data->vol_trx;
+       $row[] = $this->lib->rupiah($raw_data->amount_trx);
+       $row[] = date('d/m/Y', strtotime($raw_data->trx_date));
+       $row[] = date('d/m/Y', strtotime($raw_data->datestamp));
+  
+       $data[] = $row;
+       
+      } 
+      $start_date = date('Ymd', strtotime(substr($_POST['daterange'], 0, 10)));
+      $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
+      $this->db->where('trx_date >=', $start_date);
+      $this->db->where('trx_date <=', $end_date);
+      $recordsTotal = $this->M_qris_clean->count_all_trx();
+
+      $start_date = date('Ymd', strtotime(substr($_POST['daterange'], 0, 10)));
+      $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
+      $this->db->where('trx_date >=', $start_date);
+      $this->db->where('trx_date <=', $end_date);
+      $recordsFiltered = $this->M_qris_clean->count_filtered_trx();
+      $output = array(
+                "draw" => $_POST['draw'],
+                "recordsTotal" => $recordsTotal,
+                "recordsFiltered" => $recordsFiltered,
+                "data" => $data,
+              );
+      echo json_encode($output);
+    }
+    // END :: QRIS
 
   // START :: FORM 302
   public function form_302()

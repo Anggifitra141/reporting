@@ -28,8 +28,8 @@ class M_report extends CI_model {
     $type_report = $this->input->post('type_report');
 
     $this->db->where('status', "cleaned");
-    $this->db->where('datestamp >=', $start_date);
-    $this->db->where('datestamp <=', $end_date);
+    $this->db->where('trx_date >=', $start_date);
+    $this->db->where('trx_date <=', $end_date);
 
     if ($type_report == 'G001') {
       $this->db->where_in('sender_country', array('INDONESIA', '86'));

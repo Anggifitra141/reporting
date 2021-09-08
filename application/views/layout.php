@@ -60,6 +60,16 @@
       background-color: #FC545C;
       color: white;
     }
+    .nav-pills .nav-item .nav-link.active {
+        box-shadow: 0 2px 6px #ffbaba;
+        color: #fff;
+        background-color: #ff0000;
+    }
+    .nav-pills .nav-item .nav-link {
+        color: #ff0000;
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+    }
   </style>
   <!-- /END GA -->
 </head>
@@ -280,7 +290,7 @@
                   </ul>
                 </li>
                 <li id="nav-ltkl-clean"><a class="nav-link" href="<?php echo site_url('clean/ltkl'); ?>"><i class="fas fa-database"></i> LTKL</a></li>
-                <li class="dropdown" id="nav-qris-clean">
+                <li class="dropdown" id="nav-clean-qris">
                   <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-database"></i>QRIS</a>
                   <ul class="dropdown-menu">
                     <li id="nav-clean-qris-merchant"><a class="nav-link" href="<?php echo site_url('clean/qris_merchant'); ?>"><i class="fas fa-circle"></i> QRIS Merchant</a></li>
@@ -306,8 +316,9 @@
             <li class="dropdown" id="nav-utilities-source">
               <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-wrench"></i> <span>Utilities Source</span></a>
               <ul class="dropdown-menu">
-                <li id="nav-role-clean"><a class="nav-link" href="<?php echo site_url('utilities/role_clean'); ?>"><i class="fas fa-align-center"></i> Role Clean</a></li>
-                <li id="nav-auto-clean"><a class="nav-link" href="<?php echo site_url('utilities/auto_clean'); ?>"><i class="fas fa-align-center"></i> Auto Clean</a></li>
+                <!-- <li id="nav-role-clean"><a class="nav-link" href="<?php echo site_url('utilities/role_clean'); ?>"><i class="fas fa-align-center"></i> Role Clean</a></li> -->
+                <li id="nav-auto-clean"><a class="nav-link" href="<?php echo site_url('utilities/auto_clean'); ?>"><i class="fas fa-align-center"></i> Auto Clean LTDBB</a></li>
+                <li id="nav-auto-clean-ltkl"><a class="nav-link" href="<?php echo site_url('utilities/auto_clean_ltkl'); ?>"><i class="fas fa-align-center"></i> Auto Clean LTKL</a></li>
                 <!-- <li id="nav-manual-clean"><a class="nav-link" href="<?php echo site_url('utilities/manual'); ?>"><i class="fas fa-database"></i> Manual Clean</a></li> -->
               </ul>
             </li>

@@ -226,6 +226,7 @@ class Utilities extends CI_Controller {
 			if($cek_recept_city){
 				$recept_city = $cek_recept_city->to;
 			}
+			
 			if($cek_sender_country && $cek_sender_city && $cek_recept_country && $cek_recept_city ){
 				$result = $this->db->insert('t1clean_ltdbb', [
 					'id_source'					=> $id,

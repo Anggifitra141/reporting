@@ -44,6 +44,7 @@
                   <div class="col-md-6 mb-3">
                     <a href="javascript:void(0)" onclick="rollback_selected()" class="btn btn-warning"><i class="fas fa-redo-alt"></i> Rollback Selected</a>
                     <a href="javascript:void(0)" onclick="delete_selected()" class="btn btn-danger"><i class="fas fa-times"></i> Delete Selected</a>
+                    <a href="javascript:void(0)" onclick="edit_selected()" class="btn btn-success"><i class="fas fa-edit"></i> Edit Selected</a>
                   </div>
                 </div>
                 <table class="table table-striped" id="table-data" style="width: 100%;">
@@ -142,7 +143,7 @@
                   <span class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                  <label for="firstName">Kota/Kabupaten Asal Pengiriman</label>
+                  <label for="firstName">Kota/Kabupaten Asal Penerima</label>
                   <select name="recept_city" class="form-control" id="">
                     <?php foreach ($city as $key) : ?>
                       <option value="<?= $key->bi_code . ' - ' . $key->city ?>"><?= $key->bi_code . ' - ' . $key->city ?></option>
@@ -174,6 +175,46 @@
                 <span class="text-danger"></span>
               </div>
             </div>
+
+
+
+
+
+
+          </div>
+
+        </div>
+        <div class="modal-footer bg-whitesmoke br">
+          <button type="button" class="btn btn-secondary float-left" data-dismiss="modal">Close</button>
+          <button type="button" onclick="save_modify()" id="btnSave" class="btn btn-outline-primary float-right">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal fade" tabindex="-1" role="dialog" id="modal_modify_selected_ltdbb">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header  bg-primary text-white">
+        <b class="modal-title">Sender Country </b>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form class="form-horizontal" action="" id="form-ltdbb" method="POST">
+        <div class="modal-body">
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i> Verify manual data on your system
+          </div>
+
+          <div class="form-body">
+
+            <input type="hidden" name="id" value="">
+            <div class="row" id="form-modify-selected">
+              
+            </div>
+
+            <hr>
 
 
 
@@ -375,6 +416,67 @@
     } else {
       swal('No data selected');
     }
+  }
+
+  function edit_selected() {
+    var list_id = [];
+    $(".data-check:checked").each(function() {
+      list_id.push(this.value);
+    });
+    if (list_id.length > 0) {
+      $('#modal_modify_selected_ltdbb').modal('show');
+    $('.modal-title').text('Update Selected Ltdbb');
+    $('#form-modify-selected').html(`
+              <div class="col-6">
+                <div class="form-group">
+                  <label for="lastName">Kota/Kabupaten Pengiriman</label>
+                  <select name="sender_country" class="form-control" id="">
+                  <option value=""></option>
+                    <?php foreach ($country as $key) : ?>
+                      <option value="<?= $key->country ?>"><?= $key->country ?></option>
+                    <?php endforeach; ?>
+                  </select>
+                  <span class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                  <label for="">Kota/Kabupaten Asal Pengiriman</label>
+                  <select name="sender_city" class="form-control" id="">
+                  <option value=""></option>
+                    <?php foreach ($city as $key) : ?>
+                      <option value="<?= $key->bi_code . ' - ' . $key->city ?>"><?= $key->bi_code . ' - ' . $key->city ?></option>
+                    <?php endforeach; ?>
+                  </select>
+                  <span class="text-danger"></span>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="form-group">
+                  <label for="lastName">Kota/Kabupaten Penerima</label>
+                  <select name="sender_country" class="form-control" id="">
+                  <option value=""></option>
+                    <?php foreach ($country as $key) : ?>
+                      <option value="<?= $key->country ?>"><?= $key->country ?></option>
+                    <?php endforeach; ?>
+                  </select>
+                  <span class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                  <label for="">Kota/Kabupaten Asal Penerima</label>
+                  <select name="sender_city" class="form-control" id="">
+                    <option value=""></option>
+                    <?php foreach ($city as $key) : ?>
+                      <option value="<?= $key->bi_code . ' - ' . $key->city ?>"><?= $key->bi_code . ' - ' . $key->city ?></option>
+                    <?php endforeach; ?>
+                  </select>
+                  <span class="text-danger"></span>
+                </div>
+              </div>
+    
+    `);   
+    }else{
+      swal('Modify Selected Data Canceled');
+    }
+   
   }
 
   function delete_row(id) {

@@ -2,16 +2,7 @@
   .modal-title{
     margin-top: -10px;
   }
-  .nav-pills .nav-item .nav-link.active {
-    box-shadow: 0 2px 6px #ffbaba;
-    color: #fff;
-    background-color: #ff0000;
-}
-.nav-pills .nav-item .nav-link {
-    color: #ff0000;
-    padding-left: 15px !important;
-    padding-right: 15px !important;
-}
+  
 
 
 </style>

@@ -24,7 +24,12 @@
         
         <div class="card">
           <div class="card-header">
-          <button class="btn btn-danger pull-right" id="auto-clean" style="margin-top: 6px; border-radius: 2px !important;"><i class="fas fa-check"></i> Cleansing Data </button>
+            <h4>
+              <button class="btn btn-danger pull-right" id="auto-clean" style="border-radius: 2px !important;"><i class="fas fa-check"></i> Cleansing Data </button>
+            </h4>
+            <div class="card-header-form">
+            <a href="<?= base_url('role_model') ?>" target="_blank" class="btn btn-success pull-right" id="auto-clean" style="border-radius: 2px !important;"><i class="fas fa-rules"></i> Role Model </a>
+            </div>
           </div>
           <div class="card-body" >
             <div class="">
