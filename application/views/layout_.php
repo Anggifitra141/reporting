@@ -50,7 +50,7 @@
 
   <style>
     .fc button.fc-state-active {
-      background-color: #FF0000;
+      background-color: #fc544b;
       color: #fff;
     }
 
@@ -59,18 +59,6 @@
     .select2-container--default .select2-results__option--highlighted[aria-selected] {
       background-color: #FC545C;
       color: white;
-    }
-
-    .nav-pills .nav-item .nav-link.active {
-      box-shadow: 0 2px 6px #ffbaba;
-      color: #fff;
-      background-color: #ff0000;
-    }
-
-    .nav-pills .nav-item .nav-link {
-      color: #ff0000;
-      padding-left: 15px !important;
-      padding-right: 15px !important;
     }
   </style>
   <!-- /END GA -->
@@ -87,7 +75,66 @@
             <li><a href="<?php echo base_url(); ?>#" data-toggle="search" class="nav-link nav-link-lg d-sm-none"><i class="fas fa-search"></i></a></li>
           </ul>
           <div class="search-element">
-
+            <input class="form-control" type="search" placeholder="Search" aria-label="Search" data-width="250">
+            <button class="btn" type="submit"><i class="fas fa-search"></i></button>
+            <div class="search-backdrop"></div>
+            <div class="search-result">
+              <div class="search-header">
+                <!--Histories
+              </div>
+              <div class="search-item">
+                <a href="<?php echo base_url(); ?>#">How to hack NASA using CSS</a>
+                <a href="<?php echo base_url(); ?>#" class="search-close"><i class="fas fa-times"></i></a>
+              </div>
+              <div class="search-item">
+                <a href="<?php echo base_url(); ?>#">Kodinger.com</a>
+                <a href="<?php echo base_url(); ?>#" class="search-close"><i class="fas fa-times"></i></a>
+              </div>
+              <div class="search-item">
+                <a href="<?php echo base_url(); ?>#">#Stisla</a>
+                <a href="<?php echo base_url(); ?>#" class="search-close"><i class="fas fa-times"></i></a>
+              </div>
+              <div class="search-header">
+                Result
+              </div>
+              <div class="search-item">
+                <a href="<?php echo base_url(); ?>#">
+                  <img class="mr-3 rounded" width="30" src="<?php echo base_url(); ?>assets/img/products/product-3-50.png" alt="product">
+                  oPhone S9 Limited Edition
+                </a>
+              </div>
+              <div class="search-item">
+                <a href="<?php echo base_url(); ?>#">
+                  <img class="mr-3 rounded" width="30" src="<?php echo base_url(); ?>assets/img/products/product-2-50.png" alt="product">
+                  Drone X2 New Gen-7
+                </a>
+              </div>
+              <div class="search-item">
+                <a href="<?php echo base_url(); ?>#">
+                  <img class="mr-3 rounded" width="30" src="<?php echo base_url(); ?>assets/img/products/product-1-50.png" alt="product">
+                  Headphone Blitz
+                </a>
+              </div>
+              <div class="search-header">
+                Projects
+              </div>
+              <div class="search-item">
+                <a href="<?php echo base_url(); ?>#">
+                  <div class="search-icon bg-danger text-white mr-3">
+                    <i class="fas fa-code"></i>
+                  </div>-->
+                Report Management
+                </a>
+              </div>
+              <div class="search-item">
+                <a href="<?php echo base_url(); ?>#">
+                  <div class="search-icon bg-primary text-white mr-3">
+                    <i class="fas fa-laptop"></i>
+                  </div>
+                  Create a new Homepage Design
+                </a>
+              </div>
+            </div>
           </div>
         </form>
         <ul class="navbar-nav navbar-right">
@@ -255,61 +302,57 @@
             <li class="dropdown" id="nav-data-source">
               <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-layer-group"></i> <span>Data Source</span></a>
               <ul class="dropdown-menu">
-                <li id="nav-ltdbb-source"><a class="nav-link" href="<?php echo site_url('source/tltdbb_source'); ?>"><i class="fas fa-database"></i> Ltdbb</a></li>
-                <li id="nav-ltkl-source"><a class="nav-link" href="<?php echo site_url('source/ltkl'); ?>"><i class="fas fa-database"></i> LTKL</a></li>
-                <li class="dropdown" id="nav-qris">
-                  <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-database"></i>QRIS</a>
-                  <ul class="dropdown-menu">
-                    <li id="nav-source-qris-merchant"><a class="nav-link" href="<?php echo site_url('source/qris_merchant'); ?>"><i class="fas fa-circle"></i> QRIS Merchant</a></li>
-                    <li id="nav-source-qris-trx"><a class="nav-link" href="<?php echo site_url('source/qris_trx'); ?>"><i class="fas fa-circle"></i> QRIS Transaksi</a></li>
-                  </ul>
-                </li>
+                <li id="nav-ltdbb-source-g001"><a class="nav-link" href="<?php echo site_url('source/tltdbb_source'); ?>"><i class="fas fa-database"></i> Ltdbb</a></li>
+                <li id="nav-dana-float-source"><a class="nav-link" href="<?php echo site_url('source/ltkl'); ?>"><i class="fas fa-database"></i> LTKL</a></li>
+                <li id="nav-dana-float-source"><a class="nav-link" href="<?php echo site_url('source/qris'); ?>"><i class="fas fa-database"></i> QRIS</a></li>
                 <li id="nav-dana-float-source"><a class="nav-link" href="<?php echo site_url('source/dana_float'); ?>"><i class="fas fa-database"></i> Dana Float</a></li>
+                <li id="nav-dana-float-source"><a class="nav-link" href="<?php echo site_url('source/qris'); ?>"><i class="fas fa-database"></i> Payment Gateway</a></li>
                 <li id="nav-sipesat-source"><a class="nav-link" href="<?php echo site_url('source/si_pesat'); ?>"><i class="fas fa-database"></i> Si Pesat</a></li>
-                <li class="dropdown" id="nav-lkpbu-source">
+                <li class="dropdown" id="nav-ltdbb-source">
                   <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-database"></i>LKPBU</a>
                   <ul class="dropdown-menu">
-                    <li id="nav-lkpbu-source-302"><a class="nav-link" href="<?php echo site_url('source/lkpbu_source302'); ?>"><i class="fas fa-circle"></i> Form 302</a></li>
+                    <li id="nav-ltdbb-source-g001"><a class="nav-link" href="<?php echo site_url('source/tltdbb_source/G001'); ?>"><i class="fas fa-circle"></i> Form 302</a></li>
+                    <li id="nav-ltdbb-source-g002"><a class="nav-link" href="<?php echo site_url('source/tltdbb_source/G002'); ?>"><i class="fas fa-circle"></i> Form 303</a></li>
+                    <li id="nav-ltdbb-source-g003"><a class="nav-link" href="<?php echo site_url('source/tltdbb_source/G003'); ?>"><i class="fas fa-circle"></i> Form 304</a></li>
+                    <li id="nav-ltdbb-source-g003"><a class="nav-link" href="<?php echo site_url('source/tltdbb_source/G003'); ?>"><i class="fas fa-circle"></i> Form 306</a></li>
+                    <li id="nav-ltdbb-source-g003"><a class="nav-link" href="<?php echo site_url('source/tltdbb_source/G003'); ?>"><i class="fas fa-circle"></i> Form 309</a></li>
+                    <li id="nav-ltdbb-source-g003"><a class="nav-link" href="<?php echo site_url('source/tltdbb_source/G003'); ?>"><i class="fas fa-circle"></i> Form 310</a></li>
+                    <li id="nav-ltdbb-source-g003"><a class="nav-link" href="<?php echo site_url('source/tltdbb_source/G003'); ?>"><i class="fas fa-circle"></i> Form 311</a></li>
+                    <li id="nav-ltdbb-source-g003"><a class="nav-link" href="<?php echo site_url('source/tltdbb_source/G003'); ?>"><i class="fas fa-circle"></i> Form 312</a></li>
+                    <li id="nav-ltdbb-source-g003"><a class="nav-link" href="<?php echo site_url('source/tltdbb_source/G003'); ?>"><i class="fas fa-circle"></i> Form 313</a></li>
                   </ul>
                 </li>
                 <li id="nav-sipesat-source"><a class="nav-link" href="<?php echo site_url('source/si_pesat'); ?>"><i class="fas fa-database"></i> Gangguan Sistem</a></li>
               </ul>
             </li>
-            <style>
-              .sidebar-style-2 .sidebar-menu ul.dropdown-menu li a {
-                padding-left: 55px !important;
-              }
-            </style>
             <li class="dropdown" id="nav-data-clean">
               <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-layer-group"></i> <span>Data Clean</span></a>
               <ul class="dropdown-menu">
                 <li class="dropdown" id="nav-ltdbb-clean">
                   <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-database"></i>LTDBB</a>
                   <ul class="dropdown-menu">
-                    <li id="nav-ltdbb-clean-G001"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G001'); ?>"><i class="fas fa-circle"></i> G001</a></li>
-                    <li id="nav-ltdbb-clean-G002"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G002'); ?>"><i class="fas fa-circle"></i> G002</a></li>
-                    <li id="nav-ltdbb-clean-G003"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G003'); ?>"><i class="fas fa-circle"></i> G003</a></li>
+                    <li id="nav-ltdbb-clean-g001"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G001'); ?>"><i class="fas fa-circle"></i> G001</a></li>
+                    <li id="nav-ltdbb-clean-g002"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G002'); ?>"><i class="fas fa-circle"></i> G002</a></li>
+                    <li id="nav-ltdbb-clean-g003"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G003'); ?>"><i class="fas fa-circle"></i> G003</a></li>
                   </ul>
                 </li>
-                <li id="nav-ltkl-clean"><a class="nav-link" href="<?php echo site_url('clean/ltkl'); ?>"><i class="fas fa-database"></i> LTKL</a></li>
-                <li class="dropdown" id="nav-clean-qris">
-                  <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-database"></i>QRIS</a>
-                  <ul class="dropdown-menu">
-                    <li id="nav-clean-qris-merchant"><a class="nav-link" href="<?php echo site_url('clean/qris_merchant'); ?>"><i class="fas fa-circle"></i> QRIS Merchant</a></li>
-                    <li id="nav-clean-qris-trx"><a class="nav-link" href="<?php echo site_url('clean/qris_trx'); ?>"><i class="fas fa-circle"></i> QRIS Transaksi</a></li>
-                  </ul>
-                </li>
+                <li id="nav-dana-float-clean"><a class="nav-link" href="<?php echo site_url('clean/ltkl'); ?>"><i class="fas fa-database"></i> LTKL</a></li>
+                <li id="nav-dana-float-clean"><a class="nav-link" href="<?php echo site_url('clean/qris'); ?>"><i class="fas fa-database"></i> QRIS</a></li>
                 <li id="nav-dana-float-clean"><a class="nav-link" href="<?php echo site_url('clean/dana_float'); ?>"><i class="fas fa-database"></i> Dana Float</a></li>
+                <li id="nav-dana-float-clean"><a class="nav-link" href="<?php echo site_url('clean/qris'); ?>"><i class="fas fa-database"></i> Payment Gateway</a></li>
                 <li id="nav-sipesat-clean"><a class="nav-link" href="<?php echo site_url('clean/si_pesat'); ?>"><i class="fas fa-database"></i> Si Pesat</a></li>
-                <li class="dropdown" id="nav-lkpbu-clean">
+                <li class="dropdown" id="nav-ltdbb-clean">
                   <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-database"></i>LKPBU</a>
                   <ul class="dropdown-menu">
-                    <li id="nav-lkpbu-clean-302"><a class="nav-link" href="<?php echo site_url('clean/form_302'); ?>"><i class="fas fa-circle"></i> Form 302</a></li>
-                    <li id="nav-lkpbu-clean-304"><a class="nav-link" href="<?php echo site_url('clean/form_304'); ?>"><i class="fas fa-circle"></i> Form 304</a></li>
-                    <li id="nav-lkpbu-clean-306"><a class="nav-link" href="<?php echo site_url('clean/form_306'); ?>"><i class="fas fa-circle"></i> Form 306</a></li>
-                    <li id="nav-lkpbu-clean-309-310-311"><a class="nav-link" href="<?php echo site_url('clean/form_309_310_311'); ?>" style="font-size: 11px;"><i class="fas fa-circle"></i> Form 309 310 & 311</a></li>
-                    <li id="nav-lkpbu-clean-312"><a class="nav-link" href="<?php echo site_url('clean/form_312'); ?>"><i class="fas fa-circle"></i> Form 312</a></li>
-                    <li id="nav-lkpbu-clean-313"><a class="nav-link" href="<?php echo site_url('clean/form_313'); ?>"><i class="fas fa-circle"></i> Form 313</a></li>
+                    <li id="nav-ltdbb-clean-g001"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G001'); ?>"><i class="fas fa-circle"></i> Form 302</a></li>
+                    <li id="nav-ltdbb-clean-g002"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G002'); ?>"><i class="fas fa-circle"></i> Form 303</a></li>
+                    <li id="nav-ltdbb-clean-g003"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G003'); ?>"><i class="fas fa-circle"></i> Form 304</a></li>
+                    <li id="nav-ltdbb-clean-g003"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G003'); ?>"><i class="fas fa-circle"></i> Form 306</a></li>
+                    <li id="nav-ltdbb-clean-g003"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G003'); ?>"><i class="fas fa-circle"></i> Form 309</a></li>
+                    <li id="nav-ltdbb-clean-g003"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G003'); ?>"><i class="fas fa-circle"></i> Form 310</a></li>
+                    <li id="nav-ltdbb-clean-g003"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G003'); ?>"><i class="fas fa-circle"></i> Form 311</a></li>
+                    <li id="nav-ltdbb-clean-g003"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G003'); ?>"><i class="fas fa-circle"></i> Form 312</a></li>
+                    <li id="nav-ltdbb-clean-g003"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G003'); ?>"><i class="fas fa-circle"></i> Form 313</a></li>
                   </ul>
                 </li>
                 <li id="nav-sipesat-clean"><a class="nav-link" href="<?php echo site_url('clean/si_pesat'); ?>"><i class="fas fa-database"></i> Gangguan Sistem</a></li>
@@ -318,9 +361,8 @@
             <li class="dropdown" id="nav-utilities-source">
               <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-wrench"></i> <span>Utilities Source</span></a>
               <ul class="dropdown-menu">
-                <!-- <li id="nav-role-clean"><a class="nav-link" href="<?php echo site_url('utilities/role_clean'); ?>"><i class="fas fa-align-center"></i> Role Clean</a></li> -->
-                <li id="nav-auto-clean"><a class="nav-link" href="<?php echo site_url('utilities/auto_clean'); ?>"><i class="fas fa-align-center"></i> Auto Clean LTDBB</a></li>
-                <li id="nav-auto-clean-ltkl"><a class="nav-link" href="<?php echo site_url('utilities/auto_clean_ltkl'); ?>"><i class="fas fa-align-center"></i> Auto Clean LTKL</a></li>
+                <li id="nav-role-clean"><a class="nav-link" href="<?php echo site_url('utilities/role_clean'); ?>"><i class="fas fa-align-center"></i> Role Clean</a></li>
+                <li id="nav-auto-clean"><a class="nav-link" href="<?php echo site_url('utilities/auto_clean'); ?>"><i class="fas fa-align-center"></i> Auto Clean</a></li>
                 <!-- <li id="nav-manual-clean"><a class="nav-link" href="<?php echo site_url('utilities/manual'); ?>"><i class="fas fa-database"></i> Manual Clean</a></li> -->
               </ul>
             </li>
@@ -332,25 +374,25 @@
                 <li id="nav-ltdbb-bi-city"><a class="nav-link" href="<?php echo site_url('master/ltdbb_bi_city'); ?>"><i class="fas fa-align-center"></i> Ltdbb BI City</a></li>
                 <!-- <li id="nav-region"><a class="nav-link" href="<?php echo site_url('master/region'); ?>"><i class="fas fa-align-center"></i> Region</a></li> -->
                 <!-- <li id="nav-country"><a class="nav-link" href="<?php echo site_url('master/country'); ?>"><i class="fas fa-align-center"></i> Country</a></li> -->
-                <li id="nav-subtype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_subtype'); ?>"><i class="fas fa-align-center"></i> Subtype</a></li>
-                <li id="nav-fundtype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_fundtype'); ?>"><i class="fas fa-align-center"></i> Fundtype</a></li>
-                <li id="nav-acctype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_acctype'); ?>"><i class="fas fa-align-center"></i> Acctype</a></li>
-                <li id="nav-accstat"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_accstat'); ?>"><i class="fas fa-align-center"></i> Accstat</a></li>
-                <li id="nav-idtype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_idtype'); ?>"><i class="fas fa-align-center"></i> Idtype</a></li>
-                <li id="nav-trxmode"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_trxmode'); ?>"><i class="fas fa-align-center"></i> Trxmode</a></li>
-                <li id="nav-trxtype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_trxtype'); ?>"><i class="fas fa-align-center"></i> Trxtype</a></li>
-                <li id="nav-reporttype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_reporttype'); ?>"><i class="fas fa-align-center"></i> Reporttype</a></li>
-                <li id="nav-contactcat"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_contactcat'); ?>"><i class="fas fa-align-center"></i> Contactcat</a></li>
-                <li id="nav-commtype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_commtype'); ?>"><i class="fas fa-align-center"></i> Commtype</a></li>
-                <li id="nav-companytype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_companytype'); ?>"><i class="fas fa-align-center"></i> Companytype</a></li>
-                <li id="nav-stufftype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_stufftype'); ?>"><i class="fas fa-align-center"></i> Stufftype</a></li>
-                <li id="nav-currency"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_currency'); ?>"><i class="fas fa-align-center"></i> Currency</a></li>
-                <li id="nav-country"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_country'); ?>"><i class="fas fa-align-center"></i> Country</a></li>
-                <li id="nav-personacc"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_personacc'); ?>"><i class="fas fa-align-center"></i> Personacc</a></li>
-                <li id="nav-personentity"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_personentity'); ?>"><i class="fas fa-align-center"></i> Personentity</a></li>
-                <li id="nav-partyrole"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_partyrole'); ?>"><i class="fas fa-align-center"></i> Partyrole</a></li>
-                <li id="nav-reportind"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_reportind'); ?>"><i class="fas fa-align-center"></i> Reportind</a></li>
-                <li id="nav-gender"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_gender'); ?>"><i class="fas fa-align-center"></i> Gender</a></li>
+                <li id="nav-subtype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_01_subtype'); ?>"><i class="fas fa-align-center"></i> Subtype</a></li>
+                <li id="nav-fundtype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_02_fundtype'); ?>"><i class="fas fa-align-center"></i> Fundtype</a></li>
+                <li id="nav-acctype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_03_acctype'); ?>"><i class="fas fa-align-center"></i> Acctype</a></li>
+                <li id="nav-accstat"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_04_accstat'); ?>"><i class="fas fa-align-center"></i> Accstat</a></li>
+                <li id="nav-idtype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_05_idtype'); ?>"><i class="fas fa-align-center"></i> Idtype</a></li>
+                <li id="nav-trxmode"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_06_trxmode'); ?>"><i class="fas fa-align-center"></i> Trxmode</a></li>
+                <li id="nav-trxtype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_07_trxtype'); ?>"><i class="fas fa-align-center"></i> Trxtype</a></li>
+                <li id="nav-reporttype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_08_reporttype'); ?>"><i class="fas fa-align-center"></i> Reporttype</a></li>
+                <li id="nav-contactcat"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_09_contactcat'); ?>"><i class="fas fa-align-center"></i> Contactcat</a></li>
+                <li id="nav-commtype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_10_commtype'); ?>"><i class="fas fa-align-center"></i> Commtype</a></li>
+                <li id="nav-companytype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_11_companytype'); ?>"><i class="fas fa-align-center"></i> Companytype</a></li>
+                <li id="nav-stufftype"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_12_stufftype'); ?>"><i class="fas fa-align-center"></i> Stufftype</a></li>
+                <li id="nav-currency"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_13_currency'); ?>"><i class="fas fa-align-center"></i> Currency</a></li>
+                <li id="nav-country"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_14_country'); ?>"><i class="fas fa-align-center"></i> Country</a></li>
+                <li id="nav-personacc"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_15_personacc'); ?>"><i class="fas fa-align-center"></i> Personacc</a></li>
+                <li id="nav-personentity"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_16_personentity'); ?>"><i class="fas fa-align-center"></i> Personentity</a></li>
+                <li id="nav-partyrole"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_17_partyrole'); ?>"><i class="fas fa-align-center"></i> Partyrole</a></li>
+                <li id="nav-reportind"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_18_reportind'); ?>"><i class="fas fa-align-center"></i> Reportind</a></li>
+                <li id="nav-gender"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_19_gender'); ?>"><i class="fas fa-align-center"></i> Gender</a></li>
               </ul>
             </li>
             <!-- <li id="nav-verify-data">
@@ -361,31 +403,31 @@
               <ul class="dropdown-menu">
 
 
-                <li class="dropdown" id="nav-ltdbb-report">
+                <li class="dropdown" id="nav-ltdbb-source">
                   <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-list"></i>LTDBB</a>
                   <ul class="dropdown-menu">
-                    <li id="nav-ltdbb-report-g001"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G001'); ?>"><i class="fas fa-circle"></i> G001</a></li>
-                    <li id="nav-ltdbb-report-g002"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G002'); ?>"><i class="fas fa-circle"></i> G002</a></li>
-                    <li id="nav-ltdbb-report-g003"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G003'); ?>"><i class="fas fa-circle"></i> G003</a></li>
+                    <li id="nav-ltdbb-source-g001"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G001'); ?>"><i class="fas fa-circle"></i> G001</a></li>
+                    <li id="nav-ltdbb-source-g002"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G002'); ?>"><i class="fas fa-circle"></i> G002</a></li>
+                    <li id="nav-ltdbb-source-g003"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G003'); ?>"><i class="fas fa-circle"></i> G003</a></li>
                   </ul>
                 </li>
-                <li id="nav-dana-float-report"><a class="nav-link" href="<?php echo site_url('report/ltkl'); ?>"><i class="fas fa-list"></i> LTKL</a></li>
-                <li id="nav-dana-float-report"><a class="nav-link" href="<?php echo site_url('report/qris'); ?>"><i class="fas fa-list"></i> QRIS</a></li>
-                <li id="nav-dana-float-report"><a class="nav-link" href="<?php echo site_url('report/dana_float'); ?>"><i class="fas fa-list"></i> Dana Float</a></li>
-                <li id="nav-dana-float-report"><a class="nav-link" href="<?php echo site_url('report/qris'); ?>"><i class="fas fa-list"></i> Payment Gateway</a></li>
-                <li id="nav-sipesat-report"><a class="nav-link" href="<?php echo site_url('report/sipesat'); ?>"><i class="fas fa-list"></i> Sipesat</a></li>
-                <li class="dropdown" id="nav-lkpbu-report">
+                <li id="nav-dana-float-source"><a class="nav-link" href="<?php echo site_url('source/ltkl'); ?>"><i class="fas fa-list"></i> LTKL</a></li>
+                <li id="nav-dana-float-source"><a class="nav-link" href="<?php echo site_url('source/qris'); ?>"><i class="fas fa-list"></i> QRIS</a></li>
+                <li id="nav-dana-float-source"><a class="nav-link" href="<?php echo site_url('source/dana_float'); ?>"><i class="fas fa-list"></i> Dana Float</a></li>
+                <li id="nav-dana-float-source"><a class="nav-link" href="<?php echo site_url('source/qris'); ?>"><i class="fas fa-list"></i> Payment Gateway</a></li>
+                <li id="nav-sipesat-source"><a class="nav-link" href="<?php echo site_url('report/sipesat'); ?>"><i class="fas fa-list"></i> Sipesat</a></li>
+                <li class="dropdown" id="nav-ltdbb-source">
                   <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-list"></i>LKPBU</a>
                   <ul class="dropdown-menu">
                     <li id="nav-ltdbb-source-g001"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G001'); ?>"><i class="fas fa-circle"></i> Form 302</a></li>
                     <li id="nav-ltdbb-source-g002"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G002'); ?>"><i class="fas fa-circle"></i> Form 303</a></li>
-                    <li id="nav-lkpbu-report-304"><a class="nav-link" href="<?php echo site_url('report/lkpbu_304'); ?>"><i class="fas fa-circle"></i> Form 304</a></li>
-                    <li id="nav-lkpbu-report-306"><a class="nav-link" href="<?php echo site_url('report/lkpbu_306'); ?>"><i class="fas fa-circle"></i> Form 306</a></li>
-                    <li id="nav-lkpbu-report-309"><a class="nav-link" href="<?php echo site_url('report/lkpbu_309'); ?>"><i class="fas fa-circle"></i> Form 309</a></li>
-                    <li id="nav-lkpbu-report-310"><a class="nav-link" href="<?php echo site_url('report/lkpbu_310'); ?>"><i class="fas fa-circle"></i> Form 310</a></li>
-                    <li id="nav-lkpbu-report-311"><a class="nav-link" href="<?php echo site_url('report/lkpbu_311'); ?>"><i class="fas fa-circle"></i> Form 311</a></li>
-                    <li id="nav-lkpbu-report-312"><a class="nav-link" href="<?php echo site_url('report/lkpbu_312'); ?>"><i class="fas fa-circle"></i> Form 312</a></li>
-                    <li id="nav-lkpbu-report-313"><a class="nav-link" href="<?php echo site_url('report/lkpbu_313'); ?>"><i class="fas fa-circle"></i> Form 313</a></li>
+                    <li id="nav-ltdbb-source-g003"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G003'); ?>"><i class="fas fa-circle"></i> Form 304</a></li>
+                    <li id="nav-ltdbb-source-g003"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G003'); ?>"><i class="fas fa-circle"></i> Form 306</a></li>
+                    <li id="nav-ltdbb-source-g003"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G003'); ?>"><i class="fas fa-circle"></i> Form 309</a></li>
+                    <li id="nav-ltdbb-source-g003"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G003'); ?>"><i class="fas fa-circle"></i> Form 310</a></li>
+                    <li id="nav-ltdbb-source-g003"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G003'); ?>"><i class="fas fa-circle"></i> Form 311</a></li>
+                    <li id="nav-ltdbb-source-g003"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G003'); ?>"><i class="fas fa-circle"></i> Form 312</a></li>
+                    <li id="nav-ltdbb-source-g003"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G003'); ?>"><i class="fas fa-circle"></i> Form 313</a></li>
                   </ul>
                 </li>
                 <li id="nav-setting-report"><a class="nav-link" href="<?php echo site_url('report/setting_report'); ?>"><i class="fas fa-align-center"></i> Setting Report</a></li>
@@ -403,7 +445,7 @@
               <a href="<?php echo site_url('user_activity'); ?>" class="nav-link"><i class="fas fa-history"></i><span>User Activity</span></a>
             </li>
             <li id="nav-archive">
-              <a href="<?php echo site_url('source/archive'); ?>" class="nav-link"><i class="fas fa-archive"></i><span>Archive</span></a>
+              <a href="<?php echo site_url('archive'); ?>" class="nav-link"><i class="fas fa-archive"></i><span>Archive</span></a>
             </li>
             <li>
               <a href="<?php echo site_url('login/signout'); ?>" class="nav-link"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>

@@ -10,7 +10,7 @@
   </div>
 
   <div class="section-body">
-    <h2 class="section-title">Laporan Alat Pembayaran Menggunakan Kartu</h2>
+    <h2 class="section-title">Manage Report LKPBU FORM 306</h2>
 
     <div class="row">
       <div class="col-12">
@@ -40,7 +40,7 @@
             </div>
             <div class="row mt-4" id="result-data" style="display:none;">
               <div class="col-md-12">
-                <div class="">
+                <div class="table-responsive">
                   <table class="table table-striped" id="table" style="width: 100%;">
                     <thead>
                       <tr role="row">

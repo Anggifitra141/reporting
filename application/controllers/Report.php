@@ -451,7 +451,7 @@ class Report extends CI_Controller {
     }
     $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
     header('Content-Type: application/vnd.ms-excel');
-    header('Content-Disposition: attachment;filename="Dana Float' . date('d-m-Y', strtotime($start_date)) . ' S/d ' . date('d-m-Y', strtotime($start_date))  . '.xlsx"');
+    header('Content-Disposition: attachment;filename="Dana Float' . date('d-m-Y', strtotime($start_date)) . ' S/d ' . date('d-m-Y', strtotime($end_date))  . '.xlsx"');
     header('Cache-Control: max-age=0');
     $objWriter->save('php://output');
 
@@ -578,7 +578,7 @@ class Report extends CI_Controller {
     }
     $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
     header('Content-Type: application/vnd.ms-excel');
-    header('Content-Disposition: attachment;filename="Pelaporan LTKL' . date('d-m-Y', strtotime($start_date)) . ' S/d ' . date('d-m-Y', strtotime($start_date))  . '.xlsx"');
+    header('Content-Disposition: attachment;filename="Laporan LTKL' . date('d-m-Y', strtotime($start_date)) . ' S/d ' . date('d-m-Y', strtotime($end_date))  . '.xlsx"');
     header('Cache-Control: max-age=0');
     $objWriter->save('php://output');
 
@@ -756,7 +756,7 @@ class Report extends CI_Controller {
 
     $fraud_type = $this->db->query("SELECT CONCAT(CODE, '-', fraud) as fraud_type, code FROM tlkpbu_306_fraud_type")->result();
 
-    $type_report = "302";
+    $type_report = "306";
     $report_setting = $this->M_report->get_report_setting($type_report);
 
     $data = array();
@@ -814,6 +814,539 @@ class Report extends CI_Controller {
 
     
   }
+  // END :: LKBPU 306
+
+  // START :: LKPBU 309
+  public function lkpbu_309()
+  {
+    $data = [];
+    $data['content'] = $this->load->view('report/lkpbu/form_309', $data, TRUE);
+    $this->load->view('layout', $data);
+  }
+
+  public function ajax_list_lkpbu_309()
+  {
+    $start_date = date('Ymd', strtotime(substr($_POST['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
+    $date_type = $this->input->post('date_type');
+
+
+    $count = $this->db->query("SELECT COUNT(id) AS count FROM t1clean_lkpbu_309_310_311 WHERE code_309='999' AND $date_type BETWEEN '$start_date".'000000'." ' AND '$end_date".'235959'."' AND status='cleaned'")->row();
+
+    echo json_encode($count);
+  }
+
+  public function download_excel_lkpbu_309()
+  {
+
+    include APPPATH . 'third_party/PHPExcel/PHPExcel.php';
+    //$type_report = $this->input->post('type_report');
+
+    $start_date = date('Ymd', strtotime(substr($_GET['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_GET['daterange'], 13, 23)));
+    $date_type = $_GET['date_type'];
+
+    $count = $this->db->query("SELECT COUNT(id) AS count FROM t1clean_lkpbu_309_310_311 WHERE code_309='999' AND $date_type BETWEEN '$start_date".'000000'."' AND '$end_date".'235959'."' AND status='cleaned'")->row();
+
+    $type_report = "309";
+    $report_setting = $this->M_report->get_report_setting($type_report);
+
+    $quarter =ceil(date("n", strtotime($start_date)) / 3);
+    if ($quarter ==  "1"){
+      $triwulan = "I";
+      $periode  = "1";
+    }else if ($quarter == "2"){
+      $triwulan = "II";
+      $periode  = "4";
+    }else if ($quarter == "3"){
+      $triwulan = "III";
+      $periode  = "7";
+    }else{
+      $triwulan = "IV";
+      $periode  = "10";
+    }
+
+    $data = array();
+    $no = 1;
+    $baris = 14;
+    //$objPHPExcel    = new PHPExcel();
+
+
+    $objPHPExcel = PHPExcel_IOFactory::load("./assets/template-excel/template-lkpbu-309.xlsx");
+
+    $date_now = $this->lib->date_indonesia(date('Y-m-d'));
+
+
+        $objPHPExcel->setActiveSheetIndex(0)
+        ->setCellValue('A' . 4, "Triwulan $triwulan Tahun ".date('Y')."")
+        ->setCellValue('E' . 8, $periode)
+        ->setCellValue('B' . 19, "Jakarta, $date_now")
+
+        ->setCellValue('J' . 15, $count->count)
+        ->setCellValue('K' . 15, $count->count);
+
+
+
+    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+    header('Content-Type: application/vnd.ms-excel');
+    header('Content-Disposition: attachment;filename="Report LKPBU F309 Triwulan ' . $triwulan . '.xlsx"');
+    header('Cache-Control: max-age=0');
+    $objWriter->save('php://output');
+
+    set_time_limit(0);
+    ini_set('memory_limit', '1G');
+
+    user_log($this->session->userdata('id'), 'REPORT', "DOWNLOAD", '', "Download Report LKPBU Form 309", '');
+    trx_log($this->session->userdata('id'), 'REPORT', "DOWNLOAD", '', "Download Report LKPBU Form 309");
+    exit;
+  }
+  // END :: LKBPU 309
+
+  // START :: LKPBU 310
+  public function lkpbu_310()
+  {
+    $data = [];
+    $data['content'] = $this->load->view('report/lkpbu/form_310', $data, TRUE);
+    $this->load->view('layout', $data);
+  }
+
+  public function ajax_list_lkpbu_310()
+  {
+    $start_date = date('Ymd', strtotime(substr($_POST['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
+    $date_type = $this->input->post('date_type');
+
+
+    $count = $this->db->query("SELECT COUNT(id) AS count FROM t1clean_lkpbu_309_310_311 WHERE code_310='201' AND $date_type BETWEEN '$start_date" . '000000' . " ' AND '$end_date" . '235959' . "' AND status='cleaned'")->row();
+
+    echo json_encode($count);
+  }
+
+  public function download_excel_lkpbu_310()
+  {
+
+    include APPPATH . 'third_party/PHPExcel/PHPExcel.php';
+    //$type_report = $this->input->post('type_report');
+
+    $start_date = date('Ymd', strtotime(substr($_GET['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_GET['daterange'], 13, 23)));
+    $date_type = $_GET['date_type'];
+
+    $count = $this->db->query("SELECT COUNT(id) AS count FROM t1clean_lkpbu_309_310_311 WHERE code_310='201' AND $date_type BETWEEN '$start_date" . '000000' . "' AND '$end_date" . '235959' . "' AND status='cleaned'")->row();
+
+    $type_report = "310";
+    $report_setting = $this->M_report->get_report_setting($type_report);
+
+    $quarter = ceil(date("n", strtotime($start_date)) / 3);
+    if ($quarter ==  "1") {
+      $triwulan = "I";
+      $periode  = "1";
+    } else if ($quarter == "2") {
+      $triwulan = "II";
+      $periode  = "4";
+    } else if ($quarter == "3") {
+      $triwulan = "III";
+      $periode  = "7";
+    } else {
+      $triwulan = "IV";
+      $periode  = "10";
+    }
+
+    $data = array();
+    $no = 1;
+    $baris = 14;
+    //$objPHPExcel    = new PHPExcel();
+
+
+    $objPHPExcel = PHPExcel_IOFactory::load("./assets/template-excel/template-lkpbu-310.xlsx");
+
+    $date_now = $this->lib->date_indonesia(date('Y-m-d'));
+
+
+    $objPHPExcel->setActiveSheetIndex(0)
+      ->setCellValue('A' . 4, "Triwulan $triwulan Tahun " . date('Y') . "")
+      ->setCellValue('E' . 8, $periode)
+      ->setCellValue('B' . 21, "Jakarta, $date_now")
+
+      ->setCellValue('K' . 14, $count->count);
+
+
+
+    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+    header('Content-Type: application/vnd.ms-excel');
+    header('Content-Disposition: attachment;filename="Report LKPBU F310 Triwulan ' . $triwulan . '.xlsx"');
+    header('Cache-Control: max-age=0');
+    $objWriter->save('php://output');
+
+    set_time_limit(0);
+    ini_set('memory_limit', '1G');
+
+    user_log($this->session->userdata('id'), 'REPORT', "DOWNLOAD", '', "Download Report LKPBU Form 310", '');
+    trx_log($this->session->userdata('id'), 'REPORT', "DOWNLOAD", '', "Download Report LKPBU Form 310");
+    exit;
+  }
+  // END :: LKBPU 310
+
+  // START :: LKPBU 311
+  public function lkpbu_311()
+  {
+    $data = [];
+    $data['content'] = $this->load->view('report/lkpbu/form_311', $data, TRUE);
+    $this->load->view('layout', $data);
+  }
+
+  public function ajax_list_lkpbu_311()
+  {
+    $start_date = date('Ymd', strtotime(substr($_POST['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
+    $date_type = $this->input->post('date_type');
+
+
+    $count = $this->db->query("SELECT COUNT(id) AS count FROM t1clean_lkpbu_309_310_311 WHERE code_311='999' AND $date_type BETWEEN '$start_date" . '000000' . " ' AND '$end_date" . '235959' . "' AND status='cleaned'")->row();
+
+    echo json_encode($count);
+  }
+
+  public function download_excel_lkpbu_311()
+  {
+
+    include APPPATH . 'third_party/PHPExcel/PHPExcel.php';
+    //$type_report = $this->input->post('type_report');
+
+    $start_date = date('Ymd', strtotime(substr($_GET['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_GET['daterange'], 13, 23)));
+    $date_type = $_GET['date_type'];
+
+    $count = $this->db->query("SELECT COUNT(id) AS count FROM t1clean_lkpbu_309_310_311 WHERE code_311='999' AND $date_type BETWEEN '$start_date" . '000000' . "' AND '$end_date" . '235959' . "' AND status='cleaned'")->row();
+
+    $type_report = "311";
+    $report_setting = $this->M_report->get_report_setting($type_report);
+
+    $quarter = ceil(date("n", strtotime($start_date)) / 3);
+    if ($quarter ==  "1") {
+      $triwulan = "I";
+      $periode  = "1";
+    } else if ($quarter == "2") {
+      $triwulan = "II";
+      $periode  = "4";
+    } else if ($quarter == "3") {
+      $triwulan = "III";
+      $periode  = "7";
+    } else {
+      $triwulan = "IV";
+      $periode  = "10";
+    }
+
+    $data = array();
+    $no = 1;
+    $baris = 14;
+    //$objPHPExcel    = new PHPExcel();
+ 
+
+    $objPHPExcel = PHPExcel_IOFactory::load("./assets/template-excel/template-lkpbu-311.xlsx");
+
+    $date_now = $this->lib->date_indonesia(date('Y-m-d'));
+
+
+    $objPHPExcel->setActiveSheetIndex(0)
+      ->setCellValue('A' . 4, "Triwulan $triwulan Tahun " . date('Y') . "")
+      ->setCellValue('E' . 8, $periode)
+      ->setCellValue('B' . 22, "Jakarta, $date_now")
+
+      ->setCellValue('K' . 18, $count->count);
+
+
+
+    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+    header('Content-Type: application/vnd.ms-excel');
+    header('Content-Disposition: attachment;filename="Report LKPBU F311 Triwulan ' . $triwulan . '.xlsx"');
+    header('Cache-Control: max-age=0');
+    $objWriter->save('php://output');
+
+    set_time_limit(0);
+    ini_set('memory_limit', '1G');
+
+    user_log($this->session->userdata('id'), 'REPORT', "DOWNLOAD", '', "Download Report LKPBU Form 311", '');
+    trx_log($this->session->userdata('id'), 'REPORT', "DOWNLOAD", '', "Download Report LKPBU Form 311");
+    exit;
+  }
+  // END :: LKBPU 310
+
+  // START :: LKBPU 312
+  public function lkpbu_312()
+  {
+
+    $data = [];
+    $data['content'] = $this->load->view('report/lkpbu/form_312', $data, TRUE);
+    $this->load->view('layout', $data);
+  }
+
+  public function ajax_list_lkpbu_312()
+  {
+    $start_date = date('Ymd', strtotime(substr($_POST['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
+
+    $publication = $this->db->query("SELECT CONCAT(CODE, '-', publication) as publication, code FROM tlkpbu_312_publication_type")->result();
+    
+    $data = array();
+    $no = $_POST['start'];
+
+    $quarter = ceil(date("n", strtotime($start_date)) / 3);
+    if ($quarter ==  "1") {
+      $triwulan = "I";
+      $periode  = "1";
+    } else if ($quarter == "2") {
+      $triwulan = "II";
+      $periode  = "4";
+    } else if ($quarter == "3") {
+      $triwulan = "III";
+      $periode  = "7";
+    } else {
+      $triwulan = "IV";
+      $periode  = "10";
+    }
+
+    foreach ($publication as $raw_data) {
+      $count_query = $this->db->query("SELECT IF(COUNT(publication_code) > 0, COUNT(publication_code) , '-')  AS total FROM t1clean_lkpbu_312 
+                                    WHERE trx_date BETWEEN '$start_date'AND '$end_date' AND publication_code='$raw_data->code' AND status='cleaned'")->result();
+
+      foreach ($count_query as $raw_data2) {
+
+
+        $no++;
+        $row = array();
+        $row[] = $no++;
+        $row[] = $raw_data->publication;
+        $row[] = "";
+        $row[] = $raw_data2->total;
+
+        $data[] = $row;
+      }
+    }
+    $output = array(
+      "draw" => $_POST['draw'],
+      "data" => $data,
+    );
+    echo json_encode($output);
+  }
+
+  public function download_excel_lkpbu_312()
+  {
+
+
+
+    include APPPATH . 'third_party/PHPExcel/PHPExcel.php';
+    //$type_report = $this->input->post('type_report');
+
+    $start_date = date('Ymd', strtotime(substr($_GET['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_GET['daterange'], 13, 23)));
+
+    $publication = $this->db->query("SELECT CONCAT(CODE, '-', publication) as publication, code FROM tlkpbu_312_publication_type")->result();
+
+    $type_report = "312";
+    $report_setting = $this->M_report->get_report_setting($type_report);
+
+    $data = array();
+    $no = 1;
+    $baris = 10;
+    //$objPHPExcel    = new PHPExcel();
+    
+
+    $objPHPExcel = PHPExcel_IOFactory::load("./assets/template-excel/template-lkpbu-312.xlsx");
+
+    $quarter = ceil(date("n", strtotime($start_date)) / 3);
+    if ($quarter ==  "1") {
+      $triwulan = "I";
+      $periode  = "1";
+    } else if ($quarter == "2") {
+      $triwulan = "II";
+      $periode  = "4";
+    } else if ($quarter == "3") {
+      $triwulan = "III";
+      $periode  = "7";
+    } else {
+      $triwulan = "IV";
+      $periode  = "10";
+    }
+
+    $date_now = $this->lib->date_indonesia(date('Y-m-d'));
+
+    foreach ($publication as $raw_data) {
+      $count_query = $this->db->query("SELECT IF(COUNT(publication_code) > 0, COUNT(publication_code) , '-')  AS total FROM t1clean_lkpbu_312 
+                                    WHERE trx_date BETWEEN '$start_date'AND '$end_date' AND publication_code='$raw_data->code' AND status='cleaned'")->result();
+      foreach ($count_query as $raw_data2) {
+
+
+        $objPHPExcel->setActiveSheetIndex(0)
+          ->setCellValue('A' . 4, "Triwulan $triwulan Tahun ".date('Y')."")
+          ->setCellValue('E' . 8, $periode)
+          ->setCellValue('B' . 18, "Jakarta, $date_now")
+
+          ->setCellValue('B' . $baris, $raw_data->publication)
+          ->setCellValue('C' . $baris, "")
+          ->setCellValue('K' . $baris, $raw_data2->total);
+
+        $baris++;
+        $no++;
+
+        $data[] = $raw_data;
+      }
+    }
+
+
+    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+    header('Content-Type: application/vnd.ms-excel');
+    header('Content-Disposition: attachment;filename="Report LKPBU F312 Triwulan '.$triwulan.'.xlsx"');
+    header('Cache-Control: max-age=0');
+    $objWriter->save('php://output');
+
+    set_time_limit(0);
+    ini_set('memory_limit', '1G');
+
+    user_log($this->session->userdata('id'), 'REPORT', "DOWNLOAD", '', "Download Report LKPBU Form 312", '');
+    trx_log($this->session->userdata('id'), 'REPORT', "DOWNLOAD", '', "Download Report LKPBU Form 312");
+    exit;
+  }
+  // END :: LKBPU 312
+
+  // START :: LKBPU 313
+  public function lkpbu_313()
+  {
+
+    $data = [];
+    $data['content'] = $this->load->view('report/lkpbu/form_313', $data, TRUE);
+    $this->load->view('layout', $data);
+  }
+
+  public function ajax_list_lkpbu_313()
+  {
+    $start_date = date('Ymd', strtotime(substr($_POST['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
+
+    $publication = $this->db->query("SELECT CONCAT(CODE, '-', publication) as publication, code FROM tlkpbu_313_publication_type")->result();
+
+    $data = array();
+    $no = $_POST['start'];
+
+    $quarter = ceil(date("n", strtotime($start_date)) / 3);
+    if ($quarter ==  "1") {
+      $triwulan = "I";
+      $periode  = "1";
+    } else if ($quarter == "2") {
+      $triwulan = "II";
+      $periode  = "4";
+    } else if ($quarter == "3") {
+      $triwulan = "III";
+      $periode  = "7";
+    } else {
+      $triwulan = "IV";
+      $periode  = "10";
+    }
+
+    foreach ($publication as $raw_data) {
+      $count_query = $this->db->query("SELECT IF(COUNT(publication_code) > 0, COUNT(publication_code) , '-')  AS total FROM t1clean_lkpbu_313 
+                                    WHERE trx_date BETWEEN '$start_date'AND '$end_date' AND publication_code='$raw_data->code' AND status='cleaned'")->result();
+
+      foreach ($count_query as $raw_data2) {
+
+
+        $no++;
+        $row = array();
+        $row[] = $no++;
+        $row[] = $raw_data->publication;
+        $row[] = "";
+        $row[] = $raw_data2->total;
+
+        $data[] = $row;
+      }
+    }
+    $output = array(
+      "draw" => $_POST['draw'],
+      "data" => $data,
+    );
+    echo json_encode($output);
+  }
+
+  public function download_excel_lkpbu_313()
+  {
+
+
+
+    include APPPATH . 'third_party/PHPExcel/PHPExcel.php';
+    //$type_report = $this->input->post('type_report');
+
+    $start_date = date('Ymd', strtotime(substr($_GET['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_GET['daterange'], 13, 23)));
+
+    $publication = $this->db->query("SELECT CONCAT(CODE, '-', publication) as publication, code FROM tlkpbu_313_publication_type")->result();
+
+    $type_report = "313";
+    $report_setting = $this->M_report->get_report_setting($type_report);
+
+    $data = array();
+    $no = 1;
+    $baris = 10;
+    //$objPHPExcel    = new PHPExcel();
+
+
+    $objPHPExcel = PHPExcel_IOFactory::load("./assets/template-excel/template-lkpbu-313.xlsx");
+
+    $quarter = ceil(date("n", strtotime($start_date)) / 3);
+    if ($quarter ==  "1") {
+      $triwulan = "I";
+      $periode  = "1";
+    } else if ($quarter == "2") {
+      $triwulan = "II";
+      $periode  = "4";
+    } else if ($quarter == "3") {
+      $triwulan = "III";
+      $periode  = "7";
+    } else {
+      $triwulan = "IV";
+      $periode  = "10";
+    }
+
+    $date_now = $this->lib->date_indonesia(date('Y-m-d'));
+
+    foreach ($publication as $raw_data) {
+      $count_query = $this->db->query("SELECT IF(COUNT(publication_code) > 0, COUNT(publication_code) , '-')  AS total FROM t1clean_lkpbu_313 
+                                    WHERE trx_date BETWEEN '$start_date'AND '$end_date' AND publication_code='$raw_data->code' AND status='cleaned'")->result();
+      foreach ($count_query as $raw_data2) {
+
+
+        $objPHPExcel->setActiveSheetIndex(0)
+          ->setCellValue('A' . 4, "Triwulan $triwulan Tahun " . date('Y') . "")
+          ->setCellValue('E' . 8, $periode)
+          ->setCellValue('B' . 18, "Jakarta, $date_now")
+
+          ->setCellValue('B' . $baris, $raw_data->publication)
+          ->setCellValue('C' . $baris, "")
+          ->setCellValue('K' . $baris, $raw_data2->total);
+
+        $baris++;
+        $no++;
+
+        $data[] = $raw_data;
+      }
+    }
+
+
+    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+    header('Content-Type: application/vnd.ms-excel');
+    header('Content-Disposition: attachment;filename="Report LKPBU F313 Triwulan ' . $triwulan . '.xlsx"');
+    header('Cache-Control: max-age=0');
+    $objWriter->save('php://output');
+
+    set_time_limit(0);
+    ini_set('memory_limit', '1G');
+
+    user_log($this->session->userdata('id'), 'REPORT', "DOWNLOAD", '', "Download Report LKPBU Form 313", '');
+    trx_log($this->session->userdata('id'), 'REPORT', "DOWNLOAD", '', "Download Report LKPBU Form 313");
+    exit;
+  }
+  // END :: LKBPU 312
+
+  
 
   // START :: SETTING REPORT
   public function setting_report()
