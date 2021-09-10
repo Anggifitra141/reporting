@@ -359,8 +359,8 @@ class Report extends CI_Controller {
     $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
 
     $this->db->where('status', "cleaned");
-    $this->db->where('trx_date >=', $start_date);
-    $this->db->where('trx_date <=', $end_date);
+    $this->db->where('trx_datetime >=', $start_date . '000000');
+    $this->db->where('trx_datetime <=', $end_date . '235959');
     $list = $this->M_danafloat_clean->get_datatables();
     $data = array();
     $no = $_POST['start'];
@@ -408,8 +408,8 @@ class Report extends CI_Controller {
     $start_date = date('Ymd', strtotime(substr($_GET['daterange'], 0, 10)));
     $end_date =  date('Ymd', strtotime(substr($_GET['daterange'], 13, 23)));
     $this->db->where('status', "cleaned");
-    $this->db->where('trx_date >=', $start_date);
-    $this->db->where('trx_date <=', $end_date);
+    $this->db->where('trx_datetime >=', $start_date .'000000');
+    $this->db->where('trx_datetime <=', $end_date .'235959');
 
 
     $list = $this->db->get('t1clean_danafloat')->result();
@@ -419,7 +419,7 @@ class Report extends CI_Controller {
 
     $data = array();
     $no = 1;
-    $baris = 3;
+    $baris = 2;
     //$objPHPExcel    = new PHPExcel();
 
 
@@ -449,6 +449,7 @@ class Report extends CI_Controller {
 
       $data[] = $row;
     }
+      
     $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
     header('Content-Type: application/vnd.ms-excel');
     header('Content-Disposition: attachment;filename="Dana Float' . date('d-m-Y', strtotime($start_date)) . ' S/d ' . date('d-m-Y', strtotime($end_date))  . '.xlsx"');
