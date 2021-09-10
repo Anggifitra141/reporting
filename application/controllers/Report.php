@@ -592,6 +592,273 @@ class Report extends CI_Controller {
   }
   // END :: LTKL
 
+   // START :: LKBPU 302
+   public function lkpbu_302()
+   {
+     $data = [];
+     $data['content'] = $this->load->view('report/lkpbu/form_302', $data, TRUE);
+     $this->load->view('layout', $data);
+   }
+ 
+   public function ajax_list_lkpbu_302()
+   {
+     $start_date = date('Ymd', strtotime(substr($_POST['daterange'], 0, 10)));
+     $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
+     
+     $jml_kartu = $this->db->query("SELECT COUNT(id) tot FROM t1clean_lkpbu_302_card WHERE cust_type_id IN ('10', '11') AND DATE_FORMAT(register_date, '%Y%m%d') <'$end_date' ")->row()->tot;
+     $kartu_baru = $this->db->query("SELECT COUNT(id) tot FROM t1clean_lkpbu_302_card WHERE cust_type_id IN ('10', '11') AND DATE_FORMAT(register_date, '%Y%m%d') BETWEEN '$start_date' AND '$end_date' ")->row()->tot;
+     $kartu_tutup = $this->db->query("SELECT COUNT(id) tot FROM t1clean_lkpbu_302_card WHERE status_card = 0 AND cust_type_id IN ('10', '11') AND DATE_FORMAT(register_date, '%Y%m%d') BETWEEN '$start_date' AND '$end_date' ")->row()->tot;
+     
+     
+     $registered = $this->db->query("SELECT COUNT(id) tot FROM t1clean_lkpbu_302_card WHERE cust_type_id IN ('11') AND register_date < '20210910' AND DATE_FORMAT(register_date, '%Y%m%d') BETWEEN '$start_date' AND '$end_date' ")->row()->tot;
+     $unregis = $this->db->query("SELECT COUNT(id) tot FROM t1clean_lkpbu_302_card WHERE cust_type_id IN ('10') AND register_date < '20210910' AND DATE_FORMAT(register_date, '%Y%m%d') BETWEEN '$start_date' AND '$end_date' ")->row()->tot;
+     $dana_float = $this->db->query("SELECT SUM(curr_balance) tot FROM t0source_lkpbu_302_danafloat WHERE cust_type_id IN ('10', '11') AND DATE_FORMAT(trx_datetime, '%Y%m%d') BETWEEN '$start_date' AND '$end_date' ")->row()->tot;
+     $server_based = $registered + $unregis;
+     $vol_trx_blnj_domestik = $this->db->query("
+                          SELECT COUNT(id) tot FROM t1clean_lkpbu_302_trx 
+                          WHERE trx_code IN ('MCS_BILL_PMT','WS_TRX_TRANSFER','MCS_AIRTIME_REFILL') 
+                          AND wstransfertype IN ('CASHIN','CASHINREMITTANCEBANK','CASH-OUT','DEBET MANUAL','CASHOUT','BIAYAUPGRADE','CASHBACKREMITTANCEBANK','BIAYAREG','REFUND','TRANSFER') 
+                          AND DATE_FORMAT(trx_datetime, '%Y%m%d') BETWEEN '$start_date' AND '$end_date'
+                        ")->row()->tot;
+    $vol_transfer_antar_ue = $this->db->query("SELECT COUNT(id) tot FROM t1clean_lkpbu_302_trx WHERE trx_code IN ('WS_TRX_TRANSFER') AND wstransfertype IN ('CASHIN','TRANSFER') AND DATE_FORMAT(trx_datetime, '%Y%m%d') BETWEEN '$start_date' AND '$end_date'")->row()->tot;
+    $vol_inisial = $this->db->query("SELECT COUNT(id) tot FROM t1clean_lkpbu_302_vol WHERE init_amount = 0 AND DATE_FORMAT(trx_datetime, '%Y%m%d') BETWEEN '$start_date' AND '$end_date'")->row()->tot;
+    $vol_top_up = $this->db->query("SELECT COUNT(id) tot FROM t1clean_lkpbu_302_vol WHERE cust_type_id IN ('10', '11') AND DATE_FORMAT(trx_datetime, '%Y%m%d') BETWEEN '$start_date' AND '$end_date'")->row()->tot;
+
+    $nilai_trx_blnj_domestik = $this->db->query("
+                                              SELECT sum(trx_value) tot FROM t1clean_lkpbu_302_trx 
+                                              WHERE trx_code IN ('MCS_BILL_PMT','WS_TRX_TRANSFER','MCS_AIRTIME_REFILL') 
+                                              AND wstransfertype IN ('CASHIN','CASHINREMITTANCEBANK','CASH-OUT','DEBET MANUAL','CASHOUT','BIAYAUPGRADE','CASHBACKREMITTANCEBANK','BIAYAREG','REFUND','TRANSFER') 
+                                              AND DATE_FORMAT(trx_datetime, '%Y%m%d') BETWEEN '$start_date' AND '$end_date'
+                                        ")->row()->tot;
+    $nilai_transfer_antar_ue = $this->db->query("SELECT SUM(trx_value) tot FROM t1clean_lkpbu_302_trx WHERE trx_code IN ('WS_TRX_TRANSFER') AND wstransfertype IN ('CASHIN','TRANSFER') AND DATE_FORMAT(trx_datetime, '%Y%m%d') BETWEEN '$start_date' AND '$end_date'")->row()->tot;
+    $nilai_inisial = $this->db->query("SELECT SUM(trx_value) tot FROM t1clean_lkpbu_302_vol WHERE init_amount = 0 AND DATE_FORMAT(trx_datetime, '%Y%m%d') BETWEEN '$start_date' AND '$end_date'")->row()->tot;
+    $nilai_top_up = $this->db->query("SELECT SUM(trx_value) tot FROM t1clean_lkpbu_302_vol WHERE cust_type_id IN ('10', '11') AND DATE_FORMAT(trx_datetime, '%Y%m%d') BETWEEN '$start_date' AND '$end_date'")->row()->tot;
+     $output = array(
+       'jml_kartu'    => $jml_kartu,
+       'kartu_baru'    => $kartu_baru,
+       'kartu_tutup'    => $kartu_tutup,
+       'server_based'    => $server_based,
+       'registered'    => $registered,
+       'unregis'    => $unregis,
+       'dana_float'    => $dana_float,
+
+       'vol_trx_blnj_domestik'    => $vol_trx_blnj_domestik,
+       'vol_transfer_antar_ue'    => $vol_transfer_antar_ue,
+       'vol_inisial'    => $vol_inisial,
+       'vol_top_up'    => $vol_top_up,
+
+       'nilai_trx_blnj_domestik'    => $nilai_trx_blnj_domestik,
+       'nilai_transfer_antar_ue'    => $nilai_transfer_antar_ue,
+       'nilai_inisial'    => $nilai_inisial,
+       'nilai_top_up'    => $nilai_top_up,
+     );
+     echo json_encode($output);
+   }
+ 
+   public function download_excel_lkpbu_302()
+   {
+     include APPPATH . 'third_party/PHPExcel/PHPExcel.php';
+     //$type_report = $this->input->post('type_report');
+ 
+     $start_date = date('Ymd', strtotime(substr($_GET['daterange'], 0, 10)));
+     $end_date =  date('Ymd', strtotime(substr($_GET['daterange'], 13, 23)));
+
+     $type_report = "302";
+     $report_setting = $this->M_report->get_report_setting($type_report);
+ 
+     $data = array();
+     $no = 1;
+     $baris = 12;
+     
+     $objPHPExcel = PHPExcel_IOFactory::load("./assets/template-excel/template-lkpbu-302.xlsx");
+ 
+     $date_now = $this->lib->date_indonesia(date('Y-m-d'));
+     
+     $jml_kartu = $this->db->query("SELECT COUNT(id) tot FROM t1clean_lkpbu_302_card WHERE cust_type_id IN ('10', '11') AND DATE_FORMAT(register_date, '%Y%m%d' < '$end_date' ")->row()->tot;
+     $kartu_baru = $this->db->query("SELECT COUNT(id) tot FROM t1clean_lkpbu_302_card WHERE cust_type_id IN ('10', '11') AND DATE_FORMAT(register_date, '%Y%m%d') BETWEEN '$start_date' AND '$end_date' ")->row()->tot;
+     $kartu_tutup = $this->db->query("SELECT COUNT(id) tot FROM t1clean_lkpbu_302_card WHERE status_card = 0 AND cust_type_id IN ('10', '11') AND DATE_FORMAT(register_date, '%Y%m%d') BETWEEN '$start_date' AND '$end_date' ")->row()->tot;
+     
+     $registered = $this->db->query("SELECT COUNT(id) tot FROM t1clean_lkpbu_302_card WHERE cust_type_id IN ('11') AND register_date < '20210910' AND DATE_FORMAT(register_date, '%Y%m%d') BETWEEN '$start_date' AND '$end_date' ")->row()->tot;
+     $unregis = $this->db->query("SELECT COUNT(id) tot FROM t1clean_lkpbu_302_card WHERE cust_type_id IN ('10') AND register_date < '20210910' AND DATE_FORMAT(register_date, '%Y%m%d') BETWEEN '$start_date' AND '$end_date' ")->row()->tot;
+     $dana_float = $this->db->query("SELECT SUM(curr_balance) tot FROM t0source_lkpbu_302_danafloat WHERE cust_type_id IN ('10', '11') AND DATE_FORMAT(trx_datetime, '%Y%m%d') BETWEEN '$start_date' AND '$end_date' ")->row()->tot;
+     $server_based = $registered + $unregis;
+
+     $vol_trx_blnj_domestik = $this->db->query("
+                          SELECT COUNT(id) tot FROM t1clean_lkpbu_302_trx 
+                          WHERE trx_code IN ('MCS_BILL_PMT','WS_TRX_TRANSFER','MCS_AIRTIME_REFILL') 
+                          AND wstransfertype IN ('CASHIN','CASHINREMITTANCEBANK','CASH-OUT','DEBET MANUAL','CASHOUT','BIAYAUPGRADE','CASHBACKREMITTANCEBANK','BIAYAREG','REFUND','TRANSFER') 
+                          AND DATE_FORMAT(trx_datetime, '%Y%m%d') BETWEEN '$start_date' AND '$end_date'
+                        ")->row()->tot;
+    $vol_transfer_antar_ue = $this->db->query("SELECT COUNT(id) tot FROM t1clean_lkpbu_302_trx WHERE trx_code IN ('WS_TRX_TRANSFER') AND wstransfertype IN ('CASHIN','TRANSFER') AND DATE_FORMAT(trx_datetime, '%Y%m%d') BETWEEN '$start_date' AND '$end_date'")->row()->tot;
+    $vol_inisial = $this->db->query("SELECT COUNT(id) tot FROM t1clean_lkpbu_302_vol WHERE init_amount = 0 AND DATE_FORMAT(trx_datetime, '%Y%m%d') BETWEEN '$start_date' AND '$end_date'")->row()->tot;
+    $vol_top_up = $this->db->query("SELECT COUNT(id) tot FROM t1clean_lkpbu_302_vol WHERE cust_type_id IN ('10', '11') AND DATE_FORMAT(trx_datetime, '%Y%m%d') BETWEEN '$start_date' AND '$end_date'")->row()->tot;
+
+    $nilai_trx_blnj_domestik = $this->db->query("
+                                              SELECT sum(trx_value) tot FROM t1clean_lkpbu_302_trx 
+                                              WHERE trx_code IN ('MCS_BILL_PMT','WS_TRX_TRANSFER','MCS_AIRTIME_REFILL') 
+                                              AND wstransfertype IN ('CASHIN','CASHINREMITTANCEBANK','CASH-OUT','DEBET MANUAL','CASHOUT','BIAYAUPGRADE','CASHBACKREMITTANCEBANK','BIAYAREG','REFUND','TRANSFER') 
+                                              AND DATE_FORMAT(trx_datetime, '%Y%m%d') BETWEEN '$start_date' AND '$end_date'
+                                        ")->row()->tot;
+    $nilai_transfer_antar_ue = $this->db->query("SELECT SUM(trx_value) tot FROM t1clean_lkpbu_302_trx WHERE trx_code IN ('WS_TRX_TRANSFER') AND wstransfertype IN ('CASHIN','TRANSFER') AND DATE_FORMAT(trx_datetime, '%Y%m%d') BETWEEN '$start_date' AND '$end_date'")->row()->tot;
+    $nilai_inisial = $this->db->query("SELECT SUM(trx_value) tot FROM t1clean_lkpbu_302_vol WHERE init_amount = 0 AND DATE_FORMAT(trx_datetime, '%Y%m%d') BETWEEN '$start_date' AND '$end_date'")->row()->tot;
+    $nilai_top_up = $this->db->query("SELECT SUM(trx_value) tot FROM t1clean_lkpbu_302_vol WHERE cust_type_id IN ('10', '11') AND DATE_FORMAT(trx_datetime, '%Y%m%d') BETWEEN '$start_date' AND '$end_date'")->row()->tot;
+
+ 
+     
+ 
+       
+    $objPHPExcel->setActiveSheetIndex(0)
+      ->setCellValue('A' . 4, substr($this->lib->date_indonesia(date("-m-")) ,1)) 
+      ->setCellValue('D' . 9, date("m"))
+      ->setCellValue('A' . 47, "Jakarta, $date_now")
+      
+      ->setCellValue('G12', $jml_kartu)
+      ->setCellValue('G13', $kartu_baru)
+      ->setCellValue('G14', $kartu_tutup)
+      ->setCellValue('G26', $server_based)
+      ->setCellValue('G27', $registered)
+      ->setCellValue('G28', $unregis)
+      ->setCellValue('G29', $dana_float)
+      
+      ->setCellValue('G31', $vol_trx_blnj_domestik)
+      ->setCellValue('G32', $vol_transfer_antar_ue)
+      ->setCellValue('G33', $vol_inisial)
+      ->setCellValue('G34', $vol_top_up)
+      
+      ->setCellValue('G38', $nilai_trx_blnj_domestik)
+      ->setCellValue('G39', $nilai_transfer_antar_ue)
+      ->setCellValue('G40', $nilai_inisial)
+      ->setCellValue('G41', $nilai_top_up);
+ 
+      
+    
+ 
+     $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+     header('Content-Type: application/vnd.ms-excel');
+     header('Content-Disposition: attachment;filename="Report LKPBU F302 bulan '.date('M').'.xlsx"');
+     header('Cache-Control: max-age=0');
+     $objWriter->save('php://output');
+ 
+     set_time_limit(0);
+     ini_set('memory_limit', '1G');
+ 
+     user_log($this->session->userdata('id'), 'REPORT', "DOWNLOAD", '', "Download Report LKPBU Form 302", '');
+     trx_log($this->session->userdata('id'), 'REPORT', "DOWNLOAD", '', "Download Report LKPBU Form 302");
+     exit;
+ 
+     
+   }
+   // END :: LKBPU 302
+
+    // START :: LKBPU 303
+    public function lkpbu_303()
+    {
+      $data = [];
+      $data['content'] = $this->load->view('report/lkpbu/form_303', $data, TRUE);
+      $this->load->view('layout', $data);
+    }
+  
+    public function ajax_list_lkpbu_303()
+    {
+      $start_date = date('Ymd', strtotime(substr($_POST['daterange'], 0, 10)));
+      $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
+      
+
+      $vol_trx_blnj_domestik = $this->db->query("
+                           SELECT COUNT(id) tot FROM t1clean_lkpbu_302_trx 
+                           WHERE trx_code IN ('MCS_BILL_PMT','WS_TRX_TRANSFER','MCS_AIRTIME_REFILL') 
+                           AND wstransfertype IN ('CASHIN','CASHINREMITTANCEBANK','CASH-OUT','DEBET MANUAL','CASHOUT','BIAYAUPGRADE','CASHBACKREMITTANCEBANK','BIAYAREG','REFUND','TRANSFER') 
+                           AND DATE_FORMAT(trx_datetime, '%Y%m%d') BETWEEN '$start_date' AND '$end_date'
+                         ")->row()->tot;
+     $vol_transfer_antar_ue = $this->db->query("SELECT COUNT(id) tot FROM t1clean_lkpbu_302_trx WHERE trx_code IN ('WS_TRX_TRANSFER') AND wstransfertype IN ('CASHIN','TRANSFER') AND DATE_FORMAT(trx_datetime, '%Y%m%d') BETWEEN '$start_date' AND '$end_date'")->row()->tot;
+     $vol_inisial = $this->db->query("SELECT COUNT(id) tot FROM t1clean_lkpbu_302_vol WHERE init_amount = 0 AND DATE_FORMAT(trx_datetime, '%Y%m%d') BETWEEN '$start_date' AND '$end_date'")->row()->tot;
+     $vol_top_up = $this->db->query("SELECT COUNT(id) tot FROM t1clean_lkpbu_302_vol WHERE cust_type_id IN ('10', '11') AND DATE_FORMAT(trx_datetime, '%Y%m%d') BETWEEN '$start_date' AND '$end_date'")->row()->tot;
+ 
+     $nilai_trx_blnj_domestik = $this->db->query("
+                                               SELECT sum(trx_value) tot FROM t1clean_lkpbu_302_trx 
+                                               WHERE trx_code IN ('MCS_BILL_PMT','WS_TRX_TRANSFER','MCS_AIRTIME_REFILL') 
+                                               AND wstransfertype IN ('CASHIN','CASHINREMITTANCEBANK','CASH-OUT','DEBET MANUAL','CASHOUT','BIAYAUPGRADE','CASHBACKREMITTANCEBANK','BIAYAREG','REFUND','TRANSFER') 
+                                               AND DATE_FORMAT(trx_datetime, '%Y%m%d') BETWEEN '$start_date' AND '$end_date'
+                                         ")->row()->tot;
+     $nilai_transfer_antar_ue = $this->db->query("SELECT SUM(trx_value) tot FROM t1clean_lkpbu_302_trx WHERE trx_code IN ('WS_TRX_TRANSFER') AND wstransfertype IN ('CASHIN','TRANSFER') AND DATE_FORMAT(trx_datetime, '%Y%m%d') BETWEEN '$start_date' AND '$end_date'")->row()->tot;
+     $nilai_inisial = $this->db->query("SELECT SUM(trx_value) tot FROM t1clean_lkpbu_302_vol WHERE init_amount = 0 AND DATE_FORMAT(trx_datetime, '%Y%m%d') BETWEEN '$start_date' AND '$end_date'")->row()->tot;
+     $nilai_top_up = $this->db->query("SELECT SUM(trx_value) tot FROM t1clean_lkpbu_302_vol WHERE cust_type_id IN ('10', '11') AND DATE_FORMAT(trx_datetime, '%Y%m%d') BETWEEN '$start_date' AND '$end_date'")->row()->tot;
+      $output = array(
+        'volume'    => $vol_trx_blnj_domestik + $vol_transfer_antar_ue + $vol_inisial + $vol_top_up,
+        'nilai'    => $nilai_trx_blnj_domestik + $nilai_transfer_antar_ue + $nilai_inisial + $nilai_top_up,
+      );
+      echo json_encode($output);
+    }
+  
+    public function download_excel_lkpbu_303()
+    {
+      include APPPATH . 'third_party/PHPExcel/PHPExcel.php';
+      //$type_report = $this->input->post('type_report');
+  
+      $start_date = date('Ymd', strtotime(substr($_GET['daterange'], 0, 10)));
+      $end_date =  date('Ymd', strtotime(substr($_GET['daterange'], 13, 23)));
+ 
+      $type_report = "303";
+      $report_setting = $this->M_report->get_report_setting($type_report);
+  
+      $data = array();
+      $no = 1;
+      $baris = 12;
+      $date_now = $this->lib->date_indonesia(date('Y-m-d'));
+      $objPHPExcel = PHPExcel_IOFactory::load("./assets/template-excel/template-lkpbu-303.xlsx");
+      $vol_trx_blnj_domestik = $this->db->query("
+                           SELECT COUNT(id) tot FROM t1clean_lkpbu_302_trx 
+                           WHERE trx_code IN ('MCS_BILL_PMT','WS_TRX_TRANSFER','MCS_AIRTIME_REFILL') 
+                           AND wstransfertype IN ('CASHIN','CASHINREMITTANCEBANK','CASH-OUT','DEBET MANUAL','CASHOUT','BIAYAUPGRADE','CASHBACKREMITTANCEBANK','BIAYAREG','REFUND','TRANSFER') 
+                           AND DATE_FORMAT(trx_datetime, '%Y%m%d') BETWEEN '$start_date' AND '$end_date'
+                         ")->row()->tot;
+     $vol_transfer_antar_ue = $this->db->query("SELECT COUNT(id) tot FROM t1clean_lkpbu_302_trx WHERE trx_code IN ('WS_TRX_TRANSFER') AND wstransfertype IN ('CASHIN','TRANSFER') AND DATE_FORMAT(trx_datetime, '%Y%m%d') BETWEEN '$start_date' AND '$end_date'")->row()->tot;
+     $vol_inisial = $this->db->query("SELECT COUNT(id) tot FROM t1clean_lkpbu_302_vol WHERE init_amount = 0 AND DATE_FORMAT(trx_datetime, '%Y%m%d') BETWEEN '$start_date' AND '$end_date'")->row()->tot;
+     $vol_top_up = $this->db->query("SELECT COUNT(id) tot FROM t1clean_lkpbu_302_vol WHERE cust_type_id IN ('10', '11') AND DATE_FORMAT(trx_datetime, '%Y%m%d') BETWEEN '$start_date' AND '$end_date'")->row()->tot;
+ 
+     $nilai_trx_blnj_domestik = $this->db->query("
+                                               SELECT sum(trx_value) tot FROM t1clean_lkpbu_302_trx 
+                                               WHERE trx_code IN ('MCS_BILL_PMT','WS_TRX_TRANSFER','MCS_AIRTIME_REFILL') 
+                                               AND wstransfertype IN ('CASHIN','CASHINREMITTANCEBANK','CASH-OUT','DEBET MANUAL','CASHOUT','BIAYAUPGRADE','CASHBACKREMITTANCEBANK','BIAYAREG','REFUND','TRANSFER') 
+                                               AND DATE_FORMAT(trx_datetime, '%Y%m%d') BETWEEN '$start_date' AND '$end_date'
+                                         ")->row()->tot;
+     $nilai_transfer_antar_ue = $this->db->query("SELECT SUM(trx_value) tot FROM t1clean_lkpbu_302_trx WHERE trx_code IN ('WS_TRX_TRANSFER') AND wstransfertype IN ('CASHIN','TRANSFER') AND DATE_FORMAT(trx_datetime, '%Y%m%d') BETWEEN '$start_date' AND '$end_date'")->row()->tot;
+     $nilai_inisial = $this->db->query("SELECT SUM(trx_value) tot FROM t1clean_lkpbu_302_vol WHERE init_amount = 0 AND DATE_FORMAT(trx_datetime, '%Y%m%d') BETWEEN '$start_date' AND '$end_date'")->row()->tot;
+     $nilai_top_up = $this->db->query("SELECT SUM(trx_value) tot FROM t1clean_lkpbu_302_vol WHERE cust_type_id IN ('10', '11') AND DATE_FORMAT(trx_datetime, '%Y%m%d') BETWEEN '$start_date' AND '$end_date'")->row()->tot;
+ 
+  
+      
+  
+        
+     $objPHPExcel->setActiveSheetIndex(0)
+       ->setCellValue('A' . 4, substr($this->lib->date_indonesia(date("-m-")) ,1)) 
+       ->setCellValue('D' . 8, date("m"))
+       ->setCellValue('A' . 47, "Jakarta, $date_now")
+       
+       ->setCellValue('E12', $vol_trx_blnj_domestik + $vol_transfer_antar_ue + $vol_inisial + $vol_top_up)
+       ->setCellValue('F12', $nilai_trx_blnj_domestik + $nilai_transfer_antar_ue + $nilai_inisial + $nilai_top_up);
+  
+       
+     
+      
+      $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+      header('Content-Type: application/vnd.ms-excel');
+      header('Content-Disposition: attachment;filename="Report LKPBU F303 bulan '.date('M').'.xlsx"');
+      header('Cache-Control: max-age=0');
+      $objWriter->save('php://output');
+  
+      set_time_limit(0);
+      ini_set('memory_limit', '1G');
+  
+      user_log($this->session->userdata('id'), 'REPORT', "DOWNLOAD", '', "Download Report LKPBU Form 303", '');
+      trx_log($this->session->userdata('id'), 'REPORT', "DOWNLOAD", '', "Download Report LKPBU Form 303");
+      exit;
+  
+      
+    }
+    // END :: LKBPU 303
+ 
+
   // START :: LKBPU 304
   public function lkpbu_304()
   {
