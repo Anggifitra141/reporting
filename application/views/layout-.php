@@ -244,7 +244,7 @@
           <div class="sidebar-brand">
 
             <a href="<?php echo base_url(); ?>"><img src="<?php echo base_url('assets/img/finnet.png') ?>" style="height:80px; width:200px; margin-left:-22px;"></a><br />
-          </div><br /><br />
+          </div><br /><br/>
           <div class="sidebar-brand sidebar-brand-sm">
             <a href="<?php echo base_url(); ?>index.html">St</a>
           </div>
@@ -378,8 +378,8 @@
                 <li class="dropdown" id="nav-lkpbu-report">
                   <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-list"></i>LKPBU</a>
                   <ul class="dropdown-menu">
-                    <li id="nav-lkpbu-report-302"><a class="nav-link" href="<?php echo site_url('report/lkpbu_302'); ?>"><i class="fas fa-circle"></i> Form 302</a></li>
-                    <li id="nav-lkpbu-report-303"><a class="nav-link" href="<?php echo site_url('report/lkpbu_303'); ?>"><i class="fas fa-circle"></i> Form 303</a></li>
+                    <li id="nav-ltdbb-source-g001"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G001'); ?>"><i class="fas fa-circle"></i> Form 302</a></li>
+                    <li id="nav-ltdbb-source-g002"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G002'); ?>"><i class="fas fa-circle"></i> Form 303</a></li>
                     <li id="nav-lkpbu-report-304"><a class="nav-link" href="<?php echo site_url('report/lkpbu_304'); ?>"><i class="fas fa-circle"></i> Form 304</a></li>
                     <li id="nav-lkpbu-report-306"><a class="nav-link" href="<?php echo site_url('report/lkpbu_306'); ?>"><i class="fas fa-circle"></i> Form 306</a></li>
                     <li id="nav-lkpbu-report-309"><a class="nav-link" href="<?php echo site_url('report/lkpbu_309'); ?>"><i class="fas fa-circle"></i> Form 309</a></li>
