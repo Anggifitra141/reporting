@@ -2,7 +2,9 @@
   .modal-title{
     margin-top: -10px;
   }
-
+  .modal {
+    top: 20%;
+  }
 </style>
 
 <section class="section">
@@ -38,14 +40,14 @@
                 <thead>
                   <tr>
                     <th>Trxdate</th>
-                    <th>Status</th>
-                    <th>Sender Country</th>
-                    <th>Sender City</th>
-                    <th>Receipt Country</th>
-                    <th>Receipt City</th>
                     <th>Sender Name</th>
-                    <th>Receipt Name</th>
-                    <th>Nominal</th>
+                    <th>Sender Country</th>
+                    <th>Sender ADDR</th>
+                    <th>Sender ID</th>
+                    <th>Dest Bank Acc</th>
+                    <th>Ket</th>
+                    <th>Recept Name</th>
+                    <th>Recept Addr</th>
                   </tr>
                 </thead>
                 <tbody id="result-source"></tbody>
@@ -58,6 +60,7 @@
     </div>
   </div>
 </section>
+
 <div class="modal fade" tabindex="-1" role="dialog" id="modal_add_role">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
@@ -67,34 +70,41 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form class="form-horizontal" method="POST" id="form_role_model">
-        <div class="modal-body">
-          <div class="alert alert-info">
-            <i class="fa fa-info"></i> To More Info Code Country Click <a href="<?= base_url('master/ltdbb_bi_country') ?>" target="_blank" >Here</a> <br>
+      <div class="modal-body">
+        <form class="form-horizontal" method="POST" id="form_role_model">
+          <input type="hidden" name="id">
+          <div class="form-body">
+            <div class="form-group">
+              <label>Before Sender Country</label>
+              <input type="text" class="form-control" name="before_sender_country" readonly>
+              <span class="invalid-feedback"></span>
+            </div>
+            <div class="form-group">
+              <label>To Sender Country</label>
+              <input type="text" class="form-control" name="to_sender_country">
+              <span class="invalid-feedback"></span>
+            </div>
           </div>
-          <div class="alert alert-info">
-            <i class="fa fa-info"></i> To More Info Code City Click <a href="<?= base_url('master/ltdbb_bi_city') ?>" target="_blank" >Here</a>
-          </div>
-          <input type="hidden" name="report" value="LTDBB">
-          <div class="form-body" id="html-result"></div>
-        </div>
         </form>
-        <div class="modal-footer bg-whitesmoke br">
-          <button type="button" class="btn btn-secondary mr-auto" data-dismiss="modal">Close</button>
-          <button type="button" onclick="cleansing_data('clean');" class="btn btn-primary float-right">Cleansing</button>
-          <button type="button" onclick="cleansing_data('save');" class="btn btn-success float-right">Cleansing & Save</button>
-        </div>
+      </div>
+      <div class="modal-footer bg-whitesmoke br">
+        <button type="button" class="btn btn-secondary mr-auto" data-dismiss="modal">Close</button>
+        <button type="button" onclick="cleansing_data('clean');" class="btn btn-primary float-right">Cleansing</button>
+        <button type="button" onclick="cleansing_data('save');" class="btn btn-success float-right">Cleansing & Save</button>
+      </div>
     </div>
   </div>
 </div>
 
+<script src="<?= base_url() ?>assets/js/stisla.js"></script>
 <script src="<?php echo base_url(); ?>assets/modules/jquery.min.js"></script>
 <script>
 
 var base_url = "<?= base_url() ?>";
 $('#nav-utilities-source').addClass('dropdown active');
-  $('#nav-auto-clean').addClass('active');
+  $('#nav-auto-clean-ltkl').addClass('active');
 var table;
+const failed_cleansing = [];
   $(document).ready(function(){
     table = $('#table').DataTable({
       "deferRender": true,
@@ -104,7 +114,7 @@ var table;
       "serverSide": true,
       "order": [],
       "ajax": {
-        url: "<?php echo site_url('utilities/ajax_raw_data')?>", // json datasource
+        url: "<?php echo site_url('utilities/ajax_rawdata_ltkl')?>", // json datasource
         type: "POST",
         "dataSrc": function(response) {
           if (response.status == false) {
@@ -153,11 +163,10 @@ var table;
       if (willDelete) {
         loading();
         $.ajax({
-          url : base_url + 'utilities/json_auto_clean',
+          url : base_url + 'utilities/json_auto_clean_ltkl',
           type : 'POST',
           dataType : 'JSON',
           success : function(response){
-            console.log(response)
             if(response.fail_clean.length > 0 ){
               swal({
                 title: 'Success',
@@ -166,12 +175,13 @@ var table;
                 icon: 'success',
                 buttons: ['No', "Save Automatic Role"],
               }).then((isCofirm) => {
-                $('#html-result').html(``);
-                if(response.false > 0 ){
-                  $('#html-result').html(response.fail_clean);
-                  $('#modal_add_role').modal('show');
-                }
-                
+                $.each(response.fail_clean, function(index, val){
+                  failed_cleansing.push(val)
+                });
+                $('[name="before_sender_country"]').val(failed_cleansing[0])
+                $('[name="to_sender_country"]').val('')
+                failed_cleansing.shift();
+                $('#modal_add_role').modal('show');
               })
           }else{
             swal({
@@ -189,16 +199,21 @@ var table;
       }
     });
 });
+
 function cleansing_data(status){
   // $('#modal_add_role').modal('hide');
-  var formData = $('#form_role_model').serializeArray();
-  formData.push({name : 'status', value : status});
   $.ajax({
     url : "<?= base_url('utilities/save_role_model') ?>",
     type : 'POST',
-    data: formData,
+    data : {
+      report : 'LTKL',
+      before_sender_country : $('[name="before_sender_country"]').val(),
+      to_sender_country : $('[name="to_sender_country"]').val(),
+      status_clean : status
+    },
     dataType : 'JSON',
     success : function(response){
+      console.log(response)
       reload_table();
       swal({
         title: 'Success',
@@ -206,16 +221,33 @@ function cleansing_data(status){
         icon: 'warning',
         icon: 'success',
       });
-      if(response.false > 0){
-        $('#html-result').html(response.fail_clean);
+      if(response.fail_clean.length > 0){
+        $('[name="before_sender_country"]').val(response.fail_clean[0])
+        $('[name="to_sender_country"]').val('')
         $('#modal_add_role').modal('show');
       }else{
         $('#modal_add_role').modal('hide');
       }
+      // iziToast.success({
+      //   title: 'Success !',
+      //   message: 'Data saved successfully ',
+      //   position: 'topRight'
+      // });
+      // if(failed_cleansing[0]){
+      //   $('[name="before_sender_country"]').val(failed_cleansing[0])
+      //   $('[name="to_sender_country"]').val('')
+      //   failed_cleansing.shift();
+      //   $('#modal_add_role').modal('show');
+      // }else{
+      //   $('#modal_add_role').modal('hide');
+      // }
+      
     }
   })
 }
 
+
+  
 
 function loading()
 {
