@@ -123,6 +123,7 @@
 
   /* -- Action -- */
   function add_role_model() {
+    cek_privileges('add', event);
     save_method = 'add';
     $('.form-control').removeClass('is-invalid'); // clear error class
     $('#form_role_model')[0].reset();
@@ -131,6 +132,7 @@
   }
 
   function get_role_model(id) {
+    cek_privileges('update', event);
     save_method = 'update';
     $('#form_role_model')[0].reset();
     $.ajax({
@@ -199,40 +201,31 @@
   }
 
   function delete_role_model(id) {
-    var event = "<?php echo $this->session->userdata('action'); ?>";
-    console.log(event)
-    if (event.match(/delete/g)) {
-      swal({
-          title: "Are you sure ?",
-          text: "Once deleted, you will not be able to recover this data !",
-          icon: "warning",
-          buttons: true,
-          dangerMode: true,
-        })
-        .then((willDelete) => {
-          if (willDelete) {
-            $.ajax({
-              url: "<?php echo site_url('role_model/delete_role_model') ?>/" + id,
-              type: "post",
-              complete: function() {
-                swal("Your data has been deleted!", {
-                  icon: "success",
-                }).then(function() {
-                  $('#table').DataTable().ajax.reload();
-                });
-              }
-            });
+    cek_privileges('delete', event);
+    swal({
+        title: "Are you sure ?",
+        text: "Once deleted, you will not be able to recover this data !",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+          $.ajax({
+            url: "<?php echo site_url('role_model/delete_role_model') ?>/" + id,
+            type: "post",
+            complete: function() {
+              swal("Your data has been deleted!", {
+                icon: "success",
+              }).then(function() {
+                $('#table').DataTable().ajax.reload();
+              });
+            }
+          });
 
-          } else {
-            swal("Data failed deleted !");
-          }
-        });
-    } else {
-      iziToast.error({
-        title: 'Error !',
-        message: 'You have no right to this action.',
-        position: 'bottomCenter'
+        } else {
+          swal("Data failed deleted !");
+        }
       });
-    }
   }
 </script>

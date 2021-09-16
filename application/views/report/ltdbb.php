@@ -333,6 +333,7 @@
 
 
   function delete_selected() {
+    cek_privileges('delete', event);
     var list_id = [];
     $(".data-check:checked").each(function() {
       list_id.push(this.value);
@@ -419,6 +420,7 @@
   }
 
   function edit_selected() {
+    cek_privileges('update', event);
     var list_id = [];
     $(".data-check:checked").each(function() {
       list_id.push(this.value);
@@ -480,6 +482,7 @@
   }
 
   function delete_row(id) {
+    cek_privileges('delete', event);
     swal({
         title: 'Are you sure?',
         text: 'Are you sure delete this data?',
@@ -515,6 +518,7 @@
   }
 
   function edit_ltdbb(id) {
+    cek_privileges('update', event);
     $('#form-ltdbb')[0].reset();
     $.ajax({
       url: "<?php echo site_url('clean/get_ltdbb_by_id') ?>/" + id,

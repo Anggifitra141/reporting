@@ -337,7 +337,7 @@ class M_master extends CI_model {
   {
     $this->db->update($table, $data, $where);
 
-    trx_log($this->session->userdata('id'), $table, "Update ", $where, "Update ".$data['code']." table ".$table."");
+    trx_log($this->session->userdata('id'), $table, "Update ", $where['id'], "Update ".$data['code']." table ".$table."");
     return $this->db->affected_rows();
   }
   public function delete_master_all($table, $id)

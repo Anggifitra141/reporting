@@ -142,6 +142,7 @@
 
   /* -- Action -- */
   function add_form_312() {
+    cek_privileges('add', event);
     save_method = 'add';
     $('.form-control').removeClass('is-invalid'); // clear error class
     $('#form_312')[0].reset();
@@ -150,6 +151,7 @@
   }
 
   function get_form_312(id) {
+    cek_privileges('update', event);
     save_method = 'update';
     $('#form_312')[0].reset();
     $.ajax({
@@ -224,9 +226,7 @@
   }
 
   function delete_form_312(id) {
-    var event = "<?php echo $this->session->userdata('action'); ?>";
-    console.log(event)
-    if (event.match(/delete/g)) {
+    cek_privileges('delete', event);
       swal({
           title: "Are you sure ?",
           text: "Once deleted, you will not be able to recover this data !",
@@ -252,12 +252,5 @@
             swal("Data failed deleted !");
           }
         });
-    } else {
-      iziToast.error({
-        title: 'Error !',
-        message: 'You have no right to this action.',
-        position: 'bottomCenter'
-      });
-    }
   }
 </script>

@@ -268,6 +268,7 @@
 
 
   function delete_selected() {
+    cek_privileges('delete', event);
     var list_id = [];
     $(".data-check:checked").each(function() {
       list_id.push(this.value);

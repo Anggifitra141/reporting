@@ -134,6 +134,7 @@
   /* -- Action -- */
   function add_user() {
     save_method = 'add';
+    cek_privileges('add', event);
     $('.form-control').removeClass('is-invalid'); // clear error class
     $('#form_user')[0].reset();
     $('#modal_user').modal('show'); // show bootstrap modal
@@ -141,6 +142,7 @@
   }
 
   function get_user(id) {
+    cek_privileges('update', event);
     save_method = 'update';
     $('#form_user')[0].reset();
     $.ajax({

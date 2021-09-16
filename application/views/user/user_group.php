@@ -75,24 +75,40 @@
                   <label>Allowed Menus :</label>
                 </div>
               </div>
-              <div class="col-sm-3">
+              <div class="col-sm-6">
                 <label>Regulator Management </label><br>
                 ├──<input type="checkbox" id="dashboard" name="access[]" value="dashboard"> Dashboard<br>
-                ├──<input type="checkbox" id="data_source" name="access[]" value="data_source"> Data Source<br>
-                ├──<input type="checkbox" id="data_clean" name="access[]" value="data_clean"> Data Clean<br>
-                ├──<input type="checkbox" id="utilities" name="access[]" value="utilities"> Utilities<br>
-                ├──<input type="checkbox" id="master_data" name="access[]" value="master_data"> Master Data<br>
-                └──<input type="checkbox" id="report" name="access[]" value="report"> Report<br>
+                ├──<input type="checkbox" id="ltdbb" name="access[]" value="ltdbb"> LTDBB<br>
+                ├──<input type="checkbox" id="ltkl" name="access[]" value="ltkl"> LTKL<br>
+                ├──<input type="checkbox" id="qris" name="access[]" value="qris"> QRIS<br>
+                ├──<input type="checkbox" id="dana_float" name="access[]" value="dana_float"> Dana Float<br>
+                ├──<input type="checkbox" id="payment_gateway" name="access[]" value="payment_gateway"> Payment Gateway<br>
+                ├──<input type="checkbox" id="sipesat" name="access[]" value="sipesat"> Si Pesat<br>
+                └── LKPBU <br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├──<input type="checkbox" id="lkpbu_302" name="access[]" value="lkpbu_302"> LKPBU 302<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├──<input type="checkbox" id="lkpbu_303" name="access[]" value="lkpbu_303"> LKPBU 303<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├──<input type="checkbox" id="lkpbu_306" name="access[]" value="lkpbu_306"> LKPBU 306<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├──<input type="checkbox" id="lkpbu_309_310_311" name="access[]" value="lkpbu_309_310_311"> LKPBU 309, 310 & 311<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├──<input type="checkbox" id="lkpbu_312" name="access[]" value="lkpbu_312"> LKPBU 312<br>
+                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└──<input type="checkbox" id="lkpbu_313" name="access[]" value="lkpbu_313"> LKPBU 313<br>
+                <input type="checkbox" id="gangguan_sistem" name="access[]" value="gangguan_sistem"> Gangguan Sistem<br>
                 </label>
               </div>
               <div class="col-sm-3">
+              <label>Cleansing </label><br>
+                ├──<input type="checkbox" id="cleansing_ltdbb" name="access[]" value="cleansing_ltdbb"> LTDBB<br>
+                ├──<input type="checkbox" id="cleansing_ltkl" name="access[]" value="cleansing_ltkl"> LTKL<br>
+                </label>
+                <br><br>
                 <label>System Setting </label><br>
+                ├──<input type="checkbox" id="master_data" name="access[]" value="master_data"> Master Data<br>
                 ├──<input type="checkbox" id="user_group" name="access[]" value="user_group"> User Group<br>
                 ├──<input type="checkbox" id="user" name="access[]" value="user"> User<br>
                 ├──<input type="checkbox" id="user_activity" name="access[]" value="user_activity"> User Activity<br />
-                └──<input type="checkbox" id="user_group" name="access[]" value="user_group"> Archive<br>
+                └──<input type="checkbox" id="archive" name="access[]" value="archive"> Archive<br>
                 </label>
               </div>
+              
 
             </div>
 
@@ -137,6 +153,7 @@
   /* -- Action -- */
   function add_user_group() {
     save_method = 'add';
+    cek_privileges('add', event);
     $('.form-control').removeClass('is-invalid'); // clear error class
     $('#form_user_group')[0].reset();
     $('#modal_user_group').modal('show'); // show bootstrap modal
@@ -145,6 +162,7 @@
 
   function get_user_group(id) {
     save_method = 'update';
+    cek_privileges('update', event);
     $('#form_user_group')[0].reset();
     $.ajax({
       url: "<?php echo site_url('user_group/get_user_group') ?>/" + id,

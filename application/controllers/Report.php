@@ -675,7 +675,7 @@ class Report extends CI_Controller {
  
      $date_now = $this->lib->date_indonesia(date('Y-m-d'));
      
-     $jml_kartu = $this->db->query("SELECT COUNT(id) tot FROM t1clean_lkpbu_302_card WHERE cust_type_id IN ('10', '11') AND DATE_FORMAT(register_date, '%Y%m%d' < '$end_date' ")->row()->tot;
+     $jml_kartu = $this->db->query("SELECT COUNT(id) tot FROM t1clean_lkpbu_302_card WHERE cust_type_id IN ('10', '11') AND DATE_FORMAT(register_date, '%Y%m%d') < '$end_date' ")->row()->tot;
      $kartu_baru = $this->db->query("SELECT COUNT(id) tot FROM t1clean_lkpbu_302_card WHERE cust_type_id IN ('10', '11') AND DATE_FORMAT(register_date, '%Y%m%d') BETWEEN '$start_date' AND '$end_date' ")->row()->tot;
      $kartu_tutup = $this->db->query("SELECT COUNT(id) tot FROM t1clean_lkpbu_302_card WHERE status_card = 0 AND cust_type_id IN ('10', '11') AND DATE_FORMAT(register_date, '%Y%m%d') BETWEEN '$start_date' AND '$end_date' ")->row()->tot;
      
@@ -731,7 +731,6 @@ class Report extends CI_Controller {
       ->setCellValue('G40', $nilai_inisial)
       ->setCellValue('G41', $nilai_top_up);
  
-      
     
  
      $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');

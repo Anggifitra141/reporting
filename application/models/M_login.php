@@ -24,6 +24,7 @@ class M_login extends CI_Model {
 						'fullname' => $result['fullname'],
 						'status' => $result['status'],
 						'action' => $user_group->action,
+						'access' => $user_group->access,
 						'logged_in' => TRUE
 						);
 				$this->session->set_userdata($data);

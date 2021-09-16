@@ -203,6 +203,7 @@
   /* -- Action -- */
   function add_form_309_310_311() {
     save_method = 'add';
+    cek_privileges('add', event);
     $('.form-control').removeClass('is-invalid'); // clear error class
     $('#form_309_310_311')[0].reset();
     $('#modal_form_309_310_311').modal('show'); // show bootstrap modal
@@ -210,6 +211,7 @@
   }
 
   function import_data() {
+    cek_privileges('add', event);
     $('.form-control').removeClass('is-invalid'); // clear error class
     $('#form_import_309_310_311')[0].reset();
     $('#modal_import_309_310_311').modal('show'); // show bootstrap modal
@@ -217,6 +219,7 @@
   }
 
   function get_form_309_310_311(id) {
+    cek_privileges('update', event);
     save_method = 'update';
     $('#form_309_310_311')[0].reset();
     $.ajax({
@@ -297,41 +300,32 @@
   }
 
   function delete_form_309_310_311(id) {
-    var event = "<?php echo $this->session->userdata('action'); ?>";
-    console.log(event)
-    if (event.match(/delete/g)) {
-      swal({
-          title: "Are you sure ?",
-          text: "Once deleted, you will not be able to recover this data !",
-          icon: "warning",
-          buttons: true,
-          dangerMode: true,
-        })
-        .then((willDelete) => {
-          if (willDelete) {
-            $.ajax({
-              url: "<?php echo site_url('clean/delete_form_309_310_311') ?>/" + id,
-              type: "post",
-              complete: function() {
-                swal("Your data has been deleted!", {
-                  icon: "success",
-                }).then(function() {
-                  reload_table();
-                });
-              }
-            });
+    cek_privileges('delete', event);
+    swal({
+        title: "Are you sure ?",
+        text: "Once deleted, you will not be able to recover this data !",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+          $.ajax({
+            url: "<?php echo site_url('clean/delete_form_309_310_311') ?>/" + id,
+            type: "post",
+            complete: function() {
+              swal("Your data has been deleted!", {
+                icon: "success",
+              }).then(function() {
+                reload_table();
+              });
+            }
+          });
 
-          } else {
-            swal("Data failed deleted !");
-          }
-        });
-    } else {
-      iziToast.error({
-        title: 'Error !',
-        message: 'You have no right to this action.',
-        position: 'bottomCenter'
+        } else {
+          swal("Data failed deleted !");
+        }
       });
-    }
   }
 
   function save_import() {

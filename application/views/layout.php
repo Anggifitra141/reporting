@@ -25,6 +25,8 @@
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-94034622-3"></script>
 
   <script src="<?php echo base_url(); ?>assets/modules/jquery.min.js"></script>
+  <script>var access = "<?= $this->session->userdata('access') ?>";var event = "<?php echo $this->session->userdata('action'); ?>";</script>
+  
   <script>
     window.dataLayer = window.dataLayer || [];
 
@@ -46,6 +48,38 @@
     function convertToAngka(rupiah) {
       return parseInt(rupiah.replace(/,.*|[^0-9]/g, ''), 10);
     }
+    function cek_privileges(action, session){
+    if(action == 'add'){
+      if(!session.match(/add/g)){
+          iziToast.error({
+            title: 'Error !',
+            message: 'You have no right to this action.',
+            position: 'bottomCenter'
+          });
+        exit();
+      }
+    }
+    if(action == 'delete'){
+      if(!session.match(/delete/g)){
+          iziToast.error({
+            title: 'Error !',
+            message: 'You have no right to this action.',
+            position: 'bottomCenter'
+          });
+        exit();
+      }
+    }
+    if(action == 'update'){
+      if(!session.match(/update/g)){
+          iziToast.error({
+            title: 'Error !',
+            message: 'You have no right to this action.',
+            position: 'bottomCenter'
+          });
+        exit();
+      }
+    }
+  }
   </script>
 
   <style>
@@ -91,138 +125,14 @@
           </div>
         </form>
         <ul class="navbar-nav navbar-right">
-          <li class="dropdown dropdown-list-toggle"><a href="<?php echo base_url(); ?>#" data-toggle="dropdown" class="nav-link nav-link-lg message-toggle beep"><i class="far fa-envelope"></i></a>
-            <div class="dropdown-menu dropdown-list dropdown-menu-right">
-              <div class="dropdown-header">Messages
-                <div class="float-right">
-                  <a href="<?php echo base_url(); ?>#">Mark All As Read</a>
-                </div>
-              </div>
-              <div class="dropdown-list-content dropdown-list-message">
-                <a href="<?php echo base_url(); ?>#" class="dropdown-item dropdown-item-unread">
-                  <div class="dropdown-item-avatar">
-                    <img alt="image" src="<?php echo base_url(); ?>assets/img/avatar/avatar-1.png" class="rounded-circle">
-                    <div class="is-online"></div>
-                  </div>
-                  <div class="dropdown-item-desc">
-                    <b>Kusnaedi</b>
-                    <p>Hello, Bro!</p>
-                    <div class="time">10 Hours Ago</div>
-                  </div>
-                </a>
-                <a href="<?php echo base_url(); ?>#" class="dropdown-item dropdown-item-unread">
-                  <div class="dropdown-item-avatar">
-                    <img alt="image" src="<?php echo base_url(); ?>assets/img/avatar/avatar-2.png" class="rounded-circle">
-                  </div>
-                  <div class="dropdown-item-desc">
-                    <b>Dedik Sugiharto</b>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
-                    <div class="time">12 Hours Ago</div>
-                  </div>
-                </a>
-                <a href="<?php echo base_url(); ?>#" class="dropdown-item dropdown-item-unread">
-                  <div class="dropdown-item-avatar">
-                    <img alt="image" src="<?php echo base_url(); ?>assets/img/avatar/avatar-3.png" class="rounded-circle">
-                    <div class="is-online"></div>
-                  </div>
-                  <div class="dropdown-item-desc">
-                    <b>Agung Ardiansyah</b>
-                    <p>Sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                    <div class="time">12 Hours Ago</div>
-                  </div>
-                </a>
-                <a href="<?php echo base_url(); ?>#" class="dropdown-item">
-                  <div class="dropdown-item-avatar">
-                    <img alt="image" src="<?php echo base_url(); ?>assets/img/avatar/avatar-4.png" class="rounded-circle">
-                  </div>
-                  <div class="dropdown-item-desc">
-                    <b>Ardian Rahardiansyah</b>
-                    <p>Duis aute irure dolor in reprehenderit in voluptate velit ess</p>
-                    <div class="time">16 Hours Ago</div>
-                  </div>
-                </a>
-                <a href="<?php echo base_url(); ?>#" class="dropdown-item">
-                  <div class="dropdown-item-avatar">
-                    <img alt="image" src="<?php echo base_url(); ?>assets/img/avatar/avatar-5.png" class="rounded-circle">
-                  </div>
-                  <div class="dropdown-item-desc">
-                    <b>Alfa Zulkarnain</b>
-                    <p>Exercitation ullamco laboris nisi ut aliquip ex ea commodo</p>
-                    <div class="time">Yesterday</div>
-                  </div>
-                </a>
-              </div>
-              <div class="dropdown-footer text-center">
-                <a href="<?php echo base_url(); ?>#">View All <i class="fas fa-chevron-right"></i></a>
-              </div>
-            </div>
-          </li>
-          <li class="dropdown dropdown-list-toggle"><a href="<?php echo base_url(); ?>#" data-toggle="dropdown" class="nav-link notification-toggle nav-link-lg beep"><i class="far fa-bell"></i></a>
-            <div class="dropdown-menu dropdown-list dropdown-menu-right">
-              <div class="dropdown-header">Notifications
-                <div class="float-right">
-                  <a href="<?php echo base_url(); ?>#">Mark All As Read</a>
-                </div>
-              </div>
-              <div class="dropdown-list-content dropdown-list-icons">
-                <a href="<?php echo base_url(); ?>#" class="dropdown-item dropdown-item-unread">
-                  <div class="dropdown-item-icon bg-primary text-white">
-                    <i class="fas fa-code"></i>
-                  </div>
-                  <div class="dropdown-item-desc">
-                    Template update is available now!
-                    <div class="time text-primary">2 Min Ago</div>
-                  </div>
-                </a>
-                <a href="<?php echo base_url(); ?>#" class="dropdown-item">
-                  <div class="dropdown-item-icon bg-info text-white">
-                    <i class="far fa-user"></i>
-                  </div>
-                  <div class="dropdown-item-desc">
-                    <b>You</b> and <b>Dedik Sugiharto</b> are now friends
-                    <div class="time">10 Hours Ago</div>
-                  </div>
-                </a>
-                <a href="<?php echo base_url(); ?>#" class="dropdown-item">
-                  <div class="dropdown-item-icon bg-success text-white">
-                    <i class="fas fa-check"></i>
-                  </div>
-                  <div class="dropdown-item-desc">
-                    <b>Kusnaedi</b> has moved task <b>Fix bug header</b> to <b>Done</b>
-                    <div class="time">12 Hours Ago</div>
-                  </div>
-                </a>
-                <a href="<?php echo base_url(); ?>#" class="dropdown-item">
-                  <div class="dropdown-item-icon bg-danger text-white">
-                    <i class="fas fa-exclamation-triangle"></i>
-                  </div>
-                  <div class="dropdown-item-desc">
-                    Low disk space. Let's clean it!
-                    <div class="time">17 Hours Ago</div>
-                  </div>
-                </a>
-                <a href="<?php echo base_url(); ?>#" class="dropdown-item">
-                  <div class="dropdown-item-icon bg-info text-white">
-                    <i class="fas fa-bell"></i>
-                  </div>
-                  <div class="dropdown-item-desc">
-                    Welcome to Stisla template!
-                    <div class="time">Yesterday</div>
-                  </div>
-                </a>
-              </div>
-              <div class="dropdown-footer text-center">
-                <a href="<?php echo base_url(); ?>#">View All <i class="fas fa-chevron-right"></i></a>
-              </div>
-            </div>
-          </li>
+         
           <li class="dropdown"><a href="<?php echo base_url(); ?>#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user">
               <img alt="image" src="<?php echo base_url(); ?>assets/img/avatar/avatar-1.png" class="rounded-circle mr-1">
               <div class="d-sm-none d-lg-inline-block"><?php echo $this->session->userdata('fullname'); ?></div>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
-              <div class="dropdown-title">Logged in 5 min ago</div>
-              <a href="<?php echo base_url(); ?>features-profile.html" class="dropdown-item has-icon">
+              <div class="dropdown-title" style="font-size: 8px;">Logged in <?php $looged = $this->db->query("SELECT event_time as time FROM t4log_user WHERE id_user = '". $this->session->userdata('id')."' ORDER BY id DESC")->row()->time; echo $this->lib->waktu_lalu($looged) ?></div>
+              <!-- <a href="<?php echo base_url(); ?>features-profile.html" class="dropdown-item has-icon">
                 <i class="far fa-user"></i> Profile
               </a>
               <a href="<?php echo base_url(); ?>features-activities.html" class="dropdown-item has-icon">
@@ -230,7 +140,7 @@
               </a>
               <a href="<?php echo base_url(); ?>features-settings.html" class="dropdown-item has-icon">
                 <i class="fas fa-cog"></i> Settings
-              </a>
+              </a> -->
               <div class="dropdown-divider"></div>
               <a href="<?php echo site_url('login/signout'); ?>" class="dropdown-item has-icon text-danger">
                 <i class="fas fa-sign-out-alt"></i> Logout
@@ -256,24 +166,24 @@
             <li class="dropdown" id="nav-data-source">
               <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-layer-group"></i> <span>Data Source</span></a>
               <ul class="dropdown-menu">
-                <li id="nav-ltdbb-source"><a class="nav-link" href="<?php echo site_url('source/tltdbb_source'); ?>"><i class="fas fa-database"></i> Ltdbb</a></li>
-                <li id="nav-ltkl-source"><a class="nav-link" href="<?php echo site_url('source/ltkl'); ?>"><i class="fas fa-database"></i> LTKL</a></li>
-                <li class="dropdown" id="nav-qris">
+                <li id="nav-ltdbb-source" class="access_ltdbb"><a class="nav-link" href="<?php echo site_url('source/tltdbb_source'); ?>"><i class="fas fa-database"></i> Ltdbb</a></li>
+                <li id="nav-ltkl-source" class="access_ltkl"><a class="nav-link" href="<?php echo site_url('source/ltkl'); ?>"><i class="fas fa-database"></i> LTKL</a></li>
+                <li class="dropdown access_qris" id="nav-qris">
                   <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-database"></i>QRIS</a>
                   <ul class="dropdown-menu">
                     <li id="nav-source-qris-merchant"><a class="nav-link" href="<?php echo site_url('source/qris_merchant'); ?>"><i class="fas fa-circle"></i> QRIS Merchant</a></li>
                     <li id="nav-source-qris-trx"><a class="nav-link" href="<?php echo site_url('source/qris_trx'); ?>"><i class="fas fa-circle"></i> QRIS Transaksi</a></li>
                   </ul>
                 </li>
-                <li id="nav-dana-float-source"><a class="nav-link" href="<?php echo site_url('source/dana_float'); ?>"><i class="fas fa-database"></i> Dana Float</a></li>
-                <li id="nav-sipesat-source"><a class="nav-link" href="<?php echo site_url('source/si_pesat'); ?>"><i class="fas fa-database"></i> Si Pesat</a></li>
-                <li class="dropdown" id="nav-lkpbu-source">
+                <li id="nav-dana-float-source" class="access_dana_float"><a class="nav-link" href="<?php echo site_url('source/dana_float'); ?>"><i class="fas fa-database"></i> Dana Float</a></li>
+                <li id="nav-sipesat-source" class="access_sipesat"><a class="nav-link" href="<?php echo site_url('source/si_pesat'); ?>"><i class="fas fa-database"></i> Si Pesat</a></li>
+                <li class="dropdown" id="nav-lkpbu-source" class="access_lkpbu">
                   <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-database"></i>LKPBU</a>
                   <ul class="dropdown-menu">
-                    <li id="nav-lkpbu-source-302"><a class="nav-link" href="<?php echo site_url('source/lkpbu_source302'); ?>"><i class="fas fa-circle"></i> Form 302</a></li>
+                    <li id="nav-lkpbu-source-302" class="access_lkpbu_302"><a class="nav-link" href="<?php echo site_url('source/lkpbu_source302'); ?>"><i class="fas fa-circle"></i> Form 302</a></li>
                   </ul>
                 </li>
-                <li id="nav-sipesat-source"><a class="nav-link" href="<?php echo site_url('source/si_pesat'); ?>"><i class="fas fa-database"></i> Gangguan Sistem</a></li>
+                <li class="access_gangguan_system" id="nav-sipesat-source"><a class="nav-link" href="<?php echo site_url('source/si_pesat'); ?>"><i class="fas fa-database"></i> Gangguan Sistem</a></li>
               </ul>
             </li>
             <style>
@@ -284,7 +194,7 @@
             <li class="dropdown" id="nav-data-clean">
               <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-layer-group"></i> <span>Data Clean</span></a>
               <ul class="dropdown-menu">
-                <li class="dropdown" id="nav-ltdbb-clean">
+                <li class="dropdown access_ltdbb" id="nav-ltdbb-clean">
                   <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-database"></i>LTDBB</a>
                   <ul class="dropdown-menu">
                     <li id="nav-ltdbb-clean-G001"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G001'); ?>"><i class="fas fa-circle"></i> G001</a></li>
@@ -292,40 +202,40 @@
                     <li id="nav-ltdbb-clean-G003"><a class="nav-link" href="<?php echo site_url('clean/tltdbb_clean/G003'); ?>"><i class="fas fa-circle"></i> G003</a></li>
                   </ul>
                 </li>
-                <li id="nav-ltkl-clean"><a class="nav-link" href="<?php echo site_url('clean/ltkl'); ?>"><i class="fas fa-database"></i> LTKL</a></li>
-                <li class="dropdown" id="nav-clean-qris">
+                <li id="nav-ltkl-clean" class="access_ltkl"><a class="nav-link" href="<?php echo site_url('clean/ltkl'); ?>"><i class="fas fa-database"></i> LTKL</a></li>
+                <li class="dropdown access_qris" id="nav-clean-qris">
                   <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-database"></i>QRIS</a>
                   <ul class="dropdown-menu">
                     <li id="nav-clean-qris-merchant"><a class="nav-link" href="<?php echo site_url('clean/qris_merchant'); ?>"><i class="fas fa-circle"></i> QRIS Merchant</a></li>
                     <li id="nav-clean-qris-trx"><a class="nav-link" href="<?php echo site_url('clean/qris_trx'); ?>"><i class="fas fa-circle"></i> QRIS Transaksi</a></li>
                   </ul>
                 </li>
-                <li id="nav-dana-float-clean"><a class="nav-link" href="<?php echo site_url('clean/dana_float'); ?>"><i class="fas fa-database"></i> Dana Float</a></li>
-                <li id="nav-sipesat-clean"><a class="nav-link" href="<?php echo site_url('clean/si_pesat'); ?>"><i class="fas fa-database"></i> Si Pesat</a></li>
-                <li class="dropdown" id="nav-lkpbu-clean">
+                <li id="nav-dana-float-clean" class="access_dana_float"><a class="nav-link" href="<?php echo site_url('clean/dana_float'); ?>"><i class="fas fa-database"></i> Dana Float</a></li>
+                <li id="nav-sipesat-clean" class="access_sipesat"><a class="nav-link" href="<?php echo site_url('clean/si_pesat'); ?>"><i class="fas fa-database"></i> Si Pesat</a></li>
+                <li class="dropdown access_lkpbu" id="nav-lkpbu-clean">
                   <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-database"></i>LKPBU</a>
                   <ul class="dropdown-menu">
-                    <li id="nav-lkpbu-clean-302"><a class="nav-link" href="<?php echo site_url('clean/form_302'); ?>"><i class="fas fa-circle"></i> Form 302</a></li>
-                    <li id="nav-lkpbu-clean-304"><a class="nav-link" href="<?php echo site_url('clean/form_304'); ?>"><i class="fas fa-circle"></i> Form 304</a></li>
-                    <li id="nav-lkpbu-clean-306"><a class="nav-link" href="<?php echo site_url('clean/form_306'); ?>"><i class="fas fa-circle"></i> Form 306</a></li>
-                    <li id="nav-lkpbu-clean-309-310-311"><a class="nav-link" href="<?php echo site_url('clean/form_309_310_311'); ?>" style="font-size: 11px;"><i class="fas fa-circle"></i> Form 309 310 & 311</a></li>
-                    <li id="nav-lkpbu-clean-312"><a class="nav-link" href="<?php echo site_url('clean/form_312'); ?>"><i class="fas fa-circle"></i> Form 312</a></li>
-                    <li id="nav-lkpbu-clean-313"><a class="nav-link" href="<?php echo site_url('clean/form_313'); ?>"><i class="fas fa-circle"></i> Form 313</a></li>
+                    <li id="nav-lkpbu-clean-302" class="access_lkpbu_302"><a class="nav-link" href="<?php echo site_url('clean/form_302'); ?>"><i class="fas fa-circle"></i> Form 302</a></li>
+                    <li id="nav-lkpbu-clean-304" class="access_lkpbu_304"><a class="nav-link" href="<?php echo site_url('clean/form_304'); ?>"><i class="fas fa-circle"></i> Form 304</a></li>
+                    <li id="nav-lkpbu-clean-306" class="access_lkpbu_306"><a class="nav-link" href="<?php echo site_url('clean/form_306'); ?>"><i class="fas fa-circle"></i> Form 306</a></li>
+                    <li id="nav-lkpbu-clean-309-310-311" class="access_lkpbu_309_310_311"><a class="nav-link" href="<?php echo site_url('clean/form_309_310_311'); ?>" style="font-size: 11px;"><i class="fas fa-circle"></i> Form 309 310 & 311</a></li>
+                    <li id="nav-lkpbu-clean-312" class="access_lkpbu_312"><a class="nav-link" href="<?php echo site_url('clean/form_312'); ?>"><i class="fas fa-circle"></i> Form 312</a></li>
+                    <li id="nav-lkpbu-clean-313" class="access_lkpbu_313"><a class="nav-link" href="<?php echo site_url('clean/form_313'); ?>"><i class="fas fa-circle"></i> Form 313</a></li>
                   </ul>
                 </li>
-                <li id="nav-sipesat-clean"><a class="nav-link" href="<?php echo site_url('clean/si_pesat'); ?>"><i class="fas fa-database"></i> Gangguan Sistem</a></li>
+                <li id="nav-sipesat-clean" class="access_gangguan_system"><a class="nav-link" href="<?php echo site_url('clean/si_pesat'); ?>"><i class="fas fa-database"></i> Gangguan Sistem</a></li>
               </ul>
             </li>
             <li class="dropdown" id="nav-utilities-source">
               <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-wrench"></i> <span>Utilities Source</span></a>
               <ul class="dropdown-menu">
                 <!-- <li id="nav-role-clean"><a class="nav-link" href="<?php echo site_url('utilities/role_clean'); ?>"><i class="fas fa-align-center"></i> Role Clean</a></li> -->
-                <li id="nav-auto-clean"><a class="nav-link" href="<?php echo site_url('utilities/auto_clean'); ?>"><i class="fas fa-align-center"></i> Auto Clean LTDBB</a></li>
-                <li id="nav-auto-clean-ltkl"><a class="nav-link" href="<?php echo site_url('utilities/auto_clean_ltkl'); ?>"><i class="fas fa-align-center"></i> Auto Clean LTKL</a></li>
+                <li id="nav-auto-clean" class="access_cleansing_ltdbb"><a class="nav-link" href="<?php echo site_url('utilities/auto_clean'); ?>"><i class="fas fa-align-center"></i> Auto Clean LTDBB</a></li>
+                <li id="nav-auto-clean-ltkl" class="access_cleansing_ltkl"><a class="nav-link" href="<?php echo site_url('utilities/auto_clean_ltkl'); ?>"><i class="fas fa-align-center"></i> Auto Clean LTKL</a></li>
                 <!-- <li id="nav-manual-clean"><a class="nav-link" href="<?php echo site_url('utilities/manual'); ?>"><i class="fas fa-database"></i> Manual Clean</a></li> -->
               </ul>
             </li>
-            <li class="dropdown" id="nav-master-data">
+            <li class="dropdown access_master_data" id="nav-master-data">
               <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-sliders-h"></i> <span>Master data</span></a>
               <ul class="dropdown-menu">
                 <li id="nav-role-model"><a class="nav-link" href="<?php echo site_url('role_model'); ?>"><i class="fas fa-align-center"></i> Role Model</a></li>
@@ -352,6 +262,7 @@
                 <li id="nav-partyrole"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_partyrole'); ?>"><i class="fas fa-align-center"></i> Partyrole</a></li>
                 <li id="nav-reportind"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_reportind'); ?>"><i class="fas fa-align-center"></i> Reportind</a></li>
                 <li id="nav-gender"><a class="nav-link" href="<?php echo site_url('master/page/tltkl_gender'); ?>"><i class="fas fa-align-center"></i> Gender</a></li>
+                <li id="nav-setting-report"><a class="nav-link" href="<?php echo site_url('report/setting_report'); ?>"><i class="fas fa-align-center"></i> Setting Report</a></li>
               </ul>
             </li>
             <!-- <li id="nav-verify-data">
@@ -363,48 +274,47 @@
 
 
                 <li class="dropdown" id="nav-ltdbb-report">
-                  <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-list"></i>LTDBB</a>
+                  <a href="#" class="nav-link has-dropdown access_ltdbb" data-toggle="dropdown"><i class="fas fa-list"></i>LTDBB</a>
                   <ul class="dropdown-menu">
                     <li id="nav-ltdbb-report-g001"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G001'); ?>"><i class="fas fa-circle"></i> G001</a></li>
                     <li id="nav-ltdbb-report-g002"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G002'); ?>"><i class="fas fa-circle"></i> G002</a></li>
                     <li id="nav-ltdbb-report-g003"><a class="nav-link" href="<?php echo site_url('report/ltdbb/G003'); ?>"><i class="fas fa-circle"></i> G003</a></li>
                   </ul>
                 </li>
-                <li id="nav-dana-float-report"><a class="nav-link" href="<?php echo site_url('report/ltkl'); ?>"><i class="fas fa-list"></i> LTKL</a></li>
-                <li id="nav-dana-float-report"><a class="nav-link" href="<?php echo site_url('report/qris'); ?>"><i class="fas fa-list"></i> QRIS</a></li>
-                <li id="nav-dana-float-report"><a class="nav-link" href="<?php echo site_url('report/dana_float'); ?>"><i class="fas fa-list"></i> Dana Float</a></li>
-                <li id="nav-dana-float-report"><a class="nav-link" href="<?php echo site_url('report/qris'); ?>"><i class="fas fa-list"></i> Payment Gateway</a></li>
-                <li id="nav-sipesat-report"><a class="nav-link" href="<?php echo site_url('report/sipesat'); ?>"><i class="fas fa-list"></i> Sipesat</a></li>
-                <li class="dropdown" id="nav-lkpbu-report">
+                <li id="nav-dana-float-report" class="access_ltkl"><a class="nav-link" href="<?php echo site_url('report/ltkl'); ?>"><i class="fas fa-list"></i> LTKL</a></li>
+                <li id="nav-dana-float-report" class="access_qris"><a class="nav-link" href="<?php echo site_url('report/qris'); ?>"><i class="fas fa-list"></i> QRIS</a></li>
+                <li id="nav-dana-float-report" class="access_dana_float"><a class="nav-link" href="<?php echo site_url('report/dana_float'); ?>"><i class="fas fa-list"></i> Dana Float</a></li>
+                <li id="nav-sipesat-report" class="access_sipesat"><a class="nav-link" href="<?php echo site_url('report/sipesat'); ?>"><i class="fas fa-list"></i> Sipesat</a></li>
+                <li class="dropdown access_lkpbu" id="nav-lkpbu-report">
                   <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-list"></i>LKPBU</a>
                   <ul class="dropdown-menu">
-                    <li id="nav-lkpbu-report-302"><a class="nav-link" href="<?php echo site_url('report/lkpbu_302'); ?>"><i class="fas fa-circle"></i> Form 302</a></li>
-                    <li id="nav-lkpbu-report-303"><a class="nav-link" href="<?php echo site_url('report/lkpbu_303'); ?>"><i class="fas fa-circle"></i> Form 303</a></li>
-                    <li id="nav-lkpbu-report-304"><a class="nav-link" href="<?php echo site_url('report/lkpbu_304'); ?>"><i class="fas fa-circle"></i> Form 304</a></li>
-                    <li id="nav-lkpbu-report-306"><a class="nav-link" href="<?php echo site_url('report/lkpbu_306'); ?>"><i class="fas fa-circle"></i> Form 306</a></li>
-                    <li id="nav-lkpbu-report-309"><a class="nav-link" href="<?php echo site_url('report/lkpbu_309'); ?>"><i class="fas fa-circle"></i> Form 309</a></li>
-                    <li id="nav-lkpbu-report-310"><a class="nav-link" href="<?php echo site_url('report/lkpbu_310'); ?>"><i class="fas fa-circle"></i> Form 310</a></li>
-                    <li id="nav-lkpbu-report-311"><a class="nav-link" href="<?php echo site_url('report/lkpbu_311'); ?>"><i class="fas fa-circle"></i> Form 311</a></li>
-                    <li id="nav-lkpbu-report-312"><a class="nav-link" href="<?php echo site_url('report/lkpbu_312'); ?>"><i class="fas fa-circle"></i> Form 312</a></li>
-                    <li id="nav-lkpbu-report-313"><a class="nav-link" href="<?php echo site_url('report/lkpbu_313'); ?>"><i class="fas fa-circle"></i> Form 313</a></li>
+                    <li class="access_lkpbu_302" id="nav-lkpbu-report-302"><a class="nav-link" href="<?php echo site_url('report/lkpbu_302'); ?>"><i class="fas fa-circle"></i> Form 302</a></li>
+                    <li class="access_lkpbu_303" id="nav-lkpbu-report-303"><a class="nav-link" href="<?php echo site_url('report/lkpbu_303'); ?>"><i class="fas fa-circle"></i> Form 303</a></li>
+                    <li class="access_lkpbu_304" id="nav-lkpbu-report-304"><a class="nav-link" href="<?php echo site_url('report/lkpbu_304'); ?>"><i class="fas fa-circle"></i> Form 304</a></li>
+                    <li class="access_lkpbu_306" id="nav-lkpbu-report-306"><a class="nav-link" href="<?php echo site_url('report/lkpbu_306'); ?>"><i class="fas fa-circle"></i> Form 306</a></li>
+                    <li class="access_lkpbu_309_310_311" id="nav-lkpbu-report-309"><a class="nav-link" href="<?php echo site_url('report/lkpbu_309'); ?>"><i class="fas fa-circle"></i> Form 309</a></li>
+                    <li class="access_lkpbu_309_310_311" id="nav-lkpbu-report-310"><a class="nav-link" href="<?php echo site_url('report/lkpbu_310'); ?>"><i class="fas fa-circle"></i> Form 310</a></li>
+                    <li class="access_lkpbu_309_310_311" id="nav-lkpbu-report-311"><a class="nav-link" href="<?php echo site_url('report/lkpbu_311'); ?>"><i class="fas fa-circle"></i> Form 311</a></li>
+                    <li class="access_lkpbu_312" id="nav-lkpbu-report-312"><a class="nav-link" href="<?php echo site_url('report/lkpbu_312'); ?>"><i class="fas fa-circle"></i> Form 312</a></li>
+                    <li class="access_lkpbu_313" id="nav-lkpbu-report-313"><a class="nav-link" href="<?php echo site_url('report/lkpbu_313'); ?>"><i class="fas fa-circle"></i> Form 313</a></li>
                   </ul>
                 </li>
-                <li id="nav-setting-report"><a class="nav-link" href="<?php echo site_url('report/setting_report'); ?>"><i class="fas fa-align-center"></i> Setting Report</a></li>
+                <li id="nav-gangguan-system-report" class="access_gangguan_system"><a class="nav-link" href="<?php echo site_url('report/gangguan_system'); ?>"><i class="fas fa-list"></i> Gangguan System</a></li>
               </ul>
             </li>
 
             <li class="menu-header">System Setting</li>
             <li>
-              <a href="<?php echo site_url('user_group'); ?>" class="nav-link"><i class="fas fa-users"></i><span>User group</span></a>
+              <a href="<?php echo site_url('user_group'); ?>" class="nav-link access_user_group"><i class="fas fa-users"></i><span>User group</span></a>
             </li>
             <li>
-              <a href="<?php echo site_url('user'); ?>" class="nav-link"><i class="fas fa-user"></i><span>User</span></a>
+              <a href="<?php echo site_url('user'); ?>" class="nav-link access_user"><i class="fas fa-user"></i><span>User</span></a>
             </li>
             <li id="nav-user-activity">
-              <a href="<?php echo site_url('user_activity'); ?>" class="nav-link"><i class="fas fa-history"></i><span>User Activity</span></a>
+              <a href="<?php echo site_url('user_activity'); ?>" class="nav-link access_user_activity"><i class="fas fa-history"></i><span>User Activity</span></a>
             </li>
             <li id="nav-archive">
-              <a href="<?php echo site_url('source/archive'); ?>" class="nav-link"><i class="fas fa-archive"></i><span>Archive</span></a>
+              <a href="<?php echo site_url('source/archive'); ?>" class="nav-link access_archive"><i class="fas fa-archive"></i><span>Archive</span></a>
             </li>
             <li>
               <a href="<?php echo site_url('login/signout'); ?>" class="nav-link"><i class="fas fa-sign-out-alt"></i><span>Logout</span></a>
@@ -463,6 +373,8 @@
   <script src="<?php echo base_url(); ?>assets/js/custom.js"></script>
 
   <script>
+    
+
     $(document).ready(function() {
       $('.dropify').dropify();
       $('.select2').select2({
@@ -494,7 +406,10 @@
 
 
     });
+
   </script>
+  
+  
 </body>
 
 </html>
