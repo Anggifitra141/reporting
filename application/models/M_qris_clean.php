@@ -153,5 +153,30 @@ class M_qris_clean extends CI_model {
     $this->db->where('status', 'cleaned');
     return $this->db->count_all_results();
   }
+  public function get_qris_merchant($id)
+  {
+    $this->db->from($this->table_merchant);
+    $this->db->where('id', $id);
+    $query = $this->db->get();
+    return $query->row();
+  }
+
+  public function add_qris_merchant($data)
+  {
+    $this->db->insert($this->table_merchant, $data);
+    return $this->db->insert_id();
+  }
+
+  public function update_qris_merchant($where, $data)
+  {
+    $this->db->update($this->table_merchant, $data, $where);
+    return $this->db->affected_rows();
+  }
+
+  public function delete_qris_merchant($id)
+  {
+    $this->db->where('id', $id);
+    $this->db->delete($this->table_merchant);
+  }
 
 }

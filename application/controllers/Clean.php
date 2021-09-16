@@ -554,6 +554,8 @@ class Clean extends CI_Controller {
     //  START :: QRIS
     public function qris_merchant(){
       $data= [];
+      $data['mcc'] = $this->db->get('tqris_mcc')->result();
+      $data['merchant_criteria'] = $this->db->get('tqris_merchant_criteria')->result();
       $data['content'] = $this->load->view('clean/qris_merchant', $data, TRUE);
       $this->load->view('layout', $data);
     }
@@ -576,6 +578,8 @@ class Clean extends CI_Controller {
        $no++;
        $row = array();
        $row[] = $no; 
+       $row[] = '<a href="#" onclick="get_qris_merchant('.$raw_data->id.')" class="btn btn-icon btn-primary btn-sm"><i class="far fa-edit"></i></a>
+                  <a href="#" onclick="delete_qris_merchant('.$raw_data->id.')" class="btn btn-icon btn-danger btn-sm"><i class="fas fa-trash"></i></a>';
        $row[] = $raw_data->merchant_name;
        $row[] = $raw_data->city;
        $row[] = $raw_data->mcc;
@@ -649,6 +653,171 @@ class Clean extends CI_Controller {
                 "data" => $data,
               );
       echo json_encode($output);
+    }
+    
+
+  public function get_qris_merchant($id)
+  {
+      $result = $this->M_qris_clean->get_qris_merchant($id);
+      $data = [
+        'id'             => $result->id,
+        'merchant_name'      => $result->merchant_name,
+        'city'  => $result->city,
+        'mcc'        => $result->mcc,
+        'merchant_criteria'        => $result->merchant_criteria,
+        'merchant_status'        => $result->merchant_status,
+        'activation_peroid'       => date('Y-m-d', strtotime($result->activation_peroid))
+      ];
+      echo json_encode($data);
+  }
+
+    public function add_qris_merchant()
+    {
+      $ACT = 'add';
+      $this->_validate_qris_merchant($ACT);
+      $data = array(
+        'merchant_name'      => $this->input->post('merchant_name'),
+          'city'  => $this->input->post('city'),
+          'mcc'        => $this->input->post('mcc'),
+          'merchant_criteria'        => $this->input->post('merchant_criteria'),
+          'merchant_status'        => $this->input->post('merchant_status'),
+          'activation_peroid'       => date('Ymd', strtotime($this->input->post('activation_peroid'))),
+        'datestamp'         => date('Ymd'),
+        'status'            => 'cleaned'
+      );
+      $this->db->insert('t0source_qris_merchant', $data);
+      $id_source = $this->db->insert_id();
+      $data['id_source'] = $id_source;
+      $this->M_qris_clean->add_qris_merchant($data);
+      echo json_encode(array("status" => TRUE ));
+    }
+
+    public function update_qris_merchant()
+    {
+      $ACT = 'update';
+      $this->_validate_qris_merchant($ACT);
+      $data = array(
+        'merchant_name'      => $this->input->post('merchant_name'),
+          'city'  => $this->input->post('city'),
+          'mcc'        => $this->input->post('mcc'),
+          'merchant_criteria'        => $this->input->post('merchant_criteria'),
+          'merchant_status'        => $this->input->post('merchant_status'),
+          'activation_peroid'       => date('Ymd', strtotime($this->input->post('activation_peroid'))),
+        'datestamp'         => date('Ymd')
+      );
+      $this->M_qris_clean->update_qris_merchant(array('id' => $this->input->post('id')), $data);
+      echo json_encode(array("status" => TRUE ));
+    }
+
+    public function delete_qris_merchant($id)
+    {
+      $this->M_qris_clean->delete_qris_merchant($id);
+      echo json_encode(array("status" => TRUE));
+    }
+
+    private function _validate_qris_merchant($event)
+    {
+      $data = array();
+      $data['error_string'] = array();
+      $data['inputerror'] = array();
+      $data['status'] = TRUE;
+      $actions = explode('#', $this->session->userdata('action'));
+      $data['action'] = $actions;
+
+      if(!in_array($event, $actions))
+      {
+          $data['inputerror'][] = 'sess_act';
+          $data['error_string'][] = 'Error! You have no right to this action.';
+          $data['status'] = FALSE;
+      }
+      if($this->input->post('merchant_name') == '')
+      {
+          $data['inputerror'][] = 'merchant_name';
+          $data['error_string'][] = 'merchant_name is required';
+          $data['status'] = FALSE;
+      }
+      if($this->input->post('city') == '')
+      {
+          $data['inputerror'][] = 'city';
+          $data['error_string'][] = 'Ticket Status is required';
+          $data['status'] = FALSE;
+      }
+      if($this->input->post('mcc') == '')
+      {
+          $data['inputerror'][] = 'mcc';
+          $data['error_string'][] = 'mcc is required';
+          $data['status'] = FALSE;
+      }
+      if($this->input->post('merchant_criteria') == '')
+      {
+          $data['inputerror'][] = 'merchant_criteria';
+          $data['error_string'][] = 'merhant criteria is required';
+          $data['status'] = FALSE;
+      }
+      if($this->input->post('activation_peroid') == '')
+      {
+          $data['inputerror'][] = 'activation_peroid';
+          $data['error_string'][] = 'activation period is required';
+          $data['status'] = FALSE;
+      }
+    
+      if($data['status'] === FALSE)
+      {
+          echo json_encode($data);
+          exit();
+      }
+    }
+
+    public function import_qris_merchant(){
+      $this->_validate_import_309_310_311();
+      $config['upload_path'] = './assets/';
+      $config['allowed_types'] = 'xls|xlsx';
+      $config['overwrite'] = true;
+      $this->load->library('upload', $config);
+      if($this->upload->do_upload('file_import')){
+        $file = $this->upload->data();
+        include APPPATH.'third_party/PHPExcel/PHPExcel.php';
+        // if($file['file_ext'] == 'xls'){
+        //   $excelreader = new PHPExcel_Reader_Excel5();
+        // }else{
+        // }
+          $excelreader = new PHPExcel_Reader_Excel2007();
+
+        // $excelreader = new PHPExcel_Reader_Excel5();
+
+        $loadexcel   = $excelreader->load('assets/'.$file['file_name']);
+        $sheet       = $loadexcel->getActiveSheet()->toArray(null, true, true ,true);
+
+        $data = [];
+        $data_update = [];
+
+        $numrow = 1;
+        foreach($sheet as $row){
+          if($numrow > 1){
+            $data = [
+              'merchant_name'     =>   $row['A'],
+              'city'              =>   $row['B'],
+              'mcc'               =>   $row['C'],
+              'merchant_criteria' =>   $row['D'],
+              'merchant_status'   =>   $row['E'],
+              'activation_peroid'         =>   date('Ymd', strtotime($row['F'])),
+              'datestamp'         =>   date('Ymd'),
+            ];
+            $data_source = $data;
+            $data_source['status'] = 'old';
+            $this->db->insert('t0source_qris_merchant', $data_source);
+            $id_source = $this->db->insert_id();
+            $data['id_source'] = $id_source;
+            $data['status'] = 'cleaned';
+            $this->db->insert('t1clean_qris_merchant', $data);
+
+          }
+          $numrow++;
+        }
+        unlink('./assets/'.$file['file_name']);
+        
+      }
+      echo json_encode(['status' => true, 'message' => 'Import data berhasil']);
     }
     // END :: QRIS
 

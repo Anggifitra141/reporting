@@ -17,6 +17,7 @@
         <div class="form-group">
           <a href="#" onclick="add_form_309_310_311()" class="btn btn-icon icon-left btn-outline-primary"><i class="far fa-plus-square"></i> Add</a>
           <a href="#" onclick="import_data()" class="btn btn-icon icon-left btn-outline-success"><i class="far fa-file-excel"></i> Import Data</a>
+          <a href="<?= base_url('assets/template-excel/template-import-f309-f310-f311.xlsx') ?>" download class="btn float-right btn-icon icon-left btn-success"><i class="fas fa-download"></i> Download Sample</a>
         </div>
         <div class="card">
           <div class="card-body">
