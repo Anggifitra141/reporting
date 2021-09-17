@@ -237,6 +237,76 @@ class Report extends CI_Controller {
     exit;
   }
 
+  public function download_txt_ltdbb()
+  {
+
+
+    include APPPATH . 'third_party/PHPExcel/PHPExcel.php';
+    // $type_report = $this->input->post('type_report');
+
+    $start_date = date('Ymd', strtotime(substr($_GET['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_GET['daterange'], 13, 23)));
+    $type_report = $_GET['type_report'];
+
+    $this->db->where('status', "cleaned");
+    $this->db->where('trx_date >=', $start_date);
+    $this->db->where('trx_date <=', $end_date);
+
+    if ($type_report == 'G001') {
+      $this->db->where_in('sender_country', array('INDONESIA', '86'));
+      $this->db->where_not_in('recept_country', array('INDONESIA', '86'));
+    } else if ($type_report == 'G002') {
+      $this->db->where_not_in('sender_country', array('INDONESIA', '86'));
+      $this->db->where_in('recept_country', array('INDONESIA', '86'));
+    } else if ($type_report == 'G003') {
+      $this->db->where_in('sender_country', array('INDONESIA', '86'));
+      $this->db->where_in('recept_country', array('INDONESIA', '86'));
+    }
+    $list = $this->db->get('t1clean_ltdbb')->result();
+
+
+    $report_setting = $this->M_report->get_report_setting($type_report);
+    //$recordsFiltered = $this->M_report->count_filtered_ltdbb();
+
+    $data = array();
+    $header = 1;
+    $baris = 2;
+
+
+    foreach ($list as $row) {
+      if ($type_report == 'G001') {
+        $tgl_code = date('Ymd') . substr($report_setting->code, 1);
+        $datarow[$header] = $report_setting->header2 . 'M' . date('Ymd') . $report_setting->code . str_pad(count($list), 9, "0", STR_PAD_LEFT) . "\n";
+        $datarow[$baris] = "" . substr($row->sender_country, 0, 2) . substr($row->recept_city, 0, 4) . str_pad($row->recept_name, 50, " ") . str_pad($row->sender_name, 50, " ") . str_pad($row->trx_freq, 12, '0', STR_PAD_LEFT) . str_pad($row->trx_amount, 15, '0', STR_PAD_LEFT) . "\n";
+
+        $baris++;
+      } else if ($type_report == 'G002') {
+        $tgl_code = date('Ymd') . substr($report_setting->code, 1);
+        $datarow[$header] = $report_setting->header2 . 'M' . date('Ymd') . $report_setting->code . str_pad(count($list), 9, "0", STR_PAD_LEFT) . "\n";
+        $datarow[$baris] = "".substr($row->sender_country, 0,2).substr($row->recept_city,0,4).str_pad($row->recept_name, 50, " ").str_pad($row->sender_name, 50, " ").str_pad($row->trx_freq, 12, '0', STR_PAD_LEFT).str_pad($row->trx_amount, 15, '0', STR_PAD_LEFT)."\n";      
+        
+        $baris++;
+      } else {
+        $tgl_code = date('Ym') . substr($report_setting->code, 1);
+        $datarow[$header] = $report_setting->header2 . 'M' . date('Ymd') . $report_setting->code . str_pad(count($list), 9, "0", STR_PAD_LEFT)."\n";
+        $datarow[$baris] = "".substr($row->sender_country, 0, 2).substr($row->recept_city, 0, 4) . str_pad($row->recept_name, 50, " ") . str_pad($row->sender_name, 50, " ") . str_pad($row->trx_freq, 12, '0', STR_PAD_LEFT) . str_pad($row->trx_amount, 15, '0', STR_PAD_LEFT)."\n";
+        $baris++;
+        
+      }
+      $data[] = $row;
+   
+    }
+    
+    $filename = "Laporan LTDBB ".$report_setting->code." - ".date('Y-m-d').".txt";
+    file_put_contents($filename, $datarow);
+    header('Content-Type: application/text');
+    header('Content-Disposition: attachment; filename="'.$filename);
+    echo file_get_contents($filename);
+
+    user_log($this->session->userdata('id'), 'REPORT', "DOWNLOAD", '', "Download Report LTDBB $type_report", '');
+    trx_log($this->session->userdata('id'), 'REPORT', "DOWNLOAD", '', "Download Report LTDBB $type_report");
+  
+  }
 
   //SIPESAT
 

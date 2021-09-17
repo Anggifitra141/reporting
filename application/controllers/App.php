@@ -139,8 +139,10 @@ class App extends CI_Controller {
 		$dataContent = array();
 		$indeks=0;
 		$i = 1;
+		$head = "019293971313";
 		
 		foreach($test->result() as $dat){	
+
 			$dataContent[$i] = "".str_pad($dat->sender_city, 35)." ".str_pad($dat->recept_country, 20)." ".str_pad($dat->recept_name, 40)." ".str_pad($dat->sender_name, 40)." ".str_pad($dat->trxvolume, 3)." ".str_pad($dat->trxnominal, 10).".\n";
 			$indeks++;
 			$i++;

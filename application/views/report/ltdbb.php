@@ -31,10 +31,10 @@
                 <button class="btn btn-icon btn-outline-warning btn-block" style="margin-top:27px;" id="btn-view"><i class="fas fa-eye"></i> View </button>
               </div>
               <div class="col-md-2">
-                <a href="" target="_blank" class="btn btn-icon btn-outline-success btn-block" style="margin-top:27px;" id="btn-download-excel"><i class="fas fa-file-excel"></i> Download Excel </a>
+                <a href="" download="" class="btn btn-icon btn-outline-success btn-block" style="margin-top:27px;" id="btn-download-excel"><i class="fas fa-file-excel"></i> Download Excel </a>
               </div>
               <div class="col-md-2">
-                <button class="btn btn-icon btn-outline-primary btn-block" style="margin-top:27px;" id="btn-download-txt"><i class="fas fa-file-alt"></i> Download Txt </button>
+                <a href="" download class="btn btn-icon btn-outline-primary btn-block" style="margin-top:27px;" id="btn-download-txt"><i class="fas fa-file-alt"></i> Download Txt </a>
               </div>
             </div>
 
@@ -211,7 +211,7 @@
 
             <input type="hidden" name="id" value="">
             <div class="row" id="form-modify-selected">
-              
+
             </div>
 
             <hr>
@@ -256,7 +256,7 @@
     $('#notif-available').hide();
     $('#result-data').hide();
     $('#btn-download-excel').show();
-    $('#btn-download-excel').show();
+    $('#btn-download-txt').show();
     $('#table-data').DataTable().destroy();
 
     var type_report = "<?= $this->uri->segment(3); ?>";
@@ -293,6 +293,8 @@
         $(".data-check").prop('checked', $(this).prop('checked'));
       });
       $('#btn-download-excel').attr('href', base_url + 'report/download_excel_ltdbb?type_report=' + type_report + '&daterange=' + daterange);
+
+      $('#btn-download-txt').attr('href', base_url + 'report/download_txt_ltdbb?type_report=' + type_report + '&daterange=' + daterange);
 
     } else {
       alert('Fields Is Required');
@@ -427,8 +429,8 @@
     });
     if (list_id.length > 0) {
       $('#modal_modify_selected_ltdbb').modal('show');
-    $('.modal-title').text('Update Selected Ltdbb');
-    $('#form-modify-selected').html(`
+      $('.modal-title').text('Update Selected Ltdbb');
+      $('#form-modify-selected').html(`
               <div class="col-6">
                 <div class="form-group">
                   <label for="lastName">Kota/Kabupaten Pengiriman</label>
@@ -474,11 +476,11 @@
                 </div>
               </div>
     
-    `);   
-    }else{
+    `);
+    } else {
       swal('Modify Selected Data Canceled');
     }
-   
+
   }
 
   function delete_row(id) {
