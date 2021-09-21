@@ -296,7 +296,6 @@ class Report extends CI_Controller {
       $data[] = $row;
    
     }
-    
     $filename = "Laporan LTDBB ".$report_setting->code." - ".date('Y-m-d').".txt";
     file_put_contents($filename, $datarow);
     header('Content-Type: application/text');
@@ -429,8 +428,8 @@ class Report extends CI_Controller {
     $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
 
     $this->db->where('status', "cleaned");
-    $this->db->where('trx_datetime >=', $start_date . '000000');
-    $this->db->where('trx_datetime <=', $end_date . '235959');
+    $this->db->where('datestamp >=', $start_date);
+    $this->db->where('datestamp <=', $end_date);
     $list = $this->M_danafloat_clean->get_datatables();
     $data = array();
     $no = $_POST['start'];
@@ -477,49 +476,130 @@ class Report extends CI_Controller {
 
     $start_date = date('Ymd', strtotime(substr($_GET['daterange'], 0, 10)));
     $end_date =  date('Ymd', strtotime(substr($_GET['daterange'], 13, 23)));
-    $this->db->where('status', "cleaned");
-    $this->db->where('trx_datetime >=', $start_date .'000000');
-    $this->db->where('trx_datetime <=', $end_date .'235959');
 
-
-    $list = $this->db->get('t1clean_danafloat')->result();
+    $list = $this->db->query("
+      SELECT *, (Saldo_Awal + Cash_In - Cash_Out) as Saldo_akhir
+      From (Select `datestamp`, IFNULL((SELECT (IF(trx_type='SALDOAWAL', `trx_value`, 0) + SUM(`credit`)-SUM(`debit`) )
+      FROM `t1clean_danafloat` a3 WHERE a3.`datestamp` < a.`datestamp` ORDER BY a3.`datestamp` DESC LIMIT 1) ,Saldo_Awal) as Saldo_Awal, Cash_In, Cash_Out
+      FROM (SELECT `id`,`datestamp` , IF(trx_type='SALDOAWAL', `trx_value`, 0) as Saldo_Awal, SUM(`credit`) as Cash_In, SUM(`debit`) as Cash_Out,(IF(trx_type='SALDOAWAL', `trx_value`, 0) + SUM(`credit`)-SUM(`debit`) ) as Saldo_Akhir
+      FROM `t1clean_danafloat` a1 GROUP BY `datestamp`) a) b WHERE datestamp BETWEEN '".$start_date."' AND '".$end_date."'
+    ")->result();
 
     $type_report = "DANA FLOAT";
     $report_setting = $this->M_report->get_report_setting($type_report);
 
     $data = array();
-    $no = 1;
-    $baris = 2;
-    //$objPHPExcel    = new PHPExcel();
+    
+    $baris = 3;
+    $num_merge = 1;
+    $merge=4;
+    $for_cell = 1;
+    $i_range=1;
+    $i=0;
+    // $objPHPExcel    = new PHPExcel();
 
-
-    $objPHPExcel = PHPExcel_IOFactory::load("./assets/template-excel/template-dana-float.xlsx");
-
-
+    $objPHPExcel = PHPExcel_IOFactory::load("./assets/template-excel/template-dana-float-bi.xlsx");
+    
+    // SET HEADER
+    $sheet_range = [];
+     
+  
     foreach ($list as $row) {
+      if($row->Saldo_Awal > 0 ){
+        $merge_cell = $this->cellsToMergeByColsRow($num_merge,$merge,1);
+        $title_merge = explode(':', $merge_cell)[0];
+        
+        $objPHPExcel->getActiveSheet(0)->mergeCells($merge_cell)
+        ->setCellValue($title_merge, date('d/M/Y', strtotime($row->datestamp)));
+        $objPHPExcel->getActiveSheet()->getStyle($merge_cell)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()
+          ->getStyle($merge_cell)
+          ->getFill()
+          ->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
+          ->getStartColor()
+          ->setARGB('D9E2F3');
+        $objPHPExcel->getActiveSheet()->getStyle($merge_cell)->getFont()->setBold( true );
+        for ($i_range; $i_range <= $for_cell  * 4; $i_range++) { 
+          $sheet_range[] = PHPExcel_Cell::stringFromColumnIndex($i_range);
+        }
 
-      $objPHPExcel->setActiveSheetIndex(0)
-        ->setCellValue('A' . $baris, date('d-m-Y', strtotime($row->trx_datetime)))
-        ->setCellValue('B' . $baris, date('H:i:s', strtotime($row->trx_datetime)))
-        ->setCellValue('C' . $baris, $row->wallet_code)
-        ->setCellValue('D' . $baris, $row->trx_type)
-        ->setCellValue('E' . $baris, $row->description)
-        ->setCellValue('F' . $baris, $row->trx_value)
-        ->setCellValue('G' . $baris, $row->trx_code)
-        ->setCellValue('H' . $baris, $row->trx_id)
-        ->setCellValue('I' . $baris, $row->credit)
-        ->setCellValue('J' . $baris, $row->debit)
-        ->setCellValue('K' . $baris, $row->syslogno)
-        ->setCellValue('L' . $baris, $row->channel_id)
-        ->setCellValue('M' . $baris, $row->srac)
-        ->setCellValue('N' . $baris, $row->dsac);
+        
 
-      $baris++;
-      $no++;
 
-      $data[] = $row;
-    }
+         for ($i; $i < count($sheet_range); $i++) {    
+           $awal = $sheet_range[$i];
+          $objPHPExcel->setActiveSheetIndex(0)->setCellValue($sheet_range[$i] . 2, 'Saldo Awal');
+          $objPHPExcel->setActiveSheetIndex(0)->setCellValue($sheet_range[$i] . 3, number_format($row->Saldo_Awal,2));
+          $objPHPExcel->setActiveSheetIndex(0)->setCellValue($sheet_range[$i] . 4, 0);
+          $objPHPExcel->setActiveSheetIndex(0)->setCellValue($sheet_range[$i] . 5, 'Tidak Ada');
+          $objPHPExcel->setActiveSheetIndex(0)->setCellValue($sheet_range[$i] . 13, 'Tidak Ada');
+          $objPHPExcel->setActiveSheetIndex(0)->setCellValue($sheet_range[$i] . 14, 'Tidak Ada');
+          $objPHPExcel->setActiveSheetIndex(0)->setCellValue($sheet_range[$i] . 15, 'Tidak Ada');
+          $objPHPExcel->setActiveSheetIndex(0)->setCellValue($sheet_range[$i] . 16, 'Tidak Ada');
+          $i++;
+          $objPHPExcel->setActiveSheetIndex(0)->setCellValue($sheet_range[$i] . 2, 'Cash In');
+          $objPHPExcel->setActiveSheetIndex(0)->setCellValue($sheet_range[$i] . 3, number_format($row->Cash_In,2));
+          $objPHPExcel->setActiveSheetIndex(0)->setCellValue($sheet_range[$i] . 4, 0);
+          $objPHPExcel->setActiveSheetIndex(0)->setCellValue($sheet_range[$i] . 5, 'Tidak Ada');
+          $objPHPExcel->setActiveSheetIndex(0)->setCellValue($sheet_range[$i] . 13, 'Tidak Ada');
+          $objPHPExcel->setActiveSheetIndex(0)->setCellValue($sheet_range[$i] . 14, 'Tidak Ada');
+          $objPHPExcel->setActiveSheetIndex(0)->setCellValue($sheet_range[$i] . 15, 'Tidak Ada');
+          $objPHPExcel->setActiveSheetIndex(0)->setCellValue($sheet_range[$i] . 16, 'Tidak Ada');
+          $i++;
+          $objPHPExcel->setActiveSheetIndex(0)->setCellValue($sheet_range[$i] . 2, 'Cash Out');
+          $objPHPExcel->setActiveSheetIndex(0)->setCellValue($sheet_range[$i] . 3, number_format($row->Cash_Out,2));
+          $objPHPExcel->setActiveSheetIndex(0)->setCellValue($sheet_range[$i] . 4, 0);
+          $objPHPExcel->setActiveSheetIndex(0)->setCellValue($sheet_range[$i] . 5, 'Tidak Ada');
+          $objPHPExcel->setActiveSheetIndex(0)->setCellValue($sheet_range[$i] . 13, 'Tidak Ada');
+          $objPHPExcel->setActiveSheetIndex(0)->setCellValue($sheet_range[$i] . 14, 'Tidak Ada');
+          $objPHPExcel->setActiveSheetIndex(0)->setCellValue($sheet_range[$i] . 15, 'Tidak Ada');
+          $objPHPExcel->setActiveSheetIndex(0)->setCellValue($sheet_range[$i] . 16, 'Tidak Ada');
+          $i++;
+          $objPHPExcel->setActiveSheetIndex(0)->setCellValue($sheet_range[$i] . 2, 'Saldo Akhir');
+          $objPHPExcel->setActiveSheetIndex(0)->setCellValue($sheet_range[$i] . 3, number_format($row->Saldo_akhir,2));
+          $objPHPExcel->setActiveSheetIndex(0)->setCellValue($sheet_range[$i] . 4, number_format($row->Cash_Out,2));
+          $objPHPExcel->setActiveSheetIndex(0)->setCellValue($sheet_range[$i] . 5, 'Tidak Ada');
+          $objPHPExcel->setActiveSheetIndex(0)->setCellValue($sheet_range[$i] . 8, number_format($row->Saldo_akhir + $row->Cash_Out, 2));
+          $objPHPExcel->setActiveSheetIndex(0)->setCellValue($sheet_range[$i] . 13, 'Tidak Ada');
+          $objPHPExcel->setActiveSheetIndex(0)->setCellValue($sheet_range[$i] . 14, 'Tidak Ada');
+          $objPHPExcel->setActiveSheetIndex(0)->setCellValue($sheet_range[$i] . 15, 'Tidak Ada');
+          $objPHPExcel->setActiveSheetIndex(0)->setCellValue($sheet_range[$i] . 16, 'Tidak Ada');
+          $akhir = $sheet_range[$i];
+          $range_color =  $awal .'2:'.$akhir . 2;
+          // $i++;
+          $sheet = PHPExcel_Cell::stringFromColumnIndex($i);
+          $objPHPExcel->getActiveSheet()
+            ->getStyle($range_color)
+            ->getFill()
+            ->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
+            ->getStartColor()
+            ->setARGB('D9E2F3');
+          $objPHPExcel->getActiveSheet()->getStyle($range_color)->getFont()->setBold( true );
+        }
+       
+    
+        
       
+        $for_cell++;
+        $num_merge+=4;
+        $merge+=4;     
+      }
+    }
+    
+    $bordered = "A1:". end($sheet_range) . 16;
+    $objPHPExcel->getActiveSheet()
+    ->getStyle($bordered)
+    ->applyFromArray(
+        array(
+          'borders' => array(
+            'allborders' => array(
+                'style' => PHPExcel_Style_Border::BORDER_THIN
+            )
+        )
+        )
+    );
+    
+    
     $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
     header('Content-Type: application/vnd.ms-excel');
     header('Content-Disposition: attachment;filename="Dana Float' . date('d-m-Y', strtotime($start_date)) . ' S/d ' . date('d-m-Y', strtotime($end_date))  . '.xlsx"');
@@ -533,6 +613,16 @@ class Report extends CI_Controller {
     trx_log($this->session->userdata('id'), 'REPORT', "DOWNLOAD", '', "Download Report Dana Float");
 
     exit;
+  }
+  
+  function cellsToMergeByColsRow($start = -1, $end = -1, $row = -1){
+    $merge = 'A1:A1';
+    if($start>=0 && $end>=0 && $row>=0){
+        $start = PHPExcel_Cell::stringFromColumnIndex($start);
+        $end = PHPExcel_Cell::stringFromColumnIndex($end);
+        $merge = "$start{$row}:$end{$row}";
+    }
+    return $merge;
   }
   // END :: DANA FLOAT
 
@@ -1124,9 +1214,9 @@ class Report extends CI_Controller {
          
         ->setCellValue('C' . $baris, $row->fraud_type)
         ->setCellValue('E' . $baris, $sum->actual_loss_vol)
-        ->setCellValue('G' . $baris, number_format($sum->actual_loss_nominal))
+        ->setCellValue('G' . $baris, $this->lib->rupiah($sum->actual_loss_nominal))
         ->setCellValue('I' . $baris, $sum->potential_loss_vol)
-        ->setCellValue('K' . $baris, number_format($sum->potential_loss_nominal));
+        ->setCellValue('K' . $baris, $this->lib->rupiah($sum->potential_loss_nominal));
 
       $baris++;
       $no++;
