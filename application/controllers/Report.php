@@ -1214,9 +1214,9 @@ class Report extends CI_Controller {
          
         ->setCellValue('C' . $baris, $row->fraud_type)
         ->setCellValue('E' . $baris, $sum->actual_loss_vol)
-        ->setCellValue('G' . $baris, $this->lib->rupiah($sum->actual_loss_nominal))
+        ->setCellValue('G' . $baris, $sum->actual_loss_nominal)
         ->setCellValue('I' . $baris, $sum->potential_loss_vol)
-        ->setCellValue('K' . $baris, $this->lib->rupiah($sum->potential_loss_nominal));
+        ->setCellValue('K' . $baris, $sum->potential_loss_nominal);
 
       $baris++;
       $no++;
