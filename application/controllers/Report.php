@@ -454,7 +454,7 @@ class Report extends CI_Controller {
       $row[] =  $raw_data->syslogno;
       $row[] =  $raw_data->channel_id;
       $row[] =  $raw_data->srac;
-      $row[] =  $raw_data->dsac;;
+      $row[] =  $raw_data->dsac;
 
       $data[] = $row;
     }
@@ -1772,6 +1772,198 @@ class Report extends CI_Controller {
     exit;
   }
   // END :: LKBPU 312
+
+  // START :: QRIS
+  public function qris()
+  {
+
+    $data = [];
+    $data['mcc'] = $this->db->get('tqris_mcc')->result();
+      $data['merchant_criteria'] = $this->db->get('tqris_merchant_criteria')->result();
+    $data['content'] = $this->load->view('report/qris', $data, TRUE);
+    $this->load->view('layout', $data);
+  }
+  public function download_excel_qris()
+  {
+    include APPPATH . 'third_party/PHPExcel/PHPExcel.php';
+    //$type_report = $this->input->post('type_report');
+
+    $start_date = date('Ymd', strtotime(substr($_GET['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_GET['daterange'], 13, 23)));
+
+    $city = $this->db->query("SELECT DISTINCT city FROM t1clean_qris_merchant")->result();
+
+    $type_report = "306";
+    $report_setting = $this->M_report->get_report_setting($type_report);
+
+    
+    //$objPHPExcel    = new PHPExcel();
+
+
+    $objPHPExcel = PHPExcel_IOFactory::load("./assets/template-excel/template-qris.xlsx");
+
+    $date_now = $this->lib->date_indonesia(date('Y-m-d'));
+    $document_excel = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
+    $line_value = 8;
+    for ($i=8; $i <= 556; $i++) {
+      // MERCHANT
+      $merchant = $this->db->query("
+        SELECT
+          SUM(if(merchant_status = 'Not Active', 1, 0)) AS merchant_not_active,
+          COUNT(id) AS total_merchant,
+          SUM(if(merchant_criteria = 'UMI', 1, 0)) AS merchant_usaha_mikro,
+          SUM(if(merchant_criteria = 'UKE', 1, 0)) AS merchant_usaha_kecil,
+          SUM(if(merchant_criteria = 'UME', 1, 0)) AS merchant_usaha_menengah,
+          SUM(if(merchant_criteria = 'UBE', 1, 0)) AS merchant_usaha_besar
+        FROM t1clean_qris_merchant WHERE city = '".$document_excel[$i]['C']."'
+      ")->row();
+      $category_merchant = $this->db->query("
+        SELECT 
+        (
+          SELECT COUNT(id)  FROM t1clean_qris_merchant WHERE mcc IN (SELECT mcc FROM tqris_mcc WHERE category = 'Regular') AND city = '".$document_excel[$i]['C']."'
+        ) AS regular,
+        (
+          SELECT COUNT(id)  FROM t1clean_qris_merchant WHERE mcc IN (SELECT mcc FROM tqris_mcc WHERE category = 'Pendidikan') AND city = '".$document_excel[$i]['C']."'
+        ) AS pendidikan,
+        (
+          SELECT COUNT(id)  FROM t1clean_qris_merchant WHERE mcc IN (SELECT mcc FROM tqris_mcc WHERE category = 'SPBU') AND city = '".$document_excel[$i]['C']."'
+        ) AS spbu,
+        (
+          SELECT COUNT(id)  FROM t1clean_qris_merchant WHERE mcc IN (SELECT mcc FROM tqris_mcc WHERE category = 'G2P') AND city = '".$document_excel[$i]['C']."'
+        ) AS g2p,
+        (
+          SELECT COUNT(id)  FROM t1clean_qris_merchant WHERE mcc IN (SELECT mcc FROM tqris_mcc WHERE category = 'P2G Nasional & Daerah') AND city = '".$document_excel[$i]['C']."'
+        ) AS p2g,
+        (
+          SELECT COUNT(id)  FROM t1clean_qris_merchant WHERE mcc IN (SELECT mcc FROM tqris_mcc WHERE category = 'Donasi Sosial') AND city = '".$document_excel[$i]['C']."'
+        ) AS donasi_sosial
+      ")->row();
+
+
+      $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.$i, $merchant->merchant_not_active > 0 ? $merchant->merchant_not_active : '0');
+      $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.$i, $merchant->total_merchant > 0 ? $merchant->total_merchant : '0');
+      // MERCHANT BARU
+      $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$i, '0');
+      // MERCHANT TUTUP
+      $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.$i, '0');
+      $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.$i, $merchant->merchant_usaha_mikro > 0 ? $merchant->merchant_usaha_mikro : '0');
+      $objPHPExcel->setActiveSheetIndex(0)->setCellValue('I'.$i, $merchant->merchant_usaha_kecil > 0 ? $merchant->merchant_usaha_kecil : '0');
+      $objPHPExcel->setActiveSheetIndex(0)->setCellValue('J'.$i, $merchant->merchant_usaha_menengah > 0 ? $merchant->merchant_usaha_menengah : '0');
+      $objPHPExcel->setActiveSheetIndex(0)->setCellValue('K'.$i, $merchant->merchant_usaha_besar > 0 ? $merchant->merchant_usaha_besar : '0');
+      // MERCHANT KATEGORI
+      $objPHPExcel->setActiveSheetIndex(0)->setCellValue('L'.$i, $category_merchant->regular > 0 ? $category_merchant->regular : '0');
+      $objPHPExcel->setActiveSheetIndex(0)->setCellValue('M'.$i, $category_merchant->pendidikan > 0 ? $category_merchant->pendidikan : '0');
+      $objPHPExcel->setActiveSheetIndex(0)->setCellValue('N'.$i, $category_merchant->spbu > 0 ? $category_merchant->spbu : '0');
+      $objPHPExcel->setActiveSheetIndex(0)->setCellValue('O'.$i, $category_merchant->g2p > 0 ? $category_merchant->g2p : '0');
+      $objPHPExcel->setActiveSheetIndex(0)->setCellValue('P'.$i, $category_merchant->p2g > 0 ? $category_merchant->p2g : '0');
+      $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Q'.$i, $category_merchant->donasi_sosial > 0 ? $category_merchant->donasi_sosial : '0');
+
+      // TRANSAKSI 
+      $trx = $this->db->query("
+        SELECT
+          SUM(if(pjsp = 'ISSUER_ONUS', vol_trx, 0)) AS vol_issuer_onus,
+          SUM(if(pjsp = 'ISSUER_ONUS', amount_trx, 0)) AS sum_issuer_onus,
+          SUM(if(pjsp = 'ISSUER OFFUS', vol_trx, 0)) AS vol_issuer_offus,
+          SUM(if(pjsp = 'ISSUER OFFUS', amount_trx, 0)) AS sum_issuer_offus,
+          SUM(if(pjsp = 'ACQUIRER_OFFUS', vol_trx, 0)) AS vol_acquirer_offus,
+          SUM(if(pjsp = 'ACQUIRER_OFFUS', amount_trx, 0)) AS sum_acquirer_offus,
+          SUM(if(merchant_criteria = 'UMI', vol_trx, 0)) AS vol_usaha_mikro,
+          SUM(if(merchant_criteria = 'UMI', amount_trx, 0)) AS sum_usaha_mikro,
+          SUM(if(merchant_criteria = 'UKE', vol_trx, 0)) AS vol_usaha_kecil,
+          SUM(if(merchant_criteria = 'UKE', amount_trx, 0)) AS sum_usaha_kecil,
+          SUM(if(merchant_criteria = 'UME', vol_trx, 0)) AS vol_usaha_menengah,
+          SUM(if(merchant_criteria = 'UME', amount_trx, 0)) AS sum_usaha_menengah,
+          SUM(if(merchant_criteria = 'UBE', vol_trx, 0)) AS vol_usaha_besar,
+          SUM(if(merchant_criteria = 'UBE', amount_trx, 0)) AS sum_usaha_besar
+        FROM t1clean_qris_trx WHERE city = '".$document_excel[$i]['C']."'
+      ")->row();
+      $objPHPExcel->setActiveSheetIndex(0)->setCellValue('T'.$i, $trx->vol_issuer_onus > 0 ? $trx->vol_issuer_onus : '0');
+      $objPHPExcel->setActiveSheetIndex(0)->setCellValue('U'.$i, $trx->sum_issuer_onus > 0 ? $trx->sum_issuer_onus : '0');
+      $objPHPExcel->setActiveSheetIndex(0)->setCellValue('V'.$i, $trx->vol_issuer_offus > 0 ? $trx->vol_issuer_offus : '0');
+      $objPHPExcel->setActiveSheetIndex(0)->setCellValue('W'.$i, $trx->sum_issuer_offus > 0 ? $trx->sum_issuer_offus : '0');
+      $objPHPExcel->setActiveSheetIndex(0)->setCellValue('X'.$i, $trx->vol_acquirer_offus > 0 ? $trx->vol_acquirer_offus : '0');
+      $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Y'.$i, $trx->sum_acquirer_offus > 0 ? $trx->sum_acquirer_offus : '0');
+
+      // MERCHANT CRITERIA
+      $objPHPExcel->setActiveSheetIndex(0)->setCellValue('Z'.$i, $trx->vol_usaha_mikro > 0 ? $trx->vol_usaha_mikro : '0');
+      $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AA'.$i, $trx->sum_usaha_mikro > 0 ? $trx->sum_usaha_mikro : '0');
+      $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AB'.$i, $trx->vol_usaha_kecil > 0 ? $trx->vol_usaha_kecil : '0');
+      $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AC'.$i, $trx->sum_usaha_kecil > 0 ? $trx->sum_usaha_kecil : '0');
+      $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AD'.$i, $trx->vol_usaha_menengah > 0 ? $trx->vol_usaha_menengah : '0');
+      $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AE'.$i, $trx->sum_usaha_menengah > 0 ? $trx->sum_usaha_menengah : '0');
+      $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AF'.$i, $trx->vol_usaha_besar > 0 ? $trx->vol_usaha_besar : '0');
+      $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AG'.$i, $trx->sum_usaha_besar > 0 ? $trx->sum_usaha_besar : '0');
+
+      // Transaksi QRIS berdasarkan Kategori Merchant	
+      $category_trx = $this->db->query("
+        SELECT 
+          (
+            SELECT SUM(vol_trx)   FROM t1clean_qris_trx WHERE mcc IN (SELECT mcc FROM tqris_mcc WHERE category = 'Regular') AND city = '".$document_excel[$i]['C']."'
+          ) AS vol_merchant_reguler,
+          (
+            SELECT SUM(amount_trx)   FROM t1clean_qris_trx WHERE mcc IN (SELECT mcc FROM tqris_mcc WHERE category = 'Regular') AND city = '".$document_excel[$i]['C']."'
+          ) AS sum_merchant_reguler,
+          (
+            SELECT SUM(vol_trx)   FROM t1clean_qris_trx WHERE mcc IN (SELECT mcc FROM tqris_mcc WHERE category = 'Pendidikan') AND city = '".$document_excel[$i]['C']."'
+          ) AS vol_merchant_pendidikan,
+          (
+            SELECT SUM(amount_trx)   FROM t1clean_qris_trx WHERE mcc IN (SELECT mcc FROM tqris_mcc WHERE category = 'Pendidikan') AND city = '".$document_excel[$i]['C']."'
+          ) AS sum_merchant_pendidikan,
+          (
+            SELECT SUM(vol_trx)   FROM t1clean_qris_trx WHERE mcc IN (SELECT mcc FROM tqris_mcc WHERE category = 'SPBU') AND city = '".$document_excel[$i]['C']."'
+          ) AS vol_merchant_spbu,
+          (
+            SELECT SUM(amount_trx)   FROM t1clean_qris_trx WHERE mcc IN (SELECT mcc FROM tqris_mcc WHERE category = 'SPBU') AND city = '".$document_excel[$i]['C']."'
+          ) AS sum_merchant_spbu,
+          (
+            SELECT SUM(vol_trx)   FROM t1clean_qris_trx WHERE mcc IN (SELECT mcc FROM tqris_mcc WHERE category = 'G2P') AND city = '".$document_excel[$i]['C']."'
+          ) AS vol_merchant_g2p,
+          (
+            SELECT SUM(amount_trx)   FROM t1clean_qris_trx WHERE mcc IN (SELECT mcc FROM tqris_mcc WHERE category = 'G2P') AND city = '".$document_excel[$i]['C']."'
+          ) AS sum_merchant_g2p,
+          (
+            SELECT SUM(vol_trx)   FROM t1clean_qris_trx WHERE mcc IN (SELECT mcc FROM tqris_mcc WHERE category = 'P2G Nasional & Daerah') AND city = '".$document_excel[$i]['C']."'
+          ) AS vol_merchant_p2g,
+          (
+            SELECT SUM(amount_trx)   FROM t1clean_qris_trx WHERE mcc IN (SELECT mcc FROM tqris_mcc WHERE category = 'P2G Nasional & Daerah') AND city = '".$document_excel[$i]['C']."'
+          ) AS sum_merchant_p2g,
+          (
+            SELECT SUM(vol_trx)   FROM t1clean_qris_trx WHERE mcc IN (SELECT mcc FROM tqris_mcc WHERE category = 'Donasi Sosial') AND city = '".$document_excel[$i]['C']."'
+          ) AS vol_merchant_donasi_sosial,
+          (
+            SELECT SUM(amount_trx)   FROM t1clean_qris_trx WHERE mcc IN (SELECT mcc FROM tqris_mcc WHERE category = 'Donasi Sosial') AND city = '".$document_excel[$i]['C']."'
+          ) AS sum_merchant_donasi_sosial
+      ")->row();							
+      $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AH'.$i, $category_trx->vol_merchant_reguler > 0 ? $category_trx->vol_merchant_reguler : '0');
+      $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AI'.$i, $category_trx->sum_merchant_reguler > 0 ? $category_trx->sum_merchant_reguler : '0');
+      $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AJ'.$i, $category_trx->vol_merchant_pendidikan > 0 ? $category_trx->vol_merchant_pendidikan : '0');
+      $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AK'.$i, $category_trx->sum_merchant_pendidikan > 0 ? $category_trx->sum_merchant_pendidikan : '0');
+      $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AL'.$i, $category_trx->vol_merchant_spbu > 0 ? $category_trx->vol_merchant_spbu : '0');
+      $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AM'.$i, $category_trx->sum_merchant_spbu > 0 ? $category_trx->sum_merchant_spbu : '0');
+      $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AN'.$i, $category_trx->vol_merchant_g2p > 0 ? $category_trx->vol_merchant_g2p : '0');
+      $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AO'.$i, $category_trx->sum_merchant_g2p > 0 ? $category_trx->sum_merchant_g2p : '0');
+      $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AP'.$i, $category_trx->vol_merchant_p2g > 0 ? $category_trx->vol_merchant_p2g : '0');
+      $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AQ'.$i, $category_trx->sum_merchant_p2g > 0 ? $category_trx->sum_merchant_p2g : '0');
+      $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AR'.$i, $category_trx->vol_merchant_donasi_sosial > 0 ? $category_trx->vol_merchant_donasi_sosial : '0');
+      $objPHPExcel->setActiveSheetIndex(0)->setCellValue('AS'.$i, $category_trx->sum_merchant_donasi_sosial > 0 ? $category_trx->sum_merchant_donasi_sosial : '0');
+
+    }
+    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+    header('Content-Type: application/vnd.ms-excel');
+    header('Content-Disposition: attachment;filename="Report QRIS bulan '.date('M').'.xlsx"');
+    header('Cache-Control: max-age=0');
+    $objWriter->save('php://output');
+
+    set_time_limit(0);
+    ini_set('memory_limit', '1G');
+
+    user_log($this->session->userdata('id'), 'REPORT', "DOWNLOAD", '', "Download Report QRIS", '');
+    trx_log($this->session->userdata('id'), 'REPORT', "DOWNLOAD", '', "Download Report QRIS");
+    exit;
+  }
+
+ 
+  // END :: QRIS
 
   
 

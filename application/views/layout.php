@@ -282,7 +282,7 @@
                   </ul>
                 </li>
                 <li id="nav-dana-float-report" class="access_ltkl"><a class="nav-link" href="<?php echo site_url('report/ltkl'); ?>"><i class="fas fa-list"></i> LTKL</a></li>
-                <li id="nav-dana-float-report" class="access_qris"><a class="nav-link" href="<?php echo site_url('report/qris'); ?>"><i class="fas fa-list"></i> QRIS</a></li>
+                <li id="nav-qris-report" class="access_qris"><a class="nav-link" href="<?php echo site_url('report/qris'); ?>"><i class="fas fa-list"></i> QRIS</a></li>
                 <li id="nav-dana-float-report" class="access_dana_float"><a class="nav-link" href="<?php echo site_url('report/dana_float'); ?>"><i class="fas fa-list"></i> Dana Float</a></li>
                 <li id="nav-sipesat-report" class="access_sipesat"><a class="nav-link" href="<?php echo site_url('report/sipesat'); ?>"><i class="fas fa-list"></i> Sipesat</a></li>
                 <li class="dropdown access_lkpbu" id="nav-lkpbu-report">

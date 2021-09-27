@@ -205,4 +205,62 @@ $sql = "INSERT INTO t1clean_lkpbu_302_vol VALUES  ";
 $sql .= implode(',', $data);
 mysqli_query($conn, $sql);
 
+
+
+// QRIS MERCHANT
+$data_source = mysqli_query($conn, "SELECT * FROM t0source_qris_merchant WHERE status = 'new'");
+$data = array();
+while ($row=mysqli_fetch_array($data_source, MYSQLI_BOTH)) {
+
+  $city = preg_replace('/\s*/', "", strtolower($row['city']));
+  $cek_city = mysqli_query($conn, "SELECT `to` FROM t3role_model WHERE `table` = 'QRIS' AND LOWER(REPLACE(`from`, ' ', '')) =  '".$city."'")->fetch_array();
+  
+  if($cek_city)
+  {
+    $id_source   = $row['id'];
+    $city = $cek_city['to'];
+    $merchant_name   = $row['merchant_name'];
+    $mcc   = $row['mcc'];
+    $merchant_criteria   = $row['merchant_criteria'];
+    $merchant_status   = $row['merchant_status'];
+    $activation_peroid   = date('Ymd', strtotime($row['activation_peroid']));
+    $datestamp   = date('Ymd');
+    $status     = 'cleaned';
+    mysqli_query($conn, "UPDATE t0source_qris_merchant SET status = 'old' WHERE id = '".$row['id']."'  ");
+    $data[] = "('".''."', '".$id_source."', '".$merchant_name."', '".$city."', '".$mcc."', '".$merchant_criteria."', '".$merchant_status."', '".$activation_peroid."', '".$datestamp."', '".$status."')"; 
+  }
+
+}
+$sql = "INSERT INTO t1clean_qris_merchant VALUES  ";
+$sql .= implode(',', $data);
+$test = mysqli_query($conn, $sql);
+
+// QRIS TRX
+$data_source = mysqli_query($conn, "SELECT * FROM t0source_qris_trx WHERE status = 'new'");
+$data = array();
+while ($row=mysqli_fetch_array($data_source, MYSQLI_BOTH)) {
+
+  $city = preg_replace('/\s*/', "", strtolower($row['city']));
+  $cek_city = mysqli_query($conn, "SELECT `to` FROM t3role_model WHERE `table` = 'QRIS' AND LOWER(REPLACE(`from`, ' ', '')) =  '".$city."'")->fetch_array();
+  
+  if($cek_city)
+  {
+    $id_source   = $row['id'];
+    $city = $cek_city['to'];
+    $pjsp   = $row['pjsp'];
+    $mcc   = $row['mcc'];
+    $merchant_criteria   = $row['merchant_criteria'];
+    $vol_trx   = $row['vol_trx'];
+    $amount_trx   = $row['amount_trx'];
+    $trx_date   = date('Ymd', strtotime($row['trx_date']));
+    $datestamp   = date('Ymd');
+    $status     = 'cleaned';
+    mysqli_query($conn, "UPDATE t0source_qris_trx SET status = 'old' WHERE id = '".$row['id']."'  ");
+    $data[] = "('".''."', '".$id_source."', '".$city."', '".$pjsp."', '".$mcc."', '".$merchant_criteria."', '".$vol_trx."', '".$amount_trx."', '".$trx_date."', '".$datestamp."', '".$status."')"; 
+  }
+
+}
+$sql = "INSERT INTO t1clean_qris_trx VALUES  ";
+$sql .= implode(',', $data);
+$test = mysqli_query($conn, $sql);
 echo "successfully";
