@@ -85,17 +85,18 @@
                 ├──<input type="checkbox" id="payment_gateway" name="access[]" value="payment_gateway"> Payment Gateway<br>
                 ├──<input type="checkbox" id="sipesat" name="access[]" value="sipesat"> Si Pesat<br>
                 └── LKPBU <br>
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├──<input type="checkbox" id="lkpbu_302" name="access[]" value="lkpbu_302"> LKPBU 302<br>
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├──<input type="checkbox" id="lkpbu_303" name="access[]" value="lkpbu_303"> LKPBU 303<br>
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├──<input type="checkbox" id="lkpbu_306" name="access[]" value="lkpbu_306"> LKPBU 306<br>
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├──<input type="checkbox" id="lkpbu_309_310_311" name="access[]" value="lkpbu_309_310_311"> LKPBU 309, 310 & 311<br>
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├──<input type="checkbox" id="lkpbu_312" name="access[]" value="lkpbu_312"> LKPBU 312<br>
-                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└──<input type="checkbox" id="lkpbu_313" name="access[]" value="lkpbu_313"> LKPBU 313<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├──<input type="checkbox" id="lkpbu_302" name="access[]" value="lkpbu_302"> LKPBU 302<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├──<input type="checkbox" id="lkpbu_303" name="access[]" value="lkpbu_303"> LKPBU 303<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├──<input type="checkbox" id="lkpbu_304" name="access[]" value="lkpbu_304"> LKPBU 304<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├──<input type="checkbox" id="lkpbu_306" name="access[]" value="lkpbu_306"> LKPBU 306<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├──<input type="checkbox" id="lkpbu_309_310_311" name="access[]" value="lkpbu_309_310_311"> LKPBU 309, 310 & 311<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├──<input type="checkbox" id="lkpbu_312" name="access[]" value="lkpbu_312"> LKPBU 312<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└──<input type="checkbox" id="lkpbu_313" name="access[]" value="lkpbu_313"> LKPBU 313<br>
                 <input type="checkbox" id="gangguan_sistem" name="access[]" value="gangguan_sistem"> Gangguan Sistem<br>
                 </label>
               </div>
               <div class="col-sm-3">
-              <label>Cleansing </label><br>
+                <label>Cleansing </label><br>
                 ├──<input type="checkbox" id="cleansing_ltdbb" name="access[]" value="cleansing_ltdbb"> LTDBB<br>
                 ├──<input type="checkbox" id="cleansing_ltkl" name="access[]" value="cleansing_ltkl"> LTKL<br>
                 </label>
@@ -108,7 +109,7 @@
                 └──<input type="checkbox" id="archive" name="access[]" value="archive"> Archive<br>
                 </label>
               </div>
-              
+
 
             </div>
 
