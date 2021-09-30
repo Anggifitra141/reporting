@@ -12,7 +12,7 @@ class Clean extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-    $this->load->model(['M_tltdbb_clean', 'M_tltdbb_clean', 'M_danafloat_clean', 'M_sipesat_clean', 'M_ltkl_clean', 'M_lkpbu', 'M_qris_clean']);
+    $this->load->model(['M_tltdbb_clean', 'M_tltdbb_clean', 'M_danafloat_clean', 'M_sipesat_clean', 'M_ltkl_clean', 'M_lkpbu', 'M_qris_clean', 'M_sys_availability']);
     if(!$this->session->userdata('logged_in'))
     {
       $data=array();
@@ -1827,4 +1827,307 @@ class Clean extends CI_Controller {
       $file = $this->upload->data('file_name');
       return base_url('assets/uploads/') . $file ;
   }
+
+  // // START :: QRIS
+  public function sys_availability()
+  {
+
+    $data = [];
+    $data['content'] = $this->load->view('clean/sys_availability', $data, TRUE);
+    $this->load->view('layout', $data);
+  }
+
+  // AJAX PIC
+  public function ajax_availability_pic()
+  { 
+    $list = $this->M_sys_availability->get_datatables_pic();
+    $data = array();
+    $no = 1;
+    foreach ($list as $item) {
+        $row = array();
+        $row[] = $no++;
+				$row[] = '<a href="#" onclick="get_form_pic('.$item->id.')" class="btn btn-icon btn-primary btn-sm"><i class="far fa-edit"></i></a>
+                  <a href="#" onclick="delete_form_pic('.$item->id.')" class="btn btn-icon btn-danger btn-sm"><i class="fas fa-trash"></i></a>';
+				$row[] = $item->name;
+        $row[] = $item->division;
+        $row[] = $item->email;
+        $row[] = $item->phone_number;
+        $data[] = $row;
+    }
+
+    $output = array(
+                    "draw" => $_POST['draw'],
+                    "recordsTotal" => $this->M_sys_availability->count_all_pic(),
+                    "recordsFiltered" => $this->M_sys_availability->count_filtered_pic(),
+                    "data" => $data,
+            );
+    echo json_encode($output);
+  }
+  public function get_availability_pic($id)
+  {
+      $result = $this->M_sys_availability->get_availability_pic($id);
+      echo json_encode($result);
+  }
+  
+
+    public function add_availability_pic()
+    {
+      $ACT = 'add';
+      $this->_validate_avalability_pic($ACT);
+      $data = array(
+        'name'           => $this->input->post('name'),
+        'division'       => $this->input->post('division'),
+        'email'          => $this->input->post('email'),
+        'phone_number'   => $this->input->post('phone_number')
+      );
+      $this->M_sys_availability->add_availability_pic($data);
+      echo json_encode(array("status" => TRUE ));
+    }
+
+    public function update_availability_pic()
+    {
+      $ACT = 'update';
+      $this->_validate_avalability_pic($ACT);
+      $data = array(
+        'name'           => $this->input->post('name'),
+        'division'       => $this->input->post('division'),
+        'email'          => $this->input->post('email'),
+        'phone_number'   => $this->input->post('phone_number')
+      );
+      $this->M_sys_availability->update_availability_pic(array('id' => $this->input->post('id')), $data);
+      echo json_encode(array("status" => TRUE ));
+    }
+
+    public function delete_availability_pic($id)
+    {
+      $this->M_sys_availability->delete_availability_pic($id);
+      echo json_encode(array("status" => TRUE));
+    }
+
+    private function _validate_avalability_pic($event)
+    {
+      $data = array();
+      $data['error_string'] = array();
+      $data['inputerror'] = array();
+      $data['status'] = TRUE;
+      $actions = explode('#', $this->session->userdata('action'));
+      $data['action'] = $actions;
+
+      if(!in_array($event, $actions))
+      {
+          $data['inputerror'][] = 'sess_act';
+          $data['error_string'][] = 'Error! You have no right to this action.';
+          $data['status'] = FALSE;
+      }
+      if($this->input->post('name') == '')
+      {
+          $data['inputerror'][] = 'name';
+          $data['error_string'][] = 'name is required';
+          $data['status'] = FALSE;
+      }
+      if($this->input->post('division') == '')
+      {
+          $data['inputerror'][] = 'division';
+          $data['error_string'][] = 'Division is required';
+          $data['status'] = FALSE;
+      }
+      if($this->input->post('email') == '')
+      {
+          $data['inputerror'][] = 'email';
+          $data['error_string'][] = 'email is required';
+          $data['status'] = FALSE;
+      }
+      if($this->input->post('phone_number') == '')
+      {
+          $data['inputerror'][] = 'phone_number';
+          $data['error_string'][] = 'Phone Number is required';
+          $data['status'] = FALSE;
+      }
+    
+      if($data['status'] === FALSE)
+      {
+          echo json_encode($data);
+          exit();
+      }
+    }
+  
+    public function add_availability_system()
+    {
+      $ACT = 'add';
+      $this->_validate_avalability_system($ACT);
+      $data = array(
+        'id_service'           => $this->input->post('id_service'),
+        'id_pic'       => $this->input->post('id_pic'),
+        'threshold'          => $this->input->post('threshold'),
+        'availibility'          => $this->input->post('availibility'),
+        'notes'          => $this->input->post('notes'),
+        'datestamp'          => date('Ymd'),
+        'status'          => 'cleaned'
+      );
+      $id_trx = $this->M_sys_availability->add_availability_system($data);
+      $this->db->insert('tsysavailability_problem', [
+        'id_trx'    => $id_trx,
+        'problem_category'    => $this->input->post('problem_category'),
+        'problem_datetime'    => $this->input->post('problem_datetime'),
+        'result'    => $this->input->post('result'),
+        'repair'    => $this->input->post('repair'),
+        'repair_notes'    => $this->input->post('repair_notes'),
+        'repair_duration'    => $this->input->post('repair_duration'),
+        'repair_status'    => $this->input->post('repair_status'),
+        'severity_level'    => $this->input->post('severity_level'),
+        'problem_impact'    => $this->input->post('problem_impact'),
+        'notes'    => $this->input->post('notes_problem')
+      ]);
+      echo json_encode(array("status" => TRUE ));
+    }
+    public function ajax_availability_system()
+  { 
+    $this->db->where('status', 'cleaned');
+    $list = $this->M_sys_availability->get_datatables_system();
+    $data = array();
+    $no = 1;
+    foreach ($list as $item) {
+        $row = array();
+        $row[] = $no++;
+				$row[] = '<a href="#" onclick="get_form_system('.$item->id.')" class="btn btn-icon btn-primary btn-sm"><i class="far fa-edit"></i></a>
+                  <a href="#" onclick="delete_form_system('.$item->id.')" class="btn btn-icon btn-danger btn-sm"><i class="fas fa-trash"></i></a>';
+				$row[] = $item->service . ' - '. $item->infrastructure;
+        $row[] = $item->name;
+        $row[] = $item->threshold;
+        $row[] = $item->availibility;
+        $row[] = $item->notes;
+        $row[] = date('d/M/Y', strtotime($item->datestamp));
+        $data[] = $row;
+    }
+    $this->db->where('status', 'cleaned');
+    $recordsTotal = $this->M_sys_availability->count_all_system();
+    $this->db->where('status', 'cleaned');
+    $recordsFiltered = $this->M_sys_availability->count_filtered_system();
+    $output = array(
+                    "draw" => $_POST['draw'],
+                    "recordsTotal" => $recordsTotal,
+                    "recordsFiltered" => $recordsFiltered,
+                    "data" => $data,
+            );
+    echo json_encode($output);
+  }
+  public function get_availability_system($id)
+  {
+      $system = $this->M_sys_availability->get_availability_system($id);
+      $data['problem'] = $this->db->get_where('tsysavailability_problem', ['id_trx' => $system->id])->row();
+      $data['system'] = $system;
+      echo json_encode($data);
+  }
+    private function _validate_avalability_system($event)
+    {
+      $data = array();
+      $data['error_string'] = array();
+      $data['inputerror'] = array();
+      $data['status'] = TRUE;
+      $actions = explode('#', $this->session->userdata('action'));
+      $data['action'] = $actions;
+
+      $threshold = $this->input->post('threshold');
+      $availibility = $this->input->post('availibility');
+      if(!in_array($event, $actions))
+      {
+          $data['inputerror'][] = 'sess_act';
+          $data['error_string'][] = 'Error! You have no right to this action.';
+          $data['status'] = FALSE;
+      }
+      if($this->input->post('id_service') == '')
+      {
+          $data['inputerror'][] = 'id_service';
+          $data['error_string'][] = 'Service is required';
+          $data['status'] = FALSE;
+      }
+      if($this->input->post('id_pic') == '')
+      {
+          $data['inputerror'][] = 'id_pic';
+          $data['error_string'][] = 'PIC is required';
+          $data['status'] = FALSE;
+      }
+      if($threshold == '')
+      {
+          $data['inputerror'][] = 'threshold';
+          $data['error_string'][] = 'Threshold is required';
+          $data['status'] = FALSE;
+      }
+      if($availibility == '')
+      {
+          $data['inputerror'][] = 'availibility';
+          $data['error_string'][] = 'availibility is required';
+          $data['status'] = FALSE;
+      }
+      if($threshold > $availibility){
+        if($this->input->post('problem_category') == '')
+        {
+            $data['inputerror'][] = 'problem_category';
+            $data['error_string'][] = 'Kategori Gangguan is required';
+            $data['status'] = FALSE;
+        } 
+        if($this->input->post('problem_datetime') == '')
+        {
+            $data['inputerror'][] = 'problem_datetime';
+            $data['error_string'][] = 'Waktu Kejadian is required';
+            $data['status'] = FALSE;
+        }
+        if($this->input->post('result') == '')
+        {
+            $data['inputerror'][] = 'result';
+            $data['error_string'][] = 'Hasil Investigasi Permasalahan is required';
+            $data['status'] = FALSE;
+        }
+        if($this->input->post('repair') == '')
+        {
+            $data['inputerror'][] = 'repair';
+            $data['error_string'][] = 'Upaya Perbaikan is required';
+            $data['status'] = FALSE;
+        }
+        if($this->input->post('repair_notes') == '')
+        {
+            $data['inputerror'][] = 'repair_notes';
+            $data['error_string'][] = 'Keterangan Upaya is required';
+            $data['status'] = FALSE;
+        }
+        if($this->input->post('repair_duration') == '')
+        {
+            $data['inputerror'][] = 'repair_duration';
+            $data['error_string'][] = 'Durasi Penyelesaian is required';
+            $data['status'] = FALSE;
+        }
+        if($this->input->post('repair_status') == '')
+        {
+            $data['inputerror'][] = 'repair_status';
+            $data['error_string'][] = 'Status Penyelesaian is required';
+            $data['status'] = FALSE;
+        }
+        if($this->input->post('severity_level') == '')
+        {
+            $data['inputerror'][] = 'severity_level';
+            $data['error_string'][] = 'Severity Level is required';
+            $data['status'] = FALSE;
+        }
+        if($this->input->post('problem_impact') == '')
+        {
+            $data['inputerror'][] = 'problem_impact';
+            $data['error_string'][] = 'Dampak Insiden / Gangguan is required';
+            $data['status'] = FALSE;
+        }
+        if($this->input->post('notes_problem') == '')
+        {
+            $data['inputerror'][] = 'notes_problem';
+            $data['error_string'][] = 'Notes is required';
+            $data['status'] = FALSE;
+        }
+      }
+    
+      if($data['status'] === FALSE)
+      {
+          echo json_encode($data);
+          exit();
+      }
+    }
+
+  // END :: SYSTEM AVAILABILITY 
 }

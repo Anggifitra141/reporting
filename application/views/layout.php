@@ -223,7 +223,7 @@
                     <li id="nav-lkpbu-clean-313" class="access_lkpbu_313"><a class="nav-link" href="<?php echo site_url('clean/form_313'); ?>"><i class="fas fa-circle"></i> Form 313</a></li>
                   </ul>
                 </li>
-                <li id="nav-sipesat-clean" class="access_gangguan_system"><a class="nav-link" href="<?php echo site_url('clean/si_pesat'); ?>"><i class="fas fa-database"></i> Gangguan Sistem</a></li>
+                <li id="nav-sys-availability" class="access_sys_availability"><a class="nav-link" href="<?php echo site_url('clean/sys_availability'); ?>"><i class="fas fa-database"></i> System Availability</a></li>
               </ul>
             </li>
             <li class="dropdown" id="nav-utilities-source">
@@ -299,7 +299,7 @@
                     <li class="access_lkpbu_313" id="nav-lkpbu-report-313"><a class="nav-link" href="<?php echo site_url('report/lkpbu_313'); ?>"><i class="fas fa-circle"></i> Form 313</a></li>
                   </ul>
                 </li>
-                <li id="nav-gangguan-system-report" class="access_gangguan_system"><a class="nav-link" href="<?php echo site_url('report/gangguan_system'); ?>"><i class="fas fa-list"></i> Gangguan System</a></li>
+                <li id="nav-sys-availability-report" class="access_sys_availability"><a class="nav-link" href="<?php echo site_url('report/sys_availability'); ?>"><i class="fas fa-list"></i> System Availability</a></li>
               </ul>
             </li>
 

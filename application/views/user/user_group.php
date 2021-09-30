@@ -92,7 +92,7 @@
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├──<input type="checkbox" id="lkpbu_309_310_311" name="access[]" value="lkpbu_309_310_311"> LKPBU 309, 310 & 311<br>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├──<input type="checkbox" id="lkpbu_312" name="access[]" value="lkpbu_312"> LKPBU 312<br>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└──<input type="checkbox" id="lkpbu_313" name="access[]" value="lkpbu_313"> LKPBU 313<br>
-                <input type="checkbox" id="gangguan_sistem" name="access[]" value="gangguan_sistem"> Gangguan Sistem<br>
+                <input type="checkbox" id="sys_availability" name="access[]" value="sys_availability"> System Availability<br>
                 </label>
               </div>
               <div class="col-sm-3">

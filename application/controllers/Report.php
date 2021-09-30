@@ -1836,14 +1836,17 @@ class Report extends CI_Controller {
         ) AS p2g,
         (
           SELECT COUNT(id)  FROM t1clean_qris_merchant WHERE mcc IN (SELECT mcc FROM tqris_mcc WHERE category = 'Donasi Sosial') AND city = '".$document_excel[$i]['C']."'
-        ) AS donasi_sosial
+        ) AS donasi_sosial,
+        (
+          SELECT COUNT(id)  FROM t1clean_qris_merchant WHERE t1clean_qris_merchant.activation_peroid > '".$end_date."' AND city = '".$document_excel[$i]['C']."'
+        ) AS merchant_baru
       ")->row();
 
 
       $objPHPExcel->setActiveSheetIndex(0)->setCellValue('D'.$i, $merchant->merchant_not_active > 0 ? $merchant->merchant_not_active : '0');
       $objPHPExcel->setActiveSheetIndex(0)->setCellValue('E'.$i, $merchant->total_merchant > 0 ? $merchant->total_merchant : '0');
       // MERCHANT BARU
-      $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$i, '0');
+      $objPHPExcel->setActiveSheetIndex(0)->setCellValue('F'.$i, $category_merchant->merchant_baru > 0 ? $category_merchant->merchant_baru : '0');
       // MERCHANT TUTUP
       $objPHPExcel->setActiveSheetIndex(0)->setCellValue('G'.$i, '0');
       $objPHPExcel->setActiveSheetIndex(0)->setCellValue('H'.$i, $merchant->merchant_usaha_mikro > 0 ? $merchant->merchant_usaha_mikro : '0');
@@ -1964,6 +1967,21 @@ class Report extends CI_Controller {
 
  
   // END :: QRIS
+  
+
+  // START :: QRIS
+  public function sys_availability()
+  {
+
+    $data = [];
+    $data['service'] = $this->db->query("SELECT * FROM tsysavailability_service")->result();
+    $data['pic'] = $this->db->query("SELECT * FROM tsysavailability_pic")->result();
+    $data['content'] = $this->load->view('report/sys_availability', $data, TRUE);
+    $this->load->view('layout', $data);
+  }
+  public function ajax_availability_pic()
+  {}
+  // END :: SYSTEM AVAILABILITY 
 
   
 
