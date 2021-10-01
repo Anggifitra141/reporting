@@ -96,20 +96,12 @@
             <div class="form-group">
               <label>Mcc</label>
               <select name="mcc" id="mcc" class="form-control select2">
-                <!-- <option value="">-- Select MCC --</option>
-                <?php foreach($mcc as $key) :  ?>
-                  <option value="<?= $key->mcc ?>"><?= $key->mcc .' - '. $key->mcc_name ?></option>
-                <?php endforeach; ?> -->
               </select>
               <span class="invalid-feedback"></span>
             </div>
             <div class="form-group">
               <label>Merchant Criteria</label>
               <select name="merchant_criteria" id="merchant_criteria" class="form-control select2">
-                <option value="">-- Select Merchant Criteria --</option>
-                <?php foreach($merchant_criteria as $key) :  ?>
-                  <option value="<?= $key->code ?>"><?= $key->code .' - '. $key->description ?></option>
-                <?php endforeach; ?>
               </select>
               <span class="invalid-feedback"></span>
             </div>
@@ -207,10 +199,25 @@ $('#nav-clean-qris-merchant').addClass('active');
         var str = `<option value="">-- Select MCC --</option>`;
         $.each(response, function(index, val){
           str += `
-            <option value="${val.id}">${val.mcc} - ${val.mcc_name}</option>
+            <option value="${val.mcc}">${val.mcc} - ${val.mcc_name}</option>
           `;
         });
         $('#mcc').html(str);
+      }
+    })
+    $.ajax({
+      url  : base_url + 'clean/get_merchant_criteria',
+      type : 'GET',
+      dataType : 'JSON',
+      success : function(response)
+      {
+        var str = `<option value="">-- Select Merchant Criteria --</option>`;
+        $.each(response, function(index, val){
+          str += `
+            <option value="${val.code}">${val.code} - ${val.description}</option>
+          `;
+        });
+        $('#merchant_criteria').html(str);
       }
     })
 
@@ -279,7 +286,7 @@ function reload_table() {
         $('[name="merchant_name"]').val(data.merchant_name);
         $('[name="city"]').val(data.city);
         $('[name="mcc"]').append(`<option value="${data.mcc}" selected="selected">${data.mcc} - ${data.mcc_name}</option>`);
-        $('[name="merchant_criteria"]').val(data.merchant_criteria);
+        $('[name="merchant_criteria"]').append(`<option value="${data.merchant_criteria}" selected="selected">${data.merchant_criteria} - ${data.merchant_description}</option>`);
         $('[name="merchant_status"]').val(data.merchant_status);
         $('[name="activation_peroid"]').val(data.activation_peroid);
 

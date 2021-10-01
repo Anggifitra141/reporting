@@ -228,7 +228,7 @@
               </div>
               <div class="form-group">
                 <label>Waktu Kejadian</label>
-                <input type="text" class="form-control" name="problem_datetime">
+                <input type="text" class="form-control datetimepicker" name="problem_datetime">
                 <span class="invalid-feedback"></span>
               </div>
               <div class="form-group">

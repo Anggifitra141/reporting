@@ -672,7 +672,9 @@ class Clean extends CI_Controller {
         'merchant_name'      => $result->merchant_name,
         'city'  => $result->city,
         'mcc'        => $result->mcc,
+        'mcc_name'        => $this->db->query("SELECT mcc_name FROM tqris_mcc WHERE mcc = '".$result->mcc."'")->row()->mcc_name,
         'merchant_criteria'        => $result->merchant_criteria,
+        'merchant_description'        => $this->db->query("SELECT description FROM tqris_merchant_criteria WHERE code = '".$result->merchant_criteria."'")->row()->description,
         'merchant_status'        => $result->merchant_status,
         'activation_peroid'       => date('Y-m-d', strtotime($result->activation_peroid))
       ];
@@ -1976,7 +1978,7 @@ class Clean extends CI_Controller {
       $this->db->insert('tsysavailability_problem', [
         'id_trx'    => $id_trx,
         'problem_category'    => $this->input->post('problem_category'),
-        'problem_datetime'    => $this->input->post('problem_datetime'),
+        'problem_datetime'    => date('ymdhis', strtotime($this->input->post('problem_datetime'))),
         'result'    => $this->input->post('result'),
         'repair'    => $this->input->post('repair'),
         'repair_notes'    => $this->input->post('repair_notes'),
@@ -2019,7 +2021,7 @@ class Clean extends CI_Controller {
             $this->db->update('tsysavailability_problem', [
               'id_trx'    => $id_trx,
               'problem_category'    => $this->input->post('problem_category'),
-              'problem_datetime'    => $this->input->post('problem_datetime'),
+              'problem_datetime'    => date('ymdhis', strtotime($this->input->post('problem_datetime'))),
               'result'    => $this->input->post('result'),
               'repair'    => $this->input->post('repair'),
               'repair_notes'    => $this->input->post('repair_notes'),
@@ -2033,7 +2035,7 @@ class Clean extends CI_Controller {
             $this->db->insert('tsysavailability_problem', [
               'id_trx'    => $this->input->post('id_system'),
               'problem_category'    => $this->input->post('problem_category'),
-              'problem_datetime'    => $this->input->post('problem_datetime'),
+              'problem_datetime'    => date('ymdhis', strtotime($this->input->post('problem_datetime'))),
               'result'    => $this->input->post('result'),
               'repair'    => $this->input->post('repair'),
               'repair_notes'    => $this->input->post('repair_notes'),
