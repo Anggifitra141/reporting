@@ -16,8 +16,8 @@
       <div class="col-12">
         <div class="form-group">
           <a href="#" onclick="add_user_group()" class="btn btn-icon icon-left btn-outline-primary"><i class="far fa-plus-square"></i> Add</a>
-          <a href="#" class="btn btn-icon icon-left btn-outline-warning"><i class="fa fa-filter"></i> Filter</a>
-          <a href="#" class="btn btn-icon icon-left btn-outline-success"><i class="fas fa-download"></i> Download </a>
+          <!-- <a href="#" class="btn btn-icon icon-left btn-outline-warning"><i class="fa fa-filter"></i> Filter</a> -->
+          <!-- <a href="#" class="btn btn-icon icon-left btn-outline-success"><i class="fas fa-download"></i> Download </a> -->
         </div>
         <div class="card">
           <div class="card-body">

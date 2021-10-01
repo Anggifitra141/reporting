@@ -655,6 +655,14 @@ class Clean extends CI_Controller {
       echo json_encode($output);
     }
     
+    public function get_qrismcc(){
+      $mcc = $this->db->get('tqris_mcc')->result();
+      echo json_encode($mcc);
+    }
+    public function get_merchant_criteria(){
+      $result = $this->db->get('tqris_merchant_criteria')->result();
+      echo json_encode($result);
+    }
 
   public function get_qris_merchant($id)
   {
