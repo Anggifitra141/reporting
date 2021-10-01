@@ -16,7 +16,7 @@
       <div class="col-12">
         <div class="form-group">
         <a href="#" onclick="add_sys_availability_pic()" class="btn btn-icon icon-left btn-outline-primary"><i class="far fa-plus-square"></i> Add PIC</a>
-          <a href="#" onclick="add_availability_system()" class="btn btn-icon icon-left btn-outline-success"><i class="far fa-file-excel"></i> Add Availability Sistem</a>
+          <a href="#" onclick="add_availability_system()" class="btn btn-icon icon-left btn-outline-success"><i class="far fa-file-square"></i> Add Availability Sistem</a>
           <!-- <a href="<?= base_url('assets/template-excel/template-import-qris-merchant.xlsx') ?>" download class="btn float-right btn-icon icon-left btn-success"><i class="fas fa-download"></i> Download Sample</a> -->
         </div>
       </div>
@@ -25,14 +25,14 @@
           <div class="card-header">
             <ul class="nav nav-pills" id="myTab3" role="tablist">
               <li class="nav-item">
-                <a class="nav-link active" id="pic-tab3" data-toggle="tab" href="#pic3" role="tab" aria-controls="pic" aria-selected="true">FORM 1 PIC</a>
+                <a class="nav-link active" id="pic-tab3" data-toggle="tab" href="#pic3" role="tab" aria-controls="pic" aria-selected="true">PIC</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" id="gangguan-system-tab3" data-toggle="tab" href="#gangguan-system3" role="tab" aria-controls="gangguan-system" aria-selected="false">FORM 2 Gangguan System </a>
+                <a class="nav-link" id="gangguan-system-tab3" data-toggle="tab" href="#gangguan-system3" role="tab" aria-controls="gangguan-system" aria-selected="false">Gangguan System </a>
               </li>
-              <li class="nav-item">
+              <!-- <li class="nav-item">
                 <a class="nav-link" id="availability-tab3" data-toggle="tab" href="#availability3" role="tab" aria-controls="availability" aria-selected="false">Form 3 Availability</a>
-              </li>
+              </li> -->
             </ul>
           </div>
           <div class="card-body mb-2">
@@ -316,7 +316,7 @@ $('#nav-sys-availability-report').addClass('active');
       }],
     });
 
-    table_pic = $('#table-system').DataTable({
+    table_system = $('#table-system').DataTable({
       "deferRender": true,
       "scrollCollapse": true,
       "scrollX": true,
@@ -325,7 +325,10 @@ $('#nav-sys-availability-report').addClass('active');
       "order": [],
       "ajax": {
         url: "<?php echo site_url('clean/ajax_availability_system')?>", // json dataclean
-        type: "POST"
+        type: "POST",
+          data: function(data) {
+            data.daterange = $('[name="daterange"]').val()
+          }
       },
       "columnDefs": [{
         "orderable": false
@@ -360,7 +363,7 @@ $('#nav-sys-availability-report').addClass('active');
 };
 
 $('[name="daterange"]').change(function(){
-  
+  reload_table();
   $('#btn-download-excel').attr('href', base_url + 'report/download_excel_availability?&daterange=' + $('[name="daterange"]').val());
 });
 
@@ -396,7 +399,10 @@ function add_sys_availability_pic() {
       }
     });
   }
-
+  function reload_table() {
+    table_pic.ajax.reload(null, false);
+    table_system.ajax.reload(null, false);
+  }
 function loading()
 {
   swal({
@@ -552,7 +558,7 @@ function save_pic() {
   function get_form_system(id) {
     cek_privileges('update', event);
     save_method = 'update';
-    $('#sys_availability')[0].reset();
+    $('#sys_availability_system')[0].reset();
     $.ajax({
       url: "<?php echo site_url('clean/get_availability_system') ?>/" + id,
       type: "GET",
@@ -588,6 +594,35 @@ function save_pic() {
         alert('Error get data from ajax');
       }
     });
+  }
+  
+  function delete_form_system(id) {
+    cek_privileges('delete', event);
+    swal({
+        title: "Are you sure ?",
+        text: "Once deleted, you will not be able to recover this data !",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+          $.ajax({
+            url: "<?php echo site_url('clean/delete_availability_system') ?>/" + id,
+            type: "post",
+            complete: function() {
+              swal("Your data has been deleted!", {
+                icon: "success",
+              }).then(function() {
+                reload_table();
+              });
+            }
+          });
+
+        } else {
+          swal("Data failed deleted !");
+        }
+      });
   }
 
 </script>

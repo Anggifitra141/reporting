@@ -138,7 +138,7 @@ class M_sys_availability extends CI_model {
   {
     $this->db->select('tsysavailability_service.service, tsysavailability_service.infrastructure, t1clean_sysavailability.*, tsysavailability_pic.name');
     $this->db->from($this->table_system);
-    $this->db->join('tsysavailability_service', 't1clean_sysavailability.id_service = tsysavailability_service.id');
+    $this->db->join('tsysavailability_service', 't1clean_sysavailability.id_service = tsysavailability_service.id', 'right');
     $this->db->join('tsysavailability_pic', 't1clean_sysavailability.id_pic = tsysavailability_pic.id');
     
     $i = 0;
@@ -213,5 +213,10 @@ class M_sys_availability extends CI_model {
   {
     $this->db->update($this->table_system, $data, $where);
     return $this->db->affected_rows();
+  }
+  public function delete_availability_system($id)
+  {
+    $this->db->where('id', $id);
+    $this->db->delete($this->table_pic);
   }
 }

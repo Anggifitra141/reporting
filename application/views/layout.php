@@ -223,7 +223,7 @@
                     <li id="nav-lkpbu-clean-313" class="access_lkpbu_313"><a class="nav-link" href="<?php echo site_url('clean/form_313'); ?>"><i class="fas fa-circle"></i> Form 313</a></li>
                   </ul>
                 </li>
-                <li id="nav-sys-availability" class="access_sys_availability"><a class="nav-link" href="<?php echo site_url('clean/sys_availability'); ?>"><i class="fas fa-database"></i> System Availability</a></li>
+                <!-- <li id="nav-sys-availability" class="access_sys_availability"><a class="nav-link" href="<?php echo site_url('clean/sys_availability'); ?>"><i class="fas fa-database"></i> System Availability</a></li> -->
               </ul>
             </li>
             <li class="dropdown" id="nav-utilities-source">
@@ -232,6 +232,7 @@
                 <!-- <li id="nav-role-clean"><a class="nav-link" href="<?php echo site_url('utilities/role_clean'); ?>"><i class="fas fa-align-center"></i> Role Clean</a></li> -->
                 <li id="nav-auto-clean" class="access_cleansing_ltdbb"><a class="nav-link" href="<?php echo site_url('utilities/auto_clean'); ?>"><i class="fas fa-align-center"></i> Auto Clean LTDBB</a></li>
                 <li id="nav-auto-clean-ltkl" class="access_cleansing_ltkl"><a class="nav-link" href="<?php echo site_url('utilities/auto_clean_ltkl'); ?>"><i class="fas fa-align-center"></i> Auto Clean LTKL</a></li>
+                <li id="nav-auto-clean-qris" class="access_cleansing_qris"><a class="nav-link" href="<?php echo site_url('utilities/auto_clean_qris'); ?>"><i class="fas fa-align-center"></i> Auto Clean QRIS</a></li>
                 <!-- <li id="nav-manual-clean"><a class="nav-link" href="<?php echo site_url('utilities/manual'); ?>"><i class="fas fa-database"></i> Manual Clean</a></li> -->
               </ul>
             </li>

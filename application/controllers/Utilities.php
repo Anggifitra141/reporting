@@ -12,7 +12,7 @@ class Utilities extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-    $this->load->model(['M_raw_data', 'M_tltdbb_source', 'M_tltdbb_clean', 'M_ltkl_source']);
+    $this->load->model(['M_raw_data', 'M_tltdbb_source', 'M_tltdbb_clean', 'M_ltkl_source', 'M_qris_merchant_source']);
 		if(!$this->session->userdata('logged_in'))
     {
       $data=array();
@@ -495,10 +495,113 @@ class Utilities extends CI_Controller {
 		return array('status' => true, 'success' => $success, 'false' => $false, 'fail_clean' => $fail_clean);
 	}
 
+	// START :: AUTO CLEAN QRIS
+	public  function auto_clean_qris(){
+		$data= [];
+    $data['content'] = $this->load->view('utilities/auto_clean_qris', $data, TRUE);
+		$this->load->view('layout', $data);
+	}
+	public function ajax_rawdata_qris()
+	{
+		
+    $list = $this->M_qris_merchant_source->get_datatables();
+    $data = array();
+    $no = 1;
+    foreach ($list as $item) {
+      $row = array();
+      $row[] = $item->merchant_name;
+     $row[] = $item->city;
+     $row[] = $item->mcc;
+     $row[] = $item->merchant_criteria;
+     $row[] = $item->merchant_status;
+     $row[] = date('d/m/Y', strtotime($item->activation_peroid));
+     $row[] = date('d/m/Y', strtotime($item->datestamp));
+      $data[] = $row;
+    }
+		
+    $recordsTotal = $this->M_qris_merchant_source->count_all();
+		
+    $recordsFiltered = $this->M_qris_merchant_source->count_filtered();
+    
+
+    $output = array(
+          "draw" => $_POST['draw'],
+          "recordsTotal" => $recordsTotal,
+          "recordsFiltered" => $recordsFiltered,
+          "data" => $data,
+        );
+    echo json_encode($output);
+	}
+	public function json_auto_clean_qris(){
+		$result = $this->_proc_auto_clean_qris();
+		echo json_encode($result);
+	}
+	private function _proc_auto_clean_qris()
+  {
+		$test = $this->db->query("SELECT * FROM t0source_qris_merchant WHERE  status = 'new' ")->result_array();
+		$datestamp = date("Ymd");
+		$success = 0;
+		$false = 0;
+		$data_clean = [];
+		$fail_clean = [];
+		foreach($test as $row) {
+			$city = preg_replace('/\s*/', "", strtolower($row['city']));
+			$cek_city = $this->db->query("SELECT `to` FROM t3role_model WHERE `table` = 'QRIS' AND LOWER(REPLACE(`from`, ' ', '')) =  '".$city."'")->row_array();
+			
+			if($cek_city)
+			{
+				$id_source   = $row['id'];
+				$city = $cek_city['to'];
+				$merchant_name   = $row['merchant_name'];
+				$mcc   = $row['mcc'];
+				$merchant_criteria   = $row['merchant_criteria'];
+				$merchant_status   = $row['merchant_status'];
+				$activation_peroid   = date('Ymd', strtotime($row['activation_peroid']));
+				$datestamp   = date('Ymd');
+				$status     = 'cleaned';
+				$this->db->update("t0source_qris_merchant", ['status' => 'old'] , ['id' => $row['id']]);
+				$this->db->insert('t1clean_qris_merchant', [
+					'id_source'		=> $id_source,
+					'merchant_name'		=> $merchant_name,
+					'city'		=> $city,
+					'mcc'		=> $mcc,
+					'merchant_criteria'		=> $merchant_criteria,
+					'merchant_status'		=> $merchant_status,
+					'activation_peroid'		=> $activation_peroid,
+					'datestamp'		=> $datestamp,
+					'status'		=> $status
+				]);
+				$success++;
+			}else{
+				$false++;
+				$fail_clean[] = $row['city'];
+			}
+		}
+			
+		return array('status' => true, 'success' => $success, 'false' => $false, 'fail_clean' => $fail_clean);
+	}
+
 	public function save_role_model()
 	{
 		$report = $this->input->post('report');
 		$status_clean = $this->input->post('status_clean');
+		if($report == 'QRIS'){
+			$before_city = $this->input->post('before_city');
+			$to_city = $this->input->post('to_city');
+			$this->db->insert('t3role_model', [
+				'report_code'		=> 'QRIS',
+				'table'					=> 'QRIS',
+				'field'					=> 'city',
+				'from'					=> $before_city,
+				'to'						=> $to_city
+			]);
+			$id = $this->db->insert_id();
+			$result = $this->_proc_auto_clean_qris();
+			if($status_clean == 'clean') {
+				$this->db->delete('t3role_model', ['id' => $id]);
+			}
+			echo json_encode($result);
+		}
 		if($report == 'LTKL'){
 			$before_sender_country = $this->input->post('before_sender_country');
 			$to_sender_country = $this->input->post('to_sender_country');

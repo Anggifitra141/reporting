@@ -1980,9 +1980,76 @@ class Clean extends CI_Controller {
       ]);
       echo json_encode(array("status" => TRUE ));
     }
+    public function delete_availability_system($id)
+    {
+      $this->M_sys_availability->delete_availability_system($id);
+      $this->db->delete('tsysavailability_problem', ['id_trx' => $id]);
+      echo json_encode(array("status" => TRUE));
+    }
+
+
+    public function update_availability_system()
+    {
+      $ACT = 'update';
+      $this->_validate_avalability_system($ACT);
+      $threshold = $this->input->post('threshold');
+      $availibility = $this->input->post('availibility');
+      $data = array(
+        'id_service'           => $this->input->post('id_service'),
+        'id_pic'       => $this->input->post('id_pic'),
+        'threshold'          => $this->input->post('threshold'),
+        'availibility'          => $this->input->post('availibility'),
+        'notes'          => $this->input->post('notes'),
+        'datestamp'          => date('Ymd'),
+        'status'          => 'cleaned'
+      );
+      $id_trx = $this->M_sys_availability->update_availability_system(array('id' => $this->input->post('id_system')), $data);
+      if($threshold > 0 && $availibility > 0 ){
+        if($threshold > $availibility){
+          $cek_system = $this->db->get('tsysavailability_problem', ['id_trx' => $this->input->post('id_system')])->num_rows();
+          if($cek_system > 0 ){
+            $this->db->update('tsysavailability_problem', [
+              'id_trx'    => $id_trx,
+              'problem_category'    => $this->input->post('problem_category'),
+              'problem_datetime'    => $this->input->post('problem_datetime'),
+              'result'    => $this->input->post('result'),
+              'repair'    => $this->input->post('repair'),
+              'repair_notes'    => $this->input->post('repair_notes'),
+              'repair_duration'    => $this->input->post('repair_duration'),
+              'repair_status'    => $this->input->post('repair_status'),
+              'severity_level'    => $this->input->post('severity_level'),
+              'problem_impact'    => $this->input->post('problem_impact'),
+              'notes'    => $this->input->post('notes_problem')
+            ], ['id_trx' => $this->input->post('id_system')]);
+          }else{
+            $this->db->insert('tsysavailability_problem', [
+              'id_trx'    => $this->input->post('id_system'),
+              'problem_category'    => $this->input->post('problem_category'),
+              'problem_datetime'    => $this->input->post('problem_datetime'),
+              'result'    => $this->input->post('result'),
+              'repair'    => $this->input->post('repair'),
+              'repair_notes'    => $this->input->post('repair_notes'),
+              'repair_duration'    => $this->input->post('repair_duration'),
+              'repair_status'    => $this->input->post('repair_status'),
+              'severity_level'    => $this->input->post('severity_level'),
+              'problem_impact'    => $this->input->post('problem_impact'),
+              'notes'    => $this->input->post('notes_problem')
+            ]);
+          }
+        }
+      }
+      echo json_encode(array("status" => TRUE ));
+    }
+
     public function ajax_availability_system()
   { 
     $this->db->where('status', 'cleaned');
+    
+    $start_date = date('Ymd', strtotime(substr($_POST['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_POST['daterange'], 13, 23)));
+
+    $this->db->where('datestamp >=', $start_date);
+    $this->db->where('datestamp <=', $end_date);
     $list = $this->M_sys_availability->get_datatables_system();
     $data = array();
     $no = 1;

@@ -12,7 +12,7 @@ class Report extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-    $this->load->model(['M_report', 'M_danafloat_clean', 'M_ltkl_clean']);
+    $this->load->model(['M_report', 'M_danafloat_clean', 'M_ltkl_clean', 'M_sys_availability']);
     if(!$this->session->userdata('logged_in'))
     {
       $data=array();
@@ -1979,8 +1979,142 @@ class Report extends CI_Controller {
     $data['content'] = $this->load->view('report/sys_availability', $data, TRUE);
     $this->load->view('layout', $data);
   }
-  public function ajax_availability_pic()
-  {}
+  public function download_excel_availability()
+  {
+    
+
+    include APPPATH . 'third_party/PHPExcel/PHPExcel.php';
+
+    $start_date = date('Ymd', strtotime(substr($_GET['daterange'], 0, 10)));
+    $end_date =  date('Ymd', strtotime(substr($_GET['daterange'], 13, 23)));
+    
+
+    $data = array();
+    $line_pic = 7;
+    $date_now = $this->lib->date_indonesia(date('Y-m-d'));
+    $objPHPExcel = PHPExcel_IOFactory::load("./assets/template-excel/template-sys-availability.xlsx");
+    // FORM 1 PIC
+    $pic = $this->M_sys_availability->get_pic()->result();
+    foreach ($pic as $raw_data) {
+      $objPHPExcel->setActiveSheetIndex(2)
+          ->setCellValue('B' . $line_pic, $raw_data->name)
+          ->setCellValue('C' . $line_pic, $raw_data->division)
+          ->setCellValue('D' . $line_pic, $raw_data->email)
+          ->setCellValue('E' . $line_pic, $raw_data->phone_number);
+        $line_pic++;
+    }
+    
+    $line_pic--;
+    $bordered = "B7:E". $line_pic--;
+    $objPHPExcel->getActiveSheet(2)
+    ->getStyle($bordered)
+    ->applyFromArray(
+        array(
+          'borders' => array(
+            'allborders' => array(
+                'style' => PHPExcel_Style_Border::BORDER_THIN
+            )
+        )
+        )
+    );
+    // FORM 2 & 3
+    $line_availability = 9;
+    $line_sys = 8;
+    $this->db->where('datestamp >=', $start_date);
+    $this->db->where('datestamp <=', $end_date);
+    $availability = $this->db->query("
+      SELECT t1clean_sysavailability.id, service, infrastructure, threshold, availibility, notes, is_default
+       FROM t1clean_sysavailability RIGHT JOIN tsysavailability_service ON t1clean_sysavailability.id_service = tsysavailability_service.id 
+    ")->result();
+    $i=1;
+    $i2=1;
+    
+    foreach ($availability as $key) {
+      // SHEET AVAILABILITY
+      $threshold = intval($key->threshold);
+      $availability = intval($key->availibility);
+
+      $objPHPExcel->setActiveSheetIndex(4)
+
+          ->setCellValue('B' . $line_availability, $i++)
+          ->setCellValue('C' . $line_availability, $key->service)
+          ->setCellValue('D' . $line_availability, '')
+          ->setCellValue('E' . $line_availability, $key->infrastructure)
+          ->setCellValue('F' . $line_availability, $threshold > 0 ? $threshold : ''  )
+          ->setCellValue('G' . $line_availability, $availability > 0 ? $availability : '')
+          ->setCellValue('H' . $line_availability, $key->notes);
+        $line_availability++;
+
+      if($threshold > $availability){
+        $sys = $this->db->query("
+        SELECT service, problem_category, problem_datetime, result, repair, repair_notes, repair_duration, repair_status, severity_level, problem_impact, tsysavailability_problem.notes notes, name  
+          FROM tsysavailability_problem JOIN t1clean_sysavailability ON tsysavailability_problem.id_trx = t1clean_sysavailability.id
+          JOIN tsysavailability_service ON t1clean_sysavailability.id_service = tsysavailability_service.id 
+          JOIN tsysavailability_pic ON t1clean_sysavailability.id_pic = tsysavailability_pic.id 
+        WHERE tsysavailability_problem.id_trx = '". $key->id."'
+        ")->row();
+        $objPHPExcel->setActiveSheetIndex(3)
+          ->setCellValue('C' . $line_sys, $i2++)
+          ->setCellValue('C' . $line_sys, $sys->service)
+          ->setCellValue('D' . $line_sys, $sys->problem_category)
+          ->setCellValue('E' . $line_sys, $sys->problem_datetime)
+          ->setCellValue('F' . $line_sys, $sys->result)
+          ->setCellValue('G' . $line_sys, $sys->repair)
+          ->setCellValue('H' . $line_sys, $sys->repair_notes)
+          ->setCellValue('I' . $line_sys, $sys->repair_duration)
+          ->setCellValue('J' . $line_sys, $sys->repair_status)
+          ->setCellValue('K' . $line_sys, $sys->severity_level)
+          ->setCellValue('L' . $line_sys, $sys->problem_impact)
+          ->setCellValue('M' . $line_sys, $sys->notes)
+          ->setCellValue('N' . $line_sys, $sys->name);
+        $line_sys++;
+      }
+
+
+    }
+    $line_availability--;
+    $line_sys--;
+    $bordered = "B9:H". $line_availability--;
+    $objPHPExcel->setActiveSheetIndex(4)
+    ->getStyle($bordered)
+    ->applyFromArray(
+        array(
+          'borders' => array(
+            'allborders' => array(
+                'style' => PHPExcel_Style_Border::BORDER_THIN
+            )
+        )
+        )
+    );
+
+      
+    $bordered = "B8:N". $line_sys--;
+    $objPHPExcel->setActiveSheetIndex(3)
+    ->getStyle($bordered)
+    ->applyFromArray(
+        array(
+          'borders' => array(
+            'allborders' => array(
+                'style' => PHPExcel_Style_Border::BORDER_THIN
+            )
+        )
+        )
+    );
+
+
+    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+    header('Content-Type: application/vnd.ms-excel');
+    header('Content-Disposition: attachment;filename="'.date("F Y") .' Format Pengkinian Format Availability Sistem PJSP.xlsx"');
+    header('Cache-Control: max-age=0');
+    $objWriter->save('php://output');
+
+    set_time_limit(0);
+    ini_set('memory_limit', '1G');
+
+    user_log($this->session->userdata('id'), 'REPORT', "DOWNLOAD", '', "Download Report Availability Sistem", '');
+    trx_log($this->session->userdata('id'), 'REPORT', "DOWNLOAD", '', "Download Report Availability Sistem");
+    exit;
+  }
   // END :: SYSTEM AVAILABILITY 
 
   
