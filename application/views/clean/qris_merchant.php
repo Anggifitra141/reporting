@@ -96,10 +96,10 @@
             <div class="form-group">
               <label>Mcc</label>
               <select name="mcc" id="mcc" class="form-control select2">
-                <option value="">-- Select MCC --</option>
+                <!-- <option value="">-- Select MCC --</option>
                 <?php foreach($mcc as $key) :  ?>
                   <option value="<?= $key->mcc ?>"><?= $key->mcc .' - '. $key->mcc_name ?></option>
-                <?php endforeach; ?>
+                <?php endforeach; ?> -->
               </select>
               <span class="invalid-feedback"></span>
             </div>
@@ -198,6 +198,22 @@ $('#nav-clean-qris-merchant').addClass('active');
       }],
     });
 
+    $.ajax({
+      url  : base_url + 'clean/get_qrismcc',
+      type : 'GET',
+      dataType : 'JSON',
+      success : function(response)
+      {
+        var str = `<option value="">-- Select MCC --</option>`;
+        $.each(response, function(index, val){
+          str += `
+            <option value="${val.id}">${val.mcc} - ${val.mcc_name}</option>
+          `;
+        });
+        $('#mcc').html(str);
+      }
+    })
+
   });
   const showLoading = function() {
   swal({
@@ -231,7 +247,7 @@ function reload_table() {
   table.ajax.reload(null, false);
 }
 
-
+  
   /* -- Action -- */
   function add_qris_merchant() {
     save_method = 'add';
@@ -262,7 +278,7 @@ function reload_table() {
         $('[name="id"]').val(data.id);
         $('[name="merchant_name"]').val(data.merchant_name);
         $('[name="city"]').val(data.city);
-        $('[name="mcc"]').val(data.mcc);
+        $('[name="mcc"]').append(`<option value="${data.mcc}" selected="selected">${data.mcc} - ${data.mcc_name}</option>`);
         $('[name="merchant_criteria"]').val(data.merchant_criteria);
         $('[name="merchant_status"]').val(data.merchant_status);
         $('[name="activation_peroid"]').val(data.activation_peroid);
