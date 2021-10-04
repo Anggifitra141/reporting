@@ -24,7 +24,7 @@
                     <th class="text-center" width="1px">
                       No
                     </th>
-                    <th width="10px" style="width:90px;">Action</th>
+                    <!-- <th width="10px" style="width:90px;">Action</th> -->
                     <th>Code</th>
                     <th>Name</th>
                     <th>Period</th>
@@ -80,7 +80,7 @@
 
 <script src="<?php echo base_url(); ?>assets/modules/jquery.min.js"></script>
 <script>
-  $('#nav-sub-report').addClass('dropdown active');
+  $('#nav-master-data').addClass('dropdown active');
   $('#nav-setting-report').addClass('active');
 
   $("input").change(function() {

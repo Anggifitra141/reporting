@@ -825,6 +825,8 @@ class Clean extends CI_Controller {
           $numrow++;
         }
         unlink('./assets/'.$file['file_name']);
+        user_log($this->session->userdata('id'), 'QRIS MERCHANT', "IMPORT", '', "IMPORT DATA", $_FILES['file_import']['name']);
+        trx_log($this->session->userdata('id'), 'QRIS MERCHANT', "IMPORT", '', "IMPORT DATA" );
         
       }
       echo json_encode(['status' => true, 'message' => 'Import data berhasil']);
@@ -1551,6 +1553,8 @@ class Clean extends CI_Controller {
         $this->db->insert_batch('t1clean_lkpbu_309_310_311', $data);
       }
     }
+    user_log($this->session->userdata('id'), 'LKPBU 309, 310 & 311', "IMPORT",'', "IMPORT DATA", $this->db->last_query());
+    trx_log($this->session->userdata('id'), 'LKPBU 309, 310 & 311', "IMPORT",'', "IMPORT DATA" );
     echo json_encode(['status' => true, 'message' => 'Import data berhasil']);
   }
   // END :: FORM 309_310_311

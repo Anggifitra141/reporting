@@ -384,12 +384,17 @@ class M_lkpbu extends CI_model {
   public function add_lkpbu304($data)
   {
     $this->db->insert($this->table304, $data);
-    return $this->db->insert_id();
+    $id= $this->db->insert_id();
+    user_log($this->session->userdata('id'), 'LKPBU 304', "ADD", $id, "ADD DATA", $this->db->last_query());
+    trx_log($this->session->userdata('id'), 'LKPBU 304', "ADD", $id, "ADD DATA" );
+    return $id;
   }
 
   public function update_lkpbu304($where, $data)
   {
     $this->db->update($this->table304, $data, $where);
+    user_log($this->session->userdata('id'), 'LKPBU 304', "MODIFY", $where['id'], "MODIFY DATA", $this->db->last_query());
+    trx_log($this->session->userdata('id'), 'LKPBU 304', 'MODIFY', $where['id'], "MODIFY DATA");
     return $this->db->affected_rows();
   }
 
@@ -397,6 +402,8 @@ class M_lkpbu extends CI_model {
   {
     $this->db->where('id', $id);
     $this->db->delete($this->table304);
+    user_log($this->session->userdata('id'), 'LKPBU 304', "DELETE", $id, "DELETE DATA", $this->db->last_query());
+    trx_log($this->session->userdata('id'), 'LKPBU 304', "DELETE", $id, "DELETE DATA");
   }
 
 
@@ -489,12 +496,17 @@ class M_lkpbu extends CI_model {
   public function add_lkpbu306($data)
   {
     $this->db->insert($this->table306, $data);
-    return $this->db->insert_id();
+    $id = $this->db->insert_id();
+    user_log($this->session->userdata('id'), 'LKPBU 306', "ADD", $id, "ADD DATA", $this->db->last_query());
+    trx_log($this->session->userdata('id'), 'LKPBU 306', "ADD", $id, "ADD DATA" );
+    return $id;
   }
 
   public function update_lkpbu306($where, $data)
   {
     $this->db->update($this->table306, $data, $where);
+    user_log($this->session->userdata('id'), 'LKPBU 306', "MODIFY", $where['id'], "MODIFY DATA", $this->db->last_query());
+    trx_log($this->session->userdata('id'), 'LKPBU 306', 'MODIFY', $where['id'], "MODIFY DATA");
     return $this->db->affected_rows();
   }
 
@@ -502,6 +514,8 @@ class M_lkpbu extends CI_model {
   {
     $this->db->where('id', $id);
     $this->db->delete($this->table306);
+    user_log($this->session->userdata('id'), 'LKPBU 306', "DELETE", $id, "DELETE DATA", $this->db->last_query());
+    trx_log($this->session->userdata('id'), 'LKPBU 306', "DELETE", $id, "DELETE DATA");
   }
   // END :: FORM 306
 
@@ -593,12 +607,17 @@ class M_lkpbu extends CI_model {
   public function add_lkpbu309_310_311($data)
   {
     $this->db->insert($this->table309_310_311, $data);
-    return $this->db->insert_id();
+    $id = $this->db->insert_id();
+    user_log($this->session->userdata('id'), 'LKPBU 309, 310 & 311', "ADD", $id, "ADD DATA", $this->db->last_query());
+    trx_log($this->session->userdata('id'), 'LKPBU 309, 310 & 311', "ADD", $id, "ADD DATA" );
+    return $id;
   }
 
   public function update_lkpbu309_310_311($where, $data)
   {
     $this->db->update($this->table309_310_311, $data, $where);
+    user_log($this->session->userdata('id'), 'LKPBU 309, 310 & 311', "MODIFY", $where['id'], "MODIFY DATA", $this->db->last_query());
+    trx_log($this->session->userdata('id'), 'LKPBU 309, 310 & 311', 'MODIFY', $where['id'], "MODIFY DATA");
     return $this->db->affected_rows();
   }
 
@@ -606,6 +625,8 @@ class M_lkpbu extends CI_model {
   {
     $this->db->where('id', $id);
     $this->db->delete($this->table309_310_311);
+    user_log($this->session->userdata('id'), 'LKPBU 309, 310 & 311', "DELETE", $id, "DELETE DATA", $this->db->last_query());
+    trx_log($this->session->userdata('id'), 'LKPBU 309, 310 & 311', "DELETE", $id, "DELETE DATA");
   }
   // END :::
 
@@ -698,12 +719,17 @@ class M_lkpbu extends CI_model {
   public function add_lkpbu312($data)
   {
     $this->db->insert($this->table312, $data);
-    return $this->db->insert_id();
+    $id= $this->db->insert_id();
+    user_log($this->session->userdata('id'), 'LKPBU 312', "ADD", $id, "ADD DATA", $this->db->last_query());
+    trx_log($this->session->userdata('id'), 'LKPBU 312', "ADD", $id, "ADD DATA" );
+    return $id;
   }
 
   public function update_lkpbu312($where, $data)
   {
     $this->db->update($this->table312, $data, $where);
+    user_log($this->session->userdata('id'), 'LKPBU 312', "MODIFY", $where['id'], "MODIFY DATA", $this->db->last_query());
+    trx_log($this->session->userdata('id'), 'LKPBU 312', 'MODIFY', $where['id'], "MODIFY DATA");
     return $this->db->affected_rows();
   }
 
@@ -711,6 +737,8 @@ class M_lkpbu extends CI_model {
   {
     $this->db->where('id', $id);
     $this->db->delete($this->table312);
+    user_log($this->session->userdata('id'), 'LKPBU 312', "DELETE", $id, "DELETE DATA", $this->db->last_query());
+    trx_log($this->session->userdata('id'), 'LKPBU 312', "DELETE", $id, "DELETE DATA");
   }
   // END :: FORM 312
   
@@ -803,12 +831,17 @@ class M_lkpbu extends CI_model {
   public function add_lkpbu313($data)
   {
     $this->db->insert($this->table313, $data);
-    return $this->db->insert_id();
+    $id = $this->db->insert_id();
+    user_log($this->session->userdata('id'), 'LKPBU 313', "ADD", $id, "ADD DATA", $this->db->last_query());
+    trx_log($this->session->userdata('id'), 'LKPBU 313', "ADD", $id, "ADD DATA" );
+    return $id;
   }
 
   public function update_lkpbu313($where, $data)
   {
     $this->db->update($this->table313, $data, $where);
+    user_log($this->session->userdata('id'), 'LKPBU 313', "MODIFY", $where['id'], "MODIFY DATA", $this->db->last_query());
+    trx_log($this->session->userdata('id'), 'LKPBU 313', 'MODIFY', $where['id'], "MODIFY DATA");
     return $this->db->affected_rows();
   }
 
@@ -816,6 +849,8 @@ class M_lkpbu extends CI_model {
   {
     $this->db->where('id', $id);
     $this->db->delete($this->table313);
+    user_log($this->session->userdata('id'), 'LKPBU 313', "DELETE", $id, "DELETE DATA", $this->db->last_query());
+    trx_log($this->session->userdata('id'), 'LKPBU 313', "DELETE", $id, "DELETE DATA");
   }
   // END :: FORM 313
 

@@ -82,17 +82,24 @@ class M_master extends CI_model {
   public function add_ltdbb_bi_country($data)
   {
     $this->db->insert($this->table_ltdbb_bi_country, $data);
-    return $this->db->insert_id();
+    $id = $this->db->insert_id();
+    user_log($this->session->userdata('id'), 'LTDBB BI COUNTRY', "ADD", $id, "ADD DATA", $this->db->last_query());
+    trx_log($this->session->userdata('id'), 'LTDBB BI COUNTRY', "ADD", $id, "ADD DATA" );
+    return $id;
   }
   public function update_ltdbb_bi_country($where, $data)
   {
     $this->db->update($this->table_ltdbb_bi_country, $data, $where);
+    user_log($this->session->userdata('id'), 'LTDBB BI COUNTRY', "MODIFY", $where['id'], "MODIFY DATA", $this->db->last_query());
+    trx_log($this->session->userdata('id'), 'LTDBB BI COUNTRY', 'MODIFY', $where['id'], "MODIFY DATA");
     return $this->db->affected_rows();
   }
   public function delete_ltdbb_bi_country($id)
   {
     $this->db->where('id', $id);
     $this->db->delete($this->table_ltdbb_bi_country);
+    user_log($this->session->userdata('id'), 'LTDBB BI COUNTRY', "DELETE", $id, "DELETE DATA", $this->db->last_query());
+    trx_log($this->session->userdata('id'), 'LTDBB BI COUNTRY', "DELETE", $id, "DELETE DATA");
   }
 
 
@@ -164,17 +171,24 @@ class M_master extends CI_model {
   public function add_ltdbb_bi_city($data)
   {
     $this->db->insert($this->table_ltdbb_bi_city, $data);
-    return $this->db->insert_id();
+    $id = $this->db->insert_id();
+    user_log($this->session->userdata('id'), 'LTDBB BI CITY', "ADD", $id, "ADD DATA", $this->db->last_query());
+    trx_log($this->session->userdata('id'), 'LTDBB BI CITY', "ADD", $id, "ADD DATA" );
+    return $id;
   }
   public function update_ltdbb_bi_city($where, $data)
   {
     $this->db->update($this->table_ltdbb_bi_city, $data, $where);
+    user_log($this->session->userdata('id'), 'LTDBB BI CITY', "MODIFY", $where['id'], "MODIFY DATA", $this->db->last_query());
+    trx_log($this->session->userdata('id'), 'LTDBB BI CITY', 'MODIFY', $where['id'], "MODIFY DATA");
     return $this->db->affected_rows();
   }
   public function delete_ltdbb_bi_city($id)
   {
     $this->db->where('id', $id);
     $this->db->delete($this->table_ltdbb_bi_city);
+    user_log($this->session->userdata('id'), 'LTDBB BI CITY', "DELETE", $id, "DELETE DATA", $this->db->last_query());
+    trx_log($this->session->userdata('id'), 'LTDBB BI CITY', "DELETE", $id, "DELETE DATA");
   }
 
   // END :: MASTER LTDBB_BI_CITY
@@ -329,22 +343,27 @@ class M_master extends CI_model {
   public function add_master_all($table, $data)
   {
     $this->db->insert($table, $data);
-    trx_log($this->session->userdata('id'), $table, "Add", "", "Add code ".$data['code']." to table ".$table."");
-    return $this->db->insert_id();
+    $id = $this->db->insert_id();
+    user_log($this->session->userdata('id'), strtoupper($table), "ADD", $id, "ADD DATA", $this->db->last_query());
+    trx_log($this->session->userdata('id'), strtoupper($table), "ADD", $id, "ADD DATA" );
+
+    return $id;
     
   }
   public function update_master_all($table, $where, $data)
   {
     $this->db->update($table, $data, $where);
 
-    trx_log($this->session->userdata('id'), $table, "Update ", $where['id'], "Update ".$data['code']." table ".$table."");
+    user_log($this->session->userdata('id'), strtoupper($table), "MODIFY", $where['id'], "MODIFY DATA", $this->db->last_query());
+    trx_log($this->session->userdata('id'), strtoupper($table), 'MODIFY', $where['id'], "MODIFY DATA");
     return $this->db->affected_rows();
   }
   public function delete_master_all($table, $id)
   {
     $this->db->where('id', $id);
     $this->db->delete($table);
-    trx_log($this->session->userdata('id'), $table, "Delete", $id, "Delete from record id=".$id." table ".$table."");
+    user_log($this->session->userdata('id'), strtoupper($table), "DELETE", $id, "DELETE DATA", $this->db->last_query());
+    trx_log($this->session->userdata('id'), strtoupper($table), "DELETE", $id, "DELETE DATA");
   }
 
 }

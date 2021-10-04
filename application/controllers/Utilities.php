@@ -250,6 +250,8 @@ class Utilities extends CI_Controller {
 					'status'						=> 'cleaned'
 				]);
 				$this->db->update('t0source_ltdbb', ['status' => 'old'], ['id' => $id]);
+				user_log($this->session->userdata('id'), 'LTDBB', 'CLEANSING', '', "AUTO CLEANSING", $this->db->last_query());
+    		trx_log($this->session->userdata('id'), 'LTDBB', 'CLEANSING', '', "AUTO CLEANSING");
 				$success++;
 			}else{
 				if(!$cek_sender_country){
@@ -366,7 +368,8 @@ class Utilities extends CI_Controller {
 				}
 			}
 		}
-			
+		user_log($this->session->userdata('id'), 'LTDBB', "CLEANSING", '', "AUTO CLEANSING FINISH", "Success '".$success."' Failed '".$false."'");
+		trx_log($this->session->userdata('id'), 'LTDBB', 'CLEANSING', '', "AUTO CLEANSING FINISH");
 		return array('status' => true, 'success' => $success, 'false' => $false, 'fail_clean' => array_slice($form_clean, 0, 10));
 	}
 	function group_by($key, $data) {
@@ -484,6 +487,9 @@ class Utilities extends CI_Controller {
 					'status'						=> 'cleaned'
 				]);
 				$this->db->update('t0source_ltkl', ['status' => 'old'], ['id' => $id]);
+				user_log($this->session->userdata('id'), 'LTKL', 'CLEANSING', '', "AUTO CLEANSING", $this->db->last_query());
+    		trx_log($this->session->userdata('id'), 'LTKL', 'CLEANSING', '', "AUTO CLEANSING");
+
 				$success++;
 			}else{
 				$fail_clean[] = $SheetDataKey['sender_country'];
@@ -491,7 +497,8 @@ class Utilities extends CI_Controller {
 				$false++;
 			}
 		}
-			
+		user_log($this->session->userdata('id'), 'LTKL', "CLEANSING", '', "AUTO CLEANSING FINISH", "Success '".$success."' Failed '".$false."'");
+		trx_log($this->session->userdata('id'), 'LTKL', 'CLEANSING', '', "AUTO CLEANSING FINISH");
 		return array('status' => true, 'success' => $success, 'false' => $false, 'fail_clean' => $fail_clean);
 	}
 
@@ -571,13 +578,16 @@ class Utilities extends CI_Controller {
 					'datestamp'		=> $datestamp,
 					'status'		=> $status
 				]);
+				user_log($this->session->userdata('id'), 'QRIS', 'CLEANSING', '', "AUTO CLEANSING", $this->db->last_query());
+    		trx_log($this->session->userdata('id'), 'QRIS', 'CLEANSING', '', "AUTO CLEANSING");
 				$success++;
 			}else{
 				$false++;
 				$fail_clean[] = $row['city'];
 			}
 		}
-			
+		user_log($this->session->userdata('id'), 'QRIS', "CLEANSING", '', "AUTO CLEANSING FINISH", "Success '".$success."' Failed '".$false."'");
+		trx_log($this->session->userdata('id'), 'QRIS', 'CLEANSING', '', "AUTO CLEANSING FINISH");
 		return array('status' => true, 'success' => $success, 'false' => $false, 'fail_clean' => $fail_clean);
 	}
 

@@ -163,6 +163,7 @@ class M_qris_clean extends CI_model {
 
   public function add_qris_merchant($data)
   {
+    $this->db->insert($this->table_merchant, $data);
     $id = $this->db->insert_id();
     user_log($this->session->userdata('id'), 'QRIS MERCHANT', "ADD", $id, "ADD DATA", $this->db->last_query());
     trx_log($this->session->userdata('id'), 'QRIS MERCHANT', "ADD", $id, "ADD DATA" );

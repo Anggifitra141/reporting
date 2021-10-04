@@ -305,10 +305,10 @@
             </li>
 
             <li class="menu-header">System Setting</li>
-            <li>
+            <li id="nav-user-group">
               <a href="<?php echo site_url('user_group'); ?>" class="nav-link access_user_group"><i class="fas fa-users"></i><span>User group</span></a>
             </li>
-            <li>
+            <li id="nav-user">
               <a href="<?php echo site_url('user'); ?>" class="nav-link access_user"><i class="fas fa-user"></i><span>User</span></a>
             </li>
             <li id="nav-user-activity">

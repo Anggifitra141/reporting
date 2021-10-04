@@ -5,7 +5,6 @@ class M_user_group extends CI_model {
   /**
    *  =======   Application By    : PT. Seiber Mitra Solusi    ========
    *  =======   Version           : V.1.0                      ========
-   *  =======   Contact Develope  : anggifitra141@gmail.com    ========
    *  ===========           Copyright 2021          ===================
   */
 
@@ -97,12 +96,17 @@ class M_user_group extends CI_model {
   public function add_user_group($data)
   {
     $this->db->insert($this->table, $data);
-    return $this->db->insert_id();
+    $id = $this->db->insert_id();
+    user_log($this->session->userdata('id'), 'USER GROUP', "ADD", $id, "ADD DATA", $this->db->last_query());
+    trx_log($this->session->userdata('id'), 'USER GROUP', "ADD", $id, "ADD DATA" );
+    return $id;
   }
 
   public function update_user_group($where, $data)
   {
     $this->db->update($this->table, $data, $where);
+    user_log($this->session->userdata('id'), 'USER GROUP', "MODIFY", $where['id'], "MODIFY DATA", $this->db->last_query());
+    trx_log($this->session->userdata('id'), 'USER GROUP', 'MODIFY', $where['id'], "MODIFY DATA");
     return $this->db->affected_rows();
   }
 
@@ -110,6 +114,8 @@ class M_user_group extends CI_model {
   {
     $this->db->where('id', $id);
     $this->db->delete($this->table);
+    user_log($this->session->userdata('id'), 'USER GROUP', "DELETE", $id, "DELETE DATA", $this->db->last_query());
+    trx_log($this->session->userdata('id'), 'USER GROUP', "DELETE", $id, "DELETE DATA");
   }
 
 }

@@ -97,12 +97,17 @@ class M_role_model extends CI_model {
   public function add_role_model($data)
   {
     $this->db->insert($this->table, $data);
-    return $this->db->insert_id();
+    $id = $this->db->insert_id();
+    user_log($this->session->userdata('id'), 'ROLE MODEL', "ADD", $id, "ADD DATA", $this->db->last_query());
+    trx_log($this->session->userdata('id'), 'ROLE MODEL', "ADD", $id, "ADD DATA" );
+    return $id;
   }
 
   public function update_role_model($where, $data)
   {
     $this->db->update($this->table, $data, $where);
+    user_log($this->session->userdata('id'), 'ROLE MODEL', "MODIFY", $where['id'], "MODIFY DATA", $this->db->last_query());
+    trx_log($this->session->userdata('id'), 'ROLE MODEL', 'MODIFY', $where['id'], "MODIFY DATA");
     return $this->db->affected_rows();
   }
 
@@ -110,6 +115,8 @@ class M_role_model extends CI_model {
   {
     $this->db->where('id', $id);
     $this->db->delete($this->table);
+    user_log($this->session->userdata('id'), 'ROLE MODEL', "DELETE", $id, "DELETE DATA", $this->db->last_query());
+    trx_log($this->session->userdata('id'), 'ROLE MODEL', "DELETE", $id, "DELETE DATA");
   }
 
 }
