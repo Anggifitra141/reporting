@@ -45,7 +45,7 @@ class App extends CI_Controller {
 		$bulan = $row_month->reportcount;
 		$data['hasil'] = $bulan - $belum;
 		
-		// $data['activity'] = $this->db->query("SELECT username,actcategory, actlog,datestamp FROM tlogact JOIN user ON tlogact.uid = user.user_id WHERE MONTH(datestamp) = MONTH(CURRENT_DATE()) ORDER BY id DESC LIMIT 5")->result_array();
+		$data['activity'] = $this->db->query("SELECT tuser.fullname as fullname, event_time, event_modul, event_type, event_notes FROM t4log_user tlog JOIN t4user tuser ON  tlog.id_user = tuser.id LIMIT 10")->result_array();
 		
 		$data['result'] = $this->db->get("t3calendar")->result();
     foreach ($data['result'] as $key => $value) {
