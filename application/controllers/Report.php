@@ -2153,15 +2153,29 @@ class Report extends CI_Controller {
     echo json_encode($output);
   }
   // END :: SETTING REPORT
-  function in($value='')
-    {
-		$data['page'] 	 = 'sourceAll';
-		$data['sourceAll'] = $this->db->query("SELECT a.tcal_date as date ,a.tcal_message as name ,
-		b.regulator as regulator, c.periodname as period, a.status as status, b.status as status_rep , b.link
-		FROM tcalendar a INNER JOIN treport_settings b ON a.trepid = b.id INNER JOIN treportperiod c ON b.period = c.periodcode
-		WHERE a.tcal_date = '$value'")->result_array();
-		// $this->load->view('dataSmall',$data, FALSE);
-    echo json_encode($data);
-    }
+  // function in($value='')
+  //   {
+	// 	$data['page'] 	 = 'sourceAll';
+	// 	$data['sourceAll'] = $this->db->query("SELECT a.tcal_date as date ,a.tcal_message as name ,
+	// 	b.regulator as regulator, c.periodname as period, a.status as status, b.status as status_rep , b.link
+	// 	FROM tcalendar a INNER JOIN treport_settings b ON a.trepid = b.id INNER JOIN treportperiod c ON b.period = c.periodcode
+	// 	WHERE a.tcal_date = '$value'")->result_array();
+	// 	// $this->load->view('dataSmall',$data, FALSE);
+  //   echo json_encode($data);
+  //   }
+
+
+  public function in($date='')
+  {
+    $data= [];
+    $data['title'] = "Report date $date";
+    $data['query'] = $this->db->query("SELECT a.datestamp as date ,a.tcal_message as name ,
+                                        b.regulator as regulator, c.period_name as period, a.status as status, b.status as status_rep , b.link
+                                        FROM t3calendar a INNER JOIN t3report_settings b ON a.trepid = b.id INNER JOIN t3report_period c ON b.period = c.period_code
+                                        WHERE a.datestamp = '$date'")->result_array();
+    $data['content'] = $this->load->view('dashboard/reminder', $data, TRUE);
+    $this->load->view('layout', $data);
+
+  }
 
 }
